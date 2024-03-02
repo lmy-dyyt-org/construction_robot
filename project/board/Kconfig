@@ -61,6 +61,12 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART6
                 bool "Enable UART6 (debug usart)"
                 default y
+            config BSP_UART6_RX_BUFSIZE
+                    int "uart rx buf size"
+                    default 1024
+            config BSP_UART6_TX_BUFSIZE
+                    int "uart tx buf size"
+                    default 1024
             config BSP_UART6_RX_USING_DMA
                 bool "Enable UART6 RX DMA"
                 depends on BSP_USING_UART6 && RT_SERIAL_USING_DMA
@@ -69,6 +75,12 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART3
                 bool "Enable UART3"
                 default n
+            config BSP_UART3_RX_BUFSIZE
+                    int "uart rx buf size"
+                    default 1024
+            config BSP_UART3_TX_BUFSIZE
+                    int "uart tx buf size"
+                    default 1024
             config BSP_UART3_RX_USING_DMA
                 bool "Enable UART3 RX DMA"
                 depends on BSP_USING_UART3 && RT_SERIAL_USING_DMA
@@ -77,6 +89,12 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART7
                 bool "Enable UART7"
                 default n
+            config BSP_UART7_RX_BUFSIZE
+                    int "uart rx buf size"
+]                    default 1024
+            config BSP_UART7_TX_BUFSIZE
+                    int "uart tx buf size"
+                    default 1024
             config BSP_UART7_RX_USING_DMA
                 bool "Enable UART7 RX DMA"
                 depends on BSP_USING_UART7 && RT_SERIAL_USING_DMA
@@ -85,6 +103,12 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART8
                 bool "Enable UART8"
                 default n
+            config BSP_UART8_RX_BUFSIZE
+                    int "uart rx buf size"
+                    default 1024
+            config BSP_UART8_TX_BUFSIZE
+                    int "uart tx buf size"
+                    default 1024
             config BSP_UART8_RX_USING_DMA
                 bool "Enable UART8 RX DMA"
                 depends on BSP_USING_UART8 && RT_SERIAL_USING_DMA
@@ -93,6 +117,12 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART1
                 bool "Enable UART1 (DBUS)"
                 default n
+            config BSP_UART1_RX_BUFSIZE
+                    int "uart rx buf size"
+                    default 1024
+            config BSP_UART1_TX_BUFSIZE
+                    int "uart tx buf size"
+                    default 1024
             config BSP_UART1_RX_USING_DMA
                 bool "Enable UART1 RX DMA"
                 depends on BSP_USING_UART1 && RT_SERIAL_USING_DMA
