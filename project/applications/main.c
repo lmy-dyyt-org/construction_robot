@@ -61,7 +61,7 @@ int main(void)
 		rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 
 	char buf[]= "fgweuygfuyweg";
-	LOG_HEX("test",16,buf,sizeof(buf));
+
 
 
 
@@ -72,7 +72,7 @@ int main(void)
 // 	rt_uint8_t count =0;
 	//rt_thread_mdelay(2000);
 	
-	//Emm_V5_Init("uart8");
+	Emm_V5_Init("uart8");
 	
 	// Emm_V5_Vel_Control(1, 0, 1000, 10, 0); //速度模式
 
@@ -110,13 +110,9 @@ int main(void)
    if(rxCmd[2])
 	 { Motor_Cur_Pos = -Motor_Cur_Pos; }
 	}
-	rt_kprintf("receive_state: %d\n", state);
-	rt_kprintf("Motor_Cur_Pos: %f\n", Motor_Cur_Pos);
-	rt_kprintf("Emm_rx_flag: %d\n", Emm_rx_flag);
-
-
-
-
+//	rt_kprintf("receive_state: %d\n", state);
+//	rt_kprintf("Motor_Cur_Pos: %f\n", Motor_Cur_Pos);
+//	rt_kprintf("Emm_rx_flag: %d\n", Emm_rx_flag);
 
 	/* 使能设备 */
 

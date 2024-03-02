@@ -1,0 +1,22 @@
+*** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'rt-thread'
+assembling rt_memcpy_rvds.S...
+rt_memcpy_rvds.S: error: A1023E: File "packages\rt_memcpy_cm-latest\rt_memcpy_rvds.S" could not be opened: No such file or directory
+ArmClang: error: no such file or directory: 'packages/perf_counter-v2.2.4.1/perf_counter.c'
+ArmClang: error: no input files
+compiling perf_counter.c...
+ArmClang: error: no such file or directory: 'packages/rt_kprintf_threadsafe-latest/rt_kprintf.c'
+ArmClang: error: no input files
+compiling rt_kprintf.c...
+ArmClang: error: no such file or directory: 'packages/perf_counter-v2.2.4.1/os/perf_os_patch_rt_thread.c'
+ArmClang: error: no input files
+compiling perf_os_patch_rt_thread.c...
+ArmClang: error: no such file or directory: 'packages/slcan2rtt-latest/src/slcan.c'
+ArmClang: error: no input files
+compiling slcan.c...
+ArmClang: error: no such file or directory: 'packages/rt_vsnprintf_full-latest/rt_vsnprintf.c'
+ArmClang: error: no input files
+compiling rt_vsnprintf.c...
+".\build\keil\Obj\rt-thread.axf" - 11 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:02

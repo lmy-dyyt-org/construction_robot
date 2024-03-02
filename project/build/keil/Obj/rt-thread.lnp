@@ -1,7 +1,7 @@
 --cpu=Cortex-M4.fp.sp
 ".\build\keil\obj\main.o"
-".\build\keil\obj\emm_v5.o"
 ".\build\keil\obj\follow_line.o"
+".\build\keil\obj\emm_v5.o"
 ".\build\keil\obj\syscall_mem.o"
 ".\build\keil\obj\syscalls.o"
 ".\build\keil\obj\cctype.o"
