@@ -35,7 +35,7 @@
 
 
 float pos = 0.0f, Motor_Cur_Pos = 0.0f;
-int state;
+int state;///////////////////////////6666666666666666666666666666666666
 int main(void)
 {
 
