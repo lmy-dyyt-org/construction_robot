@@ -6,17 +6,6 @@
 
 #define SOC_STM32F427II
 
-
-#define BSP_UART1_RX_BUFSIZE 1024
-#define BSP_UART1_TX_BUFSIZE 1024
-#define BSP_UART3_RX_BUFSIZE 1024
-#define BSP_UART3_TX_BUFSIZE 1024
-#define BSP_UART6_TX_BUFSIZE 1024
-#define BSP_UART6_RX_BUFSIZE 1024
-#define BSP_UART7_TX_BUFSIZE 1024
-#define BSP_UART7_RX_BUFSIZE 1024
-#define BSP_UART8_TX_BUFSIZE 1024
-#define BSP_UART8_RX_BUFSIZE 1024
 /* RT-Thread Kernel */
 
 #define RT_NAME_MAX 8
@@ -260,8 +249,6 @@
 
 /* entertainment: terminal games and other interesting software packages */
 
-#define PKG_USING_SLCAN2RTT
-#define PKG_USING_SLCAN2RTT_LATEST_VERSION
 
 /* Arduino libraries */
 

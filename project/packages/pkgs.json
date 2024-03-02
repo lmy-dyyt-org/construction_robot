@@ -18,10 +18,5 @@
   "path": "/packages/system/perf_counter", 
   "ver": "v2.2.4.1", 
   "name": "PERF_COUNTER"
- }, 
- {
-  "path": "/packages/misc/slcan2rtt", 
-  "ver": "latest", 
-  "name": "SLCAN2RTT"
  }
 ]
