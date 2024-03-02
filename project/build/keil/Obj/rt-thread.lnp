@@ -1,4 +1,8 @@
 --cpu=Cortex-M4.fp.sp
+<<<<<<< HEAD
+=======
+".\build\keil\obj\emm_v5.o"
+>>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
 ".\build\keil\obj\main.o"
 ".\build\keil\obj\follow_line.o"
 ".\build\keil\obj\emm_v5.o"
@@ -39,7 +43,6 @@
 ".\build\keil\obj\msh.o"
 ".\build\keil\obj\msh_parse.o"
 ".\build\keil\obj\cmd.o"
-".\build\keil\obj\rt_memcpy_rvds.o"
 ".\build\keil\obj\clock.o"
 ".\build\keil\obj\components.o"
 ".\build\keil\obj\idle.o"
@@ -86,8 +89,6 @@
 ".\build\keil\obj\perf_os_patch_rt_thread.o"
 ".\build\keil\obj\perf_counter.o"
 ".\build\keil\obj\rt_kprintf.o"
-".\build\keil\obj\rt_vsnprintf.o"
-".\build\keil\obj\slcan.o"
 ".\build\keil\obj\ulog.o"
 ".\build\keil\obj\console_be.o"
 --strict --scatter ".\board\linker_scripts\link.sct"
