@@ -340,11 +340,7 @@
               <MiscControls></MiscControls>
               <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, __RTTHREAD__</Define>
               <Undefine></Undefine>
-<<<<<<< HEAD
               <IncludePath>rt-thread\components\drivers\include;board;rt-thread\components\drivers\include;board\CubeMX_Config\Inc;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\components\libc\posix\ipc;applications;rt-thread\components\utilities\ulog;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\HAL_Drivers\CMSIS\Include;rt-thread\libcpu\arm\common;packages\slcan2rtt-latest\inc;rt-thread\components\drivers\include;libraries\HAL_Drivers\drivers;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\posix\io\poll;rt-thread\include;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;board\ports;.;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\libcpu\arm\cortex-m4;libraries\HAL_Drivers\drivers\config;libraries\HAL_Drivers;rt-thread\components\drivers\include;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\eventfd;rt-thread\components\drivers\include</IncludePath>
-=======
-              <IncludePath>libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;libraries\HAL_Drivers;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\posix\io\eventfd;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
->>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
             </VariousControls>
           </Cads>
           <Aads>
@@ -389,30 +385,19 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
-<<<<<<< HEAD
-=======
-              <FileName>Emm_V5.c</FileName>
+              <FileName>follow_line.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\Emm_V5.c</FilePath>
+              <FilePath>applications\follow_line.c</FilePath>
             </File>
             <File>
->>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\main.c</FilePath>
             </File>
-<<<<<<< HEAD
             <File>
-              <FileName>follow_line.c</FileName>
+              <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\follow_line.c</FilePath>
-            </File>
-=======
->>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
-            <File>
-              <FileName>follow_line.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\follow_line.c</FilePath>
+              <FilePath>applications\Emm_V5.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -625,14 +610,11 @@
           <GroupName>Kernel</GroupName>
           <Files>
             <File>
-<<<<<<< HEAD
               <FileName>rt_memcpy_rvds.S</FileName>
               <FileType>2</FileType>
               <FilePath>packages\rt_memcpy_cm-latest\rt_memcpy_rvds.S</FilePath>
             </File>
             <File>
-=======
->>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
               <FileName>clock.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\src\clock.c</FilePath>
@@ -882,14 +864,11 @@
               <FileType>1</FileType>
               <FilePath>packages\rt_kprintf_threadsafe-latest\rt_kprintf.c</FilePath>
             </File>
-<<<<<<< HEAD
             <File>
               <FileName>rt_vsnprintf.c</FileName>
               <FileType>1</FileType>
               <FilePath>packages\rt_vsnprintf_full-latest\rt_vsnprintf.c</FilePath>
             </File>
-=======
->>>>>>> f853c5753f347c12118c96f6a19321e76274c8dd
           </Files>
         </Group>
         <Group>
