@@ -62,9 +62,6 @@ int main(void)
 
 	char buf[]= "fgweuygfuyweg";
 
-
-
-
 // 	rt_adc_device_t adc_dev;
 // 	rt_uint32_t value;
 // float 	vol;
@@ -116,10 +113,6 @@ int main(void)
 
 	/* 使能设备 */
 
-
-
-
-
 	// ret  = rt_adc_enable(adc_dev, ADC_DEV_CHANNEL);
 	
 	// while(count <10)
@@ -137,7 +130,7 @@ int main(void)
 	// 	rt_thread_mdelay(500);
 	
 
-
+				
         rt_pin_write(LED0_PIN, PIN_HIGH);
         rt_thread_mdelay(500);
         rt_pin_write(LED0_PIN, PIN_LOW);
