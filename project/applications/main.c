@@ -59,14 +59,20 @@ int main(void)
 	    /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
+
+	char buf[]= "fgweuygfuyweg";
+	LOG_HEX("test",16,buf,sizeof(buf));
+
+
+
 // 	rt_adc_device_t adc_dev;
 // 	rt_uint32_t value;
 // float 	vol;
 // 	rt_err_t ret = RT_EOK;
 // 	rt_uint8_t count =0;
-	rt_thread_mdelay(2000);
+	//rt_thread_mdelay(2000);
 	
-	Emm_V5_Init("uart8");
+	//Emm_V5_Init("uart8");
 	
 	// Emm_V5_Vel_Control(1, 0, 1000, 10, 0); //速度模式
 
