@@ -23,10 +23,10 @@
 #define LED0_PIN    GET_PIN(F, 14)
 
 
-#define ADC_DEV_NAME        "adc1"      /* ADC Éè±¸Ãû³Æ */
-#define ADC_DEV_CHANNEL     18           /* ADC Í¨µÀ */
-#define REFER_VOLTAGE       330         /* ²Î¿¼µçÑ¹ 3.3V,Êý¾Ý¾«¶È³ËÒÔ100±£Áô2Î»Ð¡Êý*/
-#define CONVERT_BITS        (1 << 12)   /* ×ª»»Î»ÊýÎª12Î» */
+#define ADC_DEV_NAME        "adc1"      /* ADC è®¾å¤‡åç§° */
+#define ADC_DEV_CHANNEL     18           /* ADC é€šé“ */
+#define REFER_VOLTAGE       330         /* å‚è€ƒç”µåŽ‹ 3.3V,æ•°æ®ç²¾åº¦ä¹˜ä»¥100ä¿ç•™2ä½å°æ•°*/
+#define CONVERT_BITS        (1 << 12)   /* è½¬æ¢ä½æ•°ä¸º12ä½ */
 
 
 #define THREAD_PRIORITY    25
@@ -39,16 +39,16 @@ int state;///////////////////////////6666666666666666666666666666666666
 int main(void)
 {
 
-///////////////////////////////////////////////////////////´´½¨Ïß³Ì
+///////////////////////////////////////////////////////////åˆ›å»ºçº¿ç¨‹
 	  rt_thread_t tid = RT_NULL;
   
-    /* ´´½¨Ïß³Ì£¬ Ãû³ÆÊÇ thread_test£¬ Èë¿ÚÊÇ thread_entry*/
+    /* åˆ›å»ºçº¿ç¨‹ï¼Œ åç§°æ˜¯ thread_testï¼Œ å…¥å£æ˜¯ thread_entry*/
   tid = rt_thread_create("follow_line",
               follow_line, RT_NULL,
               THREAD_STACK_SIZE,
               THREAD_PRIORITY, THREAD_TIMESLICE);
               
-  /* Ïß³Ì´´½¨³É¹¦£¬ÔòÆô¶¯Ïß³Ì */
+  /* çº¿ç¨‹åˆ›å»ºæˆåŠŸï¼Œåˆ™å¯åŠ¨çº¿ç¨‹ */
   if (tid != RT_NULL)
   {
     rt_thread_startup(tid);
@@ -68,11 +68,11 @@ int main(void)
 	
 	Emm_V5_Init("uart8");
 	
-	// Emm_V5_Vel_Control(1, 0, 1000, 10, 0); //ËÙ¶ÈÄ£Ê½
+	// Emm_V5_Vel_Control(1, 0, 1000, 10, 0); //é€Ÿåº¦æ¨¡å¼
 
     while (1)
     {
-	/* ²éÕÒÉè±¸ */
+	/* æŸ¥æ‰¾è®¾å¤‡ */
 	// adc_dev = (rt_adc_device_t)rt_device_find(ADC_DEV_NAME);
 	// if(adc_dev == RT_NULL)
 	// {
@@ -80,7 +80,7 @@ int main(void)
 	// 	return RT_ERROR;
 	// }
 	
-	  Emm_V5_Pos_Control(1, 0, 1000, 0, 10000, 0, 0);//Î»ÖÃÄ£Ê½£º·½ÏòCW£¬ËÙ¶È1000RPM£¬¼ÓËÙ¶È0£¨²»Ê¹ÓÃ¼Ó¼õËÙÖ±½ÓÆô¶¯£©£¬Âö³åÊý3200£¨16Ï¸·ÖÏÂ·¢ËÍ3200¸öÂö³åµç»ú×ªÒ»È¦£©£¬Ïà¶ÔÔË¶¯
+	  Emm_V5_Pos_Control(1, 0, 1000, 0, 10000, 0, 0);//ä½ç½®æ¨¡å¼ï¼šæ–¹å‘CWï¼Œé€Ÿåº¦1000RPMï¼ŒåŠ é€Ÿåº¦0ï¼ˆä¸ä½¿ç”¨åŠ å‡é€Ÿç›´æŽ¥å¯åŠ¨ï¼‰ï¼Œè„‰å†²æ•°3200ï¼ˆ16ç»†åˆ†ä¸‹å‘é€3200ä¸ªè„‰å†²ç”µæœºè½¬ä¸€åœˆï¼‰ï¼Œç›¸å¯¹è¿åŠ¨
 	rt_thread_mdelay(2000);
 	Emm_V5_Read_Sys_Params(1, S_CPOS);
 	while(Emm_rx_flag==1)
@@ -90,17 +90,17 @@ int main(void)
 	}
 	if(rxCmd[0] == 1 && rxCmd[1] == 0x36  )//&& rxCount == 8
  	{
-   // Æ´½Ó³Éuint32_tÀàÐÍ
+   // æ‹¼æŽ¥æˆuint32_tç±»åž‹
    pos = (uint32_t)(
                      ((uint32_t)rxCmd[3] << 24)    |
                      ((uint32_t)rxCmd[4] << 16)    |
                      ((uint32_t)rxCmd[5] << 8)     |
                      ((uint32_t)rxCmd[6] << 0)
                    );
-   // ×ª»»³É½Ç¶È
+   // è½¬æ¢æˆè§’åº¦
    Motor_Cur_Pos = (float)pos * 360.0f / 65536.0f;
 
-   // ·ûºÅ
+   // ç¬¦å·
    if(rxCmd[2])
 	 { Motor_Cur_Pos = -Motor_Cur_Pos; }
 	}
@@ -112,7 +112,7 @@ int main(void)
 
 
 
-	/* Ê¹ÄÜÉè±¸ */
+	/* ä½¿èƒ½è®¾å¤‡ */
 
 
 
@@ -122,14 +122,14 @@ int main(void)
 	
 	// while(count <10)
    	// 	count ++;
-	// 	/* ¶ÁÈ¡²É¼¯Öµ */
+	// 	/* è¯»å–é‡‡é›†å€¼ */
 	// 	value = rt_adc_read(adc_dev, ADC_DEV_CHANNEL);
 	// 	rt_kprintf("the value is :%d \n", value);
  
-	// 	/* ×ª»»Îª¶ÔÓ¦µçÑ¹Öµ */
+	// 	/* è½¬æ¢ä¸ºå¯¹åº”ç”µåŽ‹å€¼ */
 	// 	vol = (float)(value * 3.3f) / CONVERT_BITS;
 	// 	rt_kprintf("the voltage is :%f \n", vol);		
-	// 	float tt = (1.43 - vol)/0.0043 + 25;   //¸ù¾Ý¹«Ê½Ëã³öÎÂ¶ÈÖµ
+	// 	float tt = (1.43 - vol)/0.0043 + 25;   //æ ¹æ®å…¬å¼ç®—å‡ºæ¸©åº¦å€¼
 	// LOG_D("VSense:%.2f\r\n",tt);
 
 	// 	rt_thread_mdelay(500);
