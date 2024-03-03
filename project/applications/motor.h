@@ -91,55 +91,55 @@ typedef struct{
 
 
 
-/* initialization export */
-#ifdef MOTOR_USING_AUTO_INIT
-typedef int (*init_fn_t)(void);
-#ifdef _MSC_VER
-#pragma section("__motor_$f",read)
-    #ifdef MOTOR_DEBUGING_AUTO_INIT
-        struct motor_init_desc
-        {
-            const char* level;
-            motor_t* motor;
-            const char* fn_name;
-        };
-        #define INIT_EXPORT(fn, level)                                  \
-                                const char __motor_level_##fn[] = ".__motor_." level;       \
-                                const char __motor_##fn##_name[] = #fn;                   \
-                                __declspec(allocate("__motor_$f"))                        \
-                                rt_used const struct motor_init_desc __rt_init_msc_##fn =  \
-                                {__motor_level_##fn, fn, __motor_##fn##_name};
-    #else
-        struct motor_init_desc
-        {
-            const char* level;
-            motor_t* motor;
-        };
-        #define INIT_EXPORT(fn, level)                                  \
-                                const char __motor_level_##fn[] = ".__motor_." level;       \
-                                __declspec(allocate("__motor_$f"))                        \
-                                rt_used const struct motor_init_desc __rt_init_msc_##fn =  \
-                                {__motor_level_##fn, fn };
-    #endif /* MOTOR_DEBUGING_AUTO_INIT */
-#else
-    #ifdef MOTOR_DEBUGING_AUTO_INIT
-        struct motor_init_desc
-        {
-            const char* fn_name;
-            motor_t* motor;
-        };
-        #define INIT_EXPORT(fn, level)                                                       \
-            const char __motori_##fn##_name[] = #fn;                                            \
-            rt_used const struct motor_init_desc __motor_init_desc_##fn rt_section(".__motor_." level) = \
-            { __motori_##fn##_name, fn};
-    #else
-        #define INIT_EXPORT(fn, level)                                                       \
-            rt_used const motor_t* __motor_init_##fn rt_section(".__motor_." level) = fn
-    #endif /* RT_DEBUGING_AUTO_INIT */
-#endif /* _MSC_VER */
-#else
-#define MOTOR_INIT_EXPORT(motor, id)
-#endif /* RT_USING_COMPONENTS_INIT */
+///* initialization export */
+//#ifdef MOTOR_USING_AUTO_INIT
+//typedef int (*init_fn_t)(void);
+//#ifdef _MSC_VER
+//#pragma section("__motor_$f",read)
+//    #ifdef MOTOR_DEBUGING_AUTO_INIT
+//        struct motor_init_desc
+//        {
+//            const char* level;
+//            motor_t* motor;
+//            const char* fn_name;
+//        };
+//        #define INIT_EXPORT(fn, level)                                  \
+//                                const char __motor_level_##fn[] = ".__motor_." level;       \
+//                                const char __motor_##fn##_name[] = #fn;                   \
+//                                __declspec(allocate("__motor_$f"))                        \
+//                                rt_used const struct motor_init_desc __rt_init_msc_##fn =  \
+//                                {__motor_level_##fn, fn, __motor_##fn##_name};
+//    #else
+//        struct motor_init_desc
+//        {
+//            const char* level;
+//            motor_t* motor;
+//        };
+//        #define INIT_EXPORT(fn, level)                                  \
+//                                const char __motor_level_##fn[] = ".__motor_." level;       \
+//                                __declspec(allocate("__motor_$f"))                        \
+//                                rt_used const struct motor_init_desc __rt_init_msc_##fn =  \
+//                                {__motor_level_##fn, fn };
+//    #endif /* MOTOR_DEBUGING_AUTO_INIT */
+//#else
+//    #ifdef MOTOR_DEBUGING_AUTO_INIT
+//        struct motor_init_desc
+//        {
+//            const char* fn_name;
+//            motor_t* motor;
+//        };
+//        #define INIT_EXPORT(fn, level)                                                       \
+//            const char __motori_##fn##_name[] = #fn;                                            \
+//            rt_used const struct motor_init_desc __motor_init_desc_##fn rt_section(".__motor_." level) = \
+//            { __motori_##fn##_name, fn};
+//    #else
+//        #define INIT_EXPORT(fn, level)                                                       \
+//            rt_used const motor_t* __motor_init_##fn rt_section(".__motor_." level) = fn
+//    #endif /* RT_DEBUGING_AUTO_INIT */
+//#endif /* _MSC_VER */
+//#else
+//#define MOTOR_INIT_EXPORT(motor, id)
+//#endif /* RT_USING_COMPONENTS_INIT */
 
 
 motor_t *motor_get(int id);

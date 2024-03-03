@@ -1,3 +1,11 @@
+/*
+ * @Author: Dyyt587 805207319@qq.com
+ * @Date: 2024-03-03 16:29:11
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-03 22:31:37
+ * @FilePath: \project\applications\aboard_power_switch.c
+ * @Description: 杩欐槸榛樿璁剧疆,璇疯缃甡customMade`, 鎵撳紑koroFileHeader鏌ョ湅閰嶇疆 杩涜璁剧疆: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include <board.h>
 #include <rtthread.h>
 #include <drv_gpio.h>
@@ -23,8 +31,8 @@ int power_off(int id)
 		return 0;
 }
 
-//TODO:实现命令行开关对应switch 比如 power_switch 1 就打开 SWITCH_24V_1 
-// power_switch 就打印帮助信息，显示不同switch对应 id
+//TODO:瀹炵幇鍛戒护琛屽紑鍏冲搴攕witch 姣斿 power_switch 1 灏辨墦寮� SWITCH_24V_1 
+// power_switch 灏辨墦鍗板府鍔╀俊鎭紝鏄剧ず涓嶅悓switch瀵瑰簲 id
 //poweer on all
 static long power_switch(int argc, char**argv)
 {
