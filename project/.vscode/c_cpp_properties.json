@@ -44,6 +44,7 @@
                 "c:\\Users\\80520\\Documents\\GitHub\\construction_robot\\project\\libraries\\STM32F4xx_HAL\\CMSIS\\Device\\ST\\STM32F4xx\\Source\\Templates",
                 "c:\\Users\\80520\\Documents\\GitHub\\construction_robot\\project\\packages\\perf_counter-v2.2.4.1\\os",
                 "c:\\Users\\80520\\Documents\\GitHub\\construction_robot\\project\\packages\\rt_kprintf_threadsafe-latest",
+                "c:\\Users\\80520\\Documents\\GitHub\\construction_robot\\project\\packages\\rt_vsnprintf_full-latest",
                 "c:\\Users\\80520\\Documents\\GitHub\\construction_robot\\project\\rt-thread\\components\\utilities\\ulog\\backend"
             ],
             "defines": [
