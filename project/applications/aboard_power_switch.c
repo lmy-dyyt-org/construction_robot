@@ -8,16 +8,7 @@
 #include "ulog.h"
 #define LED0_PIN    GET_PIN(F, 14)
 
-enum{
- SWITCH_24V_1 =GET_PIN(H,5),  //PH5
- SWITCH_24V_2 =GET_PIN(H,4),	//PH4
- SWITCH_24V_3 =GET_PIN(H,2),	//Ph2
- SWITCH_24V_4 =GET_PIN(H,3),	//ph3
- SWITCH_5V_1  =GET_PIN(G,13), //PG13
-
-};
-
-
+#include "aboard_power_switch.h"
 int power_on(int id)
 {
 		rt_pin_write(id, PIN_HIGH);
@@ -31,6 +22,17 @@ int power_off(int id)
 
 		return 0;
 }
+
+//TODO:实现命令行开关对应switch 比如 power_switch 1 就打开 SWITCH_24V_1 
+// power_switch 就打印帮助信息，显示不同switch对应 id
+//poweer on all
+static long power_switch(int argc, char**argv)
+{
+
+    return 0;
+}
+MSH_CMD_EXPORT(power_switch, open or close a board power interface);
+
 
 int power_init(void)
 {

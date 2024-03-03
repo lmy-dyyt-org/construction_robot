@@ -19,6 +19,7 @@
 #include "ulog.h"
 #include "Emm_V5.h"
 #include "follow_line.h"
+#include "aboard_power_switch.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN    GET_PIN(F, 14)
 
@@ -60,6 +61,12 @@ int main(void)
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 
+		power_on(SWITCH_24V_1);
+	power_on(SWITCH_24V_2);
+	power_on(SWITCH_24V_3);
+	power_on(SWITCH_24V_4);
+	power_on(SWITCH_5V_1 );
+	
 	char buf[]= "fgweuygfuyweg";
 
 // 	rt_adc_device_t adc_dev;
