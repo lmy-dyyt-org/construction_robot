@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 #include "apid.h"
+#include "motor_cfg.h"
 #include <stdint.h>
 #include <stdlib.h>
 

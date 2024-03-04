@@ -26,7 +26,7 @@ enum
     M_ENOMEM,
 };
 
-static motor_t *motor_list[10]; // 电机列表
+static motor_t motor_list[MOTOR_NUM]; // 电机列表
 
 /**
  * @brief 获取电机
@@ -38,9 +38,9 @@ motor_t *motor_get(int id)
 {
     for (int i = 0; i < 10; i++)
     {
-        if (motor_list[i]->id == id)
+        if (motor_list[i].id == id)
         {
-            return motor_list[i];
+            return &motor_list[i];
         }
     }
     return 0;

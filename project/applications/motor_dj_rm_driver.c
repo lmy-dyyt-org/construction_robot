@@ -42,6 +42,32 @@ static motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
 // static PID_T motor_can2_speed_pid[DJ_MOTOR_NUMBER] = {0};
 // static PID_T motor_can2_pos_pid[DJ_MOTOR_NUMBER] = {0};
 
+// typedef int(*motor_driver)(int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
+// typedef int(*motor_ctr)(int id,MOTOR_VALUE_TYPE mode,float*data);
+
+int motor_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data)
+{
+    motor_t *motor = motor_get(id);
+
+    switch (mode)
+    {
+    case MOTOR_MODE_TORQUE:
+    /*返回力矩/电流值*/
+        tmpout = apid_calc(pid_torque, *((PID_TYPE *)(value)), motor->real_current);
+        break;
+    case MOTOR_MODE_SPEED:
+    /*返回速度值r/min*/
+        tmpout = apid_calc(pid_speed, *((PID_TYPE *)(value)), motor->speed_rpm);
+        break;
+    case MOTOR_MODE_POS:
+    /*返回位置 rad*/
+        tmpout = apid_calc(pid_pos, *((PID_TYPE *)(value)), motor->angle);
+        break;
+    default:
+        break;
+    }
+    return 0;
+}
 
 /* 接收数据回调函数 */
 static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
