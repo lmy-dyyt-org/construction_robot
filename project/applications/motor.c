@@ -85,7 +85,7 @@ int motor_behiver_1(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
         break;
     }
     }
-		return 0;
+    return 0;
 }
 
 // 底层支持torque
@@ -126,7 +126,7 @@ int motor_behiver_2(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
         break;
     }
     }
-		return 0;
+    return 0;
 }
 
 // 底层支持torque,speed
@@ -164,7 +164,7 @@ int motor_behiver_3(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
         break;
     }
     }
-		return 0;
+    return 0;
 }
 // 底层支持torque,speed,pos
 int motor_behiver_4(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
@@ -199,10 +199,8 @@ int motor_behiver_4(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
         break;
     }
     }
-				return 0;
-
+    return 0;
 }
-
 
 /**
  * @brief 创建一个电机
@@ -247,8 +245,7 @@ static int motor_read_feedback(motor_t *motor, PID_TYPE cycle)
     {
         motor->ops->control(motor->id, MOTOR_MODE_POS, &motor->cur_pos);
     }
-				return 0;
-
+    return 0;
 }
 
 int motor_handle(int id, float cycle)
@@ -276,7 +273,7 @@ int motor_init(motor_t *motor, motor_ops_t *ops)
     MOTOR_ASSERT(ops);
     motor->ops = ops;
     motor->id = motor_id;
-    motor_list[motor_id++] = motor;
+   // motor_list[motor_id++] = motor;
     return 0;
 }
 /**
@@ -393,6 +390,5 @@ int motor_updata_cfg(int id, int level)
         break;
     }
     MOTOR_ASSERT(motor);
-				return 0;
-
+    return 0;
 }

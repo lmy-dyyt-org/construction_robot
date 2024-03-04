@@ -35,33 +35,93 @@ static rt_device_t can_dev;        /* CAN 设备句柄 */
 #define DJ_MOTOR_NUMBER 11
 // can1的 8个电机
 static motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0}; // 8个电机
-// static PID_T motor_can1_speed_pid[DJ_MOTOR_NUMBER] = {0}; // 
-// static PID_T motor_can1_pos_pid[DJ_MOTOR_NUMBER] = {0}; // 
+// static PID_T motor_can1_speed_pid[DJ_MOTOR_NUMBER] = {0}; //
+// static PID_T motor_can1_pos_pid[DJ_MOTOR_NUMBER] = {0}; //
 // can2的 8个电机
-static motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0}; 
+static motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
 // static PID_T motor_can2_speed_pid[DJ_MOTOR_NUMBER] = {0};
 // static PID_T motor_can2_pos_pid[DJ_MOTOR_NUMBER] = {0};
 
 // typedef int(*motor_driver)(int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
 // typedef int(*motor_ctr)(int id,MOTOR_VALUE_TYPE mode,float*data);
+void dj_set_motor_Group_A(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4)
+{
 
-int motor_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data)
+    uint8_t data[8] = {0};
+    data[0] = iq1 >> 8;
+    data[1] = iq1;
+    data[2] = iq2 >> 8;
+    data[3] = iq2;
+    data[4] = iq3 >> 8;
+    data[5] = iq3;
+    data[6] = iq4 >> 8;
+    data[7] = iq4;
+
+    __Can_TxMessage(_hcan, 0, CAN_Motor_ALL_ID, 8, (uint8_t *)data); // 0代表标准正
+}
+int16_t iq[4];
+int motor_driver(int id, MOTOR_VALUE_TYPE mode, void *value, void *user_data)
 {
     motor_t *motor = motor_get(id);
+    struct rt_can_msg msg = {0};
+    motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
 
     switch (mode)
     {
     case MOTOR_MODE_TORQUE:
-    /*返回力矩/电流值*/
-        tmpout = apid_calc(pid_torque, *((PID_TYPE *)(value)), motor->real_current);
+        /*设置力矩/电流值*/
+        // tmpout = apid_calc(pid_torque, *((PID_TYPE *)(value)), motor->real_current);
+        /* 发送一帧 CAN 数据 */
+        msg.ide = RT_CAN_STDID; /* 标准格式 */
+        msg.rtr = RT_CAN_DTR;   /* 数据帧 */
+        msg.len = 8;            /* 数据长度为 8 */
+        msg.id = __motor->id;
+        uint16_t tt = (__motor->id - CAN_Motor1_ID) % 4;
+        iq[tt] = *((int16_t *)(value));
+        /* 待发送的 8 字节数据 */
+        msg.data[0] = iq[1] >> 8;
+        msg.data[1] = iq[1];
+        msg.data[2] = iq[2] >> 8;
+        msg.data[3] = iq[2];
+        msg.data[4] = iq[3] >> 8;
+        msg.data[5] = iq[3];
+        msg.data[6] = iq[4] >> 8;
+        msg.data[7] = iq[4];
+        rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+        if (size == 0)
+        {
+            rt_kprintf("can dev write data failed!\n");
+        }
         break;
     case MOTOR_MODE_SPEED:
-    /*返回速度值r/min*/
-        tmpout = apid_calc(pid_speed, *((PID_TYPE *)(value)), motor->speed_rpm);
+
         break;
     case MOTOR_MODE_POS:
-    /*返回位置 rad*/
-        tmpout = apid_calc(pid_pos, *((PID_TYPE *)(value)), motor->angle);
+
+        break;
+    default:
+        break;
+    }
+    return 0;
+}
+int motor_ctr(int id, MOTOR_VALUE_TYPE mode, float *data)
+{
+    motor_t *motor = motor_get(id);
+    motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
+
+    switch (mode)
+    {
+    case MOTOR_MODE_TORQUE:
+        /*返回力矩/电流值*/
+        *data = __motor->real_current;
+        break;
+    case MOTOR_MODE_SPEED:
+        // /*返回速度值r/min*/
+        *data = __motor->speed_rpm;
+        break;
+    case MOTOR_MODE_POS:
+        // /*返回位置 rad*/
+        *data = __motor->total_angle;
         break;
     default:
         break;
@@ -101,10 +161,10 @@ total_angle 总角度
  */
 void dj_motor_measure_updata(motor_measure_t *motor, uint8_t Rx_Data[])
 {
-    motor->last_angle = motor->angle;                              // 上次角度更新
-    motor->angle = (uint16_t)(Rx_Data[0] << 8 | Rx_Data[1]);       // 转子机械角度高8位和第八位
-    motor->speed_rpm = (int16_t)(Rx_Data[2] << 8 | Rx_Data[3]);    // 转子转速高8位和低八位
-	
+    motor->last_angle = motor->angle;                           // 上次角度更新
+    motor->angle = (uint16_t)(Rx_Data[0] << 8 | Rx_Data[1]);    // 转子机械角度高8位和第八位
+    motor->speed_rpm = (int16_t)(Rx_Data[2] << 8 | Rx_Data[3]); // 转子转速高8位和低八位
+
     motor->real_current = (int16_t)(Rx_Data[4] << 8 | Rx_Data[5]); // 实际输出转矩高8位和低8位
     motor->temperature = Rx_Data[6];                               // 温度     //Null
 
@@ -160,10 +220,10 @@ static void can_rx_thread(void *parameter)
         rt_device_read(can_dev, 0, &rxmsg, sizeof(rxmsg));
         /* 打印数据 ID 及内容 */
         rt_kprintf("ID:%x ", rxmsg.id);
-        if(rxmsg.id<0x209)
-        i = rxmsg.id - CAN_Motor1_ID;
+        if (rxmsg.id < 0x209)
+            i = rxmsg.id - CAN_Motor1_ID;
         else
-        i = rxmsg.id - CAN_6020_ID1 +4;
+            i = rxmsg.id - CAN_6020_ID1 + 4;
         if (motor_can1[i].msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
         {
             motor_can1[i].msg_cnt++;
@@ -224,20 +284,20 @@ int can_test(int argc, char *argv[])
         rt_kprintf("create can_rx thread failed!\n");
     }
 
-    msg.id = 0x78;          /* ID 为 0x78 */
-    msg.ide = RT_CAN_STDID; /* 标准格式 */
-    msg.rtr = RT_CAN_DTR;   /* 数据帧 */
-    msg.len = 8;            /* 数据长度为 8 */
+    // msg.id = 0x78;          /* ID 为 0x78 */
+    // msg.ide = RT_CAN_STDID; /* 标准格式 */
+    // msg.rtr = RT_CAN_DTR;   /* 数据帧 */
+    // msg.len = 8;            /* 数据长度为 8 */
 
-    /* 待发送的 8 字节数据 */
-    msg.data[0] = 0x00;
-    msg.data[1] = 0x11;
-    msg.data[2] = 0x22;
-    msg.data[3] = 0x33;
-    msg.data[4] = 0x44;
-    msg.data[5] = 0x55;
-    msg.data[6] = 0x66;
-    msg.data[7] = 0x77;
+    // /* 待发送的 8 字节数据 */
+    // msg.data[0] = 0x00;
+    // msg.data[1] = 0x11;
+    // msg.data[2] = 0x22;
+    // msg.data[3] = 0x33;
+    // msg.data[4] = 0x44;
+    // msg.data[5] = 0x55;
+    // msg.data[6] = 0x66;
+    // msg.data[7] = 0x77;
     /* 发送一帧 CAN 数据 */
     //    size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
     //    if (size == 0)
@@ -275,9 +335,9 @@ int motor_tt_init(void)
     /* 以中断接收及中断发送方式打开 CAN 设备 */
     res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
     RT_ASSERT(res == RT_EOK);
-		/* 设置 CAN 通信的波特率为 500kbit/s*/
-res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
-		    RT_ASSERT(res == RT_EOK);
+    /* 设置 CAN 通信的波特率为 500kbit/s*/
+    res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
+    RT_ASSERT(res == RT_EOK);
 
     /* 创建数据接收线程 */
     thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 1024, 25, 10);
@@ -289,6 +349,6 @@ res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
     {
         rt_kprintf("create can_rx thread failed!\n");
     }
-		return 0;
+    return 0;
 }
 INIT_COMPONENT_EXPORT(motor_tt_init);

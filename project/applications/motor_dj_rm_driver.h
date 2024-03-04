@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-03 23:04:47
+ * @LastEditTime: 2024-03-04 13:15:54
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -19,6 +19,7 @@ extern "C" {
 
 #define FILTER_BUF_LEN        5
 typedef struct {
+    uint16_t id;           //编码器值
     int16_t speed_rpm;      //转速
     float real_current;     //实际输出转矩
     int16_t given_current;  //扭矩
@@ -67,6 +68,8 @@ typedef enum {
 
 } DJ_Motor_Message_ID;
 
+int motor_ctr(int id,MOTOR_VALUE_TYPE mode,float*data);
+int motor_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
 
 #if defined(__cplusplus)
 }
