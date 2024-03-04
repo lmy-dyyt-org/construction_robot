@@ -15,7 +15,8 @@
 extern "C" {
 #endif
 
-//#include "motor_dj_rm_driver.h"
+#define MOTOR_INIT_OPS(index,__ops,__level) [index]={.ops=&((motor_ops_t)__ops),.flag_accept_level=__level}
+
 
 #define MOTOR_DJ_M3508_ID1_CAN1
 #define MOTOR_DJ_M3508_ID2_CAN1
@@ -154,6 +155,138 @@ enum{
 #endif  
     MOTOR_NUM
 };
+#ifdef MOTOR_DJ_M3508_ID1_CAN1
+#define MOTOR_DJ_M3508_ID1_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[0]                 \
+}                                   
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN1
+#define MOTOR_DJ_M3508_ID2_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[1]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID3_CAN1
+#define MOTOR_DJ_M3508_ID3_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[2]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN1
+
+#define MOTOR_DJ_M3508_ID4_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[3]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID5_CAN1
+#define MOTOR_DJ_M3508_ID5_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[4]\
+}
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID6_CAN1
+#define MOTOR_DJ_M3508_ID6_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[5]\
+}
+
+#endif
+#ifdef MOTOR_DJ_M3508_ID7_CAN1
+#define MOTOR_DJ_M3508_ID7_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[6]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID8_CAN1
+#define MOTOR_DJ_M3508_ID8_CAN1_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[7]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID1_CAN2
+#define MOTOR_DJ_M3508_ID1_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[0]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN2
+#define MOTOR_DJ_M3508_ID2_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[1]                 \
+}
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID3_CAN2
+#define MOTOR_DJ_M3508_ID3_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[2]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN2
+#define MOTOR_DJ_M3508_ID4_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[3]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID5_CAN2
+#define MOTOR_DJ_M3508_ID5_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[4]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID6_CAN2
+#define MOTOR_DJ_M3508_ID6_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[5]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID7_CAN2
+#define MOTOR_DJ_M3508_ID7_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[6]                 \
+}
+#endif
+#ifdef MOTOR_DJ_M3508_ID8_CAN2
+#define MOTOR_DJ_M3508_ID8_CAN2_OPS \
+{                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can2[7]                 \
+}
+#endif
 
 
 #ifdef __cplusplus

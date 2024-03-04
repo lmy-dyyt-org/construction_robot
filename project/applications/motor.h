@@ -17,6 +17,7 @@ extern "C" {
 #include "motor_cfg.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include "motor_dj_rm_driver.h"
 
 /* Compiler Related Definitions */
 #include "rtcompiler.h"
@@ -26,44 +27,29 @@ extern "C" {
 #define MOTOR_USING_AUTO_INIT
 #define MOTOR_DEBUGING_AUTO_INIT
 
-#define MOTOR_INIT_OPS(ops) {.ops=&((motor_ops_t)(ops))}
-
-#define MOTOR_INIT_STATIC                   \
-{       \
-    MOTOR_INIT_OPS({                                   \
-   .driver= motor_dj_driver,                       \
-   .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[0]                 \
-} ),\
-}
 
 
 typedef enum{
-
+	MOTOR_MODE_IDEL = 0,
 	MOTOR_MODE_TORQUE =1,
     MOTOR_MODE_SPEED = 2,
     MOTOR_MODE_POS   = 3,
     MOTOR_MODE_VOLTAGE,
     MOTOR_MODE_TEMP,
     MOTOR_MODE_MAX,
-
-//    MOTOR_CONTROL_SUPPORT_TORQUE = 0,   //硬件支持
-//    MOTOR_CONTROL_SUPPORT_SPEED = 1,    //速度支持
-//    MOTOR_CONTROL_SUPPORT_POS = 2,      //位置支持
-
-
 }MOTOR_VALUE_TYPE;
 
 enum{
 
-    MOTOR_CONTROL_SUPPORT_TORQUE = 1,   //硬件支持
-    MOTOR_CONTROL_SUPPORT_SPEED = 1<<1,    //速度支持
-    MOTOR_CONTROL_SUPPORT_POS = 1<<2,      //位置支持
+    MOTOR_CONTROL_SUPPORT_NONE =0,   //硬件支持
+    MOTOR_CONTROL_SUPPORT_TORQUE ,   //硬件支持
+    MOTOR_CONTROL_SUPPORT_SPEED ,    //速度支持
+    MOTOR_CONTROL_SUPPORT_POS ,      //位置支持
 
 };
-typedef int(*motor_driver)(int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
-typedef int(*motor_ctr)(int id,MOTOR_VALUE_TYPE mode,float*data);
-typedef int(*motor_behiver)(int id, MOTOR_VALUE_TYPE mode,void*data, void* user_data);
+typedef int(*motor_driver)(int id, uint16_t mode,float* value, void* user_data);
+typedef int(*motor_ctr)(int id,uint16_t mode,float*data);
+typedef int(*motor_behiver)(int id, uint16_t mode,void*data, void* user_data);
 typedef struct{
     motor_driver driver;
     motor_ctr control;
@@ -153,7 +139,7 @@ motor_t *motor_get(int id);
 int motor_get_id(const char* name);
 int motor_create(motor_ops_t*ops);
 int motor_handle(int id, float cycle);
-int motor_init(motor_t *motor, motor_ops_t *ops);
+void motor_init(void);
 int motor_set_speed(int id, float value);
 
 int motor_set_pos(int id, float value);

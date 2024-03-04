@@ -1,3 +1,11 @@
+/*
+ * @Author: Dyyt587 805207319@qq.com
+ * @Date: 2024-03-03 15:24:57
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-04 20:07:26
+ * @FilePath: \project\applications\motor.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 /**
  * @file motor.c
  * @brief Motor control functions
@@ -25,11 +33,8 @@ enum
     M_ENOMEM,
 };
 
-//static motor_t motor_list[MOTOR_NUM] = MOTOR_INIT_STATIC; // 电机列表
-static motor_t motor_list[MOTOR_NUM] = {
-    {.ops=&((motor_ops_t){.driver=0}),
-    }
-}; // 电机列表
+extern motor_t motor_list[MOTOR_NUM];
+
 
 /**
  * @brief 获取电机
@@ -37,19 +42,20 @@ static motor_t motor_list[MOTOR_NUM] = {
  * @param id 电机id
  * @return motor_t* 返回电机指针
  */
-motor_t *motor_get(int id)
+inline motor_t *motor_get(int id)
 {
-    for (int i = 0; i < 10; i++)
-    {
-        if (motor_list[i].id == id)
-        {
-            return &motor_list[i];
-        }
-    }
-    return 0;
+//     for (int i = 0; i < 10; i++)
+//     {
+//         if (motor_list[i].id == id)
+//         {
+//             return &motor_list[i];
+// }
+//}
+return &motor_list[id];
 }
+
 // 底层不支持
-int motor_behiver_1(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
+int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
 {
     motor_t *motor = motor_get(id);
     apid_t *pid_torque = motor->pid_torque;
@@ -92,7 +98,7 @@ int motor_behiver_1(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
 }
 
 // 底层支持torque
-int motor_behiver_2(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
+int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
 {
     motor_t *motor = motor_get(id);
     apid_t *pid_torque = motor->pid_torque;
@@ -133,7 +139,7 @@ int motor_behiver_2(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
 }
 
 // 底层支持torque,speed
-int motor_behiver_3(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
+int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
 {
     motor_t *motor = motor_get(id);
     apid_t *pid_torque = motor->pid_torque;
@@ -170,7 +176,7 @@ int motor_behiver_3(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
     return 0;
 }
 // 底层支持torque,speed,pos
-int motor_behiver_4(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
+int motor_behiver_4(int id, uint16_t mode, void *data, void *user_data)
 {
     motor_t *motor = motor_get(id);
     apid_t *pid_torque = motor->pid_torque;
@@ -205,27 +211,27 @@ int motor_behiver_4(int id, MOTOR_VALUE_TYPE mode, void *data, void *user_data)
     return 0;
 }
 
-/**
- * @brief 创建一个电机
- *
- * @param ops 电机操作函数
- * @return int 返回实际分配的id
- */
-int motor_create(motor_ops_t *ops)
-{
-    MOTOR_ASSERT(ops);
-    // 创建电机
-    motor_t *motor = (motor_t *)MOTOR_MALLOC(sizeof(motor_t));
-    if (motor)
-    {
-        motor_init(motor, ops);
-        return motor->id;
-    }
-    else
-    {
-        return -M_ENOMEM;
-    }
-}
+// /**
+//  * @brief 创建一个电机
+//  *
+//  * @param ops 电机操作函数
+//  * @return int 返回实际分配的id
+//  */
+// int motor_create(motor_ops_t *ops)
+// {
+//     MOTOR_ASSERT(ops);
+//     // 创建电机
+//     motor_t *motor = (motor_t *)MOTOR_MALLOC(sizeof(motor_t));
+//     if (motor)
+//     {
+//         motor_init(motor, ops);
+//         return motor->id;
+//     }
+//     else
+//     {
+//         return -M_ENOMEM;
+//     }
+// }
 #define MOTOD_IS_POS_TIME(motor) (motor->time % motor->pos_tick == 0)
 #define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->speed_tick == 0)
 #define MOTOD_IS_TORQUE_TIME(motor) (motor->time % motor->torque_tick == 0)
@@ -263,22 +269,7 @@ int motor_handle(int id, float cycle)
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
     return 0;
 }
-/**
- * @brief 初始化电机
- *
- * @param motor
- * @param ops
- * @return int
- */
-int motor_init(motor_t *motor, motor_ops_t *ops)
-{
-    MOTOR_ASSERT(motor);
-    MOTOR_ASSERT(ops);
-    motor->ops = ops;
-    motor->id = motor_id;
-   // motor_list[motor_id++] = motor;
-    return 0;
-}
+
 /**
  * @brief 设置电机的速度
  *
@@ -394,4 +385,22 @@ int motor_updata_cfg(int id, int level)
     }
     MOTOR_ASSERT(motor);
     return 0;
+}
+
+void motor_init(void)
+{
+    for(int i=0;i<MOTOR_NUM;++i)
+    {
+        motor_list[i].id = i;
+        motor_list[i].time = 0;
+
+        //TODO: 为什么要设置为1
+        motor_list[i].pos_tick = 1;
+        motor_list[i].speed_tick = 1;
+        motor_list[i].torque_tick = 1;
+
+        motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
+        motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;
+        motor_updata_cfg(i,motor_list[i].flag_accept_level);
+    }
 }

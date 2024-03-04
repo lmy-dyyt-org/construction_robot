@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-04 13:15:54
+ * @LastEditTime: 2024-03-04 19:47:44
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,9 +16,10 @@ extern "C" {
 #include "motor.h"
 #include <stdint.h>
 
-
-
+#define DJ_MOTOR_NUMBER 11
 #define FILTER_BUF_LEN        5
+
+
 typedef struct {
     uint16_t id;           //编码器值
     int16_t speed_rpm;      //转速
@@ -29,8 +30,8 @@ typedef struct {
 
     uint16_t last_angle;    //abs angle range:[0,8191]
     uint16_t offset_angle;  //偏差
-    int32_t round_cnt;      //电机转的圈数
-    int32_t total_angle;    //当前总角度 圈数
+    uint32_t round_cnt;      //电机转的圈数
+    uint32_t total_angle;    //当前总角度 圈数
     // uint8_t buf_idx;
     // uint16_t angle_buf[FILTER_BUF_LEN];
     // uint16_t fited_angle;        //修正角度？
@@ -68,9 +69,13 @@ typedef enum {
 
 
 } DJ_Motor_Message_ID;
+// can1的电机
+extern motor_measure_t motor_can1[DJ_MOTOR_NUMBER]; 
+// can2的电机
+extern motor_measure_t motor_can2[DJ_MOTOR_NUMBER];
 
-int motor_dj_ctr(int id,MOTOR_VALUE_TYPE mode,float*data);
-int motor_dj_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
+int motor_dj_ctr(int id,uint16_t mode,float*data);
+int motor_dj_driver (int id, uint16_t mode,float* value, void* user_data);
 
 #if defined(__cplusplus)
 }
