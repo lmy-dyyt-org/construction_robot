@@ -13,6 +13,7 @@
 extern "C" {
 #endif
 #include "apid.h"
+#include "motor.h"
 #include <stdint.h>
 
 
@@ -68,8 +69,8 @@ typedef enum {
 
 } DJ_Motor_Message_ID;
 
-int motor_ctr(int id,MOTOR_VALUE_TYPE mode,float*data);
-int motor_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
+int motor_dj_ctr(int id,MOTOR_VALUE_TYPE mode,float*data);
+int motor_dj_driver (int id, MOTOR_VALUE_TYPE mode,void* value, void* user_data);
 
 #if defined(__cplusplus)
 }

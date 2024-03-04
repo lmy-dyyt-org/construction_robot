@@ -26,10 +26,16 @@ extern "C" {
 #define MOTOR_USING_AUTO_INIT
 #define MOTOR_DEBUGING_AUTO_INIT
 
+#define MOTOR_INIT_OPS(ops) {.ops=&((motor_ops_t)(ops))}
 
-
-
-
+#define MOTOR_INIT_STATIC                   \
+{       \
+    MOTOR_INIT_OPS({                                   \
+   .driver= motor_dj_driver,                       \
+   .control = motor_dj_ctr,                     \
+   .user_data = &motor_can1[0]                 \
+} ),\
+}
 
 
 typedef enum{

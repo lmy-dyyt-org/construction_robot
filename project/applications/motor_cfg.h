@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#include "motor_dj_rm_driver.h"
+//#include "motor_dj_rm_driver.h"
 
 #define MOTOR_DJ_M3508_ID1_CAN1
 #define MOTOR_DJ_M3508_ID2_CAN1
@@ -51,15 +51,7 @@ extern "C" {
 #define MOTOR_DJ_M2006_ID7_CAN2
 #define MOTOR_DJ_M2006_ID8_CAN2
 
-#ifdef MOTOR_DJ_M3508_ID1_CAN1
-#define MOTOR_DJ_M3508_ID1_CAN1_OPS \
-{                                   \
-    .driver=                        \
-    .control =                      \
-    .user_data =                    \        
-}                                   
 
-#endif
 
 enum{
 #ifdef MOTOR_DJ_M3508_ID1_CAN1

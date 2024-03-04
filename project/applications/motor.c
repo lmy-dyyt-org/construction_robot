@@ -6,7 +6,6 @@
  */
 
 #include "motor.h"
-#include "apid.h"
 static int motor_id = 0; // 用于分配电机id
 
 #define MOTOR_ASSERT(x) \
@@ -26,7 +25,11 @@ enum
     M_ENOMEM,
 };
 
-static motor_t motor_list[MOTOR_NUM]; // 电机列表
+//static motor_t motor_list[MOTOR_NUM] = MOTOR_INIT_STATIC; // 电机列表
+static motor_t motor_list[MOTOR_NUM] = {
+    {.ops=&((motor_ops_t){.driver=0}),
+    }
+}; // 电机列表
 
 /**
  * @brief 获取电机
