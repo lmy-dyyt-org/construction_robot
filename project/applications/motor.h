@@ -77,6 +77,8 @@ typedef struct{
     uint8_t flag_run_mode :2;//记录当前运行模式
     uint8_t flag_out_mode :2;//记录当前输出模式
     uint8_t flag_accept_level :2;//记录支持的模式 0 - 3  
+    uint8_t flag_passive_feedback :1;//记录支持的模式 0 - 3  
+    uint8_t flag_passive_handle :1;//记录支持的模式 0 - 3  
 
     motor_behiver behaver;
     float acc_out;

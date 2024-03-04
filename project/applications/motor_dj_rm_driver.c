@@ -32,14 +32,12 @@ static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 
 // can1的电机
-motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0}; 
+motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0};
 // can2的电机
 motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
 
-
-
-//can1 的
-int16_t iq1_low[4], iq1_high[4],iq1_uhigh[4];
+// can1 的
+int16_t iq1_low[4], iq1_high[4], iq1_uhigh[4];
 
 int16_t iq2_low[4], iq2_high[4], iq2_uhigh[4];
 
@@ -48,7 +46,7 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
     motor_t *motor = motor_get(id);
     struct rt_can_msg msg = {0};
     motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
-
+    int16_t tmpout = *value;
     switch (mode)
     {
     case MOTOR_MODE_TORQUE:
@@ -58,34 +56,37 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         msg.ide = RT_CAN_STDID; /* 标准格式 */
         msg.rtr = RT_CAN_DTR;   /* 数据帧 */
         msg.len = 8;            /* 数据长度为 8 */
-        msg.id = __motor->id;
-				uint16_t tt = (__motor->id - CAN_Motor1_ID) % 4;
-				LOG_D("tt %d value %f",tt,value);
-		if((msg.id - CAN_Motor1_ID)>4){
-        iq1_high[tt] = *((int16_t *)(value));
-        /* 待发送的 8 字节数据 */
-        msg.data[0] = iq1_high[0] >> 8;
-        msg.data[1] = iq1_high[0];
-        msg.data[2] = iq1_high[1] >> 8;
-        msg.data[3] = iq1_high[1];
-        msg.data[4] = iq1_high[2] >> 8;
-        msg.data[5] = iq1_high[2];
-        msg.data[6] = iq1_high[3] >> 8;
-        msg.data[7] = iq1_high[3];
-		}else{
-        iq1_low[tt] = *((int16_t *)(value));
-        /* 待发送的 8 字节数据 */
-        msg.data[0] = iq1_low[0] >> 8;
-        msg.data[1] = iq1_low[0];
-        msg.data[2] = iq1_low[1] >> 8;
-        msg.data[3] = iq1_low[1];
-        msg.data[4] = iq1_low[2] >> 8;
-        msg.data[5] = iq1_low[2];
-        msg.data[6] = iq1_low[3] >> 8;
-        msg.data[7] = iq1_low[3];
-		}
-				msg.id = 0x200;
-				//msg.data[3]=12;
+        uint16_t tt = (__motor->id - CAN_Motor1_ID) % 4;
+        // LOG_D("tt %d value %f",tt,value);
+        if ((msg.id - CAN_Motor1_ID) > 4)
+        {
+            iq1_high[tt] = tmpout;
+            /* 待发送的 8 字节数据 */
+            msg.id = CAN_Motor_ALL_ID2;
+            msg.data[0] = iq1_high[0] >> 8;
+            msg.data[1] = iq1_high[0];
+            msg.data[2] = iq1_high[1] >> 8;
+            msg.data[3] = iq1_high[1];
+            msg.data[4] = iq1_high[2] >> 8;
+            msg.data[5] = iq1_high[2];
+            msg.data[6] = iq1_high[3] >> 8;
+            msg.data[7] = iq1_high[3];
+        }
+        else
+        {
+            iq1_low[tt] = tmpout;
+            /* 待发送的 8 字节数据 */
+            msg.id = CAN_Motor_ALL_ID;
+            msg.data[0] = iq1_low[0] >> 8;
+            msg.data[1] = iq1_low[0];
+            msg.data[2] = iq1_low[1] >> 8;
+            msg.data[3] = iq1_low[1];
+            msg.data[4] = iq1_low[2] >> 8;
+            msg.data[5] = iq1_low[2];
+            msg.data[6] = iq1_low[3] >> 8;
+            msg.data[7] = iq1_low[3];
+        }
+        // msg.data[3]=12;
         rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
         if (size == 0)
         {
@@ -93,12 +94,9 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         }
         break;
     case MOTOR_MODE_SPEED:
-
-        break;
     case MOTOR_MODE_POS:
-
-        break;
     default:
+        LOG_E("not support");
         break;
     }
     return 0;
@@ -171,7 +169,7 @@ void dj_motor_measure_updata(motor_measure_t *motor, uint8_t Rx_Data[])
     else if (motor->angle - motor->last_angle < -4096)
         motor->round_cnt++;
     motor->total_angle = motor->round_cnt * 8191 + motor->angle - motor->offset_angle;
-    //motor->total_angle +=motor->angle - motor->last_angle;
+    // motor->total_angle +=motor->angle - motor->last_angle;
 }
 
 void get_motor_offset(motor_measure_t *motor, uint8_t Rx_Data[])
@@ -184,12 +182,12 @@ void dj_motor_BackToZero(motor_measure_t *motor)
     motor->offset_angle = motor->angle;
     motor->round_cnt = 0;
 }
-    rt_err_t ind_t (rt_device_t dev, void *args , rt_int32_t hdr, rt_size_t size)
-    {
-            /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
-        rt_sem_release(&rx_sem);
-        return RT_EOK;
-    }
+rt_err_t ind_t(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
+{
+    /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
+    rt_sem_release(&rx_sem);
+    return RT_EOK;
+}
 
 static void can_rx_thread(void *parameter)
 {
@@ -200,17 +198,16 @@ static void can_rx_thread(void *parameter)
     /* 设置接收回调函数 */
     rt_device_set_rx_indicate(can_dev, can_rx_call);
 
-    #ifdef RT_CAN_USING_HDR
-        struct rt_can_filter_item items[] =
+#ifdef RT_CAN_USING_HDR
+    struct rt_can_filter_item items[] =
         {
 
-            {.id= 0x200,.ide= 0, .rtr=0,.mode= 0,.mask= 0x7f0, .hdr_bank=0,.rxfifo=CAN_RX_FIFO0,.ind=ind_t, .args=RT_NULL}  
-        };
-        struct rt_can_filter_config cfg = {sizeof(items)/sizeof(struct rt_can_filter_item), 1, items}; /* 过滤表 */
-        /* 设置硬件过滤表 */
-        res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
-        RT_ASSERT(res == RT_EOK);
-    #endif
+            {.id = 0x200, .ide = 0, .rtr = 0, .mode = 0, .mask = 0x7f0, .hdr_bank = 0, .rxfifo = CAN_RX_FIFO0, .ind = ind_t, .args = RT_NULL}};
+    struct rt_can_filter_config cfg = {sizeof(items) / sizeof(struct rt_can_filter_item), 1, items}; /* 过滤表 */
+    /* 设置硬件过滤表 */
+    res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
+    RT_ASSERT(res == RT_EOK);
+#endif
 
     while (1)
     {
@@ -221,7 +218,7 @@ static void can_rx_thread(void *parameter)
         /* 从 CAN 读取一帧数据 */
         rt_device_read(can_dev, 0, &rxmsg, sizeof(rxmsg));
         /* 打印数据 ID 及内容 */
-        //rt_kprintf("ID:%x ", rxmsg.id);
+        // rt_kprintf("ID:%x ", rxmsg.id);
         if (rxmsg.id < 0x209)
             i = rxmsg.id - CAN_Motor1_ID;
         else
@@ -234,15 +231,20 @@ static void can_rx_thread(void *parameter)
         else
             dj_motor_measure_updata(&motor_can1[i], rxmsg.data);
 
-        LOG_D("id %d, speed %d total_angle %d",motor_can1[i].id ,motor_can1[i].speed_rpm,motor_can1[i].total_angle);
+        LOG_D("id %d, speed %d total_angle %d", motor_can1[i].id, motor_can1[i].speed_rpm, motor_can1[i].total_angle);
 
-				float speed_rpm = motor_can1[i].speed_rpm;
-				float total_angle = motor_can1[i].total_angle;
-        motor_dj_ctr(0, MOTOR_MODE_TORQUE, &motor_can1[i].real_current);
-        motor_dj_ctr(0, MOTOR_MODE_SPEED, &speed_rpm);
-        motor_dj_ctr(0, MOTOR_MODE_POS, &total_angle);
-				float cur=1000;
-        motor_dj_driver(0, MOTOR_MODE_TORQUE, &cur, &motor_can1[i]);
+        float speed_rpm = motor_can1[i].speed_rpm;
+        float total_angle = motor_can1[i].total_angle;
+        // 更新数据
+        motor_t *motor = motor_get(M3508_1_CAN1);
+        motor_set_torque(M3508_1_CAN1, 100);
+        motor_handle(M3508_1_CAN1, 1);
+        
+        // motor_dj_ctr(0, MOTOR_MODE_TORQUE, &motor_can1[i].real_current);
+        // motor_dj_ctr(0, MOTOR_MODE_SPEED, &speed_rpm);
+        // motor_dj_ctr(0, MOTOR_MODE_POS, &total_angle);
+        // float cur = 0;
+        // motor_dj_driver(0, MOTOR_MODE_TORQUE, &cur, &motor_can1[i]);
     }
 }
 
@@ -254,8 +256,7 @@ int motor_tt_init(void)
     rt_size_t size;
     rt_thread_t thread;
 
-
-    for(int i = 0; i < DJ_MOTOR_NUMBER; i++)
+    for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
     {
         motor_can1[i].id = CAN_Motor1_ID + i;
         motor_can1[i].msg_cnt = 0;
@@ -268,7 +269,7 @@ int motor_tt_init(void)
         motor_can1[i].temperature = 0;
         motor_can1[i].total_angle = 0;
     }
-    for(int i = 0; i < DJ_MOTOR_NUMBER; i++)
+    for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
     {
         motor_can2[i].id = CAN_Motor5_ID + i;
         motor_can2[i].msg_cnt = 0;
@@ -281,7 +282,7 @@ int motor_tt_init(void)
         motor_can2[i].temperature = 0;
         motor_can2[i].total_angle = 0;
     }
-motor_init();
+    motor_init();
     /* 查找 CAN 设备 */
     can_dev = rt_device_find(CAN_DEV_NAME);
     if (!can_dev)
@@ -312,6 +313,3 @@ motor_init();
     return 0;
 }
 INIT_COMPONENT_EXPORT(motor_tt_init);
-
-
-

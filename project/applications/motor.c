@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-04 20:07:26
+ * @LastEditTime: 2024-03-04 22:03:31
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -263,8 +263,9 @@ int motor_handle(int id, float cycle)
     MOTOR_ASSERT(motor);
     MOTOR_ASSERT(motor->ops);
     motor->time += cycle;
-
-    motor_read_feedback(motor, cycle);                                                               // 更新反馈值
+    if(motor->flag_passive_feedback){}else{
+        motor_read_feedback(motor, cycle);                                                               // 更新反馈值
+    }
     motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data);                         // 进行计算
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
     return 0;
@@ -372,15 +373,19 @@ int motor_updata_cfg(int id, int level)
     {
     case 0:
         motor->behaver = motor_behiver_1;
+        motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_NONE;
         break;
     case 1:
         motor->behaver = motor_behiver_2;
+        motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_TORQUE;
         break;
     case 2:
         motor->behaver = motor_behiver_3;
+        motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_SPEED;
         break;
     case 3:
         motor->behaver = motor_behiver_4;
+        motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_POS;
         break;
     }
     MOTOR_ASSERT(motor);
