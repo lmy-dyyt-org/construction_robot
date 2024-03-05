@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+project/.vscode/c_cpp_properties.json
+project/build/keil/List/context_rvds.lst
+project/build/keil/List/rt-thread.map
+project/build/keil/List/startup_stm32f427xx.lst
+project/build/keil/Obj/project_rt-thread.dep
+project/build/keil/Obj/rt-thread.axf
+project/build/keil/Obj/rt-thread.build_log.htm
+project/build/keil/Obj/rt-thread.htm
+project/project.uvguix.80520
+project/rtthread.bin
