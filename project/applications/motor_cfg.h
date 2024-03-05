@@ -18,22 +18,22 @@ extern "C" {
 #define MOTOR_INIT_OPS(index,__ops,__level) [index]={.ops=&((motor_ops_t)__ops),.flag_accept_level=__level}
 
 
-#define MOTOR_DJ_M3508_ID1_CAN1
-#define MOTOR_DJ_M3508_ID2_CAN1
-#define MOTOR_DJ_M3508_ID3_CAN1
-#define MOTOR_DJ_M3508_ID4_CAN1
-#define MOTOR_DJ_M3508_ID5_CAN1
-#define MOTOR_DJ_M3508_ID6_CAN1
-#define MOTOR_DJ_M3508_ID7_CAN1
-#define MOTOR_DJ_M3508_ID8_CAN1
-#define MOTOR_DJ_M3508_ID1_CAN2
-#define MOTOR_DJ_M3508_ID2_CAN2
-#define MOTOR_DJ_M3508_ID3_CAN2
-#define MOTOR_DJ_M3508_ID4_CAN2
-#define MOTOR_DJ_M3508_ID5_CAN2
-#define MOTOR_DJ_M3508_ID6_CAN2
-#define MOTOR_DJ_M3508_ID7_CAN2
-#define MOTOR_DJ_M3508_ID8_CAN2
+// #define MOTOR_DJ_M3508_ID1_CAN1
+// #define MOTOR_DJ_M3508_ID2_CAN1
+// #define MOTOR_DJ_M3508_ID3_CAN1
+// #define MOTOR_DJ_M3508_ID4_CAN1
+// #define MOTOR_DJ_M3508_ID5_CAN1
+// #define MOTOR_DJ_M3508_ID6_CAN1
+// #define MOTOR_DJ_M3508_ID7_CAN1
+// #define MOTOR_DJ_M3508_ID8_CAN1
+// #define MOTOR_DJ_M3508_ID1_CAN2
+// #define MOTOR_DJ_M3508_ID2_CAN2
+// #define MOTOR_DJ_M3508_ID3_CAN2
+// #define MOTOR_DJ_M3508_ID4_CAN2
+// #define MOTOR_DJ_M3508_ID5_CAN2
+// #define MOTOR_DJ_M3508_ID6_CAN2
+// #define MOTOR_DJ_M3508_ID7_CAN2
+// #define MOTOR_DJ_M3508_ID8_CAN2
 
 #define MOTOR_DJ_M2006_ID1_CAN1
 #define MOTOR_DJ_M2006_ID2_CAN1
@@ -160,7 +160,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[0]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_1],                 \
 }                                   
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN1
@@ -168,7 +168,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[1]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_2],                 \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID3_CAN1
@@ -176,7 +176,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[2]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_3],                \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN1
@@ -185,7 +185,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[3]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_4],                 \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID5_CAN1
@@ -193,7 +193,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[4]\
+   .user_data = &dj_motors[DJ_M_CAN1_5],\
 }
 #endif
 
@@ -202,7 +202,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[5]\
+   .user_data = &dj_motors[DJ_M_CAN1_6],\
 }
 
 #endif
@@ -211,7 +211,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[6]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_7],              \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID8_CAN1
@@ -219,7 +219,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can1[7]                 \
+   .user_data = &dj_motors[DJ_M_CAN1_8],           \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID1_CAN2
@@ -227,7 +227,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[0]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_1],                \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN2
@@ -235,7 +235,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[1]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_2],                \
 }
 #endif
 
@@ -244,7 +244,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[2]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_3],               \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN2
@@ -252,7 +252,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[3]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_4],                 \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID5_CAN2
@@ -260,7 +260,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[4]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_5],                \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID6_CAN2
@@ -268,7 +268,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[5]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_6],                 \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID7_CAN2
@@ -276,7 +276,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[6]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_7],                 \
 }
 #endif
 #ifdef MOTOR_DJ_M3508_ID8_CAN2
@@ -284,7 +284,7 @@ enum{
 {                                   \
    .driver= motor_dj_driver,                       \
    .control = motor_dj_ctr,                     \
-   .user_data = &motor_can2[7]                 \
+   .user_data = &dj_motors[DJ_M_CAN2_8],                 \
 }
 #endif
 

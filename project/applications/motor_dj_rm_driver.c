@@ -32,142 +32,133 @@
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 
-// can1的电机
-motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0};
-// can2的电机
-motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
+// // can1的电机
+// motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0};
+// // can2的电机
+// motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
 
-enum{
-#ifdef MOTOR_DJ_M3508_ID1_CAN1 || MOTOR_DJ_M2006_ID1_CAN1
-    DJ_M_CAN1_1,
-#endif
-#ifdef MOTOR_DJ_M3508_ID2_CAN1 || MOTOR_DJ_M2006_ID2_CAN1
-    DJ_M_CAN1_2,
-#endif
-#ifdef MOTOR_DJ_M3508_ID3_CAN1 || MOTOR_DJ_M2006_ID3_CAN1
-    DJ_M_CAN1_3,
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN1 || MOTOR_DJ_M2006_ID4_CAN1
-    DJ_M_CAN1_4,
-#endif
-#ifdef MOTOR_DJ_M3508_ID5_CAN1 || MOTOR_DJ_M2006_ID5_CAN1
-    DJ_M_CAN1_5,
-#endif
-#ifdef MOTOR_DJ_M3508_ID6_CAN1 || MOTOR_DJ_M2006_ID6_CAN1
-    DJ_M_CAN1_6,
-#endif
-#ifdef MOTOR_DJ_M3508_ID7_CAN1 || MOTOR_DJ_M2006_ID7_CAN1
-    DJ_M_CAN1_7,
-#endif
-#ifdef MOTOR_DJ_M3508_ID8_CAN1 || MOTOR_DJ_M2006_ID8_CAN1
-    DJ_M_CAN1_8,
-#endif
-
-#ifdef MOTOR_DJ_M3508_ID8_CAN2 || MOTOR_DJ_M2006_ID8_CAN2
-    DJ_M_CAN2_1,
-#endif 
-#ifdef MOTOR_DJ_M3508_ID2_CAN2 || MOTOR_DJ_M2006_ID2_CAN2
-    DJ_M_CAN2_2,
-#endif
-#ifdef MOTOR_DJ_M3508_ID3_CAN2 || MOTOR_DJ_M2006_ID3_CAN2
-    DJ_M_CAN2_3,
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN2 || MOTOR_DJ_M2006_ID4_CAN2
-    DJ_M_CAN2_4,
-#endif
-#ifdef MOTOR_DJ_M3508_ID5_CAN2 || MOTOR_DJ_M2006_ID5_CAN2
-    DJ_M_CAN2_5,
-#endif
-#ifdef MOTOR_DJ_M3508_ID6_CAN2 || MOTOR_DJ_M2006_ID6_CAN2
-    DJ_M_CAN2_6,
-#endif
-#ifdef MOTOR_DJ_M3508_ID7_CAN2 || MOTOR_DJ_M2006_ID7_CAN2
-    DJ_M_CAN2_7,
-#endif
-#ifdef MOTOR_DJ_M3508_ID8_CAN2 || MOTOR_DJ_M2006_ID8_CAN2
-    DJ_M_CAN2_8,
-#endif
-DJ_M_NUM
-};
-
-#define DJ_MOTOR_MOTOR_ID(index,__id) [index]={.id=__id,}
+#define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
+                                                     .id = __id,         \
+                                                     .can_id = __can_id, \
+}
 motor_measure_t dj_motors[DJ_M_NUM] = {
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_1_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_1, M3508_1_CAN1, CAN_Motor1_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_2_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_2, M3508_2_CAN1, CAN_Motor2_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID3_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_3_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_3, M3508_3_CAN1, CAN_Motor3_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_4_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_4, M3508_4_CAN1, CAN_Motor4_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID5_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_5_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_5, M3508_5_CAN1, CAN_Motor5_ID),
 #endif
 
 #ifdef MOTOR_DJ_M3508_ID6_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_6_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_6, M3508_6_CAN1, CAN_Motor6_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID7_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_7_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_7, M3508_7_CAN1, CAN_Motor7_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID8_CAN1
-DJ_MOTOR_MOTOR_ID(M3508_8_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_8, M3508_8_CAN1, CAN_Motor8_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID1_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_1_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_1, M3508_1_CAN2, CAN_Motor1_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_2_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_2, M3508_2_CAN2, CAN_Motor2_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID3_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_3_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_3, M3508_3_CAN2, CAN_Motor3_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_4_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_4, M3508_4_CAN2, CAN_Motor4_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID5_CAN2
 
-DJ_MOTOR_MOTOR_ID(M3508_5_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_5, M3508_5_CAN2, CAN_Motor5_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID6_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_6_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_6, M3508_6_CAN2, CAN_Motor6_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID7_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_7_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_7, M3508_7_CAN2, CAN_Motor7_ID),
 #endif
 #ifdef MOTOR_DJ_M3508_ID8_CAN2
-DJ_MOTOR_MOTOR_ID(M3508_8_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_8, M3508_8_CAN2, CAN_Motor8_ID),
 #endif
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
-DJ_MOTOR_MOTOR_ID(M2006_1_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_1, M2006_1_CAN1, CAN_Motor1_ID),
 #endif
 #ifdef MOTOR_DJ_M2006_ID2_CAN1
-DJ_MOTOR_MOTOR_ID(M2006_2_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_2, M2006_2_CAN1, CAN_Motor2_ID),
 #endif
 #ifdef MOTOR_DJ_M2006_ID3_CAN1
-DJ_MOTOR_MOTOR_ID(M2006_3_CAN1),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_3, M2006_3_CAN1, CAN_Motor3_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID4_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_4, M2006_4_CAN1, CAN_Motor4_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID5_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_5, M2006_5_CAN1, CAN_Motor5_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID6_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_6, M2006_6_CAN1, CAN_Motor6_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID7_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_7, M2006_7_CAN1, CAN_Motor7_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID8_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_8, M2006_8_CAN1, CAN_Motor8_ID),
 #endif
 
 #ifdef MOTOR_DJ_M2006_ID1_CAN2
-DJ_MOTOR_MOTOR_ID(M2006_1_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_1, M2006_1_CAN2, CAN_Motor1_ID),
 #endif
 #ifdef MOTOR_DJ_M2006_ID2_CAN2
-DJ_MOTOR_MOTOR_ID(M2006_2_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_2, M2006_2_CAN2, CAN_Motor2_ID),
 #endif
 #ifdef MOTOR_DJ_M2006_ID3_CAN2
-DJ_MOTOR_MOTOR_ID(M2006_3_CAN2),
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_3, M2006_3_CAN2, CAN_Motor3_ID),
 #endif
-
+#ifdef MOTOR_DJ_M2006_ID4_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_4, M2006_4_CAN2, CAN_Motor4_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID5_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_5, M2006_5_CAN2, CAN_Motor5_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID6_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_6, M2006_6_CAN2, CAN_Motor6_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID7_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_7, M2006_7_CAN2, CAN_Motor7_ID),
+#endif
+#ifdef MOTOR_DJ_M2006_ID8_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_8, M2006_8_CAN2, CAN_Motor8_ID),
+#endif
 };
-
-
-
-
-
+// 写一个二分查找,通过can_id查找到电机对应的结构体
+motor_measure_t *motor_get_by_canid(uint16_t can_id)
+{
+    uint8_t left = 0, right = DJ_M_NUM - 1;
+    uint8_t mid;
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        if (dj_motors[mid].can_id == can_id)
+            return &dj_motors[mid];
+        else if (dj_motors[mid].can_id < can_id)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return RT_NULL;
+}
 
 // can1 的
 int16_t iq1_low[4], iq1_high[4], iq1_uhigh[4];
@@ -184,14 +175,17 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
     {
     case MOTOR_MODE_TORQUE:
         /*设置力矩/电流值*/
-        // tmpout = apid_calc(pid_torque, *((PID_TYPE *)(value)), motor->real_current);
         /* 发送一帧 CAN 数据 */
         msg.ide = RT_CAN_STDID; /* 标准格式 */
         msg.rtr = RT_CAN_DTR;   /* 数据帧 */
         msg.len = 8;            /* 数据长度为 8 */
-        uint16_t tt = (__motor->id - CAN_Motor1_ID) % 4;
+        uint16_t tt = (__motor->can_id - CAN_Motor1_ID) % 4;
         // LOG_D("tt %d value %f",tt,value);
-        if ((msg.id - CAN_Motor1_ID) > 4)
+
+        if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
+        {
+        }
+        else if ((msg.id - CAN_Motor1_ID) > 4)
         {
             iq1_high[tt] = tmpout;
             /* 待发送的 8 字节数据 */
@@ -288,28 +282,6 @@ real_current实际输出转矩高8位和低8位
 temperature 温度
 total_angle 总角度
  */
-void dj_motor_measure_updata(motor_measure_t *motor, uint8_t Rx_Data[])
-{
-    motor->last_angle = motor->angle;                           // 上次角度更新
-    motor->angle = (uint16_t)(Rx_Data[0] << 8 | Rx_Data[1]);    // 转子机械角度高8位和第八位
-    motor->speed_rpm = (int16_t)(Rx_Data[2] << 8 | Rx_Data[3]); // 转子转速高8位和低八位
-
-    motor->real_current = (int16_t)(Rx_Data[4] << 8 | Rx_Data[5]); // 实际输出转矩高8位和低8位
-    motor->temperature = Rx_Data[6];                               // 温度     //Null
-
-    if (motor->angle - motor->last_angle > 4096)
-        motor->round_cnt--;
-    else if (motor->angle - motor->last_angle < -4096)
-        motor->round_cnt++;
-    motor->total_angle = motor->round_cnt * 8191 + motor->angle - motor->offset_angle;
-    // motor->total_angle +=motor->angle - motor->last_angle;
-}
-
-void get_motor_offset(motor_measure_t *motor, uint8_t Rx_Data[])
-{
-    motor->offset_angle = motor->angle = (uint16_t)(Rx_Data[0] << 8 | Rx_Data[1]);
-}
-
 void dj_motor_BackToZero(motor_measure_t *motor)
 {
     motor->offset_angle = motor->angle;
@@ -352,28 +324,51 @@ static void can_rx_thread(void *parameter)
         rt_device_read(can_dev, 0, &rxmsg, sizeof(rxmsg));
         /* 打印数据 ID 及内容 */
         // rt_kprintf("ID:%x ", rxmsg.id);
-        if (rxmsg.id < 0x209)
-            i = rxmsg.id - CAN_Motor1_ID;
-        else
-            i = rxmsg.id - CAN_6020_ID1 + 4;
-        if (motor_can1[i].msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
+
+        motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
+
+        // if (rxmsg.id < 0x209)
+        //     i = rxmsg.id - CAN_Motor1_ID;
+        // else
+        //     i = rxmsg.id - CAN_6020_ID1 + 4;
+
+        if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
         {
-            motor_can1[i].msg_cnt++;
-            get_motor_offset(&motor_can1[i], rxmsg.data);
+            motor_measure->msg_cnt++;
+            motor_measure->offset_angle = motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);
         }
         else
-            dj_motor_measure_updata(&motor_can1[i], rxmsg.data);
+        {
+            motor_measure->last_angle = motor_measure->angle;                           // 上次角度更新
+            motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);    // 转子机械角度高8位和第八位
+            motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
 
-        LOG_D("id %d, speed %d total_angle %d", motor_can1[i].id, motor_can1[i].speed_rpm, motor_can1[i].total_angle);
+            motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
+            motor_measure->temperature = rxmsg.data[6];                               // 温度     //Null
 
-        float speed_rpm = motor_can1[i].speed_rpm;
-        float total_angle = motor_can1[i].total_angle;
+            if (motor_measure->angle - motor_measure->last_angle > 4096)
+                motor_measure->round_cnt--;
+            else if (motor_measure->angle - motor_measure->last_angle < -4096)
+                motor_measure->round_cnt++;
+            motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+        }
+
+        LOG_D("id %d, speed %d total_angle %d", motor_measure->id, motor_measure->speed_rpm, motor_measure->total_angle);
+
+        int id = motor_measure->id;
+
+        motor_feedback_torque(id, motor_measure->real_current);
+        motor_feedback_speed(id, motor_measure->speed_rpm);
+        motor_feedback_pos(id, motor_measure->total_angle);
+
+        float speed_rpm = motor_measure->speed_rpm;
+        float total_angle = motor_measure->total_angle;
         // 更新数据
-        motor_t *motor = motor_get(M3508_1_CAN1);
-        motor_set_torque(M3508_1_CAN1, 100);
-        motor_handle(M3508_1_CAN1, 1);
+        // motor_t *motor = motor_get(id);
+        motor_set_torque(id, 100);
+        motor_handle(id, 1);
 
-        // motor_dj_ctr(0, MOTOR_MODE_TORQUE, &motor_can1[i].real_current);
+        // motor_dj_ctr(0, MOTOR_MODE_TORQUE, &motor_measure->real_current);
         // motor_dj_ctr(0, MOTOR_MODE_SPEED, &speed_rpm);
         // motor_dj_ctr(0, MOTOR_MODE_POS, &total_angle);
         // float cur = 0;
@@ -389,32 +384,32 @@ int motor_tt_init(void)
     rt_size_t size;
     rt_thread_t thread;
 
-    for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
-    {
-        motor_can1[i].id = CAN_Motor1_ID + i;
-        motor_can1[i].msg_cnt = 0;
-        motor_can1[i].angle = 0;
-        motor_can1[i].last_angle = 0;
-        motor_can1[i].offset_angle = 0;
-        motor_can1[i].round_cnt = 0;
-        motor_can1[i].speed_rpm = 0;
-        motor_can1[i].real_current = 0;
-        motor_can1[i].temperature = 0;
-        motor_can1[i].total_angle = 0;
-    }
-    for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
-    {
-        motor_can2[i].id = CAN_Motor5_ID + i;
-        motor_can2[i].msg_cnt = 0;
-        motor_can2[i].angle = 0;
-        motor_can2[i].last_angle = 0;
-        motor_can2[i].offset_angle = 0;
-        motor_can2[i].round_cnt = 0;
-        motor_can2[i].speed_rpm = 0;
-        motor_can2[i].real_current = 0;
-        motor_can2[i].temperature = 0;
-        motor_can2[i].total_angle = 0;
-    }
+    // for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
+    // {
+    //     motor_can1[i].id = CAN_Motor1_ID + i;
+    //     motor_can1[i].msg_cnt = 0;
+    //     motor_can1[i].angle = 0;
+    //     motor_can1[i].last_angle = 0;
+    //     motor_can1[i].offset_angle = 0;
+    //     motor_can1[i].round_cnt = 0;
+    //     motor_can1[i].speed_rpm = 0;
+    //     motor_can1[i].real_current = 0;
+    //     motor_can1[i].temperature = 0;
+    //     motor_can1[i].total_angle = 0;
+    // }
+    // for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
+    // {
+    //     motor_can2[i].id = CAN_Motor5_ID + i;
+    //     motor_can2[i].msg_cnt = 0;
+    //     motor_can2[i].angle = 0;
+    //     motor_can2[i].last_angle = 0;
+    //     motor_can2[i].offset_angle = 0;
+    //     motor_can2[i].round_cnt = 0;
+    //     motor_can2[i].speed_rpm = 0;
+    //     motor_can2[i].real_current = 0;
+    //     motor_can2[i].temperature = 0;
+    //     motor_can2[i].total_angle = 0;
+    // }
     motor_init();
     /* 查找 CAN 设备 */
     can_dev = rt_device_find(CAN_DEV_NAME);

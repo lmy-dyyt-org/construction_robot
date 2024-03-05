@@ -19,9 +19,63 @@ extern "C" {
 #define DJ_MOTOR_NUMBER 11
 #define FILTER_BUF_LEN        5
 
+enum{
+    #if defined(MOTOR_DJ_M3508_ID1_CAN1) || defined(MOTOR_DJ_M2006_ID1_CAN1)
+        DJ_M_CAN1_1,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID2_CAN1) || defined(MOTOR_DJ_M2006_ID2_CAN1)
+        DJ_M_CAN1_2,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID3_CAN1) || defined(MOTOR_DJ_M2006_ID3_CAN1)
+        DJ_M_CAN1_3,
+    #endif
+
+    #if defined(MOTOR_DJ_M3508_ID4_CAN1) || defined(MOTOR_DJ_M2006_ID4_CAN1)
+        DJ_M_CAN1_4,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID5_CAN1) || defined(MOTOR_DJ_M2006_ID5_CAN1)
+        DJ_M_CAN1_5,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID6_CAN1) || defined(MOTOR_DJ_M2006_ID6_CAN1)
+        DJ_M_CAN1_6,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID7_CAN1) || defined(MOTOR_DJ_M2006_ID7_CAN1)
+        DJ_M_CAN1_7,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID8_CAN1) || defined(MOTOR_DJ_M2006_ID8_CAN1)
+        DJ_M_CAN1_8,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID1_CAN2) || defined(MOTOR_DJ_M2006_ID1_CAN2)
+        DJ_M_CAN2_1,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID2_CAN2) || defined(MOTOR_DJ_M2006_ID2_CAN2)
+        DJ_M_CAN2_2,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID3_CAN2) || defined(MOTOR_DJ_M2006_ID3_CAN2)
+        DJ_M_CAN2_3,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID4_CAN2) || defined(MOTOR_DJ_M2006_ID4_CAN2)
+        DJ_M_CAN2_4,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID5_CAN2) || defined(MOTOR_DJ_M2006_ID5_CAN2)
+        DJ_M_CAN2_5,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID6_CAN2) || defined(MOTOR_DJ_M2006_ID6_CAN2)
+        DJ_M_CAN2_6,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID7_CAN2) || defined(MOTOR_DJ_M2006_ID7_CAN2)
+        DJ_M_CAN2_7,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID8_CAN2) || defined(MOTOR_DJ_M2006_ID8_CAN2)
+        DJ_M_CAN2_8,
+    #endif
+    DJ_M_NUM
+
+};
 
 typedef struct {
     uint16_t id;           //对于motor抽象层的id
+    uint16_t can_id;
     int16_t speed_rpm;      //转速
     int16_t given_current;  //扭矩
     uint16_t angle;         //abs angle range:[0,8191] 角度范围[0,8191]
@@ -40,6 +94,7 @@ typedef struct {
         float real_current;     //实际输出转矩
 
 } motor_measure_t;
+extern motor_measure_t dj_motors[DJ_M_NUM] ;
 
 /*CAN发送或是接收的ID*/
 typedef enum {

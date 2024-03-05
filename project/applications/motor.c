@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-04 22:03:31
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-05 10:05:22
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,7 +20,8 @@ static int motor_id = 0; // 用于分配电机id
     if (!(x))           \
         while (1)       \
             ;
-                         // 电机操作函数的断言
+                         // 电机操作函数的
+#define MOTOR_ASSERT_ID(id) if(id>=MOTOR_NUM )while(1);
 #define MOTOR_MALLOC(x) malloc(x); // 电机操作函数的内存分配
 #define MOTOR_FREE(x) free(x);     // 电机操作函数的内存释放
 
@@ -44,14 +45,8 @@ extern motor_t motor_list[MOTOR_NUM];
  */
 inline motor_t *motor_get(int id)
 {
-//     for (int i = 0; i < 10; i++)
-//     {
-//         if (motor_list[i].id == id)
-//         {
-//             return &motor_list[i];
-// }
-//}
-return &motor_list[id];
+    MOTOR_ASSERT_ID(id);
+    return &motor_list[id];
 }
 
 // 底层不支持
@@ -211,32 +206,12 @@ int motor_behiver_4(int id, uint16_t mode, void *data, void *user_data)
     return 0;
 }
 
-// /**
-//  * @brief 创建一个电机
-//  *
-//  * @param ops 电机操作函数
-//  * @return int 返回实际分配的id
-//  */
-// int motor_create(motor_ops_t *ops)
-// {
-//     MOTOR_ASSERT(ops);
-//     // 创建电机
-//     motor_t *motor = (motor_t *)MOTOR_MALLOC(sizeof(motor_t));
-//     if (motor)
-//     {
-//         motor_init(motor, ops);
-//         return motor->id;
-//     }
-//     else
-//     {
-//         return -M_ENOMEM;
-//     }
-// }
+
 #define MOTOD_IS_POS_TIME(motor) (motor->time % motor->pos_tick == 0)
 #define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->speed_tick == 0)
 #define MOTOD_IS_TORQUE_TIME(motor) (motor->time % motor->torque_tick == 0)
 
-static int motor_read_feedback(motor_t *motor, PID_TYPE cycle)
+static int __motor_read_feedback(motor_t *motor, PID_TYPE cycle)
 {
 
     // 读取力矩
@@ -256,7 +231,13 @@ static int motor_read_feedback(motor_t *motor, PID_TYPE cycle)
     }
     return 0;
 }
-
+int motor_read_feedback(int id, int cycle)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    __motor_read_feedback(motor,cycle);
+    return 0;
+} 
 int motor_handle(int id, float cycle)
 {
     motor_t *motor = motor_get(id);
@@ -264,12 +245,36 @@ int motor_handle(int id, float cycle)
     MOTOR_ASSERT(motor->ops);
     motor->time += cycle;
     if(motor->flag_passive_feedback){}else{
-        motor_read_feedback(motor, cycle);                                                               // 更新反馈值
+        __motor_read_feedback(motor, cycle);                                                         // 更新反馈值
     }
     motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data);                         // 进行计算
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
     return 0;
 }
+
+int motor_feedback_torque(int id, float value)
+{
+        MOTOR_ASSERT_ID(id);
+    motor_list[id].cur_torque=value;
+	return 0;
+}
+int motor_feedback_speed(int id, float value)
+{
+    MOTOR_ASSERT_ID(id);
+    motor_list[id].cur_speed=value;
+		return 0;
+
+}
+
+int motor_feedback_pos(int id, float value)
+{
+        MOTOR_ASSERT_ID(id);
+        motor_list[id].cur_pos=value;
+		return 0;
+
+}
+
+
 
 /**
  * @brief 设置电机的速度

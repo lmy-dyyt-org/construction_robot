@@ -139,9 +139,18 @@ typedef struct{
 
 motor_t *motor_get(int id);
 int motor_get_id(const char* name);
-int motor_create(motor_ops_t*ops);
+
 int motor_handle(int id, float cycle);
 void motor_init(void);
+
+
+int motor_read_feedback(int id, int cycle);
+
+
+int motor_feedback_torque(int id, float value);
+int motor_feedback_speed(int id, float value);
+int motor_feedback_pos(int id, float value);
+
 int motor_set_speed(int id, float value);
 
 int motor_set_pos(int id, float value);
