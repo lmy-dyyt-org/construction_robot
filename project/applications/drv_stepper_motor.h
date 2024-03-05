@@ -37,7 +37,7 @@ void Emm_V5_Transmit(uint8_t* data, uint8_t len);
 int Emm_V5_Receive(uint8_t* data, uint8_t len);
 
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id);
-
+void stepper_motor_read_pos(stepper_motor_t* stepper_motor, uint8_t id);
 
 
 #ifdef __cplusplus

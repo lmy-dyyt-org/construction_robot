@@ -8,22 +8,30 @@ int state;
 static struct rt_semaphore rx_sem;    /* 用于接收消息的信号量 */
 int Emm_rx_flag = 0;                         /* 串口接收标志 */
 
+uint8_t rxCmd[128] = {0};
+uint8_t rxCount = 0;
+
+rt_device_t Emm_serial1; 
+
 void drv_stepper_motor(void *parameter)
 {
 
   Emm_V5_Init("uart8");
   stepper_motor_Init(&stepper_motor_1, 1);
+  Emm_V5_Reset_CurPos_To_Zero(1);
+  rt_thread_mdelay(50);
+  Emm_V5_Receive(rxCmd, 2);
   while(1)
   {
     /* 线程处理 */
-    Emm_V5_Pos_Control(1, 2, 100, 0, 3200, 0, 0);//位置模式：方向CW，速度1000RPM，加速度0（不使用加减速直接启动），脉冲数3200（16细分下发送3200个脉冲电机转一圈），相对运动
+    Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//位置模式：方向CW，速度100RPM，加速度0（不使用加减速直接启动），脉冲数3200（16细分下发送3200个脉冲电机转一圈），相对运动
     rt_thread_mdelay(2000);
     Emm_V5_Read_Sys_Params(1, S_CPOS);
-    while(Emm_rx_flag==1)
-    {
-      state = Emm_V5_Receive(rxCmd, 12);
-      Emm_rx_flag = 0;
-    }
+    // rt_thread_mdelay(5);
+		
+		rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+    state = Emm_V5_Receive(rxCmd, 12);
+		
     if(rxCmd[0] == 1 && rxCmd[1] == 0x36  )//&& rxCount == 8
     {
       // 拼接成uint32_t类型
@@ -51,16 +59,9 @@ void drv_stepper_motor(void *parameter)
   }
 }
 
-	
-uint8_t rxCmd[128] = {0};
-uint8_t rxCount = 0;
-
-rt_device_t Emm_serial1; 
-
 static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
 {
     /* 串口接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
-    Emm_rx_flag = 1;
     
     rt_sem_release(&rx_sem);
     
@@ -89,7 +90,6 @@ int Emm_V5_Receive(uint8_t* data, uint8_t len)
   return rt_device_read(Emm_serial1, 0, data, len);
 }
 
-
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
 {
   stepper_motor->stepper_motor_id = id;
@@ -101,5 +101,4 @@ void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
   stepper_motor->stepper_motor_err = 0;
   stepper_motor->stepper_motor_enflag = 0;
   stepper_motor->stepper_motor_zeroflag = 0;
-  Emm_V5_Reset_CurPos_To_Zero(id);
 }
