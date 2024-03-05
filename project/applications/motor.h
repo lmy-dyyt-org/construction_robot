@@ -30,12 +30,12 @@ extern "C" {
 
 
 typedef enum{
-	MOTOR_MODE_IDEL = 0,
-	MOTOR_MODE_TORQUE =1,
-    MOTOR_MODE_SPEED = 2,
-    MOTOR_MODE_POS   = 3,
-    MOTOR_MODE_VOLTAGE,
-    MOTOR_MODE_TEMP,
+	MOTOR_MODE_IDEL = 0,/*空闲*/
+	MOTOR_MODE_TORQUE =1,/*力矩*/
+    MOTOR_MODE_SPEED = 2,/*速度 rpm 转每分钟*/
+    MOTOR_MODE_POS   = 3, /*位置 rad*/
+    MOTOR_MODE_VOLTAGE, /*电压 mv 毫伏*/
+    MOTOR_MODE_TEMP,    /*温度 °C*/
     MOTOR_MODE_MAX,
 }MOTOR_VALUE_TYPE;
 
@@ -77,6 +77,8 @@ typedef struct{
     uint8_t flag_run_mode :2;//记录当前运行模式
     uint8_t flag_out_mode :2;//记录当前输出模式
     uint8_t flag_accept_level :2;//记录支持的模式 0 - 3  
+    uint8_t flag_passive_feedback :1;//记录支持的模式 0 - 3  
+    uint8_t flag_passive_handle :1;//记录支持的模式 0 - 3  
 
     motor_behiver behaver;
     float acc_out;
@@ -137,9 +139,18 @@ typedef struct{
 
 motor_t *motor_get(int id);
 int motor_get_id(const char* name);
-int motor_create(motor_ops_t*ops);
+
 int motor_handle(int id, float cycle);
 void motor_init(void);
+
+
+int motor_read_feedback(int id, int cycle);
+
+
+int motor_feedback_torque(int id, float value);
+int motor_feedback_speed(int id, float value);
+int motor_feedback_pos(int id, float value);
+
 int motor_set_speed(int id, float value);
 
 int motor_set_pos(int id, float value);

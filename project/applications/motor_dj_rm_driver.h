@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-04 19:47:44
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-05 11:03:55
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -19,17 +19,100 @@ extern "C" {
 #define DJ_MOTOR_NUMBER 11
 #define FILTER_BUF_LEN        5
 
+enum{
+    #if defined(MOTOR_DJ_M3508_ID1_CAN1) || defined(MOTOR_DJ_M2006_ID1_CAN1)
+        DJ_M_CAN1_1,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID2_CAN1) || defined(MOTOR_DJ_M2006_ID2_CAN1)
+        DJ_M_CAN1_2,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID3_CAN1) || defined(MOTOR_DJ_M2006_ID3_CAN1)
+        DJ_M_CAN1_3,
+    #endif
+
+    #if defined(MOTOR_DJ_M3508_ID4_CAN1) || defined(MOTOR_DJ_M2006_ID4_CAN1)
+        DJ_M_CAN1_4,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID5_CAN1) || defined(MOTOR_DJ_M2006_ID5_CAN1)||defined(MOTOR_DJ_M6020_ID1_CAN1)
+        DJ_M_CAN1_5,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID6_CAN1) || defined(MOTOR_DJ_M2006_ID6_CAN1)||defined(MOTOR_DJ_M6020_ID2_CAN1)
+        DJ_M_CAN1_6,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID7_CAN1) || defined(MOTOR_DJ_M2006_ID7_CAN1)||defined(MOTOR_DJ_M6020_ID3_CAN1)
+        DJ_M_CAN1_7,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID8_CAN1) || defined(MOTOR_DJ_M2006_ID8_CAN1)||defined(MOTOR_DJ_M6020_ID4_CAN1)
+        DJ_M_CAN1_8,
+    #endif
+
+    #if defined(MOTOR_DJ_M6020_ID5_CAN1)
+        DJ_M_CAN1_9,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID6_CAN1)
+        DJ_M_CAN1_10,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID7_CAN1)
+        DJ_M_CAN1_11,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID8_CAN1)
+        DJ_M_CAN1_12,
+    #endif
+    
+    #if defined(MOTOR_DJ_M3508_ID1_CAN2) || defined(MOTOR_DJ_M2006_ID1_CAN2)
+        DJ_M_CAN2_1,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID2_CAN2) || defined(MOTOR_DJ_M2006_ID2_CAN2)
+        DJ_M_CAN2_2,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID3_CAN2) || defined(MOTOR_DJ_M2006_ID3_CAN2)
+        DJ_M_CAN2_3,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID4_CAN2) || defined(MOTOR_DJ_M2006_ID4_CAN2)
+        DJ_M_CAN2_4,
+    #endif
+
+    #if defined(MOTOR_DJ_M3508_ID5_CAN2) || defined(MOTOR_DJ_M2006_ID5_CAN2)||defined(MOTOR_DJ_M6020_ID1_CAN2)
+        DJ_M_CAN2_5,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID6_CAN2) || defined(MOTOR_DJ_M2006_ID6_CAN2)||defined(MOTOR_DJ_M6020_ID2_CAN2)
+        DJ_M_CAN2_6,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID7_CAN2) || defined(MOTOR_DJ_M2006_ID7_CAN2)||defined(MOTOR_DJ_M6020_ID3_CAN2)
+        DJ_M_CAN2_7,
+    #endif
+    #if defined(MOTOR_DJ_M3508_ID8_CAN2) || defined(MOTOR_DJ_M2006_ID8_CAN2)||defined(MOTOR_DJ_M6020_ID4_CAN2)
+        DJ_M_CAN2_8,
+    #endif
+
+    #if defined(MOTOR_DJ_M6020_ID5_CAN2)
+        DJ_M_CAN2_9,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID6_CAN2)
+        DJ_M_CAN2_10,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID7_CAN2)
+        DJ_M_CAN2_11,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID8_CAN2)
+        DJ_M_CAN2_12,
+    #endif
+
+    DJ_M_NUM
+
+};
 
 typedef struct {
-    uint16_t id;           //编码器值
+    uint16_t id;           //对于motor抽象层的id
+    uint16_t can_id;
     int16_t speed_rpm;      //转速
-    float real_current;     //实际输出转矩
     int16_t given_current;  //扭矩
-    uint8_t temperature;    //温度
     uint16_t angle;         //abs angle range:[0,8191] 角度范围[0,8191]
 
     uint16_t last_angle;    //abs angle range:[0,8191]
     uint16_t offset_angle;  //偏差
+    uint8_t temperature;    //温度
+
     uint32_t round_cnt;      //电机转的圈数
     uint32_t total_angle;    //当前总角度 圈数
     // uint8_t buf_idx;
@@ -37,7 +120,10 @@ typedef struct {
     // uint16_t fited_angle;        //修正角度？
     uint32_t msg_cnt;            //初始化计数 小于50清零
     float angle_pos;  //绝对值角度
+        float real_current;     //实际输出转矩
+
 } motor_measure_t;
+extern motor_measure_t dj_motors[DJ_M_NUM] ;
 
 /*CAN发送或是接收的ID*/
 typedef enum {
