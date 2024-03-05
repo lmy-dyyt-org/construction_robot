@@ -8,6 +8,7 @@
 ".\build\keil\obj\apid_exfunc.o"
 ".\build\keil\obj\follow_line.o"
 ".\build\keil\obj\motor_cfg.o"
+".\build\keil\obj\drv_stepper_motor.o"
 ".\build\keil\obj\syscall_mem.o"
 ".\build\keil\obj\syscalls.o"
 ".\build\keil\obj\cctype.o"

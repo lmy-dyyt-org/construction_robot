@@ -1,7 +1,6 @@
 #include "Emm_V5.h"
+#include "drv_stepper_motor.h"
 
-static struct rt_semaphore rx_sem;    /* 用于接收消息的信号量 */
-int Emm_rx_flag = 0;                         /* 串口接收标志 */
 /**********************************************************
 ***	Emm_V5.0步进闭环控制例程
 ***	编写作者：ZHANGDATOU
@@ -16,46 +15,6 @@ int Emm_rx_flag = 0;                         /* 串口接收标志 */
   * @param    addr  ：电机地址
   * @retval   地址 + 功能码 + 命令状态 + 校验字节
   */
-	
-uint8_t rxCmd[128] = {0};
-uint8_t rxCount = 0;
-
-rt_device_t Emm_serial1; 
-
-static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
-{
-    /* 串口接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
-    Emm_rx_flag = 1;
-    
-    rt_sem_release(&rx_sem);
-    
-    return RT_EOK;
-}
-
-rt_device_t Emm_V5_Init(const char* uart)
-{
-  Emm_serial1 = rt_device_find(uart);
-  rt_device_open(Emm_serial1, RT_DEVICE_FLAG_RX_NON_BLOCKING | RT_DEVICE_FLAG_TX_BLOCKING);
-  /* 初始化信号量 */
-  rt_sem_init(&rx_sem, "rx_sem", 0, RT_IPC_FLAG_FIFO);
-/* 设置接收回调函数 */
-  rt_device_set_rx_indicate(Emm_serial1, Emm_uart_receive_callback);  
-  
-	return Emm_serial1;
-}
-
-void Emm_V5_Transmit(uint8_t* data, uint8_t len)
-{
-  rt_device_write(Emm_serial1, 0, data, len);
-}
-
-int Emm_V5_Receive(uint8_t* data, uint8_t len)
-{
-  return rt_device_read(Emm_serial1, 0, data, len);
-}
-
-
-
 void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr)
 {
   uint8_t cmd[16] = {0};

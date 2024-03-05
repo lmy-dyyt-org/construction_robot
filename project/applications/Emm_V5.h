@@ -40,9 +40,6 @@ extern int Emm_rx_flag;
 /**********************************************************
 *** 注意：每个函数的参数的具体说明，请查阅对应函数的注释说明
 **********************************************************/
-rt_device_t Emm_V5_Init(const char* uart);    
-void Emm_V5_Transmit(uint8_t* data, uint8_t len);
-int Emm_V5_Receive(uint8_t* data, uint8_t len);
 
 void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr); // 将当前位置清零
 void Emm_V5_Reset_Clog_Pro(uint8_t addr); // 解除堵转保护

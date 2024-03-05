@@ -10,7 +10,7 @@
       <TargetName>rt-thread</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -428,6 +428,11 @@
               <FileName>motor_cfg.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\motor_cfg.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_stepper_motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_stepper_motor.c</FilePath>
             </File>
           </Files>
         </Group>

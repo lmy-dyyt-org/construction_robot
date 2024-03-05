@@ -10,7 +10,7 @@ void follow_line(void *parameter)
     /* 线程处理 */
 	GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-//    Print_Infrared_Data(&infrared_package);
+    // Print_Infrared_Data(&infrared_package);
     rt_thread_mdelay(500);
   }
 }
