@@ -162,15 +162,20 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>268</LineNumber>
+          <LineNumber>237</LineNumber>
           <EnabledFlag>1</EnabledFlag>
+<<<<<<< Updated upstream
           <Address>134271430</Address>
+=======
+          <Address>134271240</Address>
+>>>>>>> Stashed changes
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
+<<<<<<< Updated upstream
           <Filename>applications\motor.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\rt_thread\applications/motor.c\268</Expression>
@@ -206,6 +211,11 @@
           <Filename>applications\motor.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
+=======
+          <Filename>applications\motor_dj_rm_driver.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\rt_thread\applications/motor_dj_rm_driver.c\237</Expression>
+>>>>>>> Stashed changes
         </Bp>
       </Breakpoint>
       <WatchWindow1>

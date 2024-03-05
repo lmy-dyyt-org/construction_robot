@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-05 10:05:22
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-05 14:58:30
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -334,12 +334,11 @@ int motor_set_torque(int id, float value)
  * @param value     速度值，单位r/min
  * @return int    获取状态
  */
-int motor_get_speed(int id, float *value)
+float motor_get_speed(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    *value = motor->cur_speed;
-    return M_EOK;
+    return  motor->cur_speed;
 }
 /**
  * @brief   获取电机的位置
@@ -348,12 +347,11 @@ int motor_get_speed(int id, float *value)
  * @param value     位置值，单位rad
  * @return int  获取状态
  */
-int motor_get_pos(int id, float *value)
+float motor_get_pos(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    *value = motor->cur_pos;
-    return M_EOK;
+    return motor->cur_pos;
 }
 /**
  * @brief   获取电机的力矩
@@ -362,13 +360,13 @@ int motor_get_pos(int id, float *value)
  * @param value     力矩值，单位N*m
  * @return int  获取状态
  */
-int motor_get_torque(int id, float *value)
+float motor_get_torque(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    *value = motor->cur_torque;
-    return M_EOK;
+    return motor->cur_torque;
 }
+
 
 int motor_updata_cfg(int id, int level)
 {
@@ -396,7 +394,11 @@ int motor_updata_cfg(int id, int level)
     MOTOR_ASSERT(motor);
     return 0;
 }
-
+void motor_set_passive_feedback(int id ,bool is_true)
+{
+    motor_t *motor = motor_get(id);
+    motor->flag_passive_feedback = is_true;
+}
 void motor_init(void)
 {
     for(int i=0;i<MOTOR_NUM;++i)

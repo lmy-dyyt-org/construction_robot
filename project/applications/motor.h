@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 #include "apid.h"
+#include "stdbool.h"
 #include "motor_cfg.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -146,6 +147,7 @@ void motor_init(void);
 
 int motor_read_feedback(int id, int cycle);
 
+void motor_set_passive_feedback(int id ,bool is_true);
 
 int motor_feedback_torque(int id, float value);
 int motor_feedback_speed(int id, float value);
@@ -158,11 +160,11 @@ int motor_set_pos(int id, float value);
 int motor_set_torque(int id, float value);
 
 
-int motor_get_speed(int id, float* value);
+float motor_get_speed(int id);
 
-int motor_get_pos(int id, float* value);
+float motor_get_pos(int id);
 
-int motor_get_torque(int id, float* value);
+float motor_get_torque(int id);
 
 int motor_control(int id, MOTOR_VALUE_TYPE mode,void*data);
 
