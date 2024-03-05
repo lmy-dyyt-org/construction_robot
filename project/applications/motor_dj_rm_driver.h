@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-04 22:43:44
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-05 11:03:55
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -33,18 +33,32 @@ enum{
     #if defined(MOTOR_DJ_M3508_ID4_CAN1) || defined(MOTOR_DJ_M2006_ID4_CAN1)
         DJ_M_CAN1_4,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID5_CAN1) || defined(MOTOR_DJ_M2006_ID5_CAN1)
+    #if defined(MOTOR_DJ_M3508_ID5_CAN1) || defined(MOTOR_DJ_M2006_ID5_CAN1)||defined(MOTOR_DJ_M6020_ID1_CAN1)
         DJ_M_CAN1_5,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID6_CAN1) || defined(MOTOR_DJ_M2006_ID6_CAN1)
+    #if defined(MOTOR_DJ_M3508_ID6_CAN1) || defined(MOTOR_DJ_M2006_ID6_CAN1)||defined(MOTOR_DJ_M6020_ID2_CAN1)
         DJ_M_CAN1_6,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID7_CAN1) || defined(MOTOR_DJ_M2006_ID7_CAN1)
+    #if defined(MOTOR_DJ_M3508_ID7_CAN1) || defined(MOTOR_DJ_M2006_ID7_CAN1)||defined(MOTOR_DJ_M6020_ID3_CAN1)
         DJ_M_CAN1_7,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID8_CAN1) || defined(MOTOR_DJ_M2006_ID8_CAN1)
+    #if defined(MOTOR_DJ_M3508_ID8_CAN1) || defined(MOTOR_DJ_M2006_ID8_CAN1)||defined(MOTOR_DJ_M6020_ID4_CAN1)
         DJ_M_CAN1_8,
     #endif
+
+    #if defined(MOTOR_DJ_M6020_ID5_CAN1)
+        DJ_M_CAN1_9,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID6_CAN1)
+        DJ_M_CAN1_10,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID7_CAN1)
+        DJ_M_CAN1_11,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID8_CAN1)
+        DJ_M_CAN1_12,
+    #endif
+    
     #if defined(MOTOR_DJ_M3508_ID1_CAN2) || defined(MOTOR_DJ_M2006_ID1_CAN2)
         DJ_M_CAN2_1,
     #endif
@@ -57,18 +71,33 @@ enum{
     #if defined(MOTOR_DJ_M3508_ID4_CAN2) || defined(MOTOR_DJ_M2006_ID4_CAN2)
         DJ_M_CAN2_4,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID5_CAN2) || defined(MOTOR_DJ_M2006_ID5_CAN2)
+
+    #if defined(MOTOR_DJ_M3508_ID5_CAN2) || defined(MOTOR_DJ_M2006_ID5_CAN2)||defined(MOTOR_DJ_M6020_ID1_CAN2)
         DJ_M_CAN2_5,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID6_CAN2) || defined(MOTOR_DJ_M2006_ID6_CAN2)
+    #if defined(MOTOR_DJ_M3508_ID6_CAN2) || defined(MOTOR_DJ_M2006_ID6_CAN2)||defined(MOTOR_DJ_M6020_ID2_CAN2)
         DJ_M_CAN2_6,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID7_CAN2) || defined(MOTOR_DJ_M2006_ID7_CAN2)
+    #if defined(MOTOR_DJ_M3508_ID7_CAN2) || defined(MOTOR_DJ_M2006_ID7_CAN2)||defined(MOTOR_DJ_M6020_ID3_CAN2)
         DJ_M_CAN2_7,
     #endif
-    #if defined(MOTOR_DJ_M3508_ID8_CAN2) || defined(MOTOR_DJ_M2006_ID8_CAN2)
+    #if defined(MOTOR_DJ_M3508_ID8_CAN2) || defined(MOTOR_DJ_M2006_ID8_CAN2)||defined(MOTOR_DJ_M6020_ID4_CAN2)
         DJ_M_CAN2_8,
     #endif
+
+    #if defined(MOTOR_DJ_M6020_ID5_CAN2)
+        DJ_M_CAN2_9,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID6_CAN2)
+        DJ_M_CAN2_10,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID7_CAN2)
+        DJ_M_CAN2_11,
+    #endif
+    #if defined(MOTOR_DJ_M6020_ID8_CAN2)
+        DJ_M_CAN2_12,
+    #endif
+
     DJ_M_NUM
 
 };

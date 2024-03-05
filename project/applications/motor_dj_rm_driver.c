@@ -32,15 +32,9 @@
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 
-// // can1的电机
-// motor_measure_t motor_can1[DJ_MOTOR_NUMBER] = {0};
-// // can2的电机
-// motor_measure_t motor_can2[DJ_MOTOR_NUMBER] = {0};
 
-#define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
-                                                     .id = __id,         \
-                                                     .can_id = __can_id, \
-}
+#define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {.id = __id, .can_id = __can_id,}
+
 motor_measure_t dj_motors[DJ_M_NUM] = {
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
     DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_1, M3508_1_CAN1, CAN_Motor1_ID),
@@ -141,6 +135,61 @@ motor_measure_t dj_motors[DJ_M_NUM] = {
 #ifdef MOTOR_DJ_M2006_ID8_CAN2
     DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_8, M2006_8_CAN2, CAN_Motor8_ID),
 #endif
+
+#ifdef MOTOR_DJ_M6020_ID1_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_5, M6020_1_CAN1, CAN_6020_ID1),
+#endif
+#ifdef MOTOR_DJ_M6020_ID2_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_6, M6020_2_CAN1, CAN_6020_ID2),
+#endif
+#ifdef MOTOR_DJ_M6020_ID3_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_7, M6020_3_CAN1, CAN_6020_ID3),
+#endif
+#ifdef MOTOR_DJ_M6020_ID4_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_8, M6020_4_CAN1, CAN_6020_ID4),
+#endif
+#ifdef MOTOR_DJ_M6020_ID5_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_9, M6020_5_CAN1, CAN_6020_ID5),
+#endif
+#ifdef MOTOR_DJ_M6020_ID6_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_10, M6020_6_CAN1, CAN_6020_ID6),
+#endif
+#ifdef MOTOR_DJ_M6020_ID7_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_11, M6020_7_CAN1, CAN_6020_ID7),
+#endif
+#ifdef MOTOR_DJ_M6020_ID8_CAN1
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN1_12, M6020_8_CAN1, CAN_6020_ID8),
+#endif
+
+#ifdef MOTOR_DJ_M6020_ID1_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_5, M6020_1_CAN2, CAN_6020_ID1),
+#endif
+#ifdef MOTOR_DJ_M6020_ID2_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_6, M6020_2_CAN2, CAN_6020_ID2),
+#endif
+#ifdef MOTOR_DJ_M6020_ID3_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_7, M6020_3_CAN2, CAN_6020_ID3),
+#endif
+#ifdef MOTOR_DJ_M6020_ID4_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_8, M6020_4_CAN2, CAN_6020_ID4),
+#endif
+#ifdef MOTOR_DJ_M6020_ID5_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_9, M6020_5_CAN2, CAN_6020_ID5),
+#endif
+#ifdef MOTOR_DJ_M6020_ID6_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_10, M6020_6_CAN2, CAN_6020_ID6),
+#endif
+#ifdef MOTOR_DJ_M6020_ID7_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_11, M6020_7_CAN2, CAN_6020_ID7),
+#endif
+#ifdef MOTOR_DJ_M6020_ID8_CAN2
+    DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_12, M6020_8_CAN2, CAN_6020_ID8),
+#endif
+
+
+
+
+
 };
 // 写一个二分查找,通过can_id查找到电机对应的结构体
 motor_measure_t *motor_get_by_canid(uint16_t can_id)
@@ -254,12 +303,8 @@ int motor_dj_ctr(int id, uint16_t mode, float *data)
 }
 
 /* 接收数据回调函数 */
-static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
-{
+static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size);
 
-    LOG_W("can_rx_call unknown id data");
-    return RT_EOK;
-}
 /**
     Rx_Data[0] 转子机械角度高8位
     Rx_Data[1] 转子机械角度低8位
@@ -327,10 +372,6 @@ static void can_rx_thread(void *parameter)
 
         motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
 
-        // if (rxmsg.id < 0x209)
-        //     i = rxmsg.id - CAN_Motor1_ID;
-        // else
-        //     i = rxmsg.id - CAN_6020_ID1 + 4;
 
         if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
         {
@@ -357,11 +398,17 @@ static void can_rx_thread(void *parameter)
 
         int id = motor_measure->id;
 
-        motor_feedback_torque(id, motor_measure->real_current);
-        motor_feedback_speed(id, motor_measure->speed_rpm);
+        // motor_feedback_torque(id, motor_measure->real_current);
+        // motor_feedback_speed(id, motor_measure->speed_rpm);
+        // motor_feedback_pos(id, motor_measure->total_angle);
+        uint16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
+        uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
+        uint16_t pos = 0;
+        motor_feedback_torque(id, current);
+        motor_feedback_speed(id,speed_rpm);
         motor_feedback_pos(id, motor_measure->total_angle);
 
-        float speed_rpm = motor_measure->speed_rpm;
+        float speed_rpm1 = motor_measure->speed_rpm;
         float total_angle = motor_measure->total_angle;
         // 更新数据
         // motor_t *motor = motor_get(id);
@@ -375,7 +422,12 @@ static void can_rx_thread(void *parameter)
         // motor_dj_driver(0, MOTOR_MODE_TORQUE, &cur, &motor_can1[i]);
     }
 }
+static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
+{
 
+    LOG_W("can_rx_call unknown id data");
+    return RT_EOK;
+}
 #define CAN_DEV_NAME "can1" /* CAN 设备名称 */
 int motor_tt_init(void)
 {
@@ -384,32 +436,6 @@ int motor_tt_init(void)
     rt_size_t size;
     rt_thread_t thread;
 
-    // for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
-    // {
-    //     motor_can1[i].id = CAN_Motor1_ID + i;
-    //     motor_can1[i].msg_cnt = 0;
-    //     motor_can1[i].angle = 0;
-    //     motor_can1[i].last_angle = 0;
-    //     motor_can1[i].offset_angle = 0;
-    //     motor_can1[i].round_cnt = 0;
-    //     motor_can1[i].speed_rpm = 0;
-    //     motor_can1[i].real_current = 0;
-    //     motor_can1[i].temperature = 0;
-    //     motor_can1[i].total_angle = 0;
-    // }
-    // for (int i = 0; i < DJ_MOTOR_NUMBER; i++)
-    // {
-    //     motor_can2[i].id = CAN_Motor5_ID + i;
-    //     motor_can2[i].msg_cnt = 0;
-    //     motor_can2[i].angle = 0;
-    //     motor_can2[i].last_angle = 0;
-    //     motor_can2[i].offset_angle = 0;
-    //     motor_can2[i].round_cnt = 0;
-    //     motor_can2[i].speed_rpm = 0;
-    //     motor_can2[i].real_current = 0;
-    //     motor_can2[i].temperature = 0;
-    //     motor_can2[i].total_angle = 0;
-    // }
     motor_init();
     /* 查找 CAN 设备 */
     can_dev = rt_device_find(CAN_DEV_NAME);
