@@ -40,3 +40,5 @@ project/build/keil/Obj/rt-thread.build_log.htm
 project/build/keil/Obj/rt-thread.htm
 project/project.uvguix.80520
 project/rtthread.bin
+project/build/keil/Obj/project_rt-thread.dep
+/project/build
