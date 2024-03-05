@@ -27,6 +27,8 @@
 #include "motor_dj_rm_driver.h"
 #include "ulog.h"
 #include "motor_cfg.h"
+
+#define pi (3.1415926f)
 #define CAN_DEV_NAME "can1" /* CAN 设备名称 */
 
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
@@ -295,16 +297,16 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
         *arg = __motor->real_current;
         break;
     case MOTOR_MODE_SPEED:
-        // /*返回速度值r/min*/
+        // /*返回速度值r/min rpm*/
         *arg = __motor->speed_rpm;
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
-        *arg = __motor->total_angle;
+        *arg = ((float)(__motor->total_angle*2*pi))/8192.f;
         break;
     case MOTOR_MODE_TEMP:
         // /*返回温度*/
-        *arg = 42;
+        *arg = 42.f;
         break;
     default:
         break;
@@ -412,8 +414,10 @@ static void can_rx_thread(void *parameter)
         uint16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
         uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
         uint16_t pos = 0;
-        motor_feedback_torque(id, current);
+        //9.549279f*功率/转速=扭矩
+        #define DJ_M_VEL 24.f   // 电机电压
         motor_feedback_speed(id, speed_rpm);
+        motor_feedback_torque(id, (current*DJ_M_VEL)*9.549279f/speed_rpm);
         motor_feedback_pos(id, motor_measure->total_angle);
 
         float speed_rpm1 = motor_measure->speed_rpm;
