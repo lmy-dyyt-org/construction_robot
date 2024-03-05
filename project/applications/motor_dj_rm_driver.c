@@ -32,8 +32,10 @@
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 
-
-#define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {.id = __id, .can_id = __can_id,}
+#define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
+                                                     .id = __id,         \
+                                                     .can_id = __can_id, \
+}
 
 motor_measure_t dj_motors[DJ_M_NUM] = {
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
@@ -186,10 +188,6 @@ motor_measure_t dj_motors[DJ_M_NUM] = {
     DJ_MOTOR_MOTOR_ID(DJ_M_CAN2_12, M6020_8_CAN2, CAN_6020_ID8),
 #endif
 
-
-
-
-
 };
 // 写一个二分查找,通过can_id查找到电机对应的结构体
 motor_measure_t *motor_get_by_canid(uint16_t can_id)
@@ -277,24 +275,36 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
     }
     return 0;
 }
-int motor_dj_ctr(int id, uint16_t mode, float *data)
+/**
+ * @brief 针对2006电机的控制
+ * 
+ * @param id 电机抽象层id单号
+ * @param cmd 控制命令
+ * @param arg 命令参数
+ * @return int 
+ */
+int motor_dj_ctr(int id, uint16_t cmd, float *arg)
 {
     motor_t *motor = motor_get(id);
     motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
 
-    switch (mode)
+    switch (cmd)
     {
     case MOTOR_MODE_TORQUE:
         /*返回力矩/电流值*/
-        *data = __motor->real_current;
+        *arg = __motor->real_current;
         break;
     case MOTOR_MODE_SPEED:
         // /*返回速度值r/min*/
-        *data = __motor->speed_rpm;
+        *arg = __motor->speed_rpm;
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
-        *data = __motor->total_angle;
+        *arg = __motor->total_angle;
+        break;
+    case MOTOR_MODE_TEMP:
+        // /*返回温度*/
+        *arg = 42;
         break;
     default:
         break;
@@ -332,7 +342,7 @@ void dj_motor_BackToZero(motor_measure_t *motor)
     motor->offset_angle = motor->angle;
     motor->round_cnt = 0;
 }
-rt_err_t ind_t(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
+rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
 {
     /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
     rt_sem_release(&rx_sem);
@@ -349,10 +359,9 @@ static void can_rx_thread(void *parameter)
     rt_device_set_rx_indicate(can_dev, can_rx_call);
 
 #ifdef RT_CAN_USING_HDR
-    struct rt_can_filter_item items[] =
-        {
-
-            {.id = 0x200, .ide = 0, .rtr = 0, .mode = 0, .mask = 0x7f0, .hdr_bank = 0, .rxfifo = CAN_RX_FIFO0, .ind = ind_t, .args = RT_NULL}};
+    struct rt_can_filter_item items[] = {
+        {.id = 0x200, .ide = 0, .rtr = 0, .mode = 0, .mask = 0x7f0, .hdr_bank = 0, .rxfifo = CAN_RX_FIFO0, .ind = ind_dj_can_motor_callback, .args = RT_NULL}};
+    
     struct rt_can_filter_config cfg = {sizeof(items) / sizeof(struct rt_can_filter_item), 1, items}; /* 过滤表 */
     /* 设置硬件过滤表 */
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
@@ -361,7 +370,7 @@ static void can_rx_thread(void *parameter)
 
     while (1)
     {
-        /* hdr 值为 - 1，表示直接从 uselist 链表读取数据 */
+        /* hdr 值为 0，从 过滤器读取数据 */
         rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
         rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
@@ -372,7 +381,6 @@ static void can_rx_thread(void *parameter)
 
         motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
 
-
         if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
         {
             motor_measure->msg_cnt++;
@@ -380,12 +388,12 @@ static void can_rx_thread(void *parameter)
         }
         else
         {
-            motor_measure->last_angle = motor_measure->angle;                           // 上次角度更新
+            motor_measure->last_angle = motor_measure->angle;                         // 上次角度更新
             motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);    // 转子机械角度高8位和第八位
             motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
 
             motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
-            motor_measure->temperature = rxmsg.data[6];                               // 温度     //Null
+            motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
 
             if (motor_measure->angle - motor_measure->last_angle > 4096)
                 motor_measure->round_cnt--;
@@ -405,7 +413,7 @@ static void can_rx_thread(void *parameter)
         uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
         uint16_t pos = 0;
         motor_feedback_torque(id, current);
-        motor_feedback_speed(id,speed_rpm);
+        motor_feedback_speed(id, speed_rpm);
         motor_feedback_pos(id, motor_measure->total_angle);
 
         float speed_rpm1 = motor_measure->speed_rpm;
@@ -428,7 +436,7 @@ static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
     LOG_W("can_rx_call unknown id data");
     return RT_EOK;
 }
-#define CAN_DEV_NAME "can1" /* CAN 设备名称 */
+
 int motor_tt_init(void)
 {
     struct rt_can_msg msg = {0};

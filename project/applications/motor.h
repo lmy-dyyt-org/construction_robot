@@ -30,12 +30,12 @@ extern "C" {
 
 
 typedef enum{
-	MOTOR_MODE_IDEL = 0,
-	MOTOR_MODE_TORQUE =1,
-    MOTOR_MODE_SPEED = 2,
-    MOTOR_MODE_POS   = 3,
-    MOTOR_MODE_VOLTAGE,
-    MOTOR_MODE_TEMP,
+	MOTOR_MODE_IDEL = 0,/*空闲*/
+	MOTOR_MODE_TORQUE =1,/*力矩*/
+    MOTOR_MODE_SPEED = 2,/*速度 rpm 转每分钟*/
+    MOTOR_MODE_POS   = 3, /*位置 rad*/
+    MOTOR_MODE_VOLTAGE, /*电压 mv 毫伏*/
+    MOTOR_MODE_TEMP,    /*温度 °C*/
     MOTOR_MODE_MAX,
 }MOTOR_VALUE_TYPE;
 
