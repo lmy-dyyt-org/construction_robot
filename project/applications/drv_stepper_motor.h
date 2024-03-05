@@ -23,7 +23,7 @@ typedef struct stepper_motor_t
 
 	uint16_t stepper_motor_target_speed;  	/* 电机目标转速 */
 	uint16_t stepper_motor_speed;   			/* 电机实时转速 */
-	uint32_t stepper_motor_angle;  			/* 电机实时位置角度 */
+	float stepper_motor_angle;  			/* 电机实时位置角度 */
 
 	float stepper_motor_err;  			/* 电机位置误差角度 */
 	uint8_t stepper_motor_enflag;  			/* 使能/到位/堵转状态标志位 */

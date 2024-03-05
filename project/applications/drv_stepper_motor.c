@@ -34,17 +34,17 @@ void drv_stepper_motor(void *parameter)
                         ((uint32_t)rxCmd[6] << 0)
                       );
       // 转换成角度
-      Motor_Cur_Pos = (float)pos * 360.0f / 65536.0f;
+      stepper_motor_1.stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
 
       // 符号
       if(rxCmd[2])
-      { Motor_Cur_Pos = -Motor_Cur_Pos; }
+      { stepper_motor_1.stepper_motor_angle = -stepper_motor_1.stepper_motor_angle; }
 	  }
 
 		/* 线程运行，打印计数 */
 
   	rt_kprintf("receive_state: %d\n", state);
-	  rt_kprintf("Motor_Cur_Pos: %f\n", Motor_Cur_Pos);
+	  rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor_1.stepper_motor_angle);
 	  rt_kprintf("Emm_rx_flag: %d\n", Emm_rx_flag);
 
     rt_thread_mdelay(500);
@@ -101,4 +101,5 @@ void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
   stepper_motor->stepper_motor_err = 0;
   stepper_motor->stepper_motor_enflag = 0;
   stepper_motor->stepper_motor_zeroflag = 0;
+  Emm_V5_Reset_CurPos_To_Zero(id);
 }
