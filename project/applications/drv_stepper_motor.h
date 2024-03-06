@@ -20,15 +20,17 @@ typedef struct stepper_motor_t
 	uint8_t stepper_motor_id;		/* 电机ID */
 	uint8_t stepper_motor_target_dir;		/* 电机旋转方向 */
 	uint32_t stepper_motor_target_angle;  	/* 电机目标位置角度 */ //3200个脉冲一圈
-
 	uint16_t stepper_motor_target_speed;  	/* 电机目标转速 */
+
 	uint16_t stepper_motor_speed;   			/* 电机实时转速 */
 	float stepper_motor_angle;  			/* 电机实时位置角度 */
-
 	float stepper_motor_err;  			/* 电机位置误差角度 */
+	
 	uint8_t stepper_motor_enflag;  			/* 使能/到位/堵转状态标志位 */
 	uint8_t stepper_motor_zeroflag;      		/* 正在回零/回零失败状态标志位 */
 }stepper_motor_t;
+
+extern uint8_t rxCmd[128];
 
 void drv_stepper_motor(void *parameter);
 
@@ -37,8 +39,6 @@ void Emm_V5_Transmit(uint8_t* data, uint8_t len);
 int Emm_V5_Receive(uint8_t* data, uint8_t len);
 
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id);
-void stepper_motor_read_pos(stepper_motor_t* stepper_motor, uint8_t id);
-
 
 #ifdef __cplusplus
 }
