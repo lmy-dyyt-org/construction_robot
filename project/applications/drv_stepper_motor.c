@@ -2,66 +2,38 @@
 
 stepper_motor_t stepper_motor_1;
 
-float pos = 0.0f, Motor_Cur_Pos = 0.0f;
-int state;
-
-static struct rt_semaphore rx_sem;    /* ÓÃÓÚ½ÓÊÕÏûÏ¢µÄĞÅºÅÁ¿ */
-int Emm_rx_flag = 0;                         /* ´®¿Ú½ÓÊÕ±êÖ¾ */
-
+static struct rt_semaphore rx_sem;    /* ç”¨äºæ¥æ”¶æ¶ˆæ¯çš„ä¿¡å·é‡ */
 uint8_t rxCmd[128] = {0};
-uint8_t rxCount = 0;
-
 rt_device_t Emm_serial1; 
 
 void drv_stepper_motor(void *parameter)
 {
-
+	/*é€šä¿¡åˆå§‹åŒ– ç”µæœºåˆå§‹åŒ–*/
   Emm_V5_Init("uart8");
   stepper_motor_Init(&stepper_motor_1, 1);
-  Emm_V5_Reset_CurPos_To_Zero(1);
-  rt_thread_mdelay(50);
-  Emm_V5_Receive(rxCmd, 2);
-  while(1)
+	
+	/*æ¸…é›¶ç”µæœºä½ç½®*/
+  Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
+
+	while(1)
   {
-    /* Ïß³Ì´¦Àí */
-    Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//Î»ÖÃÄ£Ê½£º·½ÏòCW£¬ËÙ¶È100RPM£¬¼ÓËÙ¶È0£¨²»Ê¹ÓÃ¼Ó¼õËÙÖ±½ÓÆô¶¯£©£¬Âö³åÊı3200£¨16Ï¸·ÖÏÂ·¢ËÍ3200¸öÂö³åµç»ú×ªÒ»È¦£©£¬Ïà¶ÔÔË¶¯
-    rt_thread_mdelay(2000);
-    Emm_V5_Read_Sys_Params(1, S_CPOS);
-    // rt_thread_mdelay(5);
+    //Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//01 fd 02 6b	
+		Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
+
+    rt_thread_mdelay(600);//è¿™é‡Œçš„å»¶æ—¶è¦æ ¹æ® é€Ÿåº¦ å’Œ è½¬åŠ¨åœˆæ•°æ¥å–
 		
-		rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
-    state = Emm_V5_Receive(rxCmd, 12);
-		
-    if(rxCmd[0] == 1 && rxCmd[1] == 0x36  )//&& rxCount == 8
-    {
-      // Æ´½Ó³Éuint32_tÀàĞÍ
-      pos = (uint32_t)(
-                        ((uint32_t)rxCmd[3] << 24)    |
-                        ((uint32_t)rxCmd[4] << 16)    |
-                        ((uint32_t)rxCmd[5] << 8)     |
-                        ((uint32_t)rxCmd[6] << 0)
-                      );
-      // ×ª»»³É½Ç¶È
-      stepper_motor_1.stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
-
-      // ·ûºÅ
-      if(rxCmd[2])
-      { stepper_motor_1.stepper_motor_angle = -stepper_motor_1.stepper_motor_angle; }
-	  }
-
-		/* Ïß³ÌÔËĞĞ£¬´òÓ¡¼ÆÊı */
-
-  	rt_kprintf("receive_state: %d\n", state);
-	  rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor_1.stepper_motor_angle);
-	  rt_kprintf("Emm_rx_flag: %d\n", Emm_rx_flag);
+    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_CPOS);
+    rt_thread_mdelay(5);
+    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_VEL);
 
     rt_thread_mdelay(500);
   }
 }
 
+/* æ¥æ”¶æ•°æ®å›è°ƒå‡½æ•° */
 static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
 {
-    /* ´®¿Ú½ÓÊÕµ½Êı¾İºó²úÉúÖĞ¶Ï£¬µ÷ÓÃ´Ë»Øµ÷º¯Êı£¬È»ºó·¢ËÍ½ÓÊÕĞÅºÅÁ¿ */
+    /* ä¸²å£æ¥æ”¶åˆ°æ•°æ®åäº§ç”Ÿä¸­æ–­ï¼Œè°ƒç”¨æ­¤å›è°ƒå‡½æ•°ï¼Œç„¶åå‘é€æ¥æ”¶ä¿¡å·é‡ */
     
     rt_sem_release(&rx_sem);
     
@@ -70,11 +42,13 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
 
 rt_device_t Emm_V5_Init(const char* uart)
 {
+  /* æŸ¥æ‰¾ç³»ç»Ÿä¸­çš„ä¸²å£è®¾å¤‡ */
   Emm_serial1 = rt_device_find(uart);
-  rt_device_open(Emm_serial1, RT_DEVICE_FLAG_RX_NON_BLOCKING | RT_DEVICE_FLAG_TX_BLOCKING);
-  /* ³õÊ¼»¯ĞÅºÅÁ¿ */
+  /* åˆå§‹åŒ–ä¿¡å·é‡ */
   rt_sem_init(&rx_sem, "rx_sem", 0, RT_IPC_FLAG_FIFO);
-/* ÉèÖÃ½ÓÊÕ»Øµ÷º¯Êı */
+  /* ä»¥ä¸­æ–­æ¥æ”¶åŠè½®è¯¢å‘é€æ¨¡å¼æ‰“å¼€ä¸²å£è®¾å¤‡ */
+  rt_device_open(Emm_serial1, RT_DEVICE_FLAG_RX_BLOCKING | RT_DEVICE_FLAG_TX_BLOCKING);
+  /* è®¾ç½®æ¥æ”¶å›è°ƒå‡½æ•° */
   rt_device_set_rx_indicate(Emm_serial1, Emm_uart_receive_callback);  
   
 	return Emm_serial1;
