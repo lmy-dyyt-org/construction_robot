@@ -229,8 +229,12 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         msg.rtr = RT_CAN_DTR;   /* 数据帧 */
         msg.len = 8;            /* 数据长度为 8 */
         uint16_t tt = (__motor->can_id - CAN_Motor1_ID) % 4;
-        // LOG_D("tt %d value %f",tt,value);
-
+         //LOG_D("id %d out %f",tt,value);
+        static int time = 0;
+        if ((time++) % 100 == 0)
+        {
+            //LOG_D(" motor_pos %f speed %f current %f out %d",  motor_get_pos(id), motor_get_speed(id), motor_get_torque(id),tmpout);
+        }
         if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
         {
         }
@@ -289,7 +293,7 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
 {
     motor_t *motor = motor_get(id);
     motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
-
+    LOG_D("not used");
     switch (cmd)
     {
     case MOTOR_MODE_TORQUE:
@@ -302,7 +306,7 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
-        *arg = (float)__motor->total_angle * 0.0007669f;
+        //*arg = (float)__motor->total_angle * 0.0007669f;
         break;
     case MOTOR_MODE_TEMP:
         // /*返回温度*/
@@ -411,26 +415,28 @@ static void can_rx_thread(void *parameter)
         // motor_feedback_torque(id, motor_measure->real_current);
         // motor_feedback_speed(id, motor_measure->speed_rpm);
         // motor_feedback_pos(id, motor_measure->total_angle);
-        register uint16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
-        register uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
+        register int16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
+        register int16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
         uint16_t pos = 0;
 // 9.549279f*功率/转速=扭矩
 #define DJ_M_VEL 24.f // 电机电压
-        motor_feedback_speed(id, speed_rpm);
         //motor_feedback_torque(id, (current * DJ_M_VEL) * 9.549279f / speed_rpm);
+        motor_feedback_speed(id, speed_rpm);
         motor_feedback_torque(id, current );
-        motor_feedback_pos(id, (float)motor_measure->total_angle* 0.0007669f);
+        motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
 
 //        float speed_rpm1 = motor_measure->speed_rpm;
 //        float total_angle = motor_measure->total_angle;
+        //motor_set_speed(M2006_1_CAN1,1000);
+        motor_set_speed(id,2000);
         //motor_set_torque(id,1000);
+        motor_feedback_speed(id, speed_rpm);
+        motor_feedback_torque(id, current );
+        motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
+        
         motor_handle(id, 1);
 
-        static int time = 0;
-        if ((time++) % 100 == 0)
-        {
-            //LOG_D("acc pos %lld motor_pos %f speed %f current %f", motor_measure->total_angle, motor_get_pos(id), motor_get_speed(id), motor_get_torque(id));
-        }
+
     }
 }
 static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)

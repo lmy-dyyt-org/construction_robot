@@ -166,6 +166,11 @@ float motor_get_pos(int id);
 
 float motor_get_torque(int id);
 
+apid_t* motor_get_pid_torque(int id);
+apid_t* motor_get_pid_speed(int id);
+apid_t* motor_get_pid_pos(int id);
+
+
 int motor_control(int id, MOTOR_VALUE_TYPE mode,void*data);
 
 #if defined(__cplusplus)

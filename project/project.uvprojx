@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, __RTTHREAD__</Define>
               <Undefine></Undefine>
-              <IncludePath>libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;libraries\HAL_Drivers;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\posix\io\eventfd;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
+              <IncludePath>rt-thread\components\libc\posix\delay;libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\drivers\ktime;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;rt-thread\components\drivers\ktime\inc;libraries\HAL_Drivers;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\dfs\dfs_v1\include;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\eventfd;rt-thread\components\utilities\var_export;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;rt-thread\components\dfs\dfs_v1\filesystems\devfs;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\stdio;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -385,29 +385,19 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>aboard_power_switch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
+              <FilePath>applications\aboard_power_switch.c</FilePath>
             </File>
             <File>
-              <FileName>motor.c</FileName>
+              <FileName>drv_stepper_motor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\motor.c</FilePath>
-            </File>
-            <File>
-              <FileName>apid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\apid.c</FilePath>
+              <FilePath>applications\drv_stepper_motor.c</FilePath>
             </File>
             <File>
               <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\Emm_V5.c</FilePath>
-            </File>
-            <File>
-              <FileName>aboard_power_switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\aboard_power_switch.c</FilePath>
             </File>
             <File>
               <FileName>motor_dj_rm_driver.c</FileName>
@@ -420,19 +410,29 @@
               <FilePath>applications\apid_exfunc.c</FilePath>
             </File>
             <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\main.c</FilePath>
+            </File>
+            <File>
               <FileName>follow_line.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\follow_line.c</FilePath>
             </File>
             <File>
-              <FileName>motor_cfg.c</FileName>
+              <FileName>motor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\motor_cfg.c</FilePath>
+              <FilePath>applications\motor.c</FilePath>
             </File>
             <File>
-              <FileName>drv_stepper_motor.c</FileName>
+              <FileName>motor_cfg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\drv_stepper_motor.c</FilePath>
+              <FilePath>applications\motor_cfg.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\apid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -478,6 +478,51 @@
               <FileName>cwchar.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\libc\compilers\common\cwchar.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CPP</GroupName>
+          <Files>
+            <File>
+              <FileName>atomic_8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\cpp11\atomic_8.c</FilePath>
+            </File>
+            <File>
+              <FileName>emutls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\cpp11\emutls.c</FilePath>
+            </File>
+            <File>
+              <FileName>thread_local_impl.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\cpp11\thread_local_impl.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>cxx_crt.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\cxx_crt.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>cxx_crt_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\cxx_crt_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>cxx_Mutex.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\os\cxx_Mutex.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>cxx_Semaphore.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\os\cxx_Semaphore.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>cxx_Thread.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>rt-thread\components\libc\cplusplus\os\cxx_Thread.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -617,6 +662,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Filesystem</GroupName>
+          <Files>
+            <File>
+              <FileName>devfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\dfs\dfs_v1\filesystems\devfs\devfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\dfs\dfs_v1\src\dfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\dfs\dfs_v1\src\dfs_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\dfs\dfs_v1\src\dfs_fs.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs_posix.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\dfs\dfs_v1\src\dfs_posix.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Finsh</GroupName>
           <Files>
             <File>
@@ -638,6 +713,11 @@
               <FileName>cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\finsh\cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>msh_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\finsh\msh_file.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -713,6 +793,26 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\src\timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ktime</GroupName>
+          <Files>
+            <File>
+              <FileName>hrtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\hrtimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>cputimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\cputimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>boottime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\boottime.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -887,6 +987,71 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>POSIX</GroupName>
+          <Files>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\delay\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>stdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\io\stdio\stdio.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_attr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_attr.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_barrier.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_barrier.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_cond.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_cond.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_rwlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_rwlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_spin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_spin.c</FilePath>
+            </File>
+            <File>
+              <FileName>pthread_tls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\pthread_tls.c</FilePath>
+            </File>
+            <File>
+              <FileName>sched.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\pthreads\sched.c</FilePath>
+            </File>
+            <File>
+              <FileName>posix_signal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\libc\posix\signal\posix_signal.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>rt_kprintf</GroupName>
           <Files>
             <File>
@@ -905,14 +1070,24 @@
           <GroupName>Utilities</GroupName>
           <Files>
             <File>
+              <FileName>console_be.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\utilities\ulog\backend\console_be.c</FilePath>
+            </File>
+            <File>
               <FileName>ulog.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\utilities\ulog\ulog.c</FilePath>
             </File>
             <File>
-              <FileName>console_be.c</FileName>
+              <FileName>var_export.c</FileName>
               <FileType>1</FileType>
-              <FilePath>rt-thread\components\utilities\ulog\backend\console_be.c</FilePath>
+              <FilePath>rt-thread\components\utilities\var_export\var_export.c</FilePath>
+            </File>
+            <File>
+              <FileName>var_export_cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\utilities\var_export\var_export_cmd.c</FilePath>
             </File>
           </Files>
         </Group>

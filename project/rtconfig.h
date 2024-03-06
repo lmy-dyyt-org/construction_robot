@@ -82,6 +82,14 @@
 
 /* DFS: device virtual file system */
 
+#define RT_USING_DFS
+#define DFS_USING_POSIX
+#define DFS_USING_WORKDIR
+#define DFS_FD_MAX 16
+#define RT_USING_DFS_V1
+#define DFS_FILESYSTEMS_MAX 4
+#define DFS_FILESYSTEM_TYPES_MAX 4
+#define RT_USING_DFS_DEVFS
 
 /* Device Drivers */
 
@@ -98,6 +106,7 @@
 #define RT_USING_ADC
 #define RT_USING_RTC
 #define RT_USING_SOFT_RTC
+#define RT_USING_KTIME
 
 /* Using USB */
 
@@ -108,19 +117,25 @@
 
 /* Timezone and Daylight Saving Time */
 
-#define RT_LIBC_USING_LIGHT_TZ_DST
-#define RT_LIBC_TZ_DEFAULT_HOUR 8
-#define RT_LIBC_TZ_DEFAULT_MIN 0
-#define RT_LIBC_TZ_DEFAULT_SEC 0
 
 /* POSIX (Portable Operating System Interface) layer */
 
+#define RT_USING_POSIX_FS
+#define RT_USING_POSIX_DEVIO
+#define RT_USING_POSIX_STDIO
+#define RT_USING_POSIX_DELAY
+#define RT_USING_POSIX_CLOCK
+#define RT_USING_PTHREADS
+#define PTHREAD_NUM_MAX 8
 
 /* Interprocess Communication (IPC) */
 
 
 /* Socket is in the 'Network' category */
 
+#define RT_USING_CPLUSPLUS
+#define RT_USING_CPLUSPLUS11
+#define RT_USING_CPP_WRAPPER
 
 /* Network */
 
@@ -136,6 +151,11 @@
 #define ULOG_USING_ISR_LOG
 #define ULOG_ASSERT_ENABLE
 #define ULOG_LINE_BUF_SIZE 128
+#define ULOG_USING_ASYNC_OUTPUT
+#define ULOG_ASYNC_OUTPUT_BUF_SIZE 2048
+#define ULOG_ASYNC_OUTPUT_BY_THREAD
+#define ULOG_ASYNC_OUTPUT_THREAD_STACK 1024
+#define ULOG_ASYNC_OUTPUT_THREAD_PRIORITY 30
 
 /* log format */
 
@@ -145,6 +165,7 @@
 #define ULOG_OUTPUT_TAG
 #define ULOG_OUTPUT_THREAD_NAME
 #define ULOG_BACKEND_USING_CONSOLE
+#define RT_USING_VAR_EXPORT
 
 /* RT-Thread online packages */
 

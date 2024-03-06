@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-06 12:51:46
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-06 14:46:04
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -292,6 +292,7 @@ int motor_set_speed(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_SPEED;
+    motor->tar_speed = value;
 
     return M_EOK;
 
@@ -343,6 +344,32 @@ float motor_get_speed(int id)
     MOTOR_ASSERT(motor);
     return motor->cur_speed;
 }
+
+/**
+ * @brief   获取电机的速度
+ *
+ * @param id    电机id
+ * @param value     速度值，单位r/min
+ * @return int    获取状态
+ */
+apid_t *motor_get_pid_torque(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    return motor->pid_torque;
+}
+apid_t *motor_get_pid_speed(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    return motor->pid_speed;
+}
+apid_t *motor_get_pid_pos(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    return motor->pid_pos;
+}
 /**
  * @brief   获取电机的位置
  *
@@ -379,14 +406,26 @@ int motor_updata_cfg(int id, int level)
     case 0:
         motor->behaver = motor_behiver_1;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_NONE;
+        motor->pid_torque = malloc(sizeof(apid_t));
+        motor->pid_speed = malloc(sizeof(apid_t));
+        motor->pid_pos = malloc(sizeof(apid_t));
+        APID_Init(motor->pid_torque,PID_POSITION,1,0,0);
+        APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
+        APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
         break;
     case 1:
         motor->behaver = motor_behiver_2;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_TORQUE;
+        motor->pid_speed = malloc(sizeof(apid_t));
+        motor->pid_pos = malloc(sizeof(apid_t));
+        APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
+        APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
         break;
     case 2:
         motor->behaver = motor_behiver_3;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_SPEED;
+        motor->pid_pos = malloc(sizeof(apid_t));
+        APID_Init(motor->pid_pos,PID_POSITION,3,0,0);
         break;
     case 3:
         motor->behaver = motor_behiver_4;
@@ -420,7 +459,7 @@ void motor_init(void)
 }
 enum
 {
-    MOTOR_OPT_ID,
+    MOTOR_OPT_ID = 0,
     MOTOR_OPT_TORQUE,
     MOTOR_OPT_SPEED,
     MOTOR_OPT_POS,
@@ -540,7 +579,9 @@ static int cmd_motor(int argc, char **argv)
     }
 
 _usage:
-
+    rt_kprintf("Usage: m [options]\n");
+    rt_kprintf("[options]:\n");
+    MSH_OPT_DUMP(cmd_motor);
     return 0;
 }
 
@@ -551,4 +592,4 @@ CMD_OPTIONS_NODE(MOTOR_OPT_SPEED, speed, set / get speed)
 CMD_OPTIONS_NODE(MOTOR_OPT_POS, pos, set / get pos)
 CMD_OPTIONS_NODE_END
 #endif /* FINSH_USING_OPTION_COMPLETION */
-MSH_CMD_EXPORT_ALIAS(cmd_motor, m, motor operate cmd, optenable);
+    MSH_CMD_EXPORT_ALIAS(cmd_motor, m, motor operate cmd, optenable);

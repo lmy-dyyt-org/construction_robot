@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-03 15:52:06
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-06 14:47:36
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.c
  * @Description:pid库
  */
@@ -10,6 +10,7 @@
 #include "apid.h"
 #include "stdio.h"
 #include <stdarg.h>
+#include "ulog.h"
 #ifdef __cplusplus
 extern "C"
 {
@@ -383,6 +384,7 @@ extern "C"
 		pid->d_handle(pid);
 		////////////////////////////////输出操作，包含p操作
 		__PID_Out(pid);
+		LOG_RAW("t p o:%f,%f,%f\r\n",pid->parameter.target,pid->parameter.present,pid->parameter.out);
 	}
 
  /**

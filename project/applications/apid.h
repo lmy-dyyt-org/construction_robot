@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: dyyt 805207319@qq.com
- * @LastEditTime: 2023-07-23 01:44:41
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-06 15:08:11
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.h
  * @Description: pid库
  */
@@ -29,7 +29,27 @@ extern "C"
 #define USE_HOOK_FIRST 0 // 使用钩子函数，自行编写
 #define USE_HOOK_END 0
 
+#ifndef ABS
 #define ABS(x) ((x > 0) ? x : -x)
+#endif
+
+typedef enum {
+     _8=0U,
+
+     _16,
+
+     _32,
+      _64,
+
+     _f,
+     _lf
+}var_type_e;
+typedef struct _var_list {
+    const char* name;
+    void* body;
+    var_type_e type;
+    struct _var_list *next;
+}var_list_t;
 
 
     enum
@@ -202,6 +222,16 @@ extern "C"
     void APID_Set_Predict(apid_t *pid, PID_TYPE value);
 
     PID_TYPE APID_Get_Out(apid_t *pid);
+
+#define VAR_CMD_REGISTER(var,type) do{\
+    var_register(&var,#var,type);\
+}while (0)
+#define VAR_CMD_ARR_REGISTER(var,type,size) do{\
+    var_arr_register(&var,#var,type,size);\
+}while (0)
+void var_register(void* var,const char* name, var_type_e type);
+void var_arr_register(void *var,const char* name, var_type_e type,int size);
+void var_init(void);
 
 
 #ifdef __cplusplus

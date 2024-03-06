@@ -21,6 +21,7 @@
 #include "follow_line.h"
 #include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
+#include "motor.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN    GET_PIN(F, 14)
 
@@ -120,5 +121,6 @@ int main(void)
         rt_thread_mdelay(500);
         rt_pin_write(LED0_PIN, PIN_LOW);
         rt_thread_mdelay(500);
+				motor_set_speed(M2006_1_CAN1,1000);
     }
 }

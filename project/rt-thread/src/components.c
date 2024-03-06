@@ -147,7 +147,7 @@ int $Sub$$main(void)
 }
 #elif defined(__ICCARM__)
 /* __low_level_init will auto called by IAR cstartup */
-extern void __iar_data_init3(void);
+extern void __iar_data_init3(void);1
 int __low_level_init(void)
 {
     // call IAR table copy function.

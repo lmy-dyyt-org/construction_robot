@@ -22,18 +22,29 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
-Project File Date:  03/05/2024
+Project File Date:  03/06/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
-compiling drv_stepper_motor.c...
-compiling main.c...
-compiling Emm_V5.c...
-linking...
-Program Size: Code=112332 RO-data=15112 RW-data=4704 ZI-data=4352  
-After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
+applications/apid_exfunc.c(87): warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
+          va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参      
+                       ^
+applications/apid_exfunc.c(84): note: parameter of type 'ALL_PID_I_Function' (aka 'enum ALL_PID_I_Function') is declared here
+void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
+                                                         ^
+applications/apid_exfunc.c(178): warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
+          va_start(ap, dmode);    // 初始化，第二个参数为最后一个确定的形参
+                       ^
+applications/apid_exfunc.c(175): note: parameter of type 'ALL_PID_D_Function' (aka 'enum ALL_PID_D_Function') is declared here
+void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
+                                                         ^
+applications/apid_exfunc.c(455): error: call to undeclared function 'VAR_VAR_MALLOC'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    var_list_t* p = (var_list_t*)VAR_VAR_MALLOC(sizeof(var_list_t));
+                                 ^
+2 warnings and 1 error generated.
+compiling apid_exfunc.c...
+".\build\keil\Obj\rt-thread.axf" - 1 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -46,6 +57,7 @@ Package Vendor: Keil
   C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
+Target not created.
 Build Time Elapsed:  00:00:02
 </pre>
 </body>
