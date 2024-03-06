@@ -2,7 +2,7 @@
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-07-19 11:36:27
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-06 15:13:17
+ * @LastEditTime: 2024-03-06 15:33:59
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid_exfunc.c
  * @Description: pid库
  */
@@ -18,7 +18,7 @@
 var_list_t var_list;
 var_list_t* _var_begin = 0;
 
-#define var_logInfo(...) LOG_I("CMD_VAR",__VA_ARGS__);
+#define var_logInfo(...) LOG_I(__VA_ARGS__);
 #define __NAME(restrc,x,name) strcpy(name,#x)
 #define VAR_MALLOC(x) rt_malloc(x)
 
@@ -174,8 +174,7 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
  */
 void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
 {
-    va_list ap; // 声明一个va_list变量
-	  va_start(ap, dmode);    // 初始化，第二个参数为最后一个确定的形参
+    va_list ap; // 声明一个va_list变量	  va_start(ap, dmode);    // 初始化，第二个参数为最后一个确定的形参
 
     pid->flag.differential_way = dmode;
     switch (dmode)
@@ -452,7 +451,7 @@ void var_arr_register(void *var,const char* name, var_type_e type,int size)
 }
 void var_register(void* var,const char* name, var_type_e type)
 {
-    var_list_t* p = (var_list_t*)VAR_VAR_MALLOC(sizeof(var_list_t));
+    var_list_t* p = (var_list_t*)VAR_MALLOC(sizeof(var_list_t));
 
     if (p == NULL)return;
     var_list_t* p2;
@@ -461,7 +460,7 @@ void var_register(void* var,const char* name, var_type_e type)
     if (name != NULL)
     {
         int len=strlen(name);
-        char* pname = (char*)VAR_VAR_MALLOC(sizeof(char)*len+1);
+        char* pname = (char*)VAR_MALLOC(sizeof(char)*len+1);
         strcpy(pname,name);
         p->name = pname;
     }

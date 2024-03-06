@@ -421,14 +421,11 @@ static void can_rx_thread(void *parameter)
 // 9.549279f*功率/转速=扭矩
 #define DJ_M_VEL 24.f // 电机电压
         //motor_feedback_torque(id, (current * DJ_M_VEL) * 9.549279f / speed_rpm);
-        motor_feedback_speed(id, speed_rpm);
-        motor_feedback_torque(id, current );
-        motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
 
 //        float speed_rpm1 = motor_measure->speed_rpm;
 //        float total_angle = motor_measure->total_angle;
         //motor_set_speed(M2006_1_CAN1,1000);
-        motor_set_speed(id,2000);
+        //motor_set_speed(id,2000);
         //motor_set_torque(id,1000);
         motor_feedback_speed(id, speed_rpm);
         motor_feedback_torque(id, current );

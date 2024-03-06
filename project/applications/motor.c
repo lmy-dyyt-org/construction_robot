@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-06 14:46:04
+ * @LastEditTime: 2024-03-06 15:57:09
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,6 +16,8 @@
 #include "motor.h"
 #include "ulog.h"
 #include "finsh.h"
+#include "ulog.h"
+
 static int motor_id = 0; // 用于分配电机id
 
 #define MOTOR_ASSERT(x) \
@@ -121,6 +123,8 @@ int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
         APID_Set_Present(pid_speed, motor->cur_speed);
         APID_Hander(pid_speed, cycle);
         motor->tar_torque = APID_Get_Out(pid_speed);
+        LOG_RAW("name%d speed t p o:%f,%f,%f\r\n",motor->name,pid_speed->parameter.target,pid_speed->parameter.present,pid_speed->parameter.out);
+////////////////////////////////
     }
     case MOTOR_MODE_TORQUE:
     {
@@ -256,6 +260,7 @@ int motor_handle(int id, float cycle)
     }
     motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data);                         // 进行计算
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
+
     return 0;
 }
 
@@ -412,6 +417,7 @@ int motor_updata_cfg(int id, int level)
         APID_Init(motor->pid_torque,PID_POSITION,1,0,0);
         APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
         APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
+        
         break;
     case 1:
         motor->behaver = motor_behiver_2;
@@ -419,7 +425,12 @@ int motor_updata_cfg(int id, int level)
         motor->pid_speed = malloc(sizeof(apid_t));
         motor->pid_pos = malloc(sizeof(apid_t));
         APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
-        APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
+        //APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		var_register(&(motor->tar_speed),"tarspeed",_f);
+		var_register(&(motor->pid_speed->parameter.target),"target",_f);
+		var_register(&(motor->pid_speed->parameter.present),"present",_f);
+		var_register(&(motor->pid_speed->parameter.out),"out",_f);
         break;
     case 2:
         motor->behaver = motor_behiver_3;
