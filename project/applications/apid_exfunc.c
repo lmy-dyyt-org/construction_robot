@@ -71,6 +71,7 @@ void APID_Set_Integral_Limit(apid_t *pid, PID_TYPE value)
 void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
 {
     va_list ap; // 声明一个va_list变量
+	  va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参      
     pid->flag.integral_way = imode;
     switch (imode)
     {
@@ -85,7 +86,6 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
         }
         break;
     case PID_INTEGRAL_SEPARATION:
-        va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参
         if (pid->flag.pid_mode == PID_INCREMENT)
         {
             pid->i_handle = i_handle_Increment_Separation;
@@ -101,7 +101,6 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
 #else
         pid->parameter.bias_for_integral = (PID_TYPE)va_arg(ap, int);
 #endif
-        va_end(ap);
         break;
     case PID_INTEGRAL_SATURATION:
         if (pid->flag.pid_mode == PID_INCREMENT)
@@ -112,7 +111,6 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
         {
             pid->i_handle = i_handle_Position_Saturation;
         }
-        va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参
 #if (PID_TYPE == float)
         pid->parameter.integral_limit = va_arg(ap, double);
 #elif (PID_TYPE == double)
@@ -120,7 +118,6 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
 #else
         pid->parameter.integral_limit = (PID_TYPE)va_arg(ap, int);
 #endif
-        va_end(ap);
         break;
     case PID_INTEGRAL_SPEED:
 
@@ -132,9 +129,7 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
         {
             pid->i_handle = i_handle_Position_Speed;
         }
-        va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参
         pid->variable = va_arg(ap, void *);
-        va_end(ap);
         break;
     case PID_INTEGRAL_TRAPEZIOD:
         if (pid->flag.pid_mode == PID_INCREMENT)
@@ -150,6 +145,8 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
     default:
         break;
     }
+		        va_end(ap);
+
 }
 
 /**
@@ -165,6 +162,8 @@ void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
 void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
 {
     va_list ap; // 声明一个va_list变量
+	  va_start(ap, dmode);    // 初始化，第二个参数为最后一个确定的形参
+
     pid->flag.differential_way = dmode;
     switch (dmode)
     {
@@ -179,7 +178,6 @@ void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
         }
         break;
     case PID_DIFFERENTIAL_PART: // 不完全微分
-        va_start(ap, dmode);    // 初始化，第二个参数为最后一个确定的形参
         if (pid->flag.pid_mode == PID_INCREMENT)
         {
             pid->d_handle = d_handle_Increment_Part;
@@ -195,10 +193,8 @@ void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
 #else
         pid->parameter.kd_.kd_lpf = (PID_TYPE)va_arg(ap, int);
 #endif
-        va_end(ap);
         break;
     case PID_DIFFERENTIAL_PREVIOUS: // 微分先行
-        va_start(ap, dmode);        // 初始化，第二个参数为最后一个确定的形参
         if (pid->flag.pid_mode == PID_INCREMENT)
         {
             pid->d_handle = d_handle_Increment_Previous;
@@ -214,9 +210,10 @@ void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...)
 #else
         pid->parameter.kd_.kd_pre = (PID_TYPE)va_arg(ap, int);
 #endif
-        va_end(ap);
         break;
     default:
         break;
     }
+		va_end(ap);
+
 }

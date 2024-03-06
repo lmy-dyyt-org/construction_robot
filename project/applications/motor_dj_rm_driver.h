@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-05 14:34:21
+ * @LastEditTime: 2024-03-05 15:41:04
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -105,8 +105,8 @@ enum{
 typedef struct {
     uint16_t id;           //对于motor抽象层的id
     uint16_t can_id;
-    int16_t speed_rpm;      //转速
-    int16_t given_current;  //扭矩
+//    int16_t speed_rpm;      //转速
+//    int16_t given_current;  //扭矩
     uint16_t angle;         //abs angle range:[0,8191] 角度范围[0,8191]
 
     uint16_t last_angle;    //abs angle range:[0,8191]
@@ -120,7 +120,7 @@ typedef struct {
     // uint16_t fited_angle;        //修正角度？
     uint32_t msg_cnt;            //初始化计数 小于50清零
 //    float angle_pos;  //绝对值角度
-        float real_current;     //实际输出转矩
+    //    float real_current;     //实际输出转矩
 
 } motor_measure_t;
 extern motor_measure_t dj_motors[DJ_M_NUM] ;

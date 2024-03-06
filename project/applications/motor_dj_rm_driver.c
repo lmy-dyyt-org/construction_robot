@@ -229,7 +229,7 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         msg.rtr = RT_CAN_DTR;   /* 数据帧 */
         msg.len = 8;            /* 数据长度为 8 */
         uint16_t tt = (__motor->can_id - CAN_Motor1_ID) % 4;
-         //LOG_D("tt %d value %f",tt,value);
+        // LOG_D("tt %d value %f",tt,value);
 
         if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
         {
@@ -279,11 +279,11 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
 }
 /**
  * @brief 针对2006电机的控制
- * 
+ *
  * @param id 电机抽象层id单号
  * @param cmd 控制命令
  * @param arg 命令参数
- * @return int 
+ * @return int
  */
 int motor_dj_ctr(int id, uint16_t cmd, float *arg)
 {
@@ -294,15 +294,15 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
     {
     case MOTOR_MODE_TORQUE:
         /*返回力矩/电流值*/
-        *arg = __motor->real_current;
+       // *arg = __motor->real_current;
         break;
     case MOTOR_MODE_SPEED:
         // /*返回速度值r/min rpm*/
-        *arg = __motor->speed_rpm;
+       // *arg = __motor->speed_rpm;
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
-        *arg = (float)__motor->total_angle*0.0007669f;
+        *arg = (float)__motor->total_angle * 0.0007669f;
         break;
     case MOTOR_MODE_TEMP:
         // /*返回温度*/
@@ -363,7 +363,7 @@ static void can_rx_thread(void *parameter)
 #ifdef RT_CAN_USING_HDR
     struct rt_can_filter_item items[] = {
         {.id = 0x200, .ide = 0, .rtr = 0, .mode = 0, .mask = 0x7f0, .hdr_bank = 0, .rxfifo = CAN_RX_FIFO0, .ind = ind_dj_can_motor_callback, .args = RT_NULL}};
-    
+
     struct rt_can_filter_config cfg = {sizeof(items) / sizeof(struct rt_can_filter_item), 1, items}; /* 过滤表 */
     /* 设置硬件过滤表 */
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
@@ -392,9 +392,9 @@ static void can_rx_thread(void *parameter)
         {
             motor_measure->last_angle = motor_measure->angle;                         // 上次角度更新
             motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);    // 转子机械角度高8位和第八位
-            motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
+            // motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
 
-            motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
+            //motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
             motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
 
             if (motor_measure->angle - motor_measure->last_angle > 4096)
@@ -404,29 +404,32 @@ static void can_rx_thread(void *parameter)
             motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
         }
 
-        //LOG_D("id %d, speed %d total_angle %d", motor_measure->id, motor_measure->speed_rpm, motor_measure->total_angle);
+        // LOG_D("id %d, speed %d total_angle %d", motor_measure->id, motor_measure->speed_rpm, motor_measure->total_angle);
 
         int id = motor_measure->id;
 
         // motor_feedback_torque(id, motor_measure->real_current);
         // motor_feedback_speed(id, motor_measure->speed_rpm);
         // motor_feedback_pos(id, motor_measure->total_angle);
-        uint16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
-        uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
+        register uint16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
+        register uint16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
         uint16_t pos = 0;
-        //9.549279f*功率/转速=扭矩
-        #define DJ_M_VEL 24.f   // 电机电压
+// 9.549279f*功率/转速=扭矩
+#define DJ_M_VEL 24.f // 电机电压
         motor_feedback_speed(id, speed_rpm);
-        motor_feedback_torque(id, (current*DJ_M_VEL)*9.549279f/speed_rpm);        motor_feedback_pos(id, (float)motor_measure->total_angle);
+        //motor_feedback_torque(id, (current * DJ_M_VEL) * 9.549279f / speed_rpm);
+        motor_feedback_torque(id, current );
+        motor_feedback_pos(id, (float)motor_measure->total_angle* 0.0007669f);
 
-        float speed_rpm1 = motor_measure->speed_rpm;
-        float total_angle = motor_measure->total_angle;
-        // 更新数据
+//        float speed_rpm1 = motor_measure->speed_rpm;
+//        float total_angle = motor_measure->total_angle;
+        motor_set_torque(id,1000);
         motor_handle(id, 1);
 
         static int time = 0;
-        if((time++)%100==0){
-		LOG_D("acc pos %lld motor_pos %f speed %f current %f",motor_measure->total_angle,motor_get_pos(id),motor_get_speed(id),motor_get_torque(id));
+        if ((time++) % 100 == 0)
+        {
+            LOG_D("acc pos %lld motor_pos %f speed %f current %f", motor_measure->total_angle, motor_get_pos(id), motor_get_speed(id), motor_get_torque(id));
         }
     }
 }
@@ -438,154 +441,153 @@ static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
 }
 static void set_motor_passive_feedback(void)
 {
-    #if defined(MOTOR_DJ_M3508_ID1_CAN1)
+#if defined(MOTOR_DJ_M3508_ID1_CAN1)
     motor_set_passive_feedback(M3508_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID2_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID2_CAN1)
     motor_set_passive_feedback(M3508_2_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID3_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID3_CAN1)
     motor_set_passive_feedback(M3508_3_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID4_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID4_CAN1)
     motor_set_passive_feedback(M3508_4_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID5_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID5_CAN1)
     motor_set_passive_feedback(M3508_5_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID6_CAN1)
-    motor_set_passive_feedback(M3508_6_CAN1, 1);    
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID7_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID6_CAN1)
+    motor_set_passive_feedback(M3508_6_CAN1, 1);
+#endif
+#if defined(MOTOR_DJ_M3508_ID7_CAN1)
     motor_set_passive_feedback(M3508_7_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID8_CAN1)
+#endif
+#if defined(MOTOR_DJ_M3508_ID8_CAN1)
     motor_set_passive_feedback(M3508_8_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID1_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID1_CAN2)
     motor_set_passive_feedback(M3508_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID2_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID2_CAN2)
     motor_set_passive_feedback(M3508_2_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID3_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID3_CAN2)
     motor_set_passive_feedback(M3508_3_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID4_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID4_CAN2)
     motor_set_passive_feedback(M3508_4_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID5_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID5_CAN2)
     motor_set_passive_feedback(M3508_5_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID6_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID6_CAN2)
     motor_set_passive_feedback(M3508_6_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID7_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID7_CAN2)
     motor_set_passive_feedback(M3508_7_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M3508_ID8_CAN2)
+#endif
+#if defined(MOTOR_DJ_M3508_ID8_CAN2)
     motor_set_passive_feedback(M3508_8_CAN2, 1);
-    #endif
+#endif
 
-    #if defined(MOTOR_DJ_M2006_ID1_CAN1)
+#if defined(MOTOR_DJ_M2006_ID1_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID2_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID2_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID3_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID3_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID4_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID4_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID5_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID5_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID6_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID6_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID7_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID7_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID8_CAN1)
+#endif
+#if defined(MOTOR_DJ_M2006_ID8_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID1_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID1_CAN2)
 
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID2_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID2_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID3_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID3_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID4_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID4_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID5_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID5_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID6_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID6_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID7_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID7_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M2006_ID8_CAN2)
+#endif
+#if defined(MOTOR_DJ_M2006_ID8_CAN2)
     motor_set_passive_feedback(M2006_1_CAN2, 1);
-    #endif
+#endif
 
-    #if defined(MOTOR_DJ_M6020_ID1_CAN1)
+#if defined(MOTOR_DJ_M6020_ID1_CAN1)
     motor_set_passive_feedback(M6020_1_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID2_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID2_CAN1)
     motor_set_passive_feedback(M6020_2_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID3_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID3_CAN1)
     motor_set_passive_feedback(M6020_3_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID4_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID4_CAN1)
     motor_set_passive_feedback(M6020_4_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID5_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID5_CAN1)
     motor_set_passive_feedback(M6020_5_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID6_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID6_CAN1)
     motor_set_passive_feedback(M6020_6_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID7_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID7_CAN1)
     motor_set_passive_feedback(M6020_7_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID8_CAN1)
+#endif
+#if defined(MOTOR_DJ_M6020_ID8_CAN1)
     motor_set_passive_feedback(M6020_8_CAN1, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID1_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID1_CAN2)
     motor_set_passive_feedback(M6020_1_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID2_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID2_CAN2)
     motor_set_passive_feedback(M6020_2_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID3_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID3_CAN2)
     motor_set_passive_feedback(M6020_3_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID4_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID4_CAN2)
     motor_set_passive_feedback(M6020_4_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID5_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID5_CAN2)
     motor_set_passive_feedback(M6020_5_CAN2, 1);
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID6_CAN2)
-    motor_set_passive_feedback(M6020_6_CAN2, 1);    
-    #endif
-    #if defined(MOTOR_DJ_M6020_ID7_CAN2)    
+#endif
+#if defined(MOTOR_DJ_M6020_ID6_CAN2)
+    motor_set_passive_feedback(M6020_6_CAN2, 1);
+#endif
+#if defined(MOTOR_DJ_M6020_ID7_CAN2)
     motor_set_passive_feedback(M6020_7_CAN2, 1);
-    #endif  
-    #if defined(MOTOR_DJ_M6020_ID8_CAN2)
+#endif
+#if defined(MOTOR_DJ_M6020_ID8_CAN2)
     motor_set_passive_feedback(M6020_8_CAN2, 1);
-    #endif
-
+#endif
 }
 int motor_tt_init(void)
 {
@@ -595,7 +597,7 @@ int motor_tt_init(void)
     rt_thread_t thread;
 
     motor_init();
-set_motor_passive_feedback();
+    set_motor_passive_feedback();
     /* 查找 CAN 设备 */
     can_dev = rt_device_find(CAN_DEV_NAME);
     if (!can_dev)
