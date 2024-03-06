@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-typedef struct stepper_motor_t
+typedef struct stepper_motor
 {
 	uint8_t stepper_motor_id;		/* 电机ID */
 	uint8_t stepper_motor_target_dir;		/* 电机旋转方向 */

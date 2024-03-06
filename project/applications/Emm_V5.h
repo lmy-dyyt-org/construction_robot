@@ -6,6 +6,7 @@
 #include <drv_usart.h>
 #include <rtdevice.h>
 #include "drv_stepper_motor.h"
+typedef struct stepper_motor stepper_motor_t;
 
 /**********************************************************
 ***	Emm_V5.0步进闭环控制例程
@@ -49,7 +50,7 @@ extern int Emm_rx_flag;
 
 void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr); // 将当前位置清零
 void Emm_V5_Reset_Clog_Pro(uint8_t addr); // 解除堵转保护
-void Emm_V5_Read_Sys_Params(struct stepper_motor_t* stepper_motor, uint8_t addr, SysParams_t s); // 读取参数
+void Emm_V5_Read_Sys_Params(stepper_motor_t* stepper_motor, uint8_t addr, SysParams_t s); // 读取参数
 void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, rt_bool_t svF, uint8_t ctrl_mode); // 发送命令修改开环/闭环控制模式
 void Emm_V5_En_Control(uint8_t addr, rt_bool_t state, rt_bool_t snF); // 电机使能控制
 void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, rt_bool_t snF); // 速度模式控制
@@ -61,6 +62,6 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, rt_bool_t svF, uint8_t o_mode, ui
 void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, rt_bool_t snF); // 发送命令触发回零
 void Emm_V5_Origin_Interrupt(uint8_t addr); // 强制中断并退出回零
 
-void Emm_V5_Get(struct stepper_motor_t* stepper_motor, SysParams_t s);
+void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s);
 
 #endif
