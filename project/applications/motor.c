@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-06 15:57:09
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-06 17:30:26
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -401,7 +401,43 @@ float motor_get_torque(int id)
     MOTOR_ASSERT(motor);
     return motor->cur_torque;
 }
+void __motor_shakdown(int id, motor_t *motor)
+{
+    if(motor->flag_run_mode==MOTOR_MODE_TORQUE)
+    {
+//  将所有pid的
+    }
+    if(motor->flag_run_mode==MOTOR_MODE_SPEED)
+    {
+        motor->tar_speed=0;
+    }
+    if(motor->flag_run_mode==MOTOR_MODE_POS)
+    {
+        motor->tar_pos=0;
+    }
+    //电机调试参数打印
+    LOG_D("motor id:%d name:%s", id, motor->name);
+    LOG_D("motor id:%d cur_torque:%f", id, motor->cur_torque);
 
+    LOG_D("motor id:%d cur_speed:%f", id, motor->cur_speed);
+    LOG_D("motor id:%d cur_pos:%f", id, motor->cur_pos);
+    LOG_D("motor id:%d tar_torque:%f", id, motor->tar_torque);
+    LOG_D("motor id:%d tar_speed:%f", id, motor->tar_speed);
+    LOG_D("motor id:%d tar_pos:%f", id, motor->tar_pos);
+
+}
+void motor_start_shakedown(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    motor->shakedown=__motor_shakdown;
+}
+void motor_stop_shakedown(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    motor->shakedown=0;
+}
 int motor_updata_cfg(int id, int level)
 {
     motor_t *motor = motor_get(id);

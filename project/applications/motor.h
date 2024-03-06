@@ -51,6 +51,7 @@ enum{
 typedef int(*motor_driver)(int id, uint16_t mode,float* value, void* user_data);
 typedef int(*motor_ctr)(int id,uint16_t mode,float*data);
 typedef int(*motor_behiver)(int id, uint16_t mode,void*data, void* user_data);
+typedef int(*motor_shakedown)(int id, motor_t* motor);
 typedef struct{
     motor_driver driver;
     motor_ctr control;
@@ -75,13 +76,16 @@ typedef struct{
     float cur_speed;
     float cur_pos;
     float cur_torque;
+
     uint8_t flag_run_mode :2;//记录当前运行模式
     uint8_t flag_out_mode :2;//记录当前输出模式
     uint8_t flag_accept_level :2;//记录支持的模式 0 - 3  
     uint8_t flag_passive_feedback :1;//记录支持的模式 0 - 3  
     uint8_t flag_passive_handle :1;//记录支持的模式 0 - 3  
 
+
     motor_behiver behaver;
+    motor_shakedown shakedown;
     float acc_out;
 }motor_t;
 
