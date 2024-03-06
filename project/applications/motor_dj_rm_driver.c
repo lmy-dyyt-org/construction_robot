@@ -423,13 +423,13 @@ static void can_rx_thread(void *parameter)
 
 //        float speed_rpm1 = motor_measure->speed_rpm;
 //        float total_angle = motor_measure->total_angle;
-        motor_set_torque(id,1000);
+        //motor_set_torque(id,1000);
         motor_handle(id, 1);
 
         static int time = 0;
         if ((time++) % 100 == 0)
         {
-            LOG_D("acc pos %lld motor_pos %f speed %f current %f", motor_measure->total_angle, motor_get_pos(id), motor_get_speed(id), motor_get_torque(id));
+            //LOG_D("acc pos %lld motor_pos %f speed %f current %f", motor_measure->total_angle, motor_get_pos(id), motor_get_speed(id), motor_get_torque(id));
         }
     }
 }
@@ -439,6 +439,50 @@ static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
     LOG_W("can_rx_call unknown id data");
     return RT_EOK;
 }
+static void set_motor_passive_feedback(void);
+int motor_tt_init(void)
+{
+    struct rt_can_msg msg = {0};
+    rt_err_t res;
+    rt_size_t size;
+    rt_thread_t thread;
+
+    motor_init();
+    set_motor_passive_feedback();
+    /* 查找 CAN 设备 */
+    can_dev = rt_device_find(CAN_DEV_NAME);
+    if (!can_dev)
+    {
+        rt_kprintf("find %s failed!\n", CAN_DEV_NAME);
+        return -RT_ERROR;
+    }
+
+    /* 初始化 CAN 接收信号量 */
+    rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
+    /* 以中断接收及中断发送方式打开 CAN 设备 */
+    res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
+    RT_ASSERT(res == RT_EOK);
+    /* 设置 CAN 通信的波特率为 500kbit/s*/
+    res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
+    RT_ASSERT(res == RT_EOK);
+
+    /* 创建数据接收线程 */
+    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096, 5, 10);
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);
+    }
+    else
+    {
+        rt_kprintf("create can_rx thread failed!\n");
+    }
+    
+    return 0;
+}
+INIT_COMPONENT_EXPORT(motor_tt_init);
+
+
+//void motor_cmd_
 static void set_motor_passive_feedback(void)
 {
 #if defined(MOTOR_DJ_M3508_ID1_CAN1)
@@ -589,42 +633,4 @@ static void set_motor_passive_feedback(void)
     motor_set_passive_feedback(M6020_8_CAN2, 1);
 #endif
 }
-int motor_tt_init(void)
-{
-    struct rt_can_msg msg = {0};
-    rt_err_t res;
-    rt_size_t size;
-    rt_thread_t thread;
 
-    motor_init();
-    set_motor_passive_feedback();
-    /* 查找 CAN 设备 */
-    can_dev = rt_device_find(CAN_DEV_NAME);
-    if (!can_dev)
-    {
-        rt_kprintf("find %s failed!\n", CAN_DEV_NAME);
-        return -RT_ERROR;
-    }
-
-    /* 初始化 CAN 接收信号量 */
-    rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
-    /* 以中断接收及中断发送方式打开 CAN 设备 */
-    res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
-    RT_ASSERT(res == RT_EOK);
-    /* 设置 CAN 通信的波特率为 500kbit/s*/
-    res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
-    RT_ASSERT(res == RT_EOK);
-
-    /* 创建数据接收线程 */
-    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096, 5, 10);
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);
-    }
-    else
-    {
-        rt_kprintf("create can_rx thread failed!\n");
-    }
-    return 0;
-}
-INIT_COMPONENT_EXPORT(motor_tt_init);
