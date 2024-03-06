@@ -366,10 +366,10 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
     case S_TPOS :  break;
     case S_VEL  :  
                   Emm_V5_Receive(rxCmd, 6);
-                  if(rxCmd[0] == 1 && rxCmd[1] == 0x35)
+                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x35)
                   {
                     //获取绝对值信息
-                    uint16_t vel = (uint16_t)(
+                    stepper_motor->stepper_motor_speed = (uint16_t)(
                                       ((uint16_t)rxCmd[3] << 8)    |
                                       ((uint16_t)rxCmd[4] << 0)    
                                     );
@@ -381,7 +381,7 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
                   } break;
     case S_CPOS : 
                   Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == 1 && rxCmd[1] == 0x36)
+                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x36)
                   {
                     //获取绝对值信息
                     float pos = (uint32_t)(
@@ -400,60 +400,43 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
                   } break;
     case S_PERR :
                   Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == 1 && rxCmd[1] == 0x36)
+                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x37)
                   {
                     //获取绝对值信息
-                    float pos = (uint32_t)(
+                    float err_pos = (uint32_t)(
                                       ((uint32_t)rxCmd[3] << 24)    |
                                       ((uint32_t)rxCmd[4] << 16)    |
                                       ((uint32_t)rxCmd[5] << 8)     |
                                       ((uint32_t)rxCmd[6] << 0)
                                     );
                     // 转换为角度
-                    stepper_motor->stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
+                    stepper_motor->stepper_motor_err = (float)err_pos * 360.0f / 65536.0f;
 
                     // 修正电机正反位置
                     if(rxCmd[2])
-                    { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
-                    rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor->stepper_motor_angle);
+                    { stepper_motor->stepper_motor_err = -stepper_motor->stepper_motor_err; }
+                    rt_kprintf("Motor_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_err);
                   } break;
     case S_FLAG :  
-                  Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == 1 && rxCmd[1] == 0x36)
+                  Emm_V5_Receive(rxCmd, 4);
+                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3A)
                   {
-                    //获取绝对值信息
-                    float pos = (uint32_t)(
-                                      ((uint32_t)rxCmd[3] << 24)    |
-                                      ((uint32_t)rxCmd[4] << 16)    |
-                                      ((uint32_t)rxCmd[5] << 8)     |
-                                      ((uint32_t)rxCmd[6] << 0)
-                                    );
-                    // 转换为角度
-                    stepper_motor->stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
-
-                    // 修正电机正反位置
-                    if(rxCmd[2])
-                    { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
-                    rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor->stepper_motor_angle);
+                    //获取电机状态标志字节
+                    uint8_t flag = rxCmd[2];
+                    stepper_motor->stepper_motor_reachflag = flag&0x02;
+                    stepper_motor->stepper_motor_stallflag = flag&0x04;
+                    stepper_motor->stepper_motor_enflag = flag&0x01;
                   } break;
     case S_ORG  :                  
-                  Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == 1 && rxCmd[1] == 0x36)
+                  Emm_V5_Receive(rxCmd, 4);
+                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3B)
                   {
-                    //获取绝对值信息
-                    float pos = (uint32_t)(
-                                      ((uint32_t)rxCmd[3] << 24)    |
-                                      ((uint32_t)rxCmd[4] << 16)    |
-                                      ((uint32_t)rxCmd[5] << 8)     |
-                                      ((uint32_t)rxCmd[6] << 0)
-                                    );
-                    // 转换为角度
-                    stepper_motor->stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
-
-                    // 修正电机正反位置
-                    if(rxCmd[2])
-                    { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
-                    rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor->stepper_motor_angle);
+                    //获取电机回零状态标志字节
+                    uint8_t flag = rxCmd[2];
+                    stepper_motor->stepper_motor_calibrationflag = flag&0x02;
+                    stepper_motor->stepper_motor_returnzeroingflag = flag&0x04;
+                    stepper_motor->stepper_motor_encokflag = flag&0x01; 
+                    stepper_motor->stepper_motor_returnzero_failflag = flag&0x08;                    
                   } break;
     case S_Conf :  break;
     case S_State:  break;

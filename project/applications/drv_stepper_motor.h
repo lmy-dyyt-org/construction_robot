@@ -11,6 +11,9 @@
 #include <drv_gpio.h>
 #include "Emm_V5.h"
 
+#define BIG_ARM_ANGLE_MAX 672.3
+#define SMALL_ARM_ANGLE_MAX 672.3
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,8 +29,14 @@ typedef struct stepper_motor
 	float stepper_motor_angle;  			/* 电机实时位置角度 */
 	float stepper_motor_err;  			/* 电机位置误差角度 */
 	
-	uint8_t stepper_motor_enflag;  			/* 使能/到位/堵转状态标志位 */
-	uint8_t stepper_motor_zeroflag;      		/* 正在回零/回零失败状态标志位 */
+	uint8_t stepper_motor_reachflag;  			/* 到位状态标志位 */
+	uint8_t stepper_motor_stallflag;  			/* 堵转状态标志位 */
+	uint8_t stepper_motor_enflag;  				/* 使能状态标志位 */
+
+	uint8_t stepper_motor_encokflag;      			/* 编码器就绪标志位 */
+	uint8_t stepper_motor_calibrationflag;			/* 校准就绪标志位 */
+	uint8_t stepper_motor_returnzeroingflag;		/* 正在回零状态标志位 */
+	uint8_t stepper_motor_returnzero_failflag; 		/* 回零失败状态标志位 */
 }stepper_motor_t;
 
 extern uint8_t rxCmd[128];

@@ -13,19 +13,23 @@ void drv_stepper_motor(void *parameter)
   stepper_motor_Init(&stepper_motor_1, 1);
 	
 	/*清零电机位置*/
-  Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
-
+  // Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
+  // Emm_V5_En_Control(1, 1, 0);
+  Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 50, 2000, 300, 200, 60, 1);
+  rt_thread_mdelay(50);
+  Emm_V5_Origin_Trigger_Return(1, 2, 0);
 	while(1)
   {
     //Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//01 fd 02 6b	
-		Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
+		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
 
     rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
 		
     Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_CPOS);
-    rt_thread_mdelay(5);
     Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_VEL);
-
+    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_ORG);
     rt_thread_mdelay(500);
   }
 }
@@ -67,12 +71,4 @@ int Emm_V5_Receive(uint8_t* data, uint8_t len)
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
 {
   stepper_motor->stepper_motor_id = id;
-  stepper_motor->stepper_motor_target_dir = 0;
-  stepper_motor->stepper_motor_target_angle = 0;
-  stepper_motor->stepper_motor_target_speed = 0;
-  stepper_motor->stepper_motor_speed = 0;
-  stepper_motor->stepper_motor_angle = 0;
-  stepper_motor->stepper_motor_err = 0;
-  stepper_motor->stepper_motor_enflag = 0;
-  stepper_motor->stepper_motor_zeroflag = 0;
 }
