@@ -411,28 +411,17 @@ static void can_rx_thread(void *parameter)
         // LOG_D("id %d, speed %d total_angle %d", motor_measure->id, motor_measure->speed_rpm, motor_measure->total_angle);
 
         int id = motor_measure->id;
-
-        // motor_feedback_torque(id, motor_measure->real_current);
-        // motor_feedback_speed(id, motor_measure->speed_rpm);
-        // motor_feedback_pos(id, motor_measure->total_angle);
         register int16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
         register int16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
         uint16_t pos = 0;
 // 9.549279f*功率/转速=扭矩
-#define DJ_M_VEL 24.f // 电机电压
-        //motor_feedback_torque(id, (current * DJ_M_VEL) * 9.549279f / speed_rpm);
-
-//        float speed_rpm1 = motor_measure->speed_rpm;
-//        float total_angle = motor_measure->total_angle;
-        //motor_set_speed(M2006_1_CAN1,1000);
-        //motor_set_speed(id,2000);
-        //motor_set_torque(id,1000);
         motor_feedback_speed(id, speed_rpm);
         motor_feedback_torque(id, current );
-        motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
+    //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
+        motor_feedback_pos(id, (float)motor_measure->total_angle);
         
         motor_handle(id, 1);
-
+        motor_start_shakedown(id);
 
     }
 }
@@ -465,12 +454,12 @@ int motor_tt_init(void)
     /* 以中断接收及中断发送方式打开 CAN 设备 */
     res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
     RT_ASSERT(res == RT_EOK);
-    /* 设置 CAN 通信的波特率为 500kbit/s*/
+    /* 设置 CAN 通信的波特率为 1Mbit/s*/
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
     RT_ASSERT(res == RT_EOK);
 
     /* 创建数据接收线程 */
-    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096, 5, 10);
+    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096*2, 5, 10);
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);

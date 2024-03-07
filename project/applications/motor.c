@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-06 17:30:26
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-06 22:42:11
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -97,7 +97,6 @@ int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
     }
     return 0;
 }
-
 // 底层支持torque
 int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
 {
@@ -123,8 +122,8 @@ int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
         APID_Set_Present(pid_speed, motor->cur_speed);
         APID_Hander(pid_speed, cycle);
         motor->tar_torque = APID_Get_Out(pid_speed);
-        LOG_RAW("name%d speed t p o:%f,%f,%f\r\n",motor->name,pid_speed->parameter.target,pid_speed->parameter.present,pid_speed->parameter.out);
-////////////////////////////////
+        // LOG_RAW("name%d speed t p o:%f,%f,%f\r\n", motor->name, pid_speed->parameter.target, pid_speed->parameter.present, pid_speed->parameter.out);
+        ////////////////////////////////
     }
     case MOTOR_MODE_TORQUE:
     {
@@ -140,7 +139,6 @@ int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
     }
     return 0;
 }
-
 // 底层支持torque,speed
 int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
 {
@@ -260,7 +258,8 @@ int motor_handle(int id, float cycle)
     }
     motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data);                         // 进行计算
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
-
+    if (motor->shakedown)
+        motor->shakedown(id, motor);
     return 0;
 }
 
@@ -403,40 +402,45 @@ float motor_get_torque(int id)
 }
 void __motor_shakdown(int id, motor_t *motor)
 {
-    if(motor->flag_run_mode==MOTOR_MODE_TORQUE)
+    if (motor->flag_run_mode == MOTOR_MODE_TORQUE)
     {
-//  将所有pid的
+        //  将力矩环路pid的当前值，设定值，输出值
+        LOG_RAW("motor id %d name %s torque tpo:%f,%f,%f\r\n", id, motor->name,
+                motor->pid_torque->parameter.target,
+                motor->pid_torque->parameter.present,
+                motor->pid_torque->parameter.out);
     }
-    if(motor->flag_run_mode==MOTOR_MODE_SPEED)
+    if (motor->flag_run_mode == MOTOR_MODE_SPEED)
     {
-        motor->tar_speed=0;
+        //  将速度环路pid的当前值，设定值，输出值
+        LOG_RAW("motor id %d name %s speed tpo:%f,%f,%f\r\n", id, motor->name,
+                motor->pid_speed->parameter.target,
+                motor->pid_speed->parameter.present,
+                motor->pid_speed->parameter.out);
     }
-    if(motor->flag_run_mode==MOTOR_MODE_POS)
+    if (motor->flag_run_mode == MOTOR_MODE_POS)
     {
-        motor->tar_pos=0;
+        //  将位置环路pid的当前值，设定值，输出值
+        LOG_RAW("motor id %d name %s pos speed tpo:%f,%f,%f, %f,%f,%f\r\n", id, motor->name,
+                motor->pid_pos->parameter.target,
+                motor->pid_pos->parameter.present,
+                motor->pid_pos->parameter.out,
+                 motor->pid_speed->parameter.target,
+                motor->pid_speed->parameter.present,
+                motor->pid_speed->parameter.out);
     }
-    //电机调试参数打印
-    LOG_D("motor id:%d name:%s", id, motor->name);
-    LOG_D("motor id:%d cur_torque:%f", id, motor->cur_torque);
-
-    LOG_D("motor id:%d cur_speed:%f", id, motor->cur_speed);
-    LOG_D("motor id:%d cur_pos:%f", id, motor->cur_pos);
-    LOG_D("motor id:%d tar_torque:%f", id, motor->tar_torque);
-    LOG_D("motor id:%d tar_speed:%f", id, motor->tar_speed);
-    LOG_D("motor id:%d tar_pos:%f", id, motor->tar_pos);
-
 }
 void motor_start_shakedown(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    motor->shakedown=__motor_shakdown;
+    motor->shakedown = __motor_shakdown;
 }
 void motor_stop_shakedown(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    motor->shakedown=0;
+    motor->shakedown = 0;
 }
 int motor_updata_cfg(int id, int level)
 {
@@ -450,29 +454,41 @@ int motor_updata_cfg(int id, int level)
         motor->pid_torque = malloc(sizeof(apid_t));
         motor->pid_speed = malloc(sizeof(apid_t));
         motor->pid_pos = malloc(sizeof(apid_t));
-        APID_Init(motor->pid_torque,PID_POSITION,1,0,0);
-        APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
-        APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
-        
+
+        RT_ASSERT(motor->pid_torque);
+        RT_ASSERT(motor->pid_speed);
+        RT_ASSERT(motor->pid_pos);
+        APID_Init(motor->pid_torque, PID_POSITION, 1, 0, 0);
+        APID_Init(motor->pid_speed, PID_POSITION, 1.14, 0.02, 0);
+        APID_Init(motor->pid_pos, PID_POSITION, 1, 0, 0);
+
         break;
     case 1:
         motor->behaver = motor_behiver_2;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_TORQUE;
-        motor->pid_speed = malloc(sizeof(apid_t));
         motor->pid_pos = malloc(sizeof(apid_t));
-        APID_Init(motor->pid_speed,PID_POSITION,1,0,0);
-        //APID_Init(motor->pid_pos,PID_POSITION,1,0,0);
+        motor->pid_speed = malloc(sizeof(apid_t));
+        RT_ASSERT(motor->pid_speed);
+        RT_ASSERT(motor->pid_pos);
+
+        APID_Init(motor->pid_speed, PID_POSITION, 1.14, 0.02, 0);
+        APID_Init(motor->pid_pos, PID_POSITION, 0.01, 0, 0);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		var_register(&(motor->tar_speed),"tarspeed",_f);
-		var_register(&(motor->pid_speed->parameter.target),"target",_f);
-		var_register(&(motor->pid_speed->parameter.present),"present",_f);
-		var_register(&(motor->pid_speed->parameter.out),"out",_f);
+        var_register(&(motor->tar_speed), "tarspeed", _f);
+        var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
+        var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
+        var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
+        var_register(&(motor->tar_pos), "tarpos", _f);
+        var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
+        var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
+        var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
         break;
     case 2:
         motor->behaver = motor_behiver_3;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_SPEED;
         motor->pid_pos = malloc(sizeof(apid_t));
-        APID_Init(motor->pid_pos,PID_POSITION,3,0,0);
+        RT_ASSERT(motor->pid_pos);
+        APID_Init(motor->pid_pos, PID_POSITION, 1, 0, 0);
         break;
     case 3:
         motor->behaver = motor_behiver_4;
