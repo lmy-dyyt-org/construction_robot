@@ -15,7 +15,7 @@ void drv_stepper_motor(void *parameter)
 	/*清零电机位置*/
   // Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
   // Emm_V5_En_Control(1, 1, 0);
-  Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 50, 2000, 300, 200, 60, 1);
+  Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 30, 10000, 300, 70, 60, 0);
   rt_thread_mdelay(50);
   Emm_V5_Origin_Trigger_Return(1, 2, 0);
 	while(1)
