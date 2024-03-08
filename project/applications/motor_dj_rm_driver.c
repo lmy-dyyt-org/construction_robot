@@ -348,12 +348,56 @@ void dj_motor_BackToZero(motor_measure_t *motor)
     motor->offset_angle = motor->angle;
     motor->round_cnt = 0;
 }
+rt_mailbox_t dj_m_mailbox;
 rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
 {
     /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
     // rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
+    struct rt_can_msg rxmsg = {0};
 
-    rt_sem_release(&rx_sem);
+    /* 从 CAN 读取一帧数据 */
+    rt_device_read(can_dev, 0, &rxmsg, sizeof(rxmsg));
+    /* 打印数据 ID 及内容 */
+    // rt_kprintf("ID:%x ", rxmsg.id);
+
+    motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
+
+    if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
+    {
+        motor_measure->msg_cnt++;
+        motor_measure->offset_angle = motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);
+    }
+    else
+    {
+        motor_measure->last_angle = motor_measure->angle;                      // 上次角度更新
+        motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]); // 转子机械角度高8位和第八位
+        // motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
+
+        // motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
+        // motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
+
+        if (motor_measure->angle - motor_measure->last_angle > 4096)
+            motor_measure->round_cnt--;
+        else if (motor_measure->angle - motor_measure->last_angle < -4096)
+            motor_measure->round_cnt++;
+        //motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+    }
+
+    int id = motor_measure->id;
+    uint16_t pos = 0;
+    // 9.549279f*功率/转速=扭矩
+    motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
+    motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
+    //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
+    motor_feedback_pos(id, (float)(motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle) * 0.0439453215f);
+
+    rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
+
+    //rt_sem_release(&rx_sem);
+    if(rt_mb_send (dj_m_mailbox, id) != RT_EOK)
+    {
+        LOG_E("dj_m_mailbox send failed");
+    }
     return RT_EOK;
 }
 static void can_rx_thread1(void *parameter)
@@ -363,7 +407,8 @@ static void can_rx_thread1(void *parameter)
 
         // motor_handle(0, 1);
         // motor_start_shakedown(0);
-        rt_thread_delay(1);
+        motor_get(0)->shakedown(0, motor_get(0));
+        rt_thread_delay(10);
     }
 }
 
@@ -376,7 +421,6 @@ static void can_rx_thread(void *parameter)
     rt_pin_mode(GET_PIN(I, 2), PIN_MODE_OUTPUT);
     /* 设置接收回调函数 */
     rt_device_set_rx_indicate(can_dev, can_rx_call);
-
 #ifdef RT_CAN_USING_HDR
     struct rt_can_filter_item items[] = {
         {.id = 0x200, .ide = 0, .rtr = 0, .mode = 0, .mask = 0x7f0, .hdr_bank = 0, .rxfifo = CAN_RX_FIFO0, .ind = ind_dj_can_motor_callback, .args = RT_NULL}};
@@ -386,59 +430,21 @@ static void can_rx_thread(void *parameter)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
     RT_ASSERT(res == RT_EOK);
 #endif
-    // motor_start_shakedown(0);
+    motor_start_shakedown(0);
 
     while (1)
     {
         /* hdr 值为 0，从 过滤器读取数据 */
         rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
-        rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
-        /* 从 CAN 读取一帧数据 */
-        rt_device_read(can_dev, 0, &rxmsg, sizeof(rxmsg));
-        /* 打印数据 ID 及内容 */
-        // rt_kprintf("ID:%x ", rxmsg.id);
-
-        motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
-
-        if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
-        {
-            motor_measure->msg_cnt++;
-            motor_measure->offset_angle = motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);
-        }
-        else
-        {
-            motor_measure->last_angle = motor_measure->angle;                      // 上次角度更新
-            motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]); // 转子机械角度高8位和第八位
-            // motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
-
-            // motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
-            // motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
-
-            if (motor_measure->angle - motor_measure->last_angle > 4096)
-                motor_measure->round_cnt--;
-            else if (motor_measure->angle - motor_measure->last_angle < -4096)
-                motor_measure->round_cnt++;
-            motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
-        }
-
-        int id = motor_measure->id;
-        // register int16_t current = ;
-        // register int16_t speed_rpm = ;
-        uint16_t pos = 0;
-        // 9.549279f*功率/转速=扭矩
-        motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
-        motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
-        //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
-        motor_feedback_pos(id, (float)motor_measure->total_angle * 0.0439453215f);
+        //rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+        rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, RT_WAITING_FOREVER);
 
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
         // motor_measure->angle,motor_measure->round_cnt);
         rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
-        motor_handle(0, 1);
+        motor_handle(i, 1);
         rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
-
-        rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
     }
 }
 static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
@@ -467,6 +473,8 @@ int motor_tt_init(void)
 
     /* 初始化 CAN 接收信号量 */
     rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
+    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 512, RT_IPC_FLAG_FIFO);
+
     /* 以中断接收及中断发送方式打开 CAN 设备 */
     res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
     RT_ASSERT(res == RT_EOK);
@@ -485,7 +493,7 @@ int motor_tt_init(void)
         rt_kprintf("create can_rx thread failed!\n");
     }
     /* 创建dainjai线程 */
-    thread = rt_thread_create("m_dj_driver_handle", can_rx_thread1, RT_NULL, 4096 * 2, 6, 10);
+    thread = rt_thread_create("m_dj_driver_handle", can_rx_thread1, RT_NULL, 4096 * 2, 22, 10);
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);

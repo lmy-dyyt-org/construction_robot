@@ -385,9 +385,9 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
-              <FileName>aboard_power_switch.c</FileName>
+              <FileName>motor_cfg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\aboard_power_switch.c</FilePath>
+              <FilePath>applications\motor_cfg.c</FilePath>
             </File>
             <File>
               <FileName>drv_stepper_motor.c</FileName>
@@ -395,14 +395,9 @@
               <FilePath>applications\drv_stepper_motor.c</FilePath>
             </File>
             <File>
-              <FileName>Emm_V5.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\Emm_V5.c</FilePath>
-            </File>
-            <File>
-              <FileName>motor_dj_rm_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\motor_dj_rm_driver.c</FilePath>
+              <FilePath>applications\main.c</FilePath>
             </File>
             <File>
               <FileName>apid_exfunc.c</FileName>
@@ -410,9 +405,9 @@
               <FilePath>applications\apid_exfunc.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>apid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
+              <FilePath>applications\apid.c</FilePath>
             </File>
             <File>
               <FileName>follow_line.c</FileName>
@@ -425,14 +420,19 @@
               <FilePath>applications\motor.c</FilePath>
             </File>
             <File>
-              <FileName>motor_cfg.c</FileName>
+              <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\motor_cfg.c</FilePath>
+              <FilePath>applications\Emm_V5.c</FilePath>
             </File>
             <File>
-              <FileName>apid.c</FileName>
+              <FileName>aboard_power_switch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\apid.c</FilePath>
+              <FilePath>applications\aboard_power_switch.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_dj_rm_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\motor_dj_rm_driver.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -805,14 +805,14 @@
               <FilePath>rt-thread\components\drivers\ktime\src\hrtimer.c</FilePath>
             </File>
             <File>
-              <FileName>cputimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>rt-thread\components\drivers\ktime\src\cputimer.c</FilePath>
-            </File>
-            <File>
               <FileName>boottime.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\ktime\src\boottime.c</FilePath>
+            </File>
+            <File>
+              <FileName>cputimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\cputimer.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -199,8 +199,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>applications\aboard_power_switch.c</PathWithFileName>
-      <FilenameWithoutPath>aboard_power_switch.c</FilenameWithoutPath>
+      <PathWithFileName>applications\motor_cfg.c</PathWithFileName>
+      <FilenameWithoutPath>motor_cfg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -220,29 +220,17 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>3</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>applications\Emm_V5.c</PathWithFileName>
-      <FilenameWithoutPath>Emm_V5.c</FilenameWithoutPath>
+      <PathWithFileName>applications\main.c</PathWithFileName>
+      <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
       <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>applications\motor_dj_rm_driver.c</PathWithFileName>
-      <FilenameWithoutPath>motor_dj_rm_driver.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -254,19 +242,19 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>6</FileNumber>
+      <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>applications\main.c</PathWithFileName>
-      <FilenameWithoutPath>main.c</FilenameWithoutPath>
+      <PathWithFileName>applications\apid.c</PathWithFileName>
+      <FilenameWithoutPath>apid.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>7</FileNumber>
+      <FileNumber>6</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -278,7 +266,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>8</FileNumber>
+      <FileNumber>7</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -290,13 +278,25 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>applications\Emm_V5.c</PathWithFileName>
+      <FilenameWithoutPath>Emm_V5.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>9</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>applications\motor_cfg.c</PathWithFileName>
-      <FilenameWithoutPath>motor_cfg.c</FilenameWithoutPath>
+      <PathWithFileName>applications\aboard_power_switch.c</PathWithFileName>
+      <FilenameWithoutPath>aboard_power_switch.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -307,8 +307,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>applications\apid.c</PathWithFileName>
-      <FilenameWithoutPath>apid.c</FilenameWithoutPath>
+      <PathWithFileName>applications\motor_dj_rm_driver.c</PathWithFileName>
+      <FilenameWithoutPath>motor_dj_rm_driver.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1175,8 +1175,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>rt-thread\components\drivers\ktime\src\cputimer.c</PathWithFileName>
-      <FilenameWithoutPath>cputimer.c</FilenameWithoutPath>
+      <PathWithFileName>rt-thread\components\drivers\ktime\src\boottime.c</PathWithFileName>
+      <FilenameWithoutPath>boottime.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1187,8 +1187,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>rt-thread\components\drivers\ktime\src\boottime.c</PathWithFileName>
-      <FilenameWithoutPath>boottime.c</FilenameWithoutPath>
+      <PathWithFileName>rt-thread\components\drivers\ktime\src\cputimer.c</PathWithFileName>
+      <FilenameWithoutPath>cputimer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1776,7 +1776,7 @@
 
   <Group>
     <GroupName>Utilities</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

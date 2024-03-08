@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-07 22:16:30
+ * @LastEditTime: 2024-03-08 13:18:41
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -258,8 +258,8 @@ int motor_handle(int id, float cycle)
     }
     motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data);                         // 进行计算
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
-    if (motor->shakedown)
-        motor->shakedown(id, motor);
+    // if (motor->shakedown)
+    //     motor->shakedown(id, motor);
     return 0;
 }
 
@@ -408,7 +408,7 @@ void __motor_shakdown(int id, motor_t *motor)
     {
         //  将力矩环路pid的当前值，设定值，输出值
 			if(MOTOD_IS_TORQUE_TIME(motor))
-        LOG_RAW("motor id %d name %s torque tpo:%f,%f,%f\r\n", id, motor->name,
+        LOG_RAW(":%f,%f,%f\r\n",
                 motor->pid_torque->parameter.target,
                 motor->pid_torque->parameter.present,
                 motor->pid_torque->parameter.out);
@@ -417,7 +417,7 @@ void __motor_shakdown(int id, motor_t *motor)
     {
         //  将速度环路pid的当前值，设定值，输出值
                             if(time%10==0){
-        LOG_RAW("motor id %d name %s speed tpo:%f,%f,%f\r\n", id, motor->name,
+        LOG_RAW(":%f,%f,%f\r\n",
                 motor->pid_speed->parameter.target,
                 motor->pid_speed->parameter.present,
                 motor->pid_speed->parameter.out);
@@ -427,7 +427,7 @@ void __motor_shakdown(int id, motor_t *motor)
     {
         //  将位置环路pid的当前值，设定值，输出值
                             if(time%10==0){
-        LOG_RAW("motor id %d name %s pos speed tpo:%f,%f,%f, %f,%f,%f\r\n", id, motor->name,
+        LOG_RAW(":%f,%f,%f, %f,%f,%f\r\n", 
                 motor->pid_pos->parameter.target,
                 motor->pid_pos->parameter.present,
                 motor->pid_pos->parameter.out,
@@ -479,7 +479,7 @@ int motor_updata_cfg(int id, int level)
         RT_ASSERT(motor->pid_pos);
 
         APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
-        APID_Init(motor->pid_pos, PID_POSITION, 0.01, 0, 0);
+        APID_Init(motor->pid_pos, PID_POSITION, 2, 0, 0);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var_register(&(motor->tar_speed), "tarspeed", _f);
         var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
