@@ -1000,6 +1000,46 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>command.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\command.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>endstop.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\endstop.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>equipment.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\equipment.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>fanControl.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\fanControl.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>interpolation.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\interpolation.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>logger.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\logger.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RampsStepper.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\RampsStepper.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>robotGeometry.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\robotarm\robotGeometry.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
