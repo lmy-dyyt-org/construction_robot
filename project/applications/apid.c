@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-06 15:41:58
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-08 15:41:56
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.c
  * @Description:pid库
  */
@@ -565,4 +565,108 @@ PID_TYPE inline APID_Get_Out(apid_t *pid)
 {
 	return pid->parameter.out;
 }
+
+
+
+/**
+ * @description: 获取pid目标值/期望值最大值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Target_Limit(apid_t *pid)
+{
+	return pid->parameter.target_limit;
+}
+
+/**
+ * @description: 获取pid误差最大值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Bias_Limit(apid_t *pid)
+{
+	return pid->parameter.bias_limit;
+}
+
+/**
+ * @description: 获取pid误差响应死区
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Bias_Dead_Zone(apid_t *pid)
+{
+	return pid->parameter.bias_dead_zone;
+}
+
+
+/**
+ * @description: 获取pid积分项最大值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Integral_Limit(apid_t *pid)
+{
+	return pid->parameter.integral_limit;
+}
+
+/**
+ * @description: 获取pid输出最大值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Out_Limit(apid_t *pid)
+{
+	return pid->parameter.out_limit;
+}
+
+/**
+ * @description: 获取pid前馈系数
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_Feedforward(apid_t *pid)
+{
+	return pid->parameter.kf;
+}
+
+/**
+ * @description: 获取pid预测系数
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE APID_Get_KPre(apid_t *pid)
+{
+	return pid->parameter.k_pre;
+}
+
+/**
+ * @description: 获取pid期望
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE inline APID_Get_Target(apid_t *pid)
+{
+	return pid->parameter.target;
+}
+
+/**
+ * @description: 获取pid当前值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE inline APID_Get_Present(apid_t *pid)
+{
+	return pid->parameter.present;
+}
+
+/**
+ * @description: 获取pid预测值
+ * @param {apid_t*} pid 实例句柄
+ * @return {PID_TYPE}
+ */
+PID_TYPE inline APID_Get_Predict(apid_t *pid)
+{
+	return pid->parameter.predict;
+}
+
 

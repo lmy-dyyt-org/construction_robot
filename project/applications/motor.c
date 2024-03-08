@@ -439,18 +439,6 @@ void motor_shakdown(int id)
                             }
         }
 }
-void motor_start_shakedown(int id)
-{
-    motor_t *motor = motor_get(id);
-    MOTOR_ASSERT(motor);
-    motor->shakedown = __motor_shakdown;
-}
-void motor_stop_shakedown(int id)
-{
-    motor_t *motor = motor_get(id);
-    MOTOR_ASSERT(motor);
-    motor->shakedown = 0;
-}
 int motor_updata_cfg(int id, int level)
 {
     motor_t *motor = motor_get(id);
@@ -460,28 +448,27 @@ int motor_updata_cfg(int id, int level)
     case 0:
         motor->behaver = motor_behiver_1;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_NONE;
-        motor->pid_torque = malloc(sizeof(apid_t));
-        motor->pid_speed = malloc(sizeof(apid_t));
-        motor->pid_pos = malloc(sizeof(apid_t));
+        // motor->pid_torque = malloc(sizeof(apid_t));
+        // motor->pid_speed = malloc(sizeof(apid_t));
+        // motor->pid_pos = malloc(sizeof(apid_t));
 
         RT_ASSERT(motor->pid_torque);
         RT_ASSERT(motor->pid_speed);
         RT_ASSERT(motor->pid_pos);
-        APID_Init(motor->pid_torque, PID_POSITION, 1, 0, 0);
-        APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
-        APID_Init(motor->pid_pos, PID_POSITION, 0.1, 0, 0);
+        // APID_Init(motor->pid_torque, PID_POSITION, 1, 0, 0);
+        // APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
+        // APID_Init(motor->pid_pos, PID_POSITION, 0.1, 0, 0);
 
         break;
     case 1:
         motor->behaver = motor_behiver_2;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_TORQUE;
-        motor->pid_pos = malloc(sizeof(apid_t));
-        motor->pid_speed = malloc(sizeof(apid_t));
+
         RT_ASSERT(motor->pid_speed);
         RT_ASSERT(motor->pid_pos);
 
-        APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
-        APID_Init(motor->pid_pos, PID_POSITION, 2, 0, 0);
+        // APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
+        // APID_Init(motor->pid_pos, PID_POSITION, 2, 0, 0);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var_register(&(motor->tar_speed), "tarspeed", _f);
         var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
@@ -495,9 +482,9 @@ int motor_updata_cfg(int id, int level)
     case 2:
         motor->behaver = motor_behiver_3;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_SPEED;
-        motor->pid_pos = malloc(sizeof(apid_t));
+        //motor->pid_pos = malloc(sizeof(apid_t));
         RT_ASSERT(motor->pid_pos);
-        APID_Init(motor->pid_pos, PID_POSITION, 1, 0, 0);
+       // APID_Init(motor->pid_pos, PID_POSITION, 1, 0, 0);
         break;
     case 3:
         motor->behaver = motor_behiver_4;
@@ -520,7 +507,7 @@ void motor_init(void)
         motor_list[i].time = 0;
 
         // TODO: 为什么要设置为1
-        motor_list[i].pos_tick = 4;
+        motor_list[i].pos_tick = 20;
         motor_list[i].speed_tick = 5;
         motor_list[i].torque_tick = 1;
 
@@ -661,7 +648,6 @@ static int start_shakdown(int argc, char **argv)
     if (argc >= 2)
     {
         int id = atoi(argv[1]);
-        motor_stop_shakedown(id);
     }
     return 0;
 }MSH_CMD_EXPORT(start_shakdown, start motor shakdowm)

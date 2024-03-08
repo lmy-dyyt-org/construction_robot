@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-06 15:08:11
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-08 16:35:41
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.h
  * @Description: pid库
  */
@@ -188,6 +188,45 @@ typedef struct _var_list {
         void (*variable)(apid_t *pid); // 变速积分
     }apid_t;
 
+/*用户不该使用该注释下面的函数*/
+	void _PID_Hander(apid_t* pid, PID_TYPE cycle);
+	void i_handle_Increment_Normal(apid_t* pid);
+	void d_handle_Increment_Complete(apid_t* pid);
+    
+	void i_handle_Position_Normal(apid_t* pid);
+	void d_handle_Position_Complete(apid_t* pid);
+/*用户不该使用该注释上面的函数*/
+/**
+ * @brief 对于特殊的使用环境，可以使用该宏创建一个匿名的pid实例，但该实例不会被自动初始化，任然需要调用init函数
+ * 
+ */
+#define APID_CREATE_STATIC_ANONYMOUS(mode, kp, ki, kd) \
+    &(apid_t){                                          \
+        .flag = {.pid_mode = mode},                      \
+        .parameter = {.kp = kp, .ki = ki, .kd = kd},     \
+    }
+
+/**
+ * @brief 对于特殊的使用环境，可以使用下面宏创建一个匿名的pid实例，该实例不用调用初始化函数
+ * 
+ */
+#define APID_CREATE_STATIC_ANONYMOUS_INCREMENT( kp, ki, kd) \
+    &(apid_t){                                          \
+        .flag = {.pid_mode = PID_INCREMENT},                      \
+        .parameter = {.kp = kp, .ki = ki, .kd = kd},     \
+        .handle = _PID_Hander,\
+        .i_handle = i_handle_Increment_Normal,\
+				.d_handle = d_handle_Increment_Complete,\
+    }
+#define APID_CREATE_STATIC_ANONYMOUS_POSITION( _kp, _ki, _kd) \
+    &(apid_t){                                          \
+        .flag = {.pid_mode = PID_POSITION},                      \
+        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},     \
+        .handle = _PID_Hander,\
+        .i_handle = i_handle_Position_Normal,\
+				.d_handle = d_handle_Position_Complete,\
+    }
+
     void APID_STOP(apid_t *pid);
     void APID_Pause(apid_t *pid);
     void APID_Enable(apid_t *pid);
@@ -223,6 +262,18 @@ typedef struct _var_list {
 
     PID_TYPE APID_Get_Out(apid_t *pid);
 
+    PID_TYPE APID_Get_Target_Limit(apid_t *pid);
+    PID_TYPE APID_Get_Bias_Limit(apid_t *pid);
+    PID_TYPE APID_Get_Bias_Dead_Zone(apid_t *pid);
+    PID_TYPE APID_Get_Integral_Limit(apid_t *pid);
+    PID_TYPE APID_Get_Out_Limit(apid_t *pid);
+
+    PID_TYPE APID_Get_Feedforward(apid_t *pid);
+    PID_TYPE APID_Get_KPre(apid_t *pid);
+
+    PID_TYPE APID_Get_Target(apid_t *pid);
+    PID_TYPE APID_Get_Present(apid_t *pid);
+    PID_TYPE APID_Get_Predict(apid_t *pid);
 #define VAR_CMD_REGISTER(var,type) do{\
     var_register(&var,#var,type);\
 }while (0)

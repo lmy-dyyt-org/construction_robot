@@ -211,7 +211,7 @@ motor_measure_t *motor_get_by_canid(uint16_t can_id)
 
 // can1 的
 int16_t iq1_low[4], iq1_high[4], iq1_uhigh[4];
-
+// can2 的
 int16_t iq2_low[4], iq2_high[4], iq2_uhigh[4];
 
 int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
@@ -231,47 +231,260 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         uint16_t tt = (__motor->can_id - CAN_Motor1_ID) % 4;
         // LOG_D("id %d out %f",tt,value);
         static int time = 0;
-        if ((time++) % 100 == 0)
-        {
-            // LOG_D(" motor_pos %f speed %f current %f out %d",  motor_get_pos(id), motor_get_speed(id), motor_get_torque(id),tmpout);
-        }
+
         if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
         {
         }
         else if ((msg.id - CAN_Motor1_ID) > 4)
         {
             iq1_high[tt] = tmpout;
-            /* 待发送的 8 字节数据 */
-            msg.id = CAN_Motor_ALL_ID2;
-            msg.data[0] = iq1_high[0] >> 8;
-            msg.data[1] = iq1_high[0];
-            msg.data[2] = iq1_high[1] >> 8;
-            msg.data[3] = iq1_high[1];
-            msg.data[4] = iq1_high[2] >> 8;
-            msg.data[5] = iq1_high[2];
-            msg.data[6] = iq1_high[3] >> 8;
-            msg.data[7] = iq1_high[3];
+            if (
+
+#ifdef MOTOR_DJ_M2006_ID5_CAN1
+                dj_motors[DJ_M_CAN1_5].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID6_CAN1
+                dj_motors[DJ_M_CAN1_6].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID7_CAN1
+                dj_motors[DJ_M_CAN1_7].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID8_CAN1
+                dj_motors[DJ_M_CAN1_8].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M2006_ID5_CAN2
+                dj_motors[DJ_M_CAN2_5].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID6_CAN2
+                dj_motors[DJ_M_CAN2_6].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID7_CAN2
+                dj_motors[DJ_M_CAN2_7].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID8_CAN2
+                dj_motors[DJ_M_CAN2_8].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID5_CAN1
+                dj_motors[DJ_M_CAN1_5].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID6_CAN1
+                dj_motors[DJ_M_CAN1_6].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID7_CAN1
+                dj_motors[DJ_M_CAN1_7].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID8_CAN1
+                dj_motors[DJ_M_CAN1_8].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID5_CAN2
+                dj_motors[DJ_M_CAN2_5].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID6_CAN2
+                dj_motors[DJ_M_CAN2_6].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID7_CAN2
+                dj_motors[DJ_M_CAN2_7].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID8_CAN2
+                dj_motors[DJ_M_CAN2_8].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID1_CAN1
+                dj_motors[DJ_M_CAN1_9].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID2_CAN1
+                dj_motors[DJ_M_CAN1_10].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID3_CAN1
+                dj_motors[DJ_M_CAN1_11].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID4_CAN1
+                dj_motors[DJ_M_CAN1_12].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID5_CAN1
+                dj_motors[DJ_M_CAN1_13].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID6_CAN1
+                dj_motors[DJ_M_CAN1_14].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID7_CAN1
+                dj_motors[DJ_M_CAN1_15].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID8_CAN1
+                dj_motors[DJ_M_CAN1_16].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID1_CAN2
+                dj_motors[DJ_M_CAN2_9].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID2_CAN2
+                dj_motors[DJ_M_CAN2_10].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID3_CAN2
+                dj_motors[DJ_M_CAN2_11].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID4_CAN2
+                dj_motors[DJ_M_CAN2_12].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID5_CAN2
+                dj_motors[DJ_M_CAN2_13].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID6_CAN2
+                dj_motors[DJ_M_CAN2_14].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID7_CAN2
+                dj_motors[DJ_M_CAN2_15].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M6020_ID8_CAN2
+                dj_motors[DJ_M_CAN2_16].msg_cnt == 0xff &&
+#endif
+                1)
+            {
+                /* 待发送的 8 字节数据 */
+                msg.id = CAN_Motor_ALL_ID2;
+                msg.data[0] = iq1_high[0] >> 8;
+                msg.data[1] = iq1_high[0];
+                msg.data[2] = iq1_high[1] >> 8;
+                msg.data[3] = iq1_high[1];
+                msg.data[4] = iq1_high[2] >> 8;
+                msg.data[5] = iq1_high[2];
+                msg.data[6] = iq1_high[3] >> 8;
+                msg.data[7] = iq1_high[3];
+                rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                if (size == 0)
+                {
+                    rt_kprintf("can dev write data failed!\n");
+                }
+            }
         }
         else
         {
-            iq1_low[tt] = tmpout;
-            /* 待发送的 8 字节数据 */
-            msg.id = CAN_Motor_ALL_ID;
-            msg.data[0] = iq1_low[0] >> 8;
-            msg.data[1] = iq1_low[0];
-            msg.data[2] = iq1_low[1] >> 8;
-            msg.data[3] = iq1_low[1];
-            msg.data[4] = iq1_low[2] >> 8;
-            msg.data[5] = iq1_low[2];
-            msg.data[6] = iq1_low[3] >> 8;
-            msg.data[7] = iq1_low[3];
+            if (
+#ifdef MOTOR_DJ_M2006_ID1_CAN1
+                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID2_CAN1
+                dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID3_CAN1
+                dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID4_CAN1
+                dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M2006_ID1_CAN2
+                dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID2_CAN2
+                dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID3_CAN2
+                dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M2006_ID4_CAN2
+                dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID1_CAN1
+                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN1
+                dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID3_CAN1
+                dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN1
+                dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID1_CAN2
+                dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN2
+                dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID3_CAN2
+                dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN2
+                dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
+#endif
+                1)
+            {
+                iq1_low[tt] = tmpout;
+                /* 待发送的 8 字节数据 */
+                msg.id = CAN_Motor_ALL_ID;
+                msg.data[0] = iq1_low[0] >> 8;
+                msg.data[1] = iq1_low[0];
+                msg.data[2] = iq1_low[1] >> 8;
+                msg.data[3] = iq1_low[1];
+                msg.data[4] = iq1_low[2] >> 8;
+                msg.data[5] = iq1_low[2];
+                msg.data[6] = iq1_low[3] >> 8;
+                msg.data[7] = iq1_low[3];
+                rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                if (size == 0)
+                {
+                    rt_kprintf("can dev write data failed!\n");
+                }
+#ifdef MOTOR_DJ_M2006_ID1_CAN1
+                dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID2_CAN1
+                dj_motors[DJ_M_CAN1_2].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID3_CAN1
+                dj_motors[DJ_M_CAN1_3].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID4_CAN1
+                dj_motors[DJ_M_CAN1_4].msg_cnt = 50;
+#endif
+
+#ifdef MOTOR_DJ_M2006_ID1_CAN2
+                dj_motors[DJ_M_CAN2_1].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID2_CAN2
+                dj_motors[DJ_M_CAN2_2].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID3_CAN2
+                dj_motors[DJ_M_CAN2_3].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M2006_ID4_CAN2
+                dj_motors[DJ_M_CAN2_4].msg_cnt = 50;
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID1_CAN1
+                dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN1
+                dj_motors[DJ_M_CAN1_2].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID3_CAN1
+                dj_motors[DJ_M_CAN1_3].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN1
+                dj_motors[DJ_M_CAN1_4].msg_cnt = 50;
+#endif
+
+#ifdef MOTOR_DJ_M3508_ID1_CAN2
+                dj_motors[DJ_M_CAN2_1].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID2_CAN2
+                dj_motors[DJ_M_CAN2_2].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID3_CAN2
+                dj_motors[DJ_M_CAN2_3].msg_cnt = 50;
+#endif
+#ifdef MOTOR_DJ_M3508_ID4_CAN2
+                dj_motors[DJ_M_CAN2_4].msg_cnt = 50;
+#endif
+            }
         }
         // msg.data[3]=12;
-        rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-        if (size == 0)
-        {
-            rt_kprintf("can dev write data failed!\n");
-        }
+
         break;
     case MOTOR_MODE_SPEED:
     case MOTOR_MODE_POS:
@@ -380,7 +593,9 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
             motor_measure->round_cnt--;
         else if (motor_measure->angle - motor_measure->last_angle < -4096)
             motor_measure->round_cnt++;
-        //motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+
+        motor_measure->msg_cnt = 0xff;
+        // motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
     }
 
     int id = motor_measure->id;
@@ -392,8 +607,8 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 
     rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
-    //rt_sem_release(&rx_sem);
-    if(rt_mb_send (dj_m_mailbox, id) != RT_EOK)
+    // rt_sem_release(&rx_sem);
+    if (rt_mb_send(dj_m_mailbox, id) != RT_EOK)
     {
         LOG_E("dj_m_mailbox send failed");
     }
@@ -406,7 +621,6 @@ static void can_rx_thread1(void *parameter)
 
         // motor_handle(0, 1);
         // motor_start_shakedown(0);
-        motor_get(0)->shakedown(0, motor_get(0));
         rt_thread_delay(10);
     }
 }
@@ -429,14 +643,13 @@ static void can_rx_thread(void *parameter)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
     RT_ASSERT(res == RT_EOK);
 #endif
-    motor_start_shakedown(0);
 
     while (1)
     {
         /* hdr 值为 0，从 过滤器读取数据 */
         rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
-        //rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+        // rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
         rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, RT_WAITING_FOREVER);
 
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),

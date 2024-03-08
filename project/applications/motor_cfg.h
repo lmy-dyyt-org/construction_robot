@@ -15,12 +15,19 @@
 extern "C"
 {
 #endif
+
+#ifndef NULL
+#define NULL 0
+#endif
 /**
  * @brief 用于初始化电机的操作函数和支持功能的宏函数
  *
  */
-#define MOTOR_INIT_OPS(index, __ops, __level) [index] = {.ops = &((motor_ops_t)__ops), .flag_accept_level = __level}
+#define MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, _torque_pid, _speed_pid, _pos_pid) [index] = {.ops = (&((motor_ops_t)__ops)), .flag_accept_level = __level, .pid_torque = _torque_pid, .pid_speed = _speed_pid, .pid_pos = _pos_pid}
 
+#define MOTOR_INIT_OPS(_index, _ops, _level)  MOTOR_INIT_OPS_PID_ALL(_index, _ops, (_level), (NULL), (NULL), (NULL))
+#define MOTOR_INIT_OPS_PID_POS(index, __ops, __level, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, NULL, NULL, _pos_pid)
+#define MOTOR_INIT_OPS_PID_SPEED(index, __ops, __level, _speed_pid, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, NULL, _speed_pid, _pos_pid)
 
     /**
      * @brief 配置电机是否启用的宏，如果启用则定义，否则注释
@@ -44,41 +51,41 @@ extern "C"
     // #define MOTOR_DJ_M3508_ID8_CAN2
 
 #define MOTOR_DJ_M2006_ID1_CAN1
-// #define MOTOR_DJ_M2006_ID2_CAN1
-// #define MOTOR_DJ_M2006_ID3_CAN1
-// #define MOTOR_DJ_M2006_ID4_CAN1
-// #define MOTOR_DJ_M2006_ID5_CAN1
-// #define MOTOR_DJ_M2006_ID6_CAN1
-// #define MOTOR_DJ_M2006_ID7_CAN1
-// #define MOTOR_DJ_M2006_ID8_CAN1
-// #define MOTOR_DJ_M2006_ID1_CAN2
-// #define MOTOR_DJ_M2006_ID2_CAN2
-// #define MOTOR_DJ_M2006_ID3_CAN2
-// #define MOTOR_DJ_M2006_ID4_CAN2
-// #define MOTOR_DJ_M2006_ID5_CAN2
-// #define MOTOR_DJ_M2006_ID6_CAN2
-// #define MOTOR_DJ_M2006_ID7_CAN2
-// #define MOTOR_DJ_M2006_ID8_CAN2
+    // #define MOTOR_DJ_M2006_ID2_CAN1
+    // #define MOTOR_DJ_M2006_ID3_CAN1
+    // #define MOTOR_DJ_M2006_ID4_CAN1
+    // #define MOTOR_DJ_M2006_ID5_CAN1
+    // #define MOTOR_DJ_M2006_ID6_CAN1
+    // #define MOTOR_DJ_M2006_ID7_CAN1
+    // #define MOTOR_DJ_M2006_ID8_CAN1
+    // #define MOTOR_DJ_M2006_ID1_CAN2
+    // #define MOTOR_DJ_M2006_ID2_CAN2
+    // #define MOTOR_DJ_M2006_ID3_CAN2
+    // #define MOTOR_DJ_M2006_ID4_CAN2
+    // #define MOTOR_DJ_M2006_ID5_CAN2
+    // #define MOTOR_DJ_M2006_ID6_CAN2
+    // #define MOTOR_DJ_M2006_ID7_CAN2
+    // #define MOTOR_DJ_M2006_ID8_CAN2
 
     // #define MOTOR_DJ_M6020_ID1_CAN1
     // #define MOTOR_DJ_M6020_ID2_CAN1
     // #define MOTOR_DJ_M6020_ID3_CAN1
     // #define MOTOR_DJ_M6020_ID4_CAN1
 
-// #define MOTOR_DJ_M6020_ID5_CAN1
-// #define MOTOR_DJ_M6020_ID6_CAN1
-// #define MOTOR_DJ_M6020_ID7_CAN1
-// #define MOTOR_DJ_M6020_ID8_CAN1
+    // #define MOTOR_DJ_M6020_ID5_CAN1
+    // #define MOTOR_DJ_M6020_ID6_CAN1
+    // #define MOTOR_DJ_M6020_ID7_CAN1
+    // #define MOTOR_DJ_M6020_ID8_CAN1
 
     // #define MOTOR_DJ_M6020_ID1_CAN2
     // #define MOTOR_DJ_M6020_ID2_CAN2
     // #define MOTOR_DJ_M6020_ID3_CAN2
     // #define MOTOR_DJ_M6020_ID4_CAN2
 
-// #define MOTOR_DJ_M6020_ID5_CAN2
-// #define MOTOR_DJ_M6020_ID6_CAN2
-// #define MOTOR_DJ_M6020_ID7_CAN2
-// #define MOTOR_DJ_M6020_ID8_CAN2
+    // #define MOTOR_DJ_M6020_ID5_CAN2
+    // #define MOTOR_DJ_M6020_ID6_CAN2
+    // #define MOTOR_DJ_M6020_ID7_CAN2
+    // #define MOTOR_DJ_M6020_ID8_CAN2
     /**
      * 配置项目结束
      */
