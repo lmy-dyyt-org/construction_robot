@@ -229,11 +229,11 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         msg.rtr = RT_CAN_DTR;   /* 数据帧 */
         msg.len = 8;            /* 数据长度为 8 */
         uint16_t tt = (__motor->can_id - CAN_Motor1_ID) % 4;
-         //LOG_D("id %d out %f",tt,value);
+        // LOG_D("id %d out %f",tt,value);
         static int time = 0;
         if ((time++) % 100 == 0)
         {
-            //LOG_D(" motor_pos %f speed %f current %f out %d",  motor_get_pos(id), motor_get_speed(id), motor_get_torque(id),tmpout);
+            // LOG_D(" motor_pos %f speed %f current %f out %d",  motor_get_pos(id), motor_get_speed(id), motor_get_torque(id),tmpout);
         }
         if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
         {
@@ -298,11 +298,11 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
     {
     case MOTOR_MODE_TORQUE:
         /*返回力矩/电流值*/
-       // *arg = __motor->real_current;
+        // *arg = __motor->real_current;
         break;
     case MOTOR_MODE_SPEED:
         // /*返回速度值r/min rpm*/
-       // *arg = __motor->speed_rpm;
+        // *arg = __motor->speed_rpm;
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
@@ -351,8 +351,20 @@ void dj_motor_BackToZero(motor_measure_t *motor)
 rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
 {
     /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
+    // rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
+
     rt_sem_release(&rx_sem);
     return RT_EOK;
+}
+static void can_rx_thread1(void *parameter)
+{
+    while (1)
+    {
+
+        // motor_handle(0, 1);
+        // motor_start_shakedown(0);
+        rt_thread_delay(1);
+    }
 }
 
 static void can_rx_thread(void *parameter)
@@ -360,7 +372,8 @@ static void can_rx_thread(void *parameter)
     int i;
     rt_err_t res;
     struct rt_can_msg rxmsg = {0};
-
+    rt_pin_mode(GET_PIN(I, 0), PIN_MODE_OUTPUT);
+    rt_pin_mode(GET_PIN(I, 2), PIN_MODE_OUTPUT);
     /* 设置接收回调函数 */
     rt_device_set_rx_indicate(can_dev, can_rx_call);
 
@@ -373,6 +386,7 @@ static void can_rx_thread(void *parameter)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
     RT_ASSERT(res == RT_EOK);
 #endif
+    // motor_start_shakedown(0);
 
     while (1)
     {
@@ -394,12 +408,12 @@ static void can_rx_thread(void *parameter)
         }
         else
         {
-            motor_measure->last_angle = motor_measure->angle;                         // 上次角度更新
-            motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);    // 转子机械角度高8位和第八位
+            motor_measure->last_angle = motor_measure->angle;                      // 上次角度更新
+            motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]); // 转子机械角度高8位和第八位
             // motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
 
-            //motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
-            motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
+            // motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
+            // motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
 
             if (motor_measure->angle - motor_measure->last_angle > 4096)
                 motor_measure->round_cnt--;
@@ -408,21 +422,23 @@ static void can_rx_thread(void *parameter)
             motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
         }
 
-        // LOG_D("id %d, speed %d total_angle %d", motor_measure->id, motor_measure->speed_rpm, motor_measure->total_angle);
-
         int id = motor_measure->id;
-        register int16_t current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]);
-        register int16_t speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]);
+        // register int16_t current = ;
+        // register int16_t speed_rpm = ;
         uint16_t pos = 0;
-// 9.549279f*功率/转速=扭矩
-        motor_feedback_speed(id, speed_rpm);
-        motor_feedback_torque(id, current );
-    //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
-        motor_feedback_pos(id, (float)motor_measure->total_angle);
-        
-        motor_handle(id, 1);
-        motor_start_shakedown(id);
+        // 9.549279f*功率/转速=扭矩
+        motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
+        motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
+        //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
+        motor_feedback_pos(id, (float)motor_measure->total_angle * 0.0439453215f);
 
+        // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
+        // motor_measure->angle,motor_measure->round_cnt);
+        rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
+        motor_handle(0, 1);
+        rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
+
+        rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
     }
 }
 static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
@@ -459,7 +475,7 @@ int motor_tt_init(void)
     RT_ASSERT(res == RT_EOK);
 
     /* 创建数据接收线程 */
-    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096*2, 5, 10);
+    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096 * 2, 5, 10);
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);
@@ -468,13 +484,21 @@ int motor_tt_init(void)
     {
         rt_kprintf("create can_rx thread failed!\n");
     }
-    
+    /* 创建dainjai线程 */
+    thread = rt_thread_create("m_dj_driver_handle", can_rx_thread1, RT_NULL, 4096 * 2, 6, 10);
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);
+    }
+    else
+    {
+        rt_kprintf("create can_rx thread failed!\n");
+    }
     return 0;
 }
 INIT_COMPONENT_EXPORT(motor_tt_init);
 
-
-//void motor_cmd_
+// void motor_cmd_
 static void set_motor_passive_feedback(void)
 {
 #if defined(MOTOR_DJ_M3508_ID1_CAN1)
@@ -625,4 +649,3 @@ static void set_motor_passive_feedback(void)
     motor_set_passive_feedback(M6020_8_CAN2, 1);
 #endif
 }
-
