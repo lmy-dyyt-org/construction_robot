@@ -1,3 +1,11 @@
+/*
+ * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @Date: 2024-03-06 16:16:14
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-03-07 11:46:13
+ * @FilePath: \project\applications\drv_stepper_motor.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include "drv_stepper_motor.h"
 
 stepper_motor_t stepper_motor_1;
@@ -50,7 +58,7 @@ rt_device_t Emm_V5_Init(const char* uart)
   Emm_serial1 = rt_device_find(uart);
   /* 初始化信号量 */
   rt_sem_init(&rx_sem, "rx_sem", 0, RT_IPC_FLAG_FIFO);
-  /* 以中断接收及轮询发送模式打开串口设备 */
+  /* 以阻塞接收及轮询发送模式打开串口设备 */
   rt_device_open(Emm_serial1, RT_DEVICE_FLAG_RX_BLOCKING | RT_DEVICE_FLAG_TX_BLOCKING);
   /* 设置接收回调函数 */
   rt_device_set_rx_indicate(Emm_serial1, Emm_uart_receive_callback);  
