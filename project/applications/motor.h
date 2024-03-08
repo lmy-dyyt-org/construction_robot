@@ -175,8 +175,8 @@ apid_t* motor_get_pid_torque(int id);
 apid_t* motor_get_pid_speed(int id);
 apid_t* motor_get_pid_pos(int id);
 
-void motor_start_shakedown(int id);
-void motor_stop_shakedown(int id);
+void motor_shakdown(int id)
+
 
 int motor_control(int id, MOTOR_VALUE_TYPE mode,void*data);
 

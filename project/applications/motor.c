@@ -400,10 +400,12 @@ float motor_get_torque(int id)
     MOTOR_ASSERT(motor);
     return motor->cur_torque;
 }
-void __motor_shakdown(int id, motor_t *motor)
+void motor_shakdown(int id)
 {
 	static int time=0;
 	time++;
+        motor_t *motor = motor_get(id);
+
     if (motor->flag_run_mode == MOTOR_MODE_TORQUE)
     {
         //  将力矩环路pid的当前值，设定值，输出值
