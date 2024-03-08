@@ -389,7 +389,6 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
     //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
-    motor_feedback_pos(id, (float)(motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle) * 0.0439453215f);
 
     rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
