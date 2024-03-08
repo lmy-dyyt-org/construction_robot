@@ -86,7 +86,7 @@ int main(void)
 // 	rt_uint8_t count =0;
 //rt_thread_mdelay(2000);
 	
-				//motor_set_speed(M2006_1_CAN1,1000);
+				////motor_set_speed(M2006_1_CAN1,1000);
 				motor_set_pos(M2006_1_CAN1,0);
 
     while (1)

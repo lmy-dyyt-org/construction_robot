@@ -595,7 +595,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
             motor_measure->round_cnt++;
 
         motor_measure->msg_cnt = 0xff;
-        // motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+        motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
     }
 
     int id = motor_measure->id;
@@ -603,8 +603,9 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     // 9.549279f*功率/转速=扭矩
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
-    //    motor_feedback_pos(id, (float)motor_measure->total_angle* 4.39453125f);
-
+    motor_feedback_pos(id, (float)(motor_measure->total_angle)*0.4);
+    LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
+          motor_measure->angle, motor_measure->round_cnt);
     rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
     // rt_sem_release(&rx_sem);
@@ -619,8 +620,8 @@ static void can_rx_thread1(void *parameter)
     while (1)
     {
 
-        // motor_handle(0, 1);
-        // motor_start_shakedown(0);
+
+        //motor_shakdown(0);
         rt_thread_delay(10);
     }
 }

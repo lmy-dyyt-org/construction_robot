@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-08 13:18:41
+ * @LastEditTime: 2024-03-08 18:52:04
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -469,6 +469,8 @@ int motor_updata_cfg(int id, int level)
 
         // APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
         // APID_Init(motor->pid_pos, PID_POSITION, 2, 0, 0);
+        APID_Init(motor->pid_speed, PID_POSITION, motor->pid_speed->parameter.kp, motor->pid_speed->parameter.ki, motor->pid_speed->parameter.kd);
+        APID_Init(motor->pid_pos, PID_POSITION,motor->pid_pos->parameter.kp, motor->pid_pos->parameter.ki, motor->pid_pos->parameter.kd);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var_register(&(motor->tar_speed), "tarspeed", _f);
         var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
