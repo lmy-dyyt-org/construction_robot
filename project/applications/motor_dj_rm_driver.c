@@ -575,7 +575,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 
     motor_measure_t *motor_measure = motor_get_by_canid(rxmsg.id);
 
-    if (motor_measure->msg_cnt <= 50) // 上电后接收50次矫正 50次之后正常接收数据
+    if (motor_measure->msg_cnt < 50) // 上电后接收50次矫正 50次之后正常接收数据
     {
         motor_measure->msg_cnt++;
         motor_measure->offset_angle = motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]);
@@ -584,18 +584,22 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     {
         motor_measure->last_angle = motor_measure->angle;                      // 上次角度更新
         motor_measure->angle = (uint16_t)(rxmsg.data[0] << 8 | rxmsg.data[1]); // 转子机械角度高8位和第八位
-        // motor_measure->speed_rpm = (int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]); // 转子转速高8位和低八位
+                            // 温度     //Null
 
-        // motor_measure->real_current = (int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5]); // 实际输出转矩高8位和低8位
-        // motor_measure->temperature = rxmsg.data[6];                                  // 温度     //Null
-
-        if (motor_measure->angle - motor_measure->last_angle > 4096)
+        if (motor_measure->angle - motor_measure->last_angle > 4096){
             motor_measure->round_cnt--;
-        else if (motor_measure->angle - motor_measure->last_angle < -4096)
+                //LOG_D("id %d,total_angle %d ", motor_measure->id, motor_measure->round_cnt);
+
+        }
+        else if (motor_measure->angle - motor_measure->last_angle < -4096){
             motor_measure->round_cnt++;
+                //LOG_D("id %d,total_angle %d ", motor_measure->id, motor_measure->round_cnt);
+
+        }
 
         motor_measure->msg_cnt = 0xff;
         motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+        //LOG_D("id %d,cnt %d angle %d %d", motor_measure->id, motor_measure->round_cnt,motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle);
     }
 
     int id = motor_measure->id;
@@ -603,9 +607,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     // 9.549279f*功率/转速=扭矩
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
-    motor_feedback_pos(id, (float)(motor_measure->total_angle)*0.4);
-    LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
-          motor_measure->angle, motor_measure->round_cnt);
+    motor_feedback_pos(id, ((float)(motor_measure->total_angle))*0.4);
     rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
     // rt_sem_release(&rx_sem);

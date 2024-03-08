@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-08 19:25:15
+ * @LastEditTime: 2024-03-08 20:16:48
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -107,6 +107,7 @@ typedef struct {
     uint16_t can_id;
         uint16_t angle;         //abs angle range:[0,8191] 角度范围[0,8191]
     uint8_t msg_cnt;            //初始化计数 小于50清零,同时兼顾数据更新标准位
+    uint8_t msg1_cnt;            //初始化计数 小于50清零,同时兼顾数据更新标准位
 
 //    int16_t speed_rpm;      //转速
 //    int16_t given_current;  //扭矩
@@ -115,8 +116,8 @@ typedef struct {
     uint16_t offset_angle;  //偏差
    // uint8_t temperature;    //温度
 
-    int64_t round_cnt;      //电机转的圈数
-   int64_t total_angle;    //当前总角度 圈数
+    int32_t round_cnt;      //电机转的圈数
+   int32_t total_angle;    //当前总角度 圈数
     // uint8_t buf_idx;
     // uint16_t angle_buf[FILTER_BUF_LEN];
     // uint16_t fited_angle;        //修正角度？
