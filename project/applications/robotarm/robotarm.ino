@@ -137,6 +137,12 @@ void setup()
 }
 
 void loop() {
+/*
+注意c++的写法，每个电机继承了 RobotGeometry 类，所以可以直接调用 RobotGeometry 类的函数
+相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
+
+*/
+  ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
   interpolator.updateActualPosition();
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());
   stepperRotate.stepToPositionRad(geometry.getRotRad());
@@ -145,14 +151,22 @@ void loop() {
   #if RAIL
     stepperRail.stepToPositionMM(interpolator.getEPosmm(), STEPS_PER_MM_RAIL);
   #endif
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  ////////////步进电机控制片，我们要换成自己的闭环步进电机/////////////////
   stepperRotate.update();
   stepperLower.update();
   stepperHigher.update();
   #if RAIL
     stepperRail.update();
   #endif
-  fan.update();
+//////////////////////////////////////
 
+
+/////////////////////////////////////////////////
+这个是串口控制代码的解析，并且下命令给插值器
   if (!queue.isFull()) {
     if (command.handleGcode()) {
       queue.push(command.getCmd());
@@ -164,20 +178,17 @@ void loop() {
       Serial.println(PRINT_REPLY_MSG);
     }
   }
+///////////////////////////////////////////////////
 
-  if (millis() % 500 < 250) {
-    led.cmdOn();
-  }
-  else {
-    led.cmdOff();
-  }
 
+//////////////////////////同理，控制的/////////////////////////
   #if BOARD_CHOICE == WEMOSD1R32 && ESP32_JOYSTICK == DUALSHOCK4
     ps4_controller_loop();
   #endif
   #if BOARD_CHOICE == WEMOSD1R32 && ESP32_JOYSTICK == WIIMOTE
     wiimote_controller_loop();
   #endif
+/////////////////////////////////////////////////////////////
 }
 
 void executeCommand(Cmd cmd) {

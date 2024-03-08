@@ -1,3 +1,4 @@
+#if 0
 #include "command.h"
 #include "logger.h"
 #include <Arduino.h>
@@ -129,3 +130,4 @@ void cmdDwell(Cmd(&cmd)){
 void printErr() {
   Logger::logERROR("COMMAND NOT RECOGNIZED");
 }
+#endif

@@ -2,7 +2,20 @@
 
 #include <math.h>
 #include <Arduino.h>
+/*
+核心文件，用于计算机械臂的几何学，包括计算机械臂的角度，长度等
+RobotGeometry 类的构造函数接收三个参数：a_ee_offset（末端执行器偏移）、
+a_low_shank_length（下杆长度）和 a_high_shank_length（上杆长度）这些参数用于设置机器人的几何形状
 
+set 方法接收三个参数：axmm、aymm 和 azmm，
+分别代表机器人在三个方向（x、y、z）上的位置
+在设置这些位置后，会调用 calculateGrad 方法来计算一些必要的参数。
+
+getXmm、getYmm 和 getZmm 方法分别用于获取机器人在三个方向上的位置。
+
+注意！！
+我们要了解这个文件的作用，可以尝试理解这个文件的代码，注意我们机器人没有z轴的运动，rotation
+*/
 RobotGeometry::RobotGeometry(float a_ee_offset, float a_low_shank_length, float a_high_shank_length) {
   ee_offset = a_ee_offset;
   low_shank_length = a_low_shank_length;

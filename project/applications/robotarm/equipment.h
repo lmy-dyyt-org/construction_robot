@@ -1,6 +1,6 @@
 #ifndef EQUIPMENT_H_
 #define EQUIPMENT_H_
-
+#if 0
 class Equipment {
 public:
   Equipment(int equipment_pin);
@@ -10,4 +10,5 @@ private:
   int pin;
 };
 
+#endif
 #endif

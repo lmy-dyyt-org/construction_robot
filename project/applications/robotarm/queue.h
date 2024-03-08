@@ -1,6 +1,8 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
+//他自己实现的一个队列，使用模板类，缓冲区是一个数组，优化嵌入式使用
+//我们基本也没啥用
 template <typename Element> class Queue {
 public:
   Queue(int alen);

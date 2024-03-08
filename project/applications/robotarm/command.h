@@ -1,3 +1,4 @@
+#if 0
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
@@ -36,4 +37,5 @@ void cmdMove(Cmd(&cmd), Point pos, Point pos_offset, bool isRelativeCoord);
 void cmdDwell(Cmd(&cmd));
 void printErr();
 
+#endif
 #endif

@@ -13,7 +13,6 @@
 ".\build\keil\obj\command.o"
 ".\build\keil\obj\endstop.o"
 ".\build\keil\obj\equipment.o"
-".\build\keil\obj\fancontrol.o"
 ".\build\keil\obj\interpolation.o"
 ".\build\keil\obj\logger.o"
 ".\build\keil\obj\rampsstepper.o"

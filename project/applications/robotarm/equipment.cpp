@@ -1,6 +1,7 @@
 #include "equipment.h"
 #include <Arduino.h>
-
+#if 0
+/* led的，没啥用*/
 Equipment::Equipment(int equipment_pin){
   pin = equipment_pin;
   pinMode(pin, OUTPUT);
@@ -13,3 +14,4 @@ void Equipment::cmdOn(){
 void Equipment::cmdOff(){
   digitalWrite(pin, LOW);  
 }
+#endif

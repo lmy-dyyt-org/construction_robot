@@ -1016,11 +1016,6 @@
               <FilePath>.\applications\robotarm\equipment.cpp</FilePath>
             </File>
             <File>
-              <FileName>fanControl.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\robotarm\fanControl.cpp</FilePath>
-            </File>
-            <File>
               <FileName>interpolation.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\robotarm\interpolation.cpp</FilePath>

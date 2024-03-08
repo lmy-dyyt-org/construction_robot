@@ -2,7 +2,11 @@
 #include "config.h"
 #include "queue.h"
 #include "logger.h"
+/*
+核心文件，一个运动插补类，用于控制机械臂的运动
+并且用它判断一次坐标运动是否完成，是高层控制
 
+*/
 Interpolation::Interpolation(){
   speed_profile = SPEED_PROFILE;
   pos_offset.xmm = 0.0;

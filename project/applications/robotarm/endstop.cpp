@@ -1,6 +1,9 @@
 #include "endstop.h"
 #include <Arduino.h>
-
+#if 0
+/**
+ * 这个文件用于定义机械臂的限位开关类，同时还包括回到原点的函数
+*/
 Endstop::Endstop(int a_min_pin, int a_dir_pin, int a_step_pin, int a_en_pin, int a_switch_input, int a_step_offset, int a_home_dwell, bool does_swap_pin){
   min_pin = a_min_pin;
   dir_pin = a_dir_pin;
@@ -91,3 +94,4 @@ bool Endstop::state(){
   }
   return bState;
 }
+#endif
