@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-08 18:52:04
+ * @LastEditTime: 2024-03-10 00:43:13
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -429,13 +429,10 @@ void motor_shakdown(int id)
     {
         //  将位置环路pid的当前值，设定值，输出值
                             if(time%10==0){
-        LOG_RAW(":%f,%f,%f, %f,%f,%f\r\n", 
+        LOG_RAW(":%f,%f,%f\r\n", 
                 motor->pid_pos->parameter.target,
                 motor->pid_pos->parameter.present,
-                motor->pid_pos->parameter.out,
-                 motor->pid_speed->parameter.target,
-                motor->pid_speed->parameter.present,
-                motor->pid_speed->parameter.out);
+                motor->pid_pos->parameter.out);
                             }
         }
 }
@@ -509,7 +506,7 @@ void motor_init(void)
         motor_list[i].time = 0;
 
         // TODO: 为什么要设置为1
-        motor_list[i].pos_tick = 20;
+        motor_list[i].pos_tick = 10;
         motor_list[i].speed_tick = 5;
         motor_list[i].torque_tick = 1;
 
