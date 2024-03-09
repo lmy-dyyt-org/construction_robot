@@ -1,11 +1,23 @@
+/*
+ * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @Date: 2024-03-02 22:00:25
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-09 23:38:54
+ * @FilePath: \project\applications\Emm_V5.h
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #ifndef __EMM_V5_H
 #define __EMM_V5_H
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 #include <board.h>
 #include <rtthread.h>
 #include <drv_usart.h>
 #include <rtdevice.h>
 #include "drv_stepper_motor.h"
+
 typedef struct stepper_motor stepper_motor_t;
 
 /**********************************************************
@@ -63,5 +75,7 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, rt_bool_t snF); 
 void Emm_V5_Origin_Interrupt(uint8_t addr); // 强制中断并退出回零
 
 void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s);
-
+#ifdef __cplusplus
+}
+#endif
 #endif
