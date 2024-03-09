@@ -10,7 +10,7 @@
       <TargetName>rt-thread</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -338,15 +338,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-<<<<<<< Updated upstream
               <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, ARDUINO_ARCH_RTTHREAD=10000, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, ARDUINO=10819, __RTTHREAD__</Define>
               <Undefine></Undefine>
-              <IncludePath>rt-thread\components\dfs\dfs_v1\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;libraries\HAL_Drivers\drivers;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\drivers\ktime\inc;rt-thread\components\libc\posix\io\eventfd;board\ports;.;board\CubeMX_Config\Inc;rt-thread\components\drivers\include;packages\perf_counter-v2.2.4.1;packages\RTduino-latest\libraries\user;rt-thread\components\dfs\dfs_v1\filesystems\devfs;rt-thread\include;applications\arduino_pinout;rt-thread\components\libc\compilers\common\extension;libraries\HAL_Drivers;rt-thread\components\libc\cplusplus\cpp11\armclang;rt-thread\components\drivers\ktime;rt-thread\components\utilities\ulog;rt-thread\components\libc\posix\io\poll;packages\RTduino-latest\core;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\libc\posix\ipc;rt-thread\components\libc\posix\io\epoll;libraries\HAL_Drivers\drivers\config;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;applications;rt-thread\components\libc\posix\delay;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\stdio;rt-thread\components\utilities\var_export;board;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;rt-thread\libcpu\arm\cortex-m4;libraries\HAL_Drivers\CMSIS\Include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\libcpu\arm\common</IncludePath>
-=======
-              <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, __RTTHREAD__</Define>
-              <Undefine></Undefine>
-              <IncludePath>rt-thread\components\libc\posix\delay;libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\drivers\ktime;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;rt-thread\components\drivers\ktime\inc;libraries\HAL_Drivers;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\dfs\dfs_v1\include;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\eventfd;rt-thread\components\utilities\var_export;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;rt-thread\components\dfs\dfs_v1\filesystems\devfs;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\stdio;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
->>>>>>> Stashed changes
+              <IncludePath>rt-thread\components\libc\posix\delay;libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\libc\cplusplus\cpp11\armclang;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\drivers\ktime;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;rt-thread\components\drivers\ktime\inc;packages\RTduino-latest\core;libraries\HAL_Drivers;applications\arduino_pinout;rt-thread\components\drivers\include;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\dfs\dfs_v1\include;packages\RTduino-latest\libraries\user;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\eventfd;rt-thread\components\utilities\var_export;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;rt-thread\components\dfs\dfs_v1\filesystems\devfs;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\stdio;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -391,29 +385,6 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
-<<<<<<< Updated upstream
-=======
-              <FileName>apid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\apid.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>apid_exfunc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\apid_exfunc.c</FilePath>
-            </File>
-            <File>
-              <FileName>motor_dj_rm_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\motor_dj_rm_driver.c</FilePath>
-            </File>
-            <File>
->>>>>>> Stashed changes
               <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\Emm_V5.c</FilePath>
@@ -469,14 +440,6 @@
                 </FileArmAds>
               </FileOption>
             </File>
-<<<<<<< Updated upstream
-=======
-            <File>
-              <FileName>drv_stepper_motor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\drv_stepper_motor.c</FilePath>
-            </File>
->>>>>>> Stashed changes
             <File>
               <FileName>aboard_power_switch.c</FileName>
               <FileType>1</FileType>
@@ -1043,9 +1006,24 @@
               <FilePath>.\applications\robotarm\command.cpp</FilePath>
             </File>
             <File>
+              <FileName>command.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\command.h</FilePath>
+            </File>
+            <File>
+              <FileName>config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\config.h</FilePath>
+            </File>
+            <File>
               <FileName>endstop.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\robotarm\endstop.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>endstop.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\endstop.h</FilePath>
             </File>
             <File>
               <FileName>equipment.cpp</FileName>
@@ -1053,9 +1031,19 @@
               <FilePath>.\applications\robotarm\equipment.cpp</FilePath>
             </File>
             <File>
+              <FileName>equipment.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\equipment.h</FilePath>
+            </File>
+            <File>
               <FileName>interpolation.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\robotarm\interpolation.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>interpolation.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\interpolation.h</FilePath>
             </File>
             <File>
               <FileName>logger.cpp</FileName>
@@ -1063,14 +1051,34 @@
               <FilePath>.\applications\robotarm\logger.cpp</FilePath>
             </File>
             <File>
+              <FileName>logger.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\logger.h</FilePath>
+            </File>
+            <File>
+              <FileName>queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\queue.h</FilePath>
+            </File>
+            <File>
               <FileName>RampsStepper.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\robotarm\RampsStepper.cpp</FilePath>
             </File>
             <File>
+              <FileName>RampsStepper.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\RampsStepper.h</FilePath>
+            </File>
+            <File>
               <FileName>robotGeometry.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\robotarm\robotGeometry.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>robotGeometry.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\robotarm\robotGeometry.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1642,11 +1650,6 @@
         <Group>
           <GroupName>Kernel</GroupName>
           <Files>
-            <File>
-              <FileName>rt_memcpy_rvds.S</FileName>
-              <FileType>2</FileType>
-              <FilePath>packages\rt_memcpy_cm-latest\rt_memcpy_rvds.S</FilePath>
-            </File>
             <File>
               <FileName>src_clock.c</FileName>
               <FileType>1</FileType>
@@ -2437,22 +2440,14 @@
           <GroupName>ktime</GroupName>
           <Files>
             <File>
-<<<<<<< Updated upstream
-=======
-              <FileName>boottime.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>rt-thread\components\drivers\ktime\src\boottime.c</FilePath>
-            </File>
-            <File>
->>>>>>> Stashed changes
-              <FileName>hrtimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>rt-thread\components\drivers\ktime\src\hrtimer.c</FilePath>
-            </File>
-            <File>
               <FileName>cputimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\ktime\src\cputimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>hrtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\hrtimer.c</FilePath>
             </File>
             <File>
               <FileName>boottime.c</FileName>
@@ -2725,342 +2720,6 @@
           <GroupName>RTduino-core</GroupName>
           <Files>
             <File>
-              <FileName>WString.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\WString.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>Print.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\Print.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>RTduino.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\RTduino.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wiring_digital.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\RTduino-latest\core\wiring_digital.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>WMath_cpp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\WMath_cpp.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>HardwareSerial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\HardwareSerial.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
               <FileName>Tone.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>packages\RTduino-latest\core\Tone.cpp</FilePath>
@@ -3107,175 +2766,7 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wiring.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\RTduino-latest\core\wiring.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>dtostrf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\RTduino-latest\core\avr\dtostrf.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>Stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\Stream.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3331,63 +2822,7 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wiring_analog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\RTduino-latest\core\wiring_analog.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3443,7 +2878,175 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>wiring.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\RTduino-latest\core\wiring.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>RTduino.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>packages\RTduino-latest\core\RTduino.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>WMath_cpp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>packages\RTduino-latest\core\WMath_cpp.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3499,7 +3102,7 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3509,9 +3112,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>IPAddress.cpp</FileName>
+              <FileName>HardwareSerial.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>packages\RTduino-latest\core\IPAddress.cpp</FilePath>
+              <FilePath>packages\RTduino-latest\core\HardwareSerial.cpp</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -3555,7 +3158,175 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=c++11</MiscControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>dtostrf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\RTduino-latest\core\avr\dtostrf.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>wiring_analog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\RTduino-latest\core\wiring_analog.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>WString.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>packages\RTduino-latest\core\WString.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3611,7 +3382,175 @@
                     <v6WtE>2</v6WtE>
                     <v6Rtti>2</v6Rtti>
                     <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>Print.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>packages\RTduino-latest\core\Print.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>Stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>packages\RTduino-latest\core\Stream.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=c++11 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code</MiscControls>
+                      <Define> </Define>
+                      <Undefine> </Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>wiring_digital.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\RTduino-latest\core\wiring_digital.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
+                  <PublicsOnly>0</PublicsOnly>
+                  <StopOnExitCode>3</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls>  -std=gnu99 -Wall -Wextra -Wunused -Wunused-parameter -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wformat -Wformat-security -Warray-bounds -Wuninitialized -Wsequence-point -Wreturn-type -Wcomment -Wswitch -Wmissing-braces -Wmultichar -Wparentheses -Wlogical-op -Wsequence-point -Wfloat-equal -Wsign-compare -Wpointer-arith -Wimplicit-fallthrough -Wduplicated-cond -Wduplicated-branches -Wunreachable-code -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes</MiscControls>
                       <Define> </Define>
                       <Undefine> </Undefine>
                       <IncludePath></IncludePath>
@@ -3657,16 +3596,4 @@
     <files/>
   </RTE>
 
-<<<<<<< Updated upstream
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>project</LayName>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
-
-=======
->>>>>>> Stashed changes
 </Project>
