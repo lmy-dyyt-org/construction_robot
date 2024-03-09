@@ -36,7 +36,6 @@
 #include "robotGeometry.h"
 #include "interpolation.h"
 #include "RampsStepper.h"
-#include "queue.h"
 #include "command.h"
 #include "equipment.h"
 #include "endstop.h"
