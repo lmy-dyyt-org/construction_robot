@@ -338,9 +338,15 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
+<<<<<<< Updated upstream
               <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, ARDUINO_ARCH_RTTHREAD=10000, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, ARDUINO=10819, __RTTHREAD__</Define>
               <Undefine></Undefine>
               <IncludePath>rt-thread\components\dfs\dfs_v1\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;libraries\HAL_Drivers\drivers;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\drivers\ktime\inc;rt-thread\components\libc\posix\io\eventfd;board\ports;.;board\CubeMX_Config\Inc;rt-thread\components\drivers\include;packages\perf_counter-v2.2.4.1;packages\RTduino-latest\libraries\user;rt-thread\components\dfs\dfs_v1\filesystems\devfs;rt-thread\include;applications\arduino_pinout;rt-thread\components\libc\compilers\common\extension;libraries\HAL_Drivers;rt-thread\components\libc\cplusplus\cpp11\armclang;rt-thread\components\drivers\ktime;rt-thread\components\utilities\ulog;rt-thread\components\libc\posix\io\poll;packages\RTduino-latest\core;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\libc\posix\ipc;rt-thread\components\libc\posix\io\epoll;libraries\HAL_Drivers\drivers\config;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;applications;rt-thread\components\libc\posix\delay;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\stdio;rt-thread\components\utilities\var_export;board;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;rt-thread\libcpu\arm\cortex-m4;libraries\HAL_Drivers\CMSIS\Include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\libcpu\arm\common</IncludePath>
+=======
+              <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, USE_HAL_DRIVER, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, __RTTHREAD__</Define>
+              <Undefine></Undefine>
+              <IncludePath>rt-thread\components\libc\posix\delay;libraries\HAL_Drivers\drivers\config;board\CubeMX_Config\Inc;rt-thread\components\libc\posix\pthreads;rt-thread\components\libc\cplusplus\os;board;applications;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\posix\io\epoll;rt-thread\components\libc\compilers\common\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\libc\posix\signal;.;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\drivers\ktime;rt-thread\components\finsh;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\ports;rt-thread\include;rt-thread\components\drivers\ktime\inc;libraries\HAL_Drivers;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\libc\posix\io\poll;rt-thread\components\dfs\dfs_v1\include;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\cplusplus;rt-thread\components\libc\posix\io\eventfd;rt-thread\components\utilities\var_export;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\ipc;rt-thread\components\drivers\include;rt-thread\components\dfs\dfs_v1\filesystems\devfs;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\stdio;libraries\HAL_Drivers\drivers;packages\perf_counter-v2.2.4.1;rt-thread\components\drivers\include</IncludePath>
+>>>>>>> Stashed changes
             </VariousControls>
           </Cads>
           <Aads>
@@ -385,6 +391,29 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
+<<<<<<< Updated upstream
+=======
+              <FileName>apid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\apid.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid_exfunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\apid_exfunc.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_dj_rm_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\motor_dj_rm_driver.c</FilePath>
+            </File>
+            <File>
+>>>>>>> Stashed changes
               <FileName>Emm_V5.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\Emm_V5.c</FilePath>
@@ -440,6 +469,14 @@
                 </FileArmAds>
               </FileOption>
             </File>
+<<<<<<< Updated upstream
+=======
+            <File>
+              <FileName>drv_stepper_motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_stepper_motor.c</FilePath>
+            </File>
+>>>>>>> Stashed changes
             <File>
               <FileName>aboard_power_switch.c</FileName>
               <FileType>1</FileType>
@@ -2400,6 +2437,14 @@
           <GroupName>ktime</GroupName>
           <Files>
             <File>
+<<<<<<< Updated upstream
+=======
+              <FileName>boottime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\ktime\src\boottime.c</FilePath>
+            </File>
+            <File>
+>>>>>>> Stashed changes
               <FileName>hrtimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\ktime\src\hrtimer.c</FilePath>
@@ -3612,6 +3657,7 @@
     <files/>
   </RTE>
 
+<<<<<<< Updated upstream
   <LayerInfo>
     <Layers>
       <Layer>
@@ -3621,4 +3667,6 @@
     </Layers>
   </LayerInfo>
 
+=======
+>>>>>>> Stashed changes
 </Project>
