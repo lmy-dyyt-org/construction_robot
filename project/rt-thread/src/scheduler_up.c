@@ -301,7 +301,9 @@ void rt_schedule(void)
                 rt_current_priority = (rt_uint8_t)highest_ready_priority;
                 from_thread         = rt_current_thread;
                 rt_current_thread   = to_thread;
-
+#ifdef RT_USING_THREAD_USAGE
+        
+#endif
                 RT_OBJECT_HOOK_CALL(rt_scheduler_hook, (from_thread, to_thread));
 
                 if (need_insert_from_thread)

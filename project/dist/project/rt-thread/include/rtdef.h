@@ -945,6 +945,9 @@ struct rt_thread
 #endif /* RT_USING_HW_STACK_GUARD */
 #endif /* RT_USING_MEM_PROTECTION */
 
+#ifdef RT_USING_THREAD_USAGE
+    rt_ubase_t use_tick;
+#endif /* RT_USING_THREAD_USAGE */
     struct rt_spinlock          spinlock;
     rt_ubase_t                  user_data;              /**< private user data beyond this thread */
 };
