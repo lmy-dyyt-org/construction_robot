@@ -246,6 +246,25 @@ void rt_system_scheduler_start(void)
 
     /* never come back */
 }
+rt_ubase_t rt_thread_use_tick(void);
+rt_weak rt_tick_t rt_thread_time_get_ms(void);
+
+rt_weak rt_tick_t rt_thread_time_get_ms(void)
+{
+    return rt_tick_get_millisecond();
+}
+rt_ubase_t rt_thread_use_tick(void)
+{
+    static rt_ubase_t last_tick = 0;
+    /* use static to faster */
+    static rt_ubase_t now=0;
+    now = rt_thread_time_get_ms();
+    rt_ubase_t tmp = now-last_tick;
+    last_tick = now;
+    return tmp;
+}
+
+
 
 /**
  * @addtogroup Thread
@@ -302,7 +321,7 @@ void rt_schedule(void)
                 from_thread         = rt_current_thread;
                 rt_current_thread   = to_thread;
 #ifdef RT_USING_THREAD_USAGE
-        
+        from_thread->use_tick += rt_thread_use_tick();
 #endif
                 RT_OBJECT_HOOK_CALL(rt_scheduler_hook, (from_thread, to_thread));
 

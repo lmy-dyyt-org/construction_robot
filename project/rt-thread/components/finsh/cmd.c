@@ -180,7 +180,7 @@ long list_thread(void)
     object_split(tcb_strlen);
     rt_kprintf("\n");
 #else
-    rt_kprintf("%-*.*s pri  status      sp     stack size max used left tick   error  tcb addr\n", maxlen, maxlen, item_title);
+    rt_kprintf("%-*.*s pri  status      sp     stack size max used left tick   error  tcb addr usage tick thread usage\n", maxlen, maxlen, item_title);
     object_split(maxlen);
     rt_kprintf(" ---  ------- ---------- ----------  ------  ---------- -------");
     rt_kprintf(" ");
