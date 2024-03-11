@@ -87,7 +87,10 @@ int main(void)
 //rt_thread_mdelay(2000);
 	
 				////motor_set_speed(M2006_1_CAN1,1000);
-				motor_set_pos(M2006_1_CAN1,0);
+				motor_set_speed(M2006_1_CAN1,1000);
+				motor_set_speed(M2006_2_CAN1,1000);
+				motor_set_speed(M2006_3_CAN1,1000);
+				motor_set_speed(M2006_4_CAN1,1000);
 
     while (1)
     {

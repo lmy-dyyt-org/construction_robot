@@ -608,7 +608,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
     motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.4);
-    rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
+    //rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
     // rt_sem_release(&rx_sem);
     if (rt_mb_send(dj_m_mailbox, id) != RT_EOK)
@@ -621,7 +621,7 @@ static void can_rx_thread1(void *parameter)
 {
     while (1)
     {
-        // motor_shakdown(0);
+        //motor_shakdown(0);
         rt_thread_delay(10);
     }
 }
@@ -655,9 +655,9 @@ static void can_rx_thread(void *parameter)
 
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
         // motor_measure->angle,motor_measure->round_cnt);
-        rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
+        //rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
         motor_handle(i, 1);
-        rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
+        //rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
     }
 }
 static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
@@ -779,6 +779,8 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
+				APID_D_PART(motor_get_pid_pos(M2006_1_CAN1),0.7);
+
 #endif
 #if defined(MOTOR_DJ_M2006_ID2_CAN1)
     motor_set_passive_feedback(M2006_2_CAN1, 1);
@@ -788,6 +790,7 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_2_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_2_CAN1), 200);
+		APID_D_PART(motor_get_pid_pos(M2006_2_CAN1),0.7);
 #endif
 #if defined(MOTOR_DJ_M2006_ID3_CAN1)
     motor_set_passive_feedback(M2006_3_CAN1, 1);
@@ -797,6 +800,8 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_3_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_3_CAN1), 200);
+				APID_D_PART(motor_get_pid_pos(M2006_2_CAN1),0.7);
+
 #endif
 #if defined(MOTOR_DJ_M2006_ID4_CAN1)
     motor_set_passive_feedback(M2006_4_CAN1, 1);
@@ -806,6 +811,8 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
+				APID_D_PART(motor_get_pid_pos(M2006_2_CAN1),0.7);
+
 #endif
 #if defined(MOTOR_DJ_M2006_ID5_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
