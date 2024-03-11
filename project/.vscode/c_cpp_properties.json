@@ -477,6 +477,8 @@
                 "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\libraries\\HAL_Drivers\\drivers",
                 "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\packages\\perf_counter-v2.2.4.1",
                 "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\applications\\robotarm",
+                "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\applications\\abus",
+                "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\applications\\statemachine",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux_compat",

@@ -6,13 +6,45 @@ void follow_line(void *parameter)
 {
 	Infrared_Init();
 	infrared_package.move_direction = front;
+
+    // aStateMachine* sm = (aStateMachine*)malloc(sizeof(aStateMachine));
+    // aStateMachine_Init(sm, "sm");
+    // aState* s1 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s1, "s1", aState_excution, aState_entry, aState_exit);
+    // aState* s2 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s2, "s2", aState_excution, aState_entry, aState_exit);
+    // aState* s3 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s3, "s3", aState_excution, aState_entry, aState_exit);
+    // aState* s4 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s4, "s4", aState_excution, aState_entry, aState_exit);
+    // aStateMachine_addState(sm, s1);
+    // aStateMachine_addState(sm, s2);
+    // aStateMachine_addState(sm, s3);
+    // aStateMachine_addState(sm, s4);
+
+    // aStateMachine_start(sm, s1);
+    // aStateMachine_addTransition1(sm, s1, s2, condition); //[](aStateMachine* sm) {printf("%s condition s1 -> s2", aState_getName(sm->current)); return false; }
+    // aStateMachine_addTransition1(sm, s1, s3, condition);//[](aStateMachine* sm) {printf("%s condition s1 -> s3", aState_getName(sm->current)); return true; }
+    // aStateMachine_addTransition1(sm, s2, s3, condition);//[](aStateMachine* sm) {return true; }
+    // aStateMachine_addTransition1(sm, s3, s4, condition);
+    // aStateMachine_addTransition1(sm, s4, 0, condition);
+    // aStateMachine_showStates(sm);
+
+    // //update 会更新状态机状态，会执行excution 然后判断condtion
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+
   while(1)
   {
     /* 线程处理 */
 	GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-    Print_Infrared_Data(&infrared_package);
-	rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
+    // Print_Infrared_Data(&infrared_package);
+	// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
+
     rt_thread_mdelay(500);
   }
 }

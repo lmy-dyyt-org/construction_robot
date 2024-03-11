@@ -9,6 +9,7 @@
 #include <rtdevice.h>
 #include <board.h>
 #include <drv_gpio.h>
+#include "statemachine.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
