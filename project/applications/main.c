@@ -22,6 +22,7 @@
 #include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
 #include "motor.h"
+#include "drv_chassis.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN    GET_PIN(F, 14)
 
@@ -37,6 +38,10 @@
 #define THREAD_PRIORITY_STEPPER_MOTOR    25
 #define THREAD_STACK_SIZE_STEPPER_MOTOR  1024
 #define THREAD_TIMESLICE_STEPPER_MOTOR    5
+
+#define THREAD_PRIORITY_CHASSIS    25
+#define THREAD_STACK_SIZE_CHASSIS  1024
+#define THREAD_TIMESLICE_CHASSIS    5
 
 int main(void)
 {
@@ -67,6 +72,20 @@ int main(void)
   if (tid_stepper_motor != RT_NULL)
   {
     rt_thread_startup(tid_stepper_motor);
+  }
+//////////////////////////////////////////////////////////////创建底盘运动线程
+	 rt_thread_t tid_chassis = RT_NULL;
+  
+    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
+  tid_chassis = rt_thread_create("drv_chassis",
+              drv_chassis, RT_NULL,
+              THREAD_STACK_SIZE_CHASSIS,
+              THREAD_PRIORITY_CHASSIS, THREAD_TIMESLICE_CHASSIS);
+              
+  /* 线程创建成功，则启动线程 */
+  if (tid_chassis != RT_NULL)
+  {
+    rt_thread_startup(tid_chassis);
   }
 //////////////////////////////////////////////////////////////	
 	/* set LED0 pin mode to output */

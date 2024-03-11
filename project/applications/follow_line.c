@@ -72,6 +72,10 @@ uint8_t Is_Spacial_point(infrared* infrared_package)
 		else infrared_package->is_spacial_point_flag = 0;
 		break;
 
+		case rotate:
+			infrared_package->is_spacial_point_flag = 0;
+		break;
+		
 		default: infrared_package->is_spacial_point_flag = 0;
 		break;
 	}

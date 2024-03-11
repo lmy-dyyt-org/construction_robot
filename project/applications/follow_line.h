@@ -62,6 +62,7 @@ enum direction{
 	front=0,
 	left,
 	right,
+	rotate,
 };
 
 typedef struct infrared
