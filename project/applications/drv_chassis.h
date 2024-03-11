@@ -11,7 +11,7 @@
 #include <rtdevice.h>
 #include <board.h>
 #include <drv_gpio.h>
-
+#include <ulog.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -82,6 +82,14 @@ typedef struct chassis_mai{
     void(*user_handle)(struct chassis_mai* mai);
 }chassis_mai_t;
 
+void drv_chassis(void *parameter);
+void chassis_mai_userdata(chassis_mai_t * mai);
+
+
+
+
+
+
 void chassis_mai_set_speed(chassis_mai_t * mai, chassis_mai_state* state, chassis_mai_offset* offset);
 void chassis_mai_set_position(chassis_mai_t * mai,chassis_mai_state* state, chassis_mai_offset* offset);
 void chassis_mai_set_zero_pos(chassis_mai_t * mai);
@@ -91,7 +99,6 @@ void chassis_mai_get_state(chassis_mai_t * mai, chassis_mai_state* state);
 void chassis_mai_handler(chassis_mai_t * mai,uint32_t time_ms);
 
 int chassis_mai_init(chassis_mai_t * mai,void(*user_handle)(chassis_mai_t* mai));
-
 
 #ifdef __cplusplus
 }

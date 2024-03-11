@@ -1,5 +1,27 @@
 #include "drv_chassis.h"
 
+chassis_mai_t mai;
+chassis_mai_state state;
+chassis_mai_offset offset;
+
+void drv_chassis(void *parameter)
+{
+  chassis_mai_init(&mai,chassis_mai_userdata);
+  state.xSpeed_m_s = 0.5;
+  while(1)
+  {
+    /* 线程处理 */
+    chassis_mai_set_speed(&mai, &state, &offset);
+	/* 线程运行，打印计数 */
+    
+    rt_thread_mdelay(500);
+  }
+}
+
+void chassis_mai_userdata(chassis_mai_t * mai)
+{
+
+}
 
 /**
  * @brief 将给定xy速度分解到，  ab轴上（x型）【/：a方向  \：b方向】 ， ac轮对b方向起作用，bd轮对a方向起作用
