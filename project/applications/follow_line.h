@@ -13,12 +13,12 @@
 extern "C" {
 #endif
 
-#define FRONT_INFRARED0_PIN    GET_PIN(F, 1)	//前左0 I1
-#define FRONT_INFRARED1_PIN    GET_PIN(E, 5)	//前左1 J1
-#define FRONT_INFRARED2_PIN    GET_PIN(E, 6)	//前中0 K1
-#define FRONT_INFRARED3_PIN    GET_PIN(C, 2)	//前中1 L1
-#define FRONT_INFRARED4_PIN    GET_PIN(C, 3)	//前右0 M1
-#define FRONT_INFRARED5_PIN    GET_PIN(C, 4)	//前右1 N1
+#define FRONT_INFRARED0_PIN    GET_PIN(C, 4)	//前左0 N1
+#define FRONT_INFRARED1_PIN    GET_PIN(C, 3)	//前左1 M1
+#define FRONT_INFRARED2_PIN    GET_PIN(C, 2)	//前中0 L1
+#define FRONT_INFRARED3_PIN    GET_PIN(E, 6)	//前中1 K1
+#define FRONT_INFRARED4_PIN    GET_PIN(E, 5)	//前右0 J1
+#define FRONT_INFRARED5_PIN    GET_PIN(F, 1)	//前右1 I1
 	
 #define LEFT_INFRARED0_PIN    GET_PIN(F, 0)		//左左0 I2
 #define LEFT_INFRARED1_PIN    GET_PIN(E, 4)		//左左1 J2
@@ -57,11 +57,18 @@ enum{
 	right_right1_infrared,
 };
 
+enum direction{
+	front=0,
+	left,
+	right,
+};
+
 typedef struct infrared
 {
 	rt_uint8_t infrared_data[18];
-	
-	
+
+	uint8_t is_spacial_point_flag;
+	enum direction move_direction;
 }infrared;
 
 void follow_line(void *parameter);
@@ -69,6 +76,8 @@ void follow_line(void *parameter);
 void Infrared_Init(void);
 void GET_Infrared_Data(infrared* infrared_package);
 void Print_Infrared_Data(infrared* infrared_package);
+
+uint8_t Is_Spacial_point(infrared* infrared_package);
 
 #ifdef __cplusplus
 }

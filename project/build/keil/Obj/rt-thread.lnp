@@ -17,6 +17,7 @@
 ".\build\keil\obj\logger.o"
 ".\build\keil\obj\rampsstepper.o"
 ".\build\keil\obj\robotgeometry.o"
+".\build\keil\obj\drv_chassis.o"
 ".\build\keil\obj\syscall_mem.o"
 ".\build\keil\obj\syscalls.o"
 ".\build\keil\obj\cctype.o"

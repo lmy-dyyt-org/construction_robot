@@ -1,8 +1,2 @@
-*** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
-Build target 'rt-thread'
-compiling drv_stepper_motor.c...
-linking...
-Program Size: Code=107028 RO-data=11628 RW-data=2012 ZI-data=5916  
-After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
-Build Time Elapsed:  00:00:03
+Load "d:\\out\\competition\\construction robot\\code\\construction_robot\\project\\build\\keil\\Obj\\rt-thread.axf" 
+Erase Done.Programming Done.Verify OK.Flash Load finished at 15:40:10

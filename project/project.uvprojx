@@ -1080,6 +1080,11 @@
               <FileType>5</FileType>
               <FilePath>.\applications\robotarm\robotGeometry.h</FilePath>
             </File>
+            <File>
+              <FileName>drv_chassis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_chassis.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

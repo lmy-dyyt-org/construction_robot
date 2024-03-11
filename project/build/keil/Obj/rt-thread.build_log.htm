@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.38.0.0
 Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: ed s, s, LIC=RC93N-YYV10-DYKV3-AKSKU-J8CHC-5VFJA
+License Information: lmy 2777400275@qq.com, lmy, LIC=WHYH9-4LIQE-VEGHA-18IYC-ZQP6C-NL0JA
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
@@ -17,39 +17,47 @@ Library Manager: ArmAr.exe V6.19
 Hex Converter:   FromElf.exe V6.19
 CPU DLL:         SARMCM3.DLL V5.38.0.0
 Dialog DLL:      DCM.DLL V1.17.5.0
-Target DLL:      CMSIS_AGDI.dll V1.33.15.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.1.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
-Project File Date:  03/09/2024
+d:\out\competition\construction robot\code\construction_robot\project\project.uvprojx
+Project File Date:  03/11/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
 Note: source file 'rt-thread\src\clock.c' - object file renamed from '.\build\keil\Obj\src_clock.o' to '.\build\keil\Obj\src_clock.o'.
 Note: source file 'rt-thread\src\thread.c' - object file renamed from '.\build\keil\Obj\src_thread.o' to '.\build\keil\Obj\src_thread.o'.
-applications/motor_dj_rm_driver.c(26): warning: In file included from...
+compiling follow_line.c...
+applications/main.c(20): warning: In file included from...
+applications/Emm_V5.h(21): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+applications/drv_stepper_motor.h(40): note: previous definition is here
+}stepper_motor_t;
+ ^
+applications/main.c(24): warning: In file included from...
+applications/motor.h(16): warning: In file included from...
 applications/apid.h(189): warning: redefinition of typedef 'apid_t' is a C11 feature [-Wtypedef-redefinition]
     }apid_t;
      ^
 applications/apid.h(177): note: previous definition is here
     typedef  struct _PID_T apid_t;
                            ^
-applications/motor_dj_rm_driver.c(27): warning: In file included from...
-applications/motor_dj_rm_driver.h(16): warning: In file included from...
+applications/main.c(24): warning: In file included from...
 applications/motor.h(90): warning: redefinition of typedef 'motor_t' is a C11 feature [-Wtypedef-redefinition]
 }motor_t;
  ^
 applications/motor.h(51): note: previous definition is here
 typedef struct motor motor_t;
                      ^
-2 warnings generated.
-compiling motor_dj_rm_driver.c...
+3 warnings generated.
+compiling main.c...
 linking...
-Program Size: Code=116508 RO-data=12444 RW-data=2236 ZI-data=6804  
+Program Size: Code=116668 RO-data=12472 RW-data=2236 ZI-data=6804  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 2 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -59,7 +67,7 @@ Package Vendor: Keil
                 STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
 
 <h2>Collection of Component include folders:</h2>
-  C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+  C:/Keil_v5/ARM/PACK/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
 Build Time Elapsed:  00:00:03
