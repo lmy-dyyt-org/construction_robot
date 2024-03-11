@@ -781,13 +781,31 @@ static void set_motor_passive_feedback(void)
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
 #endif
 #if defined(MOTOR_DJ_M2006_ID2_CAN1)
-    motor_set_passive_feedback(M2006_1_CAN1, 1);
+    motor_set_passive_feedback(M2006_2_CAN1, 1);
+		    APID_Set_Out_Limit(motor_get_pid_speed(M2006_2_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M2006_2_CAN1), 2000);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_2_CAN1), 20);
+
+    APID_Set_Out_Limit(motor_get_pid_pos(M2006_2_CAN1), 20000);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M2006_2_CAN1), 200);
 #endif
 #if defined(MOTOR_DJ_M2006_ID3_CAN1)
-    motor_set_passive_feedback(M2006_1_CAN1, 1);
+    motor_set_passive_feedback(M2006_3_CAN1, 1);
+		    APID_Set_Out_Limit(motor_get_pid_speed(M2006_3_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M2006_3_CAN1), 2000);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_3_CAN1), 20);
+
+    APID_Set_Out_Limit(motor_get_pid_pos(M2006_3_CAN1), 20000);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M2006_3_CAN1), 200);
 #endif
 #if defined(MOTOR_DJ_M2006_ID4_CAN1)
-    motor_set_passive_feedback(M2006_1_CAN1, 1);
+    motor_set_passive_feedback(M2006_4_CAN1, 1);
+		    APID_Set_Out_Limit(motor_get_pid_speed(M2006_4_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M2006_4_CAN1), 2000);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_4_CAN1), 20);
+
+    APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 20000);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
 #endif
 #if defined(MOTOR_DJ_M2006_ID5_CAN1)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
