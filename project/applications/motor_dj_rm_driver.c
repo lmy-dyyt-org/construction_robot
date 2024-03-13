@@ -33,7 +33,7 @@
 
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
-
+static struct rt_ringbuffer*dj_m_ringfifo;
 #define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
                                                      .id = __id,         \
                                                      .can_id = __can_id, \
@@ -425,11 +425,12 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 msg.data[5] = iq1_low[2];
                 msg.data[6] = iq1_low[3] >> 8;
                 msg.data[7] = iq1_low[3];
-                rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                if (size == 0)
+                rt_size_t size;
+                do 
                 {
-                    rt_kprintf("can dev write data failed!\n");
-                }
+                    //LOG_E("can dev write data failed! \n");
+size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                }while(size != sizeof(msg));
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
                 dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
 #endif
@@ -607,7 +608,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
         }
 
         motor_measure->msg_cnt = 0xff;
-        motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
+        motor_measure->total_angle = motor_measure->round_cnt * 8192 + motor_measure->angle - motor_measure->offset_angle;
         // LOG_D("id %d,cnt %d angle %d %d", motor_measure->id, motor_measure->round_cnt,motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle);
     }
 
@@ -616,14 +617,18 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     // 9.549279f*功率/转速=扭矩
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
-    motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.4);
+    //motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.0439453125f);
+    motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.001220703125f);
     // rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
     // rt_sem_release(&rx_sem);
-    if (rt_mb_send(dj_m_mailbox, id) != RT_EOK)
-    {
-        LOG_E("dj_m_mailbox send failed");
-    }
+    
+    rt_ringbuffer_putchar_force(dj_m_ringfifo, id);
+	// 	int8_t tt = rt_mb_send(dj_m_mailbox, id);
+    // if (tt != RT_EOK)
+    // {
+    //     LOG_E("dj_m_mailbox send failed %d",-tt);
+    // }
     return RT_EOK;
 }
 static void can_rx_thread1(void *parameter)
@@ -637,9 +642,9 @@ static void can_rx_thread1(void *parameter)
 
 static void can_rx_thread(void *parameter)
 {
-    int i;
+    static int i;
     rt_err_t res;
-    struct rt_can_msg rxmsg = {0};
+    struct rt_can_msg msg = {0};
     rt_pin_mode(GET_PIN(I, 0), PIN_MODE_OUTPUT);
     rt_pin_mode(GET_PIN(I, 2), PIN_MODE_OUTPUT);
     /* 设置接收回调函数 */
@@ -657,11 +662,15 @@ static void can_rx_thread(void *parameter)
     while (1)
     {
         /* hdr 值为 0，从 过滤器读取数据 */
-        rxmsg.hdr_index = 0;
+        //rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
         // rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
-        rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, RT_WAITING_FOREVER);
-
+        if(rt_ringbuffer_getchar(dj_m_ringfifo, &i)==0)
+        {
+            //rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, 1);
+            rt_thread_mdelay(1);
+            //LOG_E("dj_m_ringfifo get failed");
+        }
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
         // motor_measure->angle,motor_measure->round_cnt);
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
@@ -694,9 +703,10 @@ int motor_tt_init(void)
     }
 
     /* 初始化 CAN 接收信号量 */
-    rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
-    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 512, RT_IPC_FLAG_FIFO);
+    //rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
+    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 4096, RT_IPC_FLAG_FIFO);
 
+    dj_m_ringfifo =  rt_ringbuffer_create(4096);
     /* 以中断接收及中断发送方式打开 CAN 设备 */
     res = rt_device_open(can_dev, RT_DEVICE_FLAG_INT_TX | RT_DEVICE_FLAG_INT_RX);
     RT_ASSERT(res == RT_EOK);

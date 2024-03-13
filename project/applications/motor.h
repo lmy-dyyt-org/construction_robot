@@ -29,16 +29,17 @@ extern "C"
 
     typedef enum
     {
-        MOTOR_MODE_SAFETY_STOP,  /* 紧急关闭 */
-        MOTOR_MODE_SAFETY_START, /* 安全启动 */
+
         
-        MOTOR_MODE_IDEL ,     /* 空闲 */
-        MOTOR_MODE_TORQUE ,   /* 力矩 */
-        MOTOR_MODE_SPEED ,    /* 速度 rpm 转每分钟 */
-        MOTOR_MODE_POS ,      /* 位置 rad */
+        MOTOR_MODE_IDEL=0U ,     /* 空闲 */
+        MOTOR_MODE_TORQUE=1U ,   /* 力矩 */
+        MOTOR_MODE_SPEED=2U ,    /* 速度 rpm 转每分钟 */
+        MOTOR_MODE_POS=3U ,      /* 位置 rad */
         MOTOR_MODE_VOLTAGE,      /* 电压 mv 毫伏 */
         MOTOR_MODE_TEMP,         /* 温度 °C */
 
+			        MOTOR_MODE_SAFETY_STOP,  /* 紧急关闭 */
+        MOTOR_MODE_SAFETY_START, /* 安全启动 */
         MOTOR_MODE_MAX,
     } MOTOR_VALUE_TYPE;
 

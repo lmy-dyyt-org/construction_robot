@@ -2579,6 +2579,8 @@ static rt_err_t _rt_mb_send_wait(rt_mailbox_t mb,
     if (mb->entry == mb->size && timeout == 0)
     {
         rt_spin_unlock_irqrestore(&(mb->spinlock), level);
+                            while(1);
+
         return -RT_EFULL;
     }
 
@@ -2592,6 +2594,7 @@ static rt_err_t _rt_mb_send_wait(rt_mailbox_t mb,
         if (timeout == 0)
         {
             rt_spin_unlock_irqrestore(&(mb->spinlock), level);
+                    while(1);
 
             return -RT_EFULL;
         }
@@ -2602,6 +2605,8 @@ static rt_err_t _rt_mb_send_wait(rt_mailbox_t mb,
 
         if (ret != RT_EOK)
         {
+                    while(1);
+
             rt_spin_unlock_irqrestore(&(mb->spinlock), level);
             return ret;
         }
