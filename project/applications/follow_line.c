@@ -74,7 +74,7 @@ void follow_line(void *parameter)
     /* 线程处理 */
 	GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-    // Print_Infrared_Data(&infrared_package);
+    Print_Infrared_Data(&infrared_package);
 	// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 
     rt_thread_mdelay(500);
@@ -87,19 +87,19 @@ uint8_t Is_Spacial_point(infrared* infrared_package)
 	switch(infrared_package->move_direction)
 	{
 		case front: 
-		if(infrared_package->infrared_data[front_left0_infrared] || infrared_package->infrared_data[front_right1_infrared])
+		if( (infrared_package->infrared_data[front_left0_infrared] || infrared_package->infrared_data[front_right1_infrared]) && (infrared_package->infrared_data[front_middle0_infrared] || infrared_package->infrared_data[front_middle1_infrared]) )
 			infrared_package->is_spacial_point_flag = 1;
 		else infrared_package->is_spacial_point_flag = 0;
 		break;
 
 		case left:
-		if(infrared_package->infrared_data[left_left0_infrared] || infrared_package->infrared_data[left_right1_infrared])
+		if(infrared_package->infrared_data[left_left0_infrared] || infrared_package->infrared_data[left_right1_infrared] && (infrared_package->infrared_data[left_middle0_infrared] || infrared_package->infrared_data[left_middle1_infrared]) )
 			infrared_package->is_spacial_point_flag = 1;
 		else infrared_package->is_spacial_point_flag = 0;
 		break;
 
 		case right:
-		if(infrared_package->infrared_data[right_left0_infrared] || infrared_package->infrared_data[right_right1_infrared])
+		if(infrared_package->infrared_data[right_left0_infrared] || infrared_package->infrared_data[right_right1_infrared] && (infrared_package->infrared_data[right_middle0_infrared] || infrared_package->infrared_data[right_middle1_infrared]) )
 			infrared_package->is_spacial_point_flag = 1;
 		else infrared_package->is_spacial_point_flag = 0;
 		break;
