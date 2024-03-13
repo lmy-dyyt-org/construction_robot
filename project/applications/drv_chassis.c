@@ -1,4 +1,5 @@
 #include "drv_chassis.h"
+#include "motor.h"
 
 chassis_mai_t mai;
 chassis_mai_state state;
@@ -73,6 +74,11 @@ void chassis_mai_set_speed(chassis_mai_t * mai, chassis_mai_state* state, chassi
     mai->wheel_1_speed_m_s += offset->wheel_1_offset_speed_m_s;
     mai->wheel_2_speed_m_s += offset->wheel_2_offset_speed_m_s;
     mai->wheel_3_speed_m_s += offset->wheel_3_offset_speed_m_s;
+		
+				motor_set_speed(M2006_1_CAN1,mai->wheel_0_speed_m_s);
+				motor_set_speed(M2006_2_CAN1,mai->wheel_1_speed_m_s);
+				motor_set_speed(M2006_3_CAN1,mai->wheel_2_speed_m_s);
+				motor_set_speed(M2006_4_CAN1,mai->wheel_3_speed_m_s);
 }
 
 //备注:航向角是以开机为0角度，由于没有添加其他纠正手段故仅在车轮无打滑，地面平行的时候才能保证精度（保证不了！！）
