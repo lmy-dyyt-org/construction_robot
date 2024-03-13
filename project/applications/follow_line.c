@@ -1,6 +1,38 @@
 #include "follow_line.h"
+#include "apid.h"
+
+apid_t *pid_follow_line_front;
+
 
 infrared infrared_package;
+
+int follow_line_init(void)
+{
+		  rt_thread_t tid_follow_line = RT_NULL;
+  #define THREAD_PRIORITY_FOLLOW_LINE    25
+#define THREAD_STACK_SIZE_FOLLOW_LINE  1024
+#define THREAD_TIMESLICE_FOLLOW_LINE    5
+    /* åˆ›å»ºçº¿ç¨‹ï¼Œ åç§°æ˜¯ thread_testï¼Œ å…¥å£æ˜¯ thread_entry*/
+  tid_follow_line = rt_thread_create("follow_line",
+              follow_line, RT_NULL,
+              THREAD_STACK_SIZE_FOLLOW_LINE,
+              THREAD_PRIORITY_FOLLOW_LINE, THREAD_TIMESLICE_FOLLOW_LINE);
+              
+  /* çº¿ç¨‹åˆ›å»ºæˆåŠŸï¼Œåˆ™å¯åŠ¨çº¿ç¨‹ */
+  if (tid_follow_line != RT_NULL)
+  {
+    rt_thread_startup(tid_follow_line);
+  }
+	APID_Init(&pid_follow_line_front, PID_POSITION, 0.1, 0.1, 0.1);
+	APID_Enable(&pid_follow_line_front);
+	if (pid_follow_line_front == RT_NULL)
+	{
+		rt_kprintf("pid_follow_line_front create failed\n");
+		return -1;
+	}
+	return 0;
+}
+INIT_COMPONENT_EXPORT(follow_line_init);
 
 void follow_line(void *parameter)
 {
@@ -30,7 +62,7 @@ void follow_line(void *parameter)
     // aStateMachine_addTransition1(sm, s4, 0, condition);
     // aStateMachine_showStates(sm);
 
-    // //update »á¸üÐÂ×´Ì¬»ú×´Ì¬£¬»áÖ´ÐÐexcution È»ºóÅÐ¶Ïcondtion
+    // //update ä¼šæ›´æ–°çŠ¶æ€æœºçŠ¶æ€ï¼Œä¼šæ‰§è¡Œexcution ç„¶åŽåˆ¤æ–­condtion
     // aStateMachine_update(sm);
     // aStateMachine_update(sm);
     // aStateMachine_update(sm);
@@ -39,9 +71,9 @@ void follow_line(void *parameter)
 
   while(1)
   {
-    /* Ïß³Ì´¦Àí */
+    /* çº¿ç¨‹å¤„ç† */
 	GET_Infrared_Data(&infrared_package);
-		/* Ïß³ÌÔËÐÐ£¬´òÓ¡¼ÆÊý */
+		/* çº¿ç¨‹è¿è¡Œï¼Œæ‰“å°è®¡æ•° */
     // Print_Infrared_Data(&infrared_package);
 	// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 
@@ -49,7 +81,7 @@ void follow_line(void *parameter)
   }
 }
 
-//ÒÔÉÏµÛÊÓ½ÇÎª×¼,ÒýÈë ÄÃ/·Å£¨·´×ªÊÓ½Ç£©Ê±,Ð¡³µÐÐ½ø×´Ì¬:Ö±ÐÐ¡¢×óÐÐ¡¢ÓÒÐÐ
+//ä»¥ä¸Šå¸è§†è§’ä¸ºå‡†,å¼•å…¥ æ‹¿/æ”¾ï¼ˆåè½¬è§†è§’ï¼‰æ—¶,å°è½¦è¡Œè¿›çŠ¶æ€:ç›´è¡Œã€å·¦è¡Œã€å³è¡Œ
 uint8_t Is_Spacial_point(infrared* infrared_package)
 {
 	switch(infrared_package->move_direction)
