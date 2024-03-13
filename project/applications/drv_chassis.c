@@ -8,7 +8,7 @@ chassis_mai_offset offset;
 void drv_chassis(void *parameter)
 {
   chassis_mai_init(&mai,chassis_mai_userdata);
-  state.xSpeed_m_s = 5;
+  state.ySpeed_m_s = 5;
   while(1)
   {
     /* 线程处理 */
@@ -16,6 +16,19 @@ void drv_chassis(void *parameter)
 	/* 线程运行，打印计数 */
     
     rt_thread_mdelay(500);
+		
+		
+		
+		
+    motor_set_speed(M2006_1_CAN1,  mai.wheel_1_speed_m_s);
+    motor_set_speed(M2006_2_CAN1,  mai.wheel_0_speed_m_s);
+    motor_set_speed(M2006_3_CAN1,  mai.wheel_3_speed_m_s);
+    motor_set_speed(M2006_4_CAN1,  mai.wheel_2_speed_m_s);
+		
+	LOG_I("motor1:%f",mai.wheel_1_speed_m_s);
+    LOG_I("motor2:%f",mai.wheel_0_speed_m_s);
+    LOG_I("motor3:%f",mai.wheel_3_speed_m_s);
+    LOG_I("motor4:%f",mai.wheel_2_speed_m_s);
   }
 }
 
@@ -75,10 +88,6 @@ void chassis_mai_set_speed(chassis_mai_t * mai, chassis_mai_state* state, chassi
     mai->wheel_2_speed_m_s += offset->wheel_2_offset_speed_m_s;
     mai->wheel_3_speed_m_s += offset->wheel_3_offset_speed_m_s;
 		
-	//			motor_set_speed(M2006_1_CAN1,-mai->wheel_0_speed_m_s);
-//				motor_set_speed(M2006_2_CAN1,-mai->wheel_1_speed_m_s);
-				motor_set_speed(M2006_3_CAN1,mai->wheel_2_speed_m_s);
-//				motor_set_speed(M2006_4_CAN1,-mai->wheel_3_speed_m_s);
 }
 
 //备注:航向角是以开机为0角度，由于没有添加其他纠正手段故仅在车轮无打滑，地面平行的时候才能保证精度（保证不了！！）
