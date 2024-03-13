@@ -1110,6 +1110,21 @@
               <FileType>1</FileType>
               <FilePath>.\applications\statemachine\cvector.c</FilePath>
             </File>
+            <File>
+              <FileName>PathFinder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\map\PathFinder.c</FilePath>
+            </File>
+            <File>
+              <FileName>RobotState.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\map\RobotState.c</FilePath>
+            </File>
+            <File>
+              <FileName>SemanticMap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\map\SemanticMap.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
