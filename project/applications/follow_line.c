@@ -3,7 +3,7 @@
 #include "apid.h"
 #include "abus_topic.h"
 
-apid_t *pid_follow_line_front;
+apid_t pid_follow_line_front;
 	abus_topic_t topic;
 static abus_accounter_t acc;
 float error;
@@ -30,11 +30,7 @@ int follow_line_init(void)
 	APID_Init(&pid_follow_line_front, PID_POSITION, 0.1, 0.1, 0.1);
 
 	APID_Enable(&pid_follow_line_front);
-	if (pid_follow_line_front == RT_NULL)
-	{
-		rt_kprintf("pid_follow_line_front create failed\n");
-		return -1;
-	}
+
 
 	abus_topic_init_t init;
 	init.buf = (uint8_t*)malloc(1024);
@@ -43,7 +39,7 @@ int follow_line_init(void)
 	init.name = "test_topic";
 	abus_topic_init(&topic, &init);
 
-		acc.name = "line_acc";
+	acc.name = "line_acc";
 	acc.callback = NULL;
 	acc.datafifo = NULL;
 	acc.flag.is_sync = 1;

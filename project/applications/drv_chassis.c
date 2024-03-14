@@ -19,11 +19,11 @@ void drv_chassis(void *parameter)
   chassis_mai_init(&mai,chassis_mai_userdata);
   state.xSpeed_m_s = 5;
 	
-//	acc.name = "drv_acc";
-//	acc.callback = drv_sub_callback;
-//	acc.datafifo = NULL;
-//	acc.flag.is_sync = 1;
-	//abus_topic_subscribe(&topic, &acc, acc.flag);
+	acc.name = "drv_acc";
+	acc.callback = drv_sub_callback;
+	acc.datafifo = NULL;
+	acc.flag.is_sync = 1;
+	abus_topic_subscribe(&topic, &acc, acc.flag);
   while(1)
   {
     /* 线程处理 */
