@@ -78,7 +78,8 @@ void setup()
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0);
 }
 
-void loop() {
+void loop() 
+{
 /*
 注意c++的写法，每个电机继承了 RobotGeometry 类，所以可以直接调用 RobotGeometry 类的函数
 相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
@@ -104,8 +105,5 @@ void loop() {
 
 
 //geometry.getRotRad()*3200/(6.28)
-
-
-
 
 }

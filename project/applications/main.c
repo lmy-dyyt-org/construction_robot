@@ -45,20 +45,20 @@
 
 int main(void)
 {
-//////////////////////////////////////////////////////////////创建红外循迹线程
-	  rt_thread_t tid_follow_line = RT_NULL;
+// //////////////////////////////////////////////////////////////创建红外循迹线程
+// 	  rt_thread_t tid_follow_line = RT_NULL;
   
-    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
-  tid_follow_line = rt_thread_create("follow_line",
-              follow_line, RT_NULL,
-              THREAD_STACK_SIZE_FOLLOW_LINE,
-              THREAD_PRIORITY_FOLLOW_LINE, THREAD_TIMESLICE_FOLLOW_LINE);
+//     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
+//   tid_follow_line = rt_thread_create("follow_line",
+//               follow_line, RT_NULL,
+//               THREAD_STACK_SIZE_FOLLOW_LINE,
+//               THREAD_PRIORITY_FOLLOW_LINE, THREAD_TIMESLICE_FOLLOW_LINE);
               
-  /* 线程创建成功，则启动线程 */
-  if (tid_follow_line != RT_NULL)
-  {
-    rt_thread_startup(tid_follow_line);
-  }
+//   /* 线程创建成功，则启动线程 */
+//   if (tid_follow_line != RT_NULL)
+//   {
+//     rt_thread_startup(tid_follow_line);
+//   }
 //////////////////////////////////////////////////////////////创建步进电机线程
 	 rt_thread_t tid_stepper_motor = RT_NULL;
   

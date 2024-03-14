@@ -17,7 +17,7 @@
 #include <drv_usart.h>
 #include <rtdevice.h>
 #include "drv_stepper_motor.h"
-
+#include "ulog.h"
 typedef struct stepper_motor stepper_motor_t;
 
 /**********************************************************

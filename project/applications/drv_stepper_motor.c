@@ -23,17 +23,19 @@ void drv_stepper_motor(void *parameter)
 	/*清零电机位置*/
   // Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
   // Emm_V5_En_Control(1, 1, 0);
-  Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 30, 5000, 300, 400, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  方向0 是控制往上抬
+  //Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 30, 5000, 300, 400, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  方向0 是控制往上抬
 
-  //Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 350, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 350, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
 
   rt_thread_mdelay(50);
   Emm_V5_Origin_Trigger_Return(1, 2, 0);
+
+  LOG_D("stepper_motor_1 init success");
 	while(1)
   {
     //Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//01 fd 02 6b	
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
-
+  LOG_D("stepper_motor_1 ");
     rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
 		
     Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_CPOS);
