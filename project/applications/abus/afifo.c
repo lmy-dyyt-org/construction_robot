@@ -182,7 +182,7 @@ unsigned int __afifo_in_data(struct afifo *fifo, const unsigned char *buffer, un
      * we update the fifo->in index.
      */
     // smp_wmb();
-    //fifo->in += len;  //每次累加，到达最大值后溢出，自动转为0
+    fifo->in += len;  //每次累加，到达最大值后溢出，自动转为0
     return len;
 }
 

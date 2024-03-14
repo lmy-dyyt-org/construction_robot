@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "abus_topic.h"
 
 #define FRONT_INFRARED0_PIN    GET_PIN(C, 4)	//前左0 N1
 #define FRONT_INFRARED1_PIN    GET_PIN(C, 3)	//前左1 M1
@@ -72,6 +73,8 @@ typedef struct infrared
 	uint8_t is_spacial_point_flag;
 	enum direction move_direction;
 }infrared;
+
+extern abus_topic_t topic;
 
 void follow_line(void *parameter);
 
