@@ -126,10 +126,10 @@ int main(void)
 
 	// 	rt_thread_mdelay(500);
 	
-  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
-  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
+//  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
+  //Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
 
-				
+//				
         rt_pin_write(LED0_PIN, PIN_HIGH);
         rt_thread_mdelay(500);
         rt_pin_write(LED0_PIN, PIN_LOW);

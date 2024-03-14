@@ -724,16 +724,7 @@ int motor_tt_init(void)
     {
         rt_kprintf("create can_rx thread failed!\n");
     }
-    /* 创建dainjai线程 */
-    thread = rt_thread_create("m_dj_driver_handle", can_rx_thread1, RT_NULL, 4096 * 2, 22, 10);
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);
-    }
-    else
-    {
-        rt_kprintf("create can_rx thread failed!\n");
-    }
+
     return 0;
 }
 INIT_COMPONENT_EXPORT(motor_tt_init);
