@@ -3,12 +3,17 @@
 #include "apid.h"
 #include "abus_topic.h"
 
-apid_t *pid_follow_line_front;
-	abus_topic_t topic;
+apid_t pid_follow_line_front;
+abus_topic_t topic;
 static abus_accounter_t acc;
 float error;
 
 infrared infrared_package;
+int follow_line_sub_callback(abus_topic_t* sub)
+{
+	//LOG_D("follow_line_sub_callback");
+	return 0;
+}
 
 int follow_line_init(void)
 {
@@ -30,27 +35,23 @@ int follow_line_init(void)
 	APID_Init(&pid_follow_line_front, PID_POSITION, 0.1, 0.1, 0.1);
 
 	APID_Enable(&pid_follow_line_front);
-	if (pid_follow_line_front == RT_NULL)
-	{
-		rt_kprintf("pid_follow_line_front create failed\n");
-		return -1;
-	}
+
 
 	abus_topic_init_t init;
-	init.buf = (uint8_t*)malloc(1024);
+	init.buf = (uint8_t*)rt_malloc(1024);
 	init.buf_size = 1024;
 	init.msg_size = sizeof(float);
 	init.name = "test_topic";
 	abus_topic_init(&topic, &init);
 
-		acc.name = "line_acc";
+	acc.name = "line_acc";
 	acc.callback = NULL;
 	acc.datafifo = NULL;
 	acc.flag.is_sync = 1;
 	abus_topic_subscribe(&topic, &acc, acc.flag);
 	return 0;
 }
-INIT_COMPONENT_EXPORT(follow_line_init);
+INIT_BOARD_EXPORT(follow_line_init);
 
 void follow_line(void *parameter)
 {
@@ -97,7 +98,7 @@ void follow_line(void *parameter)
     /* 线程处理 */
 	GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-    Print_Infrared_Data(&infrared_package);
+    //Print_Infrared_Data(&infrared_package);
 	// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 	 error = 
 	-infrared_package.infrared_data[front_middle0_infrared]*FRONT_middle_factor+
@@ -108,7 +109,7 @@ void follow_line(void *parameter)
 
 	-infrared_package.infrared_data[front_left0_infrared]*FRONT_middle_edge2+
 	infrared_package.infrared_data[front_right1_infrared]*FRONT_middle_edge2;
-	//abus_public(&acc, &error);
+	abus_public(&acc, &error);
     rt_thread_mdelay(15);
   }
 }

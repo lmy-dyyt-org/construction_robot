@@ -1,16 +1,29 @@
 #include "drv_chassis.h"
 #include "motor.h"
+#include "abus_topic.h"
+#include "follow_line.h"
 
 chassis_mai_t mai;
 chassis_mai_state state;
 chassis_mai_offset offset;
+static abus_accounter_t acc;
+
+int drv_sub_callback(abus_topic_t *topic)
+{
+    LOG_D("drv_sub_callback");
+  return 0;
+}
 
 void drv_chassis(void *parameter)
 {
   chassis_mai_init(&mai,chassis_mai_userdata);
   state.xSpeed_m_s = 5;
-			static int i=0;
-		i+=3600 ;
+	
+//	acc.name = "drv_acc";
+//	acc.callback = drv_sub_callback;
+//	acc.datafifo = NULL;
+//	acc.flag.is_sync = 1;
+	//abus_topic_subscribe(&topic, &acc, acc.flag);
   while(1)
   {
     /* 线程处理 */
@@ -21,14 +34,7 @@ void drv_chassis(void *parameter)
     motor_set_speed(M2006_3_CAN1,  mai.wheel_3_speed_m_s);
     motor_set_speed(M2006_4_CAN1,  -mai.wheel_2_speed_m_s);
 		
-//	LOG_I("motor1:%f",mai.wheel_1_speed_m_s);
-//    LOG_I("motor2:%f",mai.wheel_0_speed_m_s);
-//    LOG_I("motor3:%f",mai.wheel_3_speed_m_s);
-//    LOG_I("motor4:%f",mai.wheel_2_speed_m_s);
-		
-	//motor_set_pos(M2006_1_CAN1,  i);
-
-    rt_thread_mdelay(12000);
+    rt_thread_mdelay(20);
   }
 }
 
