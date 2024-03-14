@@ -1,12 +1,13 @@
 ﻿/*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-11 00:05:09
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-11 09:55:23
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-13 22:57:37
  * @FilePath: \abus_v2.0.1\abus_v2.0.1\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "abus_topic.h"
+#include "ulog.h"
 
 int abus_topic_init(abus_topic_t *topic, abus_topic_init_t *init)
 {
@@ -52,7 +53,7 @@ int abus_public(abus_accounter_t *acc, void *msg)
      if (acc_in != acc->topic->msg_size)
      {
          //TODO:
-         printf("abus_public  data in error acc in %d will in %d\n",acc_in,acc->topic->msg_size);
+         LOG_D("abus_public  data in error acc in %d will in %d\n",acc_in,acc->topic->msg_size);
          //while (1);
      }
     // 遍历sync链表
@@ -69,6 +70,7 @@ int abus_public(abus_accounter_t *acc, void *msg)
                 uint32_t sync_in = afifo_in(sync->datafifo,msg,acc->topic->msg_size);
                 if (sync_in != acc->topic->msg_size)
                 {   
+                    LOG_D("abus_public  data in error sync in %d will in %d\n",sync_in,acc->topic->msg_size);
                     while(1);
                 }
             }
