@@ -1,11 +1,12 @@
 /*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-06 16:16:14
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-07 11:46:13
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-15 01:46:20
  * @FilePath: \project\applications\drv_stepper_motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+#include "rtthread.h"
 #include "drv_stepper_motor.h"
 
 stepper_motor_t stepper_motor_1;
@@ -17,7 +18,7 @@ rt_device_t Emm_serial1;
 void drv_stepper_motor(void *parameter)
 {
 	/*通信初始化 电机初始化*/
-  Emm_V5_Init("uart8");
+  Emm_V5_Init("uart7");
   stepper_motor_Init(&stepper_motor_1, 1);
 	
 	/*清零电机位置*/
@@ -71,6 +72,7 @@ rt_device_t Emm_V5_Init(const char* uart)
 	return Emm_serial1;
 }
 
+
 void Emm_V5_Transmit(uint8_t* data, uint8_t len)
 {
   rt_device_write(Emm_serial1, 0, data, len);
@@ -85,3 +87,23 @@ void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
 {
   stepper_motor->stepper_motor_id = id;
 }
+int stepper_motor_init(void)
+{
+	#define THREAD_PRIORITY_STEPPER_MOTOR    25
+#define THREAD_STACK_SIZE_STEPPER_MOTOR  1024
+#define THREAD_TIMESLICE_STEPPER_MOTOR    5
+		 rt_thread_t tid_stepper_motor = RT_NULL;
+  
+    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
+  tid_stepper_motor = rt_thread_create("drv_stepper_motor",
+              drv_stepper_motor, RT_NULL,
+              THREAD_STACK_SIZE_STEPPER_MOTOR,
+              THREAD_PRIORITY_STEPPER_MOTOR, THREAD_TIMESLICE_STEPPER_MOTOR);
+              
+  /* 线程创建成功，则启动线程 */
+  if (tid_stepper_motor != RT_NULL)
+  {
+    rt_thread_startup(tid_stepper_motor);
+  }
+	return 0;
+}INIT_DEVICE_EXPORT(stepper_motor_init);

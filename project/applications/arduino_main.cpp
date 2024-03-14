@@ -96,8 +96,8 @@ void loop()
   #endif
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Emm_V5_Pos_Control(1, 0, 100, 0, geometry.getLowRad()*3200/(6.28), false, false);
-  // Emm_V5_Pos_Control(1, 0, 100, 0, geometry.getHighRad()*3200/(6.28), false, false);
+//  Emm_V5_Pos_Control(1, 0, 100, 0, geometry.getLowRad()*3200/(6.28), false, false);
+//  Emm_V5_Pos_Control(1, 0, 100, 0, geometry.getHighRad()*3200/(6.28), false, false);
 
 
   //while(电机运动到位置)

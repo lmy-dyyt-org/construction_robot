@@ -35,9 +35,7 @@
 #define THREAD_STACK_SIZE_FOLLOW_LINE  1024
 #define THREAD_TIMESLICE_FOLLOW_LINE    5
 
-#define THREAD_PRIORITY_STEPPER_MOTOR    25
-#define THREAD_STACK_SIZE_STEPPER_MOTOR  1024
-#define THREAD_TIMESLICE_STEPPER_MOTOR    5
+
 
 #define THREAD_PRIORITY_CHASSIS    25
 #define THREAD_STACK_SIZE_CHASSIS  1024
@@ -60,19 +58,7 @@ int main(void)
 //     rt_thread_startup(tid_follow_line);
 //   }
 //////////////////////////////////////////////////////////////创建步进电机线程
-	 rt_thread_t tid_stepper_motor = RT_NULL;
-  
-    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
-  tid_stepper_motor = rt_thread_create("drv_stepper_motor",
-              drv_stepper_motor, RT_NULL,
-              THREAD_STACK_SIZE_STEPPER_MOTOR,
-              THREAD_PRIORITY_STEPPER_MOTOR, THREAD_TIMESLICE_STEPPER_MOTOR);
-              
-  /* 线程创建成功，则启动线程 */
-  if (tid_stepper_motor != RT_NULL)
-  {
-    rt_thread_startup(tid_stepper_motor);
-  }
+
 //////////////////////////////////////////////////////////////创建底盘运动线程
 	 rt_thread_t tid_chassis = RT_NULL;
   
@@ -140,6 +126,8 @@ int main(void)
 
 	// 	rt_thread_mdelay(500);
 	
+  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
+  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
 
 				
         rt_pin_write(LED0_PIN, PIN_HIGH);
