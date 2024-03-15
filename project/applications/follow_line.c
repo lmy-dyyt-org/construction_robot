@@ -4,7 +4,7 @@
 #include "abus_topic.h"
 
 apid_t pid_follow_line_front;
-	abus_topic_t topic;
+	abus_topic_t line_error_topic;
 static abus_accounter_t acc;
 float error;
 
@@ -37,13 +37,13 @@ int follow_line_init(void)
 	init.buf_size = 1024;
 	init.msg_size = sizeof(float);
 	init.name = "test_topic";
-	abus_topic_init(&topic, &init);
+	abus_topic_init(&line_error_topic, &init);
 
 	acc.name = "line_acc";
 	acc.callback = NULL;
 	acc.datafifo = NULL;
 	acc.flag.is_sync = 1;
-	abus_topic_subscribe(&topic, &acc, acc.flag);
+	abus_topic_subscribe(&line_error_topic, &acc, acc.flag);
 	return 0;
 }
 INIT_COMPONENT_EXPORT(follow_line_init);
@@ -104,7 +104,7 @@ void follow_line(void *parameter)
 
 	-infrared_package.infrared_data[front_left0_infrared]*FRONT_middle_edge2+
 	infrared_package.infrared_data[front_right1_infrared]*FRONT_middle_edge2;
-	//abus_public(&acc, &error);
+	abus_public(&acc, &error);
     rt_thread_mdelay(15);
   }
 }

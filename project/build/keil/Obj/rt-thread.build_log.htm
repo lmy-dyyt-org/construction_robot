@@ -29,69 +29,8 @@ Project File Date:  03/14/2024
 Build target 'rt-thread'
 Note: source file 'rt-thread\src\clock.c' - object file renamed from '.\build\keil\Obj\src_clock.o' to '.\build\keil\Obj\src_clock.o'.
 Note: source file 'rt-thread\src\thread.c' - object file renamed from '.\build\keil\Obj\src_thread.o' to '.\build\keil\Obj\src_thread.o'.
-applications/follow_line.c(1): warning: In file included from...
-applications/follow_line.h(16): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(32): warning: 'EPERM' macro redefined [-Wmacro-redefined]
-#define EPERM 1  /* Operation not permitted */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(45): note: previous definition is here
-#define EPERM            (ERROR_BASE_NO + 1)
-        ^
-applications/follow_line.c(1): warning: In file included from...
-applications/follow_line.h(16): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(33): warning: 'ENOENT' macro redefined [-Wmacro-redefined]
-#define ENOENT 2 /* No such file or directory */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(49): note: previous definition is here
-#define ENOENT           (ERROR_BASE_NO + 2)
-        ^
-applications/follow_line.c(1): warning: In file included from...
-applications/follow_line.h(16): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(34): warning: 'ESRCH' macro redefined [-Wmacro-redefined]
-#define ESRCH 3  /* No such process */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(53): note: previous definition is here
-#define ESRCH            (ERROR_BASE_NO + 3)
-        ^
-applications/follow_line.c(1): warning: In file included from...
-applications/follow_line.h(16): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(35): warning: 'EINTR' macro redefined [-Wmacro-redefined]
-#define EINTR 4  /* Interrupted system call */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(57): note: previous definition is here
-#define EINTR            (ERROR_BASE_NO + 4)
-        ^
-applications/follow_line.c(1): warning: In file included from...
-applications/follow_line.h(16): warning: In file included from...
-./applications/abus\abus_topic.h(37): warning: redefinition of typedef 'abus_accounter_t' is a C11 feature [-Wtypedef-redefinition]
-        }abus_accounter_t;
-         ^
-./applications/abus\abus_topic.h(22): note: previous definition is here
-        typedef struct abus_accounter abus_accounter_t;
-                                      ^
-./applications/abus\abus_topic.h(46): warning: redefinition of typedef 'abus_topic_t' is a C11 feature [-Wtypedef-redefinition]
-        }abus_topic_t;
-         ^
-./applications/abus\abus_topic.h(23): note: previous definition is here
-        typedef struct abus_topic abus_topic_t;
-                                  ^
-applications/follow_line.c(2): warning: In file included from...
-applications/apid.h(189): warning: redefinition of typedef 'apid_t' is a C11 feature [-Wtypedef-redefinition]
-    }apid_t;
-     ^
-applications/apid.h(177): note: previous definition is here
-    typedef  struct _PID_T apid_t;
-                           ^
-7 warnings generated.
-compiling follow_line.c...
-linking...
-Program Size: Code=118036 RO-data=12316 RW-data=3316 ZI-data=7132  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 7 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -104,7 +43,7 @@ Package Vendor: Keil
   C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

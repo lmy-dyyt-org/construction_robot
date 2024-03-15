@@ -6,7 +6,7 @@
 chassis_mai_t mai;
 chassis_mai_state state;
 chassis_mai_offset offset;
-static abus_accounter_t acc;
+abus_accounter_t chassis_line_acc;
 
 int drv_sub_callback(abus_topic_t *topic)
 {
@@ -19,11 +19,11 @@ void drv_chassis(void *parameter)
   chassis_mai_init(&mai,chassis_mai_userdata);
   state.xSpeed_m_s = 5;
 	
-	acc.name = "drv_acc";
-	acc.callback = drv_sub_callback;
-	acc.datafifo = NULL;
-	acc.flag.is_sync = 1;
-	abus_topic_subscribe(&topic, &acc, acc.flag);
+	chassis_line_acc.name = "drv_acc";
+	chassis_line_acc.callback = drv_sub_callback;
+	chassis_line_acc.datafifo = NULL;
+	chassis_line_acc.flag.is_sync = 1;
+	//abus_topic_subscribe(&line_error_topic, &chassis_line_acc, chassis_line_acc.flag);
   while(1)
   {
     /* 线程处理 */
