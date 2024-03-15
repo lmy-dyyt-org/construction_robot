@@ -307,7 +307,9 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, rt_bool_t svF, uint8_t o_mode, ui
   
   // 发送命令
   Emm_V5_Transmit(cmd, 20);
+
   Emm_V5_Receive(rxCmd, 4);
+
 }
 
 /**
@@ -331,6 +333,11 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, rt_bool_t snF)
   // 发送命令
   Emm_V5_Transmit(cmd, 5);
   Emm_V5_Receive(rxCmd, 4);
+  for(int i=0;i<4;i++)
+  {
+    rt_kprintf("%x ", rxCmd[i]);
+  }
+  rt_kprintf("\r\n");
 }
 
 /**
@@ -377,7 +384,7 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
                     // 修正电机正反速度
                     if(rxCmd[2])
                     { stepper_motor->stepper_motor_speed = -stepper_motor->stepper_motor_speed; }
-                    rt_kprintf("Motor_Cur_Speed: %d\n", stepper_motor->stepper_motor_speed);
+                    LOG_I("stepperMotor_%d_Cur_Speed: %d\n",stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_speed);
                   } break;
     case S_CPOS : 
                   Emm_V5_Receive(rxCmd, 8);
@@ -396,7 +403,7 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
                     // 修正电机正反位置
                     if(rxCmd[2])
                     { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
-                    rt_kprintf("Motor_Cur_Pos: %f\n", stepper_motor->stepper_motor_angle);
+                    LOG_I("stepperMotor_%d_Cur_Pos: %f\n",stepper_motor->stepper_motor_id , stepper_motor->stepper_motor_angle);
                   } break;
     case S_PERR :
                   Emm_V5_Receive(rxCmd, 8);
@@ -415,7 +422,7 @@ void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
                     // 修正电机正反位置
                     if(rxCmd[2])
                     { stepper_motor->stepper_motor_err = -stepper_motor->stepper_motor_err; }
-                    rt_kprintf("Motor_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_err);
+                    LOG_I("stepperMotor_%d_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_err);
                   } break;
     case S_FLAG :  
                   Emm_V5_Receive(rxCmd, 4);

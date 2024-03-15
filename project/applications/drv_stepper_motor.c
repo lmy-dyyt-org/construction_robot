@@ -9,7 +9,8 @@
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
 
-stepper_motor_t stepper_motor_1;
+stepper_motor_t stepper_motor_big_arm;
+stepper_motor_t stepper_motor_small_arm;
 
 static struct rt_semaphore rx_sem;    /* 用于接收消息的信号量 */
 uint8_t rxCmd[128] = {0};
@@ -18,32 +19,39 @@ rt_device_t Emm_serial1;
 void drv_stepper_motor(void *parameter)
 {
 	/*通信初始化 电机初始化*/
-  Emm_V5_Init("uart7");
-  stepper_motor_Init(&stepper_motor_1, 1);
-	
-	/*清零电机位置*/
-  // Emm_V5_Reset_CurPos_To_Zero(1);//01 0A 02 6B
-  // Emm_V5_En_Control(1, 1, 0);
-  //Emm_V5_Origin_Modify_Params(1, 1, 2, 0, 30, 5000, 300, 400, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  方向0 是控制往上抬
+  Emm_V5_Init("uart8");
+  stepper_motor_Init(&stepper_motor_big_arm, 1);
+	stepper_motor_Init(&stepper_motor_small_arm, 3);
+  rt_thread_mdelay(2000); //上电需要等两秒 初始化
+  Emm_V5_Receive(rxCmd, 2); //不知道为什么会有 两个 ff 
 
-  Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 350, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  //回零调参 电机有存储的 没必要每次都重新设置
+  Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
-  rt_thread_mdelay(50);
+  rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
   Emm_V5_Origin_Trigger_Return(1, 2, 0);
+  Emm_V5_Origin_Trigger_Return(3, 2, 0);
 
-  LOG_D("stepper_motor_1 init success");
-	while(1)
+  while(1)
   {
+
     //Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//01 fd 02 6b	
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
-  LOG_D("stepper_motor_1 ");
-    rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
-		
-    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_CPOS);
-    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_VEL);
-    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_PERR);
-    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_FLAG);
-    Emm_V5_Read_Sys_Params(&stepper_motor_1, 1, S_ORG);
+    // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
+
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
+
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
+
     rt_thread_mdelay(500);
   }
 }
@@ -80,13 +88,22 @@ void Emm_V5_Transmit(uint8_t* data, uint8_t len)
 
 int Emm_V5_Receive(uint8_t* data, uint8_t len)
 {
-  return rt_device_read(Emm_serial1, 0, data, len);
+  if(rt_device_read(Emm_serial1, 0, data, len))
+  {
+    return 1;
+  }
+  else
+  {
+    LOG_E("stepmotor_receive error!\r\n");
+    return 0;
+  }
 }
 
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id)
 {
   stepper_motor->stepper_motor_id = id;
 }
+
 int stepper_motor_init(void)
 {
 	#define THREAD_PRIORITY_STEPPER_MOTOR    25
