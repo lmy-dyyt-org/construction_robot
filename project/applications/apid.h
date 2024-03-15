@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-08 16:35:41
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-03-15 20:50:04
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.h
  * @Description: pid库
  */
@@ -210,10 +210,10 @@ typedef struct _var_list {
  * @brief 对于特殊的使用环境，可以使用下面宏创建一个匿名的pid实例，该实例不用调用初始化函数
  * 
  */
-#define APID_CREATE_STATIC_ANONYMOUS_INCREMENT( kp, ki, kd) \
+#define APID_CREATE_STATIC_ANONYMOUS_INCREMENT( _kp, _ki, _kd) \
     &(apid_t){                                          \
         .flag = {.pid_mode = PID_INCREMENT},                      \
-        .parameter = {.kp = kp, .ki = ki, .kd = kd},     \
+        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},     \
         .handle = _PID_Hander,\
         .i_handle = i_handle_Increment_Normal,\
 				.d_handle = d_handle_Increment_Complete,\
