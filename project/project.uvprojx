@@ -1125,6 +1125,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\map\SemanticMap.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_process_steppermotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_process_steppermotor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

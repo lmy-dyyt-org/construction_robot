@@ -86,8 +86,20 @@ void Emm_V5_Read_Sys_Params(stepper_motor_t* stepper_motor, uint8_t addr, SysPar
   cmd[i] = 0x6B; ++i;                   // 校验字节
   
   // 发送命令
+  // LOG_D("trans_tryto_take_mutex\n");
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  LOG_D("trans_take_mutex\n");
+
+  stepper_motor_cmd_state = s;//置状态应该放在 发送前面 ，不然callback的时候还是 idle 就会先把一些数据发送出去
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, i);
-  Emm_V5_Get(stepper_motor, s);
+
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);//release先退出线程，然后接收会立马卡住（因为那边也有设备的take（处理权）），让接收执行完
+  LOG_D("trans_release_sem\n");
+
+ 
+  
 }
 
 /**
@@ -309,7 +321,7 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, rt_bool_t svF, uint8_t o_mode, ui
   Emm_V5_Transmit(cmd, 20);
 
   Emm_V5_Receive(rxCmd, 4);
-
+  stepper_motor_cmd_state = 0;
 }
 
 /**

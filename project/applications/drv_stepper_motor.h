@@ -40,12 +40,16 @@ typedef struct stepper_motor
 }stepper_motor_t;
 
 extern uint8_t rxCmd[128];
+extern uint8_t stepper_motor_cmd_state;
+extern rt_mutex_t  mutex_step;
+extern rt_sem_t step_sem;
 
 void drv_stepper_motor(void *parameter);
 
 rt_device_t Emm_V5_Init(const char* uart);    
 void Emm_V5_Transmit(uint8_t* data, uint8_t len);
 int Emm_V5_Receive(uint8_t* data, uint8_t len);
+uint8_t Emm_V5_ID_judge(stepper_motor_t** stepper_motor);
 
 void stepper_motor_Init(stepper_motor_t* stepper_motor, uint8_t id);
 
