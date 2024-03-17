@@ -17,7 +17,6 @@
 ".\build\keil\obj\logger.o"
 ".\build\keil\obj\rampsstepper.o"
 ".\build\keil\obj\robotgeometry.o"
-".\build\keil\obj\drv_chassis.o"
 ".\build\keil\obj\abus_topic.o"
 ".\build\keil\obj\abus_v2.0.1.o"
 ".\build\keil\obj\afifo.o"

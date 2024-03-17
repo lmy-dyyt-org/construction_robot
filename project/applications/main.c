@@ -22,7 +22,6 @@
 #include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
 #include "motor.h"
-#include "drv_chassis.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN    GET_PIN(F, 14)
 

@@ -32,10 +32,6 @@ chassis_pos.z_rad = 10;
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
         chassis_handle(&chassis_mai, 0);
 #endif
-//		motor_set_pos(M2006_1_CAN1, 3600);
-//    motor_set_speed(M2006_2_CAN1,2000);
-//    motor_set_speed(M2006_3_CAN1,  1000);
-//    motor_set_speed(M2006_4_CAN1,  4000);
 
 	rt_thread_mdelay(50);
     }

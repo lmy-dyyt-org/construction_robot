@@ -1081,11 +1081,6 @@
               <FilePath>.\applications\robotarm\robotGeometry.h</FilePath>
             </File>
             <File>
-              <FileName>drv_chassis.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_chassis.c</FilePath>
-            </File>
-            <File>
               <FileName>abus_topic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\abus\abus_topic.c</FilePath>
