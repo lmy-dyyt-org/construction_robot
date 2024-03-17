@@ -60,19 +60,7 @@ int main(void)
 //////////////////////////////////////////////////////////////创建步进电机线程
 
 //////////////////////////////////////////////////////////////创建底盘运动线程
-	 rt_thread_t tid_chassis = RT_NULL;
-  
-    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
-  tid_chassis = rt_thread_create("drv_chassis",
-              drv_chassis, RT_NULL,
-              THREAD_STACK_SIZE_CHASSIS,
-              THREAD_PRIORITY_CHASSIS, THREAD_TIMESLICE_CHASSIS);
-              
-  /* 线程创建成功，则启动线程 */
-  if (tid_chassis != RT_NULL)
-  {
-    rt_thread_startup(tid_chassis);
-  }
+
 //////////////////////////////////////////////////////////////	
 	/* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);

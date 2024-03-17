@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-13 11:42:38
+ * @LastEditTime: 2024-03-17 09:19:59
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -334,7 +334,7 @@ int motor_set_speed(int id, float value)
 
     motor->flag_run_mode = MOTOR_MODE_SPEED;
     motor->tar_speed = value;
-
+    //LOG_D("motor id:%d speed:%f", id, value);
     return M_EOK;
 
 }
@@ -448,7 +448,7 @@ void motor_shakdown(int id)
     {
         //  将力矩环路pid的当前值，设定值，输出值
         if (MOTOD_IS_TORQUE_TIME(motor))
-            LOG_RAW(":%f,%f,%f\r\n",
+            LOG_RAW("q:%f,%f,%f\r\n",
                     motor->pid_torque->parameter.target,
                     motor->pid_torque->parameter.present,
                     motor->pid_torque->parameter.out);
@@ -458,7 +458,7 @@ void motor_shakdown(int id)
         //  将速度环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW(":%f,%f,%f\r\n",
+            LOG_RAW("s:%f,%f,%f\r\n",
                     motor->pid_speed->parameter.target,
                     motor->pid_speed->parameter.present,
                     motor->pid_speed->parameter.out);
@@ -469,7 +469,7 @@ void motor_shakdown(int id)
         //  将位置环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW(":%f,%f,%f\r\n",
+            LOG_RAW("p:%f,%f,%f\r\n",
                     motor->pid_pos->parameter.target,
                     motor->pid_pos->parameter.present,
                     motor->pid_pos->parameter.out);
@@ -485,16 +485,17 @@ int motor_updata_cfg(int id, int level)
     case 0:
         motor->behaver = motor_behiver_1;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_NONE;
-        // motor->pid_torque = malloc(sizeof(apid_t));
-        // motor->pid_speed = malloc(sizeof(apid_t));
-        // motor->pid_pos = malloc(sizeof(apid_t));
+        motor->pid_torque = malloc(sizeof(apid_t));
+        motor->pid_speed = malloc(sizeof(apid_t));
+        motor->pid_pos = malloc(sizeof(apid_t));
 
         RT_ASSERT(motor->pid_torque);
         RT_ASSERT(motor->pid_speed);
         RT_ASSERT(motor->pid_pos);
-        // APID_Init(motor->pid_torque, PID_POSITION, 1, 0, 0);
-        // APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
-        // APID_Init(motor->pid_pos, PID_POSITION, 0.1, 0, 0);
+
+        APID_Init(motor->pid_torque, PID_POSITION, motor->pid_torque->parameter.kp, motor->pid_torque->parameter.ki, motor->pid_torque->parameter.kd);
+        APID_Init(motor->pid_speed, PID_POSITION, motor->pid_speed->parameter.kp, motor->pid_speed->parameter.ki, motor->pid_speed->parameter.kd);
+        APID_Init(motor->pid_pos, PID_POSITION, motor->pid_pos->parameter.kp, motor->pid_pos->parameter.ki, motor->pid_pos->parameter.kd);
 
         break;
     case 1:
@@ -504,8 +505,6 @@ int motor_updata_cfg(int id, int level)
         RT_ASSERT(motor->pid_speed);
         RT_ASSERT(motor->pid_pos);
 
-        // APID_Init(motor->pid_speed, PID_POSITION, 2.14, 0.0017, 0);
-        // APID_Init(motor->pid_pos, PID_POSITION, 2, 0, 0);
         APID_Init(motor->pid_speed, PID_POSITION, motor->pid_speed->parameter.kp, motor->pid_speed->parameter.ki, motor->pid_speed->parameter.kd);
         APID_Init(motor->pid_pos, PID_POSITION, motor->pid_pos->parameter.kp, motor->pid_pos->parameter.ki, motor->pid_pos->parameter.kd);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,9 +520,9 @@ int motor_updata_cfg(int id, int level)
     case 2:
         motor->behaver = motor_behiver_3;
         motor->flag_out_mode = MOTOR_CONTROL_SUPPORT_SPEED;
-        // motor->pid_pos = malloc(sizeof(apid_t));
+        motor->pid_pos = malloc(sizeof(apid_t));
         RT_ASSERT(motor->pid_pos);
-        // APID_Init(motor->pid_pos, PID_POSITION, 1, 0, 0);
+        APID_Init(motor->pid_pos, PID_POSITION, motor->pid_pos->parameter.kp, motor->pid_pos->parameter.ki, motor->pid_pos->parameter.kd);
         break;
     case 3:
         motor->behaver = motor_behiver_4;

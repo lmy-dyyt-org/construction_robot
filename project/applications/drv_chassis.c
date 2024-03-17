@@ -33,10 +33,11 @@ void drv_chassis(void *parameter)
   //   motor_set_speed(M2006_2_CAN1,  mai.wheel_0_speed_m_s);
   //   motor_set_speed(M2006_3_CAN1,  mai.wheel_3_speed_m_s);
   //   motor_set_speed(M2006_4_CAN1,  -mai.wheel_2_speed_m_s);
-		motor_set_pos(M2006_1_CAN1,  3600);
-    motor_set_speed(M2006_2_CAN1,2000);
-    motor_set_speed(M2006_3_CAN1,  1000);
-    motor_set_speed(M2006_4_CAN1,  4000);
+		// motor_set_pos(M2006_1_CAN1, 3600);
+    // motor_set_speed(M2006_2_CAN1,2000);
+    // motor_set_speed(M2006_3_CAN1,  1000);
+    // motor_set_speed(M2006_4_CAN1,  4000);
+    
     rt_thread_mdelay(20);
   }
 }
