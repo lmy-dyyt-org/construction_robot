@@ -9,6 +9,11 @@
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
 
+#define DBG_TAG              "drv.step_motor"
+
+#define DBG_LVL               DBG_INFO
+#include <ulog.h>
+
 stepper_motor_t stepper_motor_big_arm;
 stepper_motor_t stepper_motor_small_arm;
 
@@ -25,6 +30,8 @@ uint8_t stepper_motor_cmd_state = S_IDLE; //初始化命令接收为空闲
 
 rt_mutex_t  mutex_step = RT_NULL;//互斥锁
 rt_sem_t step_sem = RT_NULL;//信号量
+rt_sem_t cmp_sem = RT_NULL;//信号量
+uint8_t rxCount = 0;
 
 void drv_stepper_motor(void *parameter)
 {
@@ -34,33 +41,32 @@ void drv_stepper_motor(void *parameter)
 	stepper_motor_Init(&stepper_motor_small_arm, 3);
   rt_thread_mdelay(2000); //上电需要等两秒 初始化
 
-  // //回零调参 电机有存储的 没必要每次都重新设置
-  // Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
-  // Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+  //回零调参 电机有存储的 没必要每次都重新设置
+  Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
-  // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
-  // Emm_V5_Origin_Trigger_Return(1, 2, 0);
-  // Emm_V5_Origin_Trigger_Return(3, 2, 0);
+  rt_thread_mdelay(100);//延时等待闭环步进参数设置完成（写入flash）
+  Emm_V5_Origin_Trigger_Return(1, 2, 0);
+  Emm_V5_Origin_Trigger_Return(3, 2, 0); 
 
+  // Emm_V5_Pos_Control(1, 0, 100, 0, 320, 0, 0);//01 fd 02 6b	
   while(1)
   {
-    rt_thread_mdelay(500);
-    //Emm_V5_Pos_Control(1, 0, 100, 0, 3200, 0, 0);//01 fd 02 6b	
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
 
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
 
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
-
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
+    rt_thread_mdelay(500);
   }
 }
 
@@ -71,7 +77,7 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
     // rt_sem_release(&rx_sem);
 
     /* 发送 缓冲区大小 到邮箱中 */
-   
+    rxCount = size;
     switch(stepper_motor_cmd_state)                           // 功能码
     {
       case S_VER  :  break;
@@ -82,25 +88,58 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
       case S_ENCL :  break;
       case S_TPOS :  break;
       case S_VEL  :  
-      if(size>=6)  
-      {
-        LOG_D("vel,size:%d\n",size);
-        rt_mb_send(&mb1, (uint8_t)size); 
-      }
+        if(size>=6)  
+        {
+          // LOG_D("vel,size:%d\n",size);
+      // rt_mb_send(&mb1, (uint8_t)size); 
+          rt_sem_release(cmp_sem);
+        }
       break;
       case S_CPOS :  
-      if(size>=8)  
-      {
-        LOG_D("pos,size:%d\n",size);
-        rt_mb_send(&mb1, (uint8_t)size);
-      }
-      break;
-      case S_PERR :  if(size>=8)  rt_mb_send(&mb1, (uint8_t)size); break;
-      case S_FLAG :  if(size>=4)  rt_mb_send(&mb1, (uint8_t)size); break;
-      case S_ORG  :  if(size>=4)  rt_mb_send(&mb1, (uint8_t)size); break;
+        if(size>=8)  
+        {
+          // LOG_D("pos,size:%d\n",size);
+          rt_mb_send(&mb1, (uint8_t)size);
+          rt_sem_release(cmp_sem);
+        }
+        break;
+      case S_PERR :  
+        if(size>=8)  
+        {
+       // rt_mb_send(&mb1, (uint8_t)size);
+          rt_sem_release(cmp_sem);
+        }
+        
+        break;
+      case S_FLAG :  
+        if(size>=4)  
+        {
+          rt_mb_send(&mb1, (uint8_t)size); 
+          rt_sem_release(cmp_sem);
+        }
+        break;
+      case S_ORG  :  
+        if(size>=4)
+        {
+          rt_mb_send(&mb1, (uint8_t)size);
+          rt_sem_release(cmp_sem);
+        }
+        break;
       case S_Conf :  break;
       case S_State:  break;
-      case S_IDLE :  LOG_D("idle\n");  rt_mb_send(&mb1, (uint8_t)size); break;
+      case S_IDLE :  
+        // LOG_D("idle,size:%d\n",size);  
+        // rt_mb_send(&mb1, (uint8_t)size);
+        rt_sem_release(cmp_sem);
+        break;
+      case S_Ans :  
+        if(size>=4) 
+        {
+          // LOG_D("ansewer,size:%d\n",size); 
+        // rt_mb_send(&mb1, (uint8_t)size); 
+          rt_sem_release(cmp_sem);
+        }
+        break;
       default: break;
     }
     return RT_EOK;
@@ -115,7 +154,7 @@ void drv_process_steppermotor(void *parameter)
   stepper_motor_t* stepper_motor;
   rt_thread_mdelay(2000);
   int8_t t = rt_device_read(Emm_serial1, 0, tmp, 60);
-  LOG_D("stepperMotor_Receive_Error: %d\n", t);
+  // LOG_D("stepperMotor_Receive_Error: %d\n", t);
 
   /* 设置接收回调函数 */
   rt_device_set_rx_indicate(Emm_serial1, Emm_uart_receive_callback);  
@@ -123,19 +162,20 @@ void drv_process_steppermotor(void *parameter)
   while(1)
   {
         rt_sem_take(step_sem, RT_WAITING_FOREVER); //获取通知
-        LOG_D("rece_take_sem\n");
+        // LOG_D("rece_take_sem\n");
         rt_mutex_take(mutex_step, RT_WAITING_FOREVER);  //获取电机处理权
-
+        // LOG_D("rece_take_mutex\n");
       /* 从邮箱中收取邮件 */
-      if (rt_mb_recv(&mb1, &rx_size, RT_WAITING_FOREVER) == RT_EOK)
-      {
-        LOG_D("start_process,rx_size:%d\n",rx_size);
+      // if (rt_mb_recv(&mb1, &rx_size, RT_WAITING_FOREVER) == RT_EOK)
+      // {
+        rt_sem_take(cmp_sem, RT_WAITING_FOREVER); //获取callback通知
+        // LOG_D("start_process,rx_size:%d\n",rxCount);
         // rt_device_read(Emm_serial1, 0, &data, 1);
         // LOG_I("stepperMotor_Receive: %d,%x,%d\n",rx_size,data,++rx_count);
         switch(stepper_motor_cmd_state)                           // 功能码
         {
           case S_IDLE : 
-                        LOG_D("stepperMotor_Receive: %x,%d,%d\n",data[0],rt_device_read(Emm_serial1, 0, data, rx_size),++rx_count);//把缓冲区的垃圾清空
+                        LOG_D("stepperMotor_Receive: %x,%d,%d\n",data[0],rt_device_read(Emm_serial1, 0, data, 60),++rx_count);//把缓冲区的垃圾清空
                          break;
           case S_VER  :  break;
           case S_RL   :  break;
@@ -145,7 +185,7 @@ void drv_process_steppermotor(void *parameter)
           case S_ENCL :  break;
           case S_TPOS :  break;
           case S_VEL  :  
-                        if(rx_size >= 6)
+                        if(rxCount >= 6)
                         {
                             Emm_V5_Receive(rxCmd, 6);
                             if(Emm_V5_ID_judge(&stepper_motor) == 0)
@@ -164,18 +204,18 @@ void drv_process_steppermotor(void *parameter)
                               stepper_motor_cmd_state = S_IDLE; // 清除状态
                               LOG_I("stepperMotor_%d_Cur_Speed: %d\n",stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_speed);
                               rt_mutex_release(mutex_step);
-                              LOG_D("mutex_release\n");
+                              // LOG_D("mutex_release\n");
                             }
                         } 
 
                         else 
                         {
-                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size));
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
                           break;
                         }
                         break;
           case S_CPOS : 
-                        if(rx_size >= 8)
+                        if(rxCount >= 8)
                         {
                             Emm_V5_Receive(rxCmd, 8);
                             if(Emm_V5_ID_judge(&stepper_motor) == 0)
@@ -197,19 +237,20 @@ void drv_process_steppermotor(void *parameter)
                               // 修正电机正反位置
                               if(rxCmd[2])
                               { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
+                               stepper_motor_cmd_state = S_IDLE; // 清除状态
                               LOG_I("stepperMotor_%d_Cur_Pos: %f\n",stepper_motor->stepper_motor_id , stepper_motor->stepper_motor_angle);    
                               rt_mutex_release(mutex_step);
-                              LOG_D("mutex_release\n");                          
+                              // LOG_D("mutex_release\n");                          
                             }
                         } 
                         else 
                         {
-                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size));
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
                           break;
                         }
                         break;
           case S_PERR :
-                        if(rx_size == 8)
+                        if(rxCount >= 8)
                         {
                             Emm_V5_Receive(rxCmd, 8);
                             if(Emm_V5_ID_judge(&stepper_motor) == 0)
@@ -229,16 +270,18 @@ void drv_process_steppermotor(void *parameter)
                           // 修正电机正反位置
                           if(rxCmd[2])
                           { stepper_motor->stepper_motor_err = -stepper_motor->stepper_motor_err; }
+                          stepper_motor_cmd_state = S_IDLE; // 清除状态
                           LOG_I("stepperMotor_%d_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_err);
+                          rt_mutex_release(mutex_step);
                         } 
                         else 
                         {
-                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size));
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
                           break;
                         }
                         break;
           case S_FLAG :
-                        if(rx_size == 4)
+                        if(rxCount >= 4)
                         {
                             Emm_V5_Receive(rxCmd, 4);
                             if(Emm_V5_ID_judge(&stepper_motor) == 0)
@@ -250,15 +293,17 @@ void drv_process_steppermotor(void *parameter)
                           stepper_motor->stepper_motor_reachflag = flag&0x02;
                           stepper_motor->stepper_motor_stallflag = flag&0x04;
                           stepper_motor->stepper_motor_enflag = flag&0x01;
+                          stepper_motor_cmd_state = S_IDLE; // 清除状态
+                          rt_mutex_release(mutex_step);
                         } 
                         else 
                         {
-                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size));
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
                           break;
                         }
                         break;
           case S_ORG  : 
-                        if(rx_size == 4)
+                        if(rxCount >= 4)
                         {
                             Emm_V5_Receive(rxCmd, 4);
                             if(Emm_V5_ID_judge(&stepper_motor) == 0)
@@ -271,18 +316,21 @@ void drv_process_steppermotor(void *parameter)
                           stepper_motor->stepper_motor_returnzeroingflag = flag&0x04;
                           stepper_motor->stepper_motor_encokflag = flag&0x01; 
                           stepper_motor->stepper_motor_returnzero_failflag = flag&0x08;  
+                          stepper_motor_cmd_state = S_IDLE; // 清除状态
+                          rt_mutex_release(mutex_step);
                         } 
                         else 
                         {
-                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size));
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
                           break;
                         }
                         break;
           case S_Conf :  break;
           case S_State:  break;
-          default: LOG_E("stepperMotor_cmd_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, rx_size)); break;
+          case S_Ans :LOG_D("process_answer: %d\n", rt_device_read(Emm_serial1, 0, tmp, 4));  stepper_motor_cmd_state = S_IDLE;  rt_mutex_release(mutex_step); break;
+          default: LOG_E("stepperMotor_cmd_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60)); rt_mutex_release(mutex_step); break;
         }
-      }
+      // }
   }
 }
 
@@ -330,7 +378,7 @@ int stepper_motor_init(void)
     if (mutex_step == RT_NULL)
         return -RT_ERROR;
 
-    /* 创建一个动态信号量，初始值是 0 */
+    /* 创建一个动态信号量1，初始值是 0 */
     step_sem = rt_sem_create("stem", 0, RT_IPC_FLAG_PRIO);
     if (step_sem == RT_NULL)
     {
@@ -340,6 +388,18 @@ int stepper_motor_init(void)
     else
     {
         rt_kprintf("create done. step semaphore value = 0.\n");
+    }
+
+    /* 创建一个动态信号量2，初始值是 0 */
+    cmp_sem = rt_sem_create("cpem", 0, RT_IPC_FLAG_PRIO);
+    if (cmp_sem == RT_NULL)
+    {
+        rt_kprintf("create cmp semaphore failed.\n");
+        return -1;
+    }
+    else
+    {
+        rt_kprintf("create done. cmp semaphore value = 0.\n");
     }
 
     // 创建邮箱mailbox

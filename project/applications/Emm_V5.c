@@ -9,6 +9,10 @@
 ***	CSDN博客：http s://blog.csdn.net/zhangdatou666
 ***	qq交流群：262438510
 **********************************************************/
+#define DBG_TAG              "drv.EMM_V5"
+
+#define DBG_LVL               DBG_INFO
+#include <ulog.h>
 
 /**
   * @brief    将当前位置清零
@@ -26,8 +30,12 @@ void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr)
   cmd[3] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -46,8 +54,12 @@ void Emm_V5_Reset_Clog_Pro(uint8_t addr)
   cmd[3] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -84,22 +96,20 @@ void Emm_V5_Read_Sys_Params(stepper_motor_t* stepper_motor, uint8_t addr, SysPar
   }
 
   cmd[i] = 0x6B; ++i;                   // 校验字节
-  
+   
   // 发送命令
   // LOG_D("trans_tryto_take_mutex\n");
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
-  LOG_D("trans_take_mutex\n");
+  // LOG_D("trans_take_mutex\n");
 
   stepper_motor_cmd_state = s;//置状态应该放在 发送前面 ，不然callback的时候还是 idle 就会先把一些数据发送出去
   LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
-  Emm_V5_Transmit(cmd, i);
+  Emm_V5_Transmit(cmd, i);  
 
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);//release先退出线程，然后接收会立马卡住（因为那边也有设备的take（处理权）），让接收执行完
-  LOG_D("trans_release_sem\n");
+  // LOG_D("trans_release_sem\n");
 
- 
-  
 }
 
 /**
@@ -122,8 +132,12 @@ void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, rt_bool_t svF, uint8_t ctrl_mode)
   cmd[5] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -146,8 +160,12 @@ void Emm_V5_En_Control(uint8_t addr, rt_bool_t state, rt_bool_t snF)
   cmd[5] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -174,8 +192,12 @@ void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, rt
   cmd[7] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 8);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -208,9 +230,12 @@ void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, ui
   cmd[11] =  snF;                       // 多机同步运动标志，false为不启用，true为启用
   cmd[12] =  0x6B;                      // 校验字节
   
-  // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 13);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -231,8 +256,12 @@ void Emm_V5_Stop_Now(uint8_t addr, rt_bool_t snF)
   cmd[4] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -251,8 +280,12 @@ void Emm_V5_Synchronous_motion(uint8_t addr)
   cmd[3] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -273,8 +306,12 @@ void Emm_V5_Origin_Set_O(uint8_t addr, rt_bool_t svF)
   cmd[4] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -318,10 +355,13 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, rt_bool_t svF, uint8_t o_mode, ui
   cmd[19] =  0x6B;                      // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 20);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 
-  Emm_V5_Receive(rxCmd, 4);
-  stepper_motor_cmd_state = 0;
 }
 
 /**
@@ -341,15 +381,14 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, rt_bool_t snF)
   cmd[2] =  o_mode;                     // 回零模式，0为单圈就近回零，1为单圈方向回零，2为多圈无限位碰撞回零，3为多圈有限位开关回零
   cmd[3] =  snF;                        // 多机同步运动标志，false为不启用，true为启用
   cmd[4] =  0x6B;                       // 校验字节
-  
+
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
-  Emm_V5_Receive(rxCmd, 4);
-  for(int i=0;i<4;i++)
-  {
-    rt_kprintf("%x ", rxCmd[i]);
-  }
-  rt_kprintf("\r\n");
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
 /**
@@ -368,99 +407,59 @@ void Emm_V5_Origin_Interrupt(uint8_t addr)
   cmd[3] =  0x6B;                       // 校验字节
   
   // 发送命令
+  rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
+  stepper_motor_cmd_state = S_Ans;
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
-  Emm_V5_Receive(rxCmd, 4);
+  rt_mutex_release(mutex_step);
+  rt_sem_release(step_sem);
 }
 
-void Emm_V5_Get(stepper_motor_t* stepper_motor, SysParams_t s)
-{
-  switch(s)                             // 功能码
-  {
-    case S_VER  :  break;
-    case S_RL   :  break;
-    case S_PID  :  break;
-    case S_VBUS :  break;
-    case S_CPHA :  break;
-    case S_ENCL :  break;
-    case S_TPOS :  break;
-    case S_VEL  :  
-                  Emm_V5_Receive(rxCmd, 6);
-                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x35)
-                  {
-                    //获取绝对值信息
-                    stepper_motor->stepper_motor_speed = (uint16_t)(
-                                      ((uint16_t)rxCmd[3] << 8)    |
-                                      ((uint16_t)rxCmd[4] << 0)    
-                                    );
+//     case S_PERR :
+//                   Emm_V5_Receive(rxCmd, 8);
+//                   if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x37)
+//                   {
+//                     //获取绝对值信息
+//                     float err_pos = (uint32_t)(
+//                                       ((uint32_t)rxCmd[3] << 24)    |
+//                                       ((uint32_t)rxCmd[4] << 16)    |
+//                                       ((uint32_t)rxCmd[5] << 8)     |
+//                                       ((uint32_t)rxCmd[6] << 0)
+//                                     );
+//                     // 转换为角度
+//                     stepper_motor->stepper_motor_err = (float)err_pos * 360.0f / 65536.0f;
 
-                    // 修正电机正反速度
-                    if(rxCmd[2])
-                    { stepper_motor->stepper_motor_speed = -stepper_motor->stepper_motor_speed; }
-                    LOG_I("stepperMotor_%d_Cur_Speed: %d\n",stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_speed);
-                  } break;
-    case S_CPOS : 
-                  Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x36)
-                  {
-                    //获取绝对值信息
-                    float pos = (uint32_t)(
-                                      ((uint32_t)rxCmd[3] << 24)    |
-                                      ((uint32_t)rxCmd[4] << 16)    |
-                                      ((uint32_t)rxCmd[5] << 8)     |
-                                      ((uint32_t)rxCmd[6] << 0)
-                                    );
-                    // 转换为角度
-                    stepper_motor->stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
-
-                    // 修正电机正反位置
-                    if(rxCmd[2])
-                    { stepper_motor->stepper_motor_angle = -stepper_motor->stepper_motor_angle; }
-                    LOG_I("stepperMotor_%d_Cur_Pos: %f\n",stepper_motor->stepper_motor_id , stepper_motor->stepper_motor_angle);
-                  } break;
-    case S_PERR :
-                  Emm_V5_Receive(rxCmd, 8);
-                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x37)
-                  {
-                    //获取绝对值信息
-                    float err_pos = (uint32_t)(
-                                      ((uint32_t)rxCmd[3] << 24)    |
-                                      ((uint32_t)rxCmd[4] << 16)    |
-                                      ((uint32_t)rxCmd[5] << 8)     |
-                                      ((uint32_t)rxCmd[6] << 0)
-                                    );
-                    // 转换为角度
-                    stepper_motor->stepper_motor_err = (float)err_pos * 360.0f / 65536.0f;
-
-                    // 修正电机正反位置
-                    if(rxCmd[2])
-                    { stepper_motor->stepper_motor_err = -stepper_motor->stepper_motor_err; }
-                    LOG_I("stepperMotor_%d_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_err);
-                  } break;
-    case S_FLAG :  
-                  Emm_V5_Receive(rxCmd, 4);
-                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3A)
-                  {
-                    //获取电机状态标志字节
-                    uint8_t flag = rxCmd[2];
-                    stepper_motor->stepper_motor_reachflag = flag&0x02;
-                    stepper_motor->stepper_motor_stallflag = flag&0x04;
-                    stepper_motor->stepper_motor_enflag = flag&0x01;
-                  } break;
-    case S_ORG  :                  
-                  Emm_V5_Receive(rxCmd, 4);
-                  if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3B)
-                  {
-                    //获取电机回零状态标志字节
-                    uint8_t flag = rxCmd[2];
-                    stepper_motor->stepper_motor_calibrationflag = flag&0x02;
-                    stepper_motor->stepper_motor_returnzeroingflag = flag&0x04;
-                    stepper_motor->stepper_motor_encokflag = flag&0x01; 
-                    stepper_motor->stepper_motor_returnzero_failflag = flag&0x08;                    
-                  } break;
-    case S_Conf :  break;
-    case S_State:  break;
-    default: break;
-  }
+//                     // 修正电机正反位置
+//                     if(rxCmd[2])
+//                     { stepper_motor->stepper_motor_err = -stepper_motor->stepper_motor_err; }
+//                     LOG_I("stepperMotor_%d_Cur_err_Pos: %f\n", stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_err);
+//                   } break;
+//     case S_FLAG :  
+//                   Emm_V5_Receive(rxCmd, 4);
+//                   if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3A)
+//                   {
+//                     //获取电机状态标志字节
+//                     uint8_t flag = rxCmd[2];
+//                     stepper_motor->stepper_motor_reachflag = flag&0x02;
+//                     stepper_motor->stepper_motor_stallflag = flag&0x04;
+//                     stepper_motor->stepper_motor_enflag = flag&0x01;
+//                   } break;
+//     case S_ORG  :                  
+//                   Emm_V5_Receive(rxCmd, 4);
+//                   if(rxCmd[0] == stepper_motor->stepper_motor_id && rxCmd[1] == 0x3B)
+//                   {
+//                     //获取电机回零状态标志字节
+//                     uint8_t flag = rxCmd[2];
+//                     stepper_motor->stepper_motor_calibrationflag = flag&0x02;
+//                     stepper_motor->stepper_motor_returnzeroingflag = flag&0x04;
+//                     stepper_motor->stepper_motor_encokflag = flag&0x01; 
+//                     stepper_motor->stepper_motor_returnzero_failflag = flag&0x08;                    
+//                   } break;
+//     case S_Conf :  break;
+//     case S_State:  break;
+//     case S_REVEIVE: Emm_V5_Receive(rxCmd, 4); break;
+//     default: break;
+  // }
 
 
-}
+// }
