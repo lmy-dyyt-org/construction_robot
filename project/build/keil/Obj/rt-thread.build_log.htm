@@ -29,84 +29,11 @@ Project File Date:  03/17/2024
 Build target 'rt-thread'
 Note: source file 'rt-thread\src\clock.c' - object file renamed from '.\build\keil\Obj\src_clock.o' to '.\build\keil\Obj\src_clock.o'.
 Note: source file 'rt-thread\src\thread.c' - object file renamed from '.\build\keil\Obj\src_thread.o' to '.\build\keil\Obj\src_thread.o'.
-applications/main.c(20): warning: In file included from...
-applications/Emm_V5.h(21): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
-typedef struct stepper_motor stepper_motor_t;
-                             ^
-applications/drv_stepper_motor.h(40): note: previous definition is here
-}stepper_motor_t;
- ^
-applications/main.c(21): warning: In file included from...
-applications/follow_line.h(24): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(32): warning: 'EPERM' macro redefined [-Wmacro-redefined]
-#define EPERM 1  /* Operation not permitted */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(45): note: previous definition is here
-#define EPERM            (ERROR_BASE_NO + 1)
-        ^
-applications/main.c(21): warning: In file included from...
-applications/follow_line.h(24): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(33): warning: 'ENOENT' macro redefined [-Wmacro-redefined]
-#define ENOENT 2 /* No such file or directory */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(49): note: previous definition is here
-#define ENOENT           (ERROR_BASE_NO + 2)
-        ^
-applications/main.c(21): warning: In file included from...
-applications/follow_line.h(24): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(34): warning: 'ESRCH' macro redefined [-Wmacro-redefined]
-#define ESRCH 3  /* No such process */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(53): note: previous definition is here
-#define ESRCH            (ERROR_BASE_NO + 3)
-        ^
-applications/main.c(21): warning: In file included from...
-applications/follow_line.h(24): warning: In file included from...
-./applications/abus\abus_topic.h(21): warning: In file included from...
-./applications/abus/afifo.h(35): warning: 'EINTR' macro redefined [-Wmacro-redefined]
-#define EINTR 4  /* Interrupted system call */
-        ^
-rt-thread/components/libc/compilers/common/extension\sys/errno.h(57): note: previous definition is here
-#define EINTR            (ERROR_BASE_NO + 4)
-        ^
-applications/main.c(21): warning: In file included from...
-applications/follow_line.h(24): warning: In file included from...
-./applications/abus\abus_topic.h(37): warning: redefinition of typedef 'abus_accounter_t' is a C11 feature [-Wtypedef-redefinition]
-        }abus_accounter_t;
-         ^
-./applications/abus\abus_topic.h(22): note: previous definition is here
-        typedef struct abus_accounter abus_accounter_t;
-                                      ^
-./applications/abus\abus_topic.h(46): warning: redefinition of typedef 'abus_topic_t' is a C11 feature [-Wtypedef-redefinition]
-        }abus_topic_t;
-         ^
-./applications/abus\abus_topic.h(23): note: previous definition is here
-        typedef struct abus_topic abus_topic_t;
-                                  ^
-applications/main.c(24): warning: In file included from...
-applications/motor.h(17): warning: In file included from...
-applications/apid.h(189): warning: redefinition of typedef 'apid_t' is a C11 feature [-Wtypedef-redefinition]
-    }apid_t;
-     ^
-applications/apid.h(177): note: previous definition is here
-    typedef  struct _PID_T apid_t;
-                           ^
-applications/main.c(24): warning: In file included from...
-applications/motor.h(96): warning: redefinition of typedef 'motor_t' is a C11 feature [-Wtypedef-redefinition]
-    } motor_t;
-      ^
-applications/motor.h(55): note: previous definition is here
-    typedef struct motor motor_t;
-                         ^
-9 warnings generated.
-compiling main.c...
+compiling chassis_port.c...
 linking...
-Program Size: Code=120084 RO-data=12384 RW-data=3328 ZI-data=7152  
+Program Size: Code=119220 RO-data=12384 RW-data=3328 ZI-data=7144  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 9 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -119,7 +46,7 @@ Package Vendor: Keil
   C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

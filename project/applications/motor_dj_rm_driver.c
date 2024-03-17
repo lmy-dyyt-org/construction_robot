@@ -638,11 +638,9 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     // 9.549279f*功率/转速=扭矩
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
-    //motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.0439453125f);
     //0.894为实际测量后的修正系数
     #define KK (0.001365606437140999)
     motor_feedback_pos(id, ((float)(motor_measure->total_angle)) *KK);
-    //motor_feedback_pos(id, (((float)(motor_measure->total_angle)) *10.f/8191.f)/0.894);
     // rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
     
@@ -660,7 +658,7 @@ static void can_rx_thread1(void *parameter)
 {
     while (1)
     {
-        motor_shakdown(1);
+        //motor_shakdown(1);
         rt_thread_delay(10);
     }
 }
