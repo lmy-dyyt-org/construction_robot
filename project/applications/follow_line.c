@@ -6,8 +6,24 @@
 apid_t pid_follow_line_front;
 	abus_topic_t line_error_topic;
 static abus_accounter_t acc;
+static abus_accounter_t acc1;
+static abus_accounter_t acc2;
+static abus_accounter_t acc3;
+static abus_accounter_t acc4;
+static abus_accounter_t acc5;
 float error;
-
+int asub_callback2 (abus_topic_t* sub)
+{
+	LOG_D("sub_callback2\n");
+}
+int asub_callback1 (abus_topic_t* sub)
+{
+	LOG_D("sub_callback1\n");
+}
+int asub_callback (abus_topic_t* sub)
+{
+	LOG_D("sub_callback\n");
+}
 infrared infrared_package;
 
 int follow_line_init(void)
@@ -32,18 +48,6 @@ int follow_line_init(void)
 	APID_Enable(&pid_follow_line_front);
 
 
-	abus_topic_init_t init;
-	init.buf = (uint8_t*)malloc(1024);
-	init.buf_size = 1024;
-	init.msg_size = sizeof(float);
-	init.name = "test_topic";
-	abus_topic_init(&line_error_topic, &init);
-
-	acc.name = "line_acc";
-	acc.callback = NULL;
-	acc.datafifo = NULL;
-	acc.flag.is_sync = 1;
-	abus_topic_subscribe(&line_error_topic, &acc, acc.flag);
 	return 0;
 }
 INIT_COMPONENT_EXPORT(follow_line_init);
@@ -83,6 +87,33 @@ void follow_line(void *parameter)
     // aStateMachine_update(sm);
     // aStateMachine_update(sm);
 
+
+	abus_topic_init_t init;
+	init.buf = (uint8_t*)malloc(1024);
+	init.buf_size = 1024;
+	init.msg_size = sizeof(float);
+	init.name = "test_topic";
+	abus_topic_init(&line_error_topic, &init);
+
+	acc.name = "line_acc";
+	acc.callback = asub_callback;
+	acc.datafifo = NULL;
+	acc.flag.is_sync = 1;
+	abus_topic_subscribe(&line_error_topic, &acc, acc.flag);
+
+	acc1.name = "line_acc1";
+	acc1.callback = asub_callback1;
+	acc1.datafifo = NULL;
+	acc1.flag.is_sync = 1;
+	abus_topic_subscribe(&line_error_topic, &acc1, acc1.flag);
+
+	acc2.name = "line_acc1";
+	acc2.callback = asub_callback2;
+	acc2.datafifo = NULL;
+	acc2.flag.is_sync = 1;
+	abus_topic_subscribe(&line_error_topic, &acc2, acc2.flag);
+		abus_public(&acc, &error);
+
   while(1)
   {
 	#define FRONT_middle_factor 0.1
@@ -104,7 +135,6 @@ void follow_line(void *parameter)
 
 	-infrared_package.infrared_data[front_left0_infrared]*FRONT_middle_edge2+
 	infrared_package.infrared_data[front_right1_infrared]*FRONT_middle_edge2;
-	abus_public(&acc, &error);
     rt_thread_mdelay(15);
   }
 }

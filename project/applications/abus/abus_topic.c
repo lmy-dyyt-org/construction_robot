@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-11 00:05:09
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-14 13:24:24
+ * @LastEditTime: 2024-03-17 22:31:33
  * @FilePath: \abus_v2.0.1\abus_v2.0.1\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -31,6 +31,7 @@ int abus_topic_subscribe(abus_topic_t *topic, abus_accounter_t *acc, abus_sub_fl
     }
     else
     {
+        LOG_D("abus_topic_subscribe  async\n");
         // async
         list_add(&acc->head, &topic->async_accounter);
     }
@@ -68,14 +69,14 @@ int abus_public(abus_accounter_t *acc, void *msg)
             {
                 //将数据复制到里面
                 uint32_t sync_in = afifo_in(sync->datafifo,msg,acc->topic->msg_size);
-                if (sync_in != acc->topic->msg_size)
+                if (sync_in != sync->topic->msg_size)
                 {   
-                    LOG_D("abus_public  data in error sync in %d will in %d\n",sync_in,acc->topic->msg_size);
+                    LOG_D("abus_public data in error sync in %d will in %d\n",sync_in,acc->topic->msg_size);
                     while(1);
                 }
             }
-            if (sync->callback)acc->callback(acc->topic);
-
+            if (sync->callback)sync->callback(sync->topic);
+            LOG_D("abus_public  sub \n");
         }
         afifo_add_out(acc->topic->datafifo,acc->topic->msg_size);
     }

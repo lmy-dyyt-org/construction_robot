@@ -24,7 +24,7 @@ chassis_speed.z_rad_s = 1;
 
 // chassis_pos.x_m = 10;
 // chassis_pos.y_m = 10;   
-chassis_pos.z_rad = 400;
+chassis_pos.z_rad = 0;
     //chassis_set_speed(&chassis_mai, &chassis_speed);
     chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
