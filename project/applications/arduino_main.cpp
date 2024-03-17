@@ -76,6 +76,7 @@ void setup()
     }
   }
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0);
+
 }
 
 void loop() 
@@ -101,8 +102,8 @@ void loop()
 
 
   //while(电机运动到位置)
-  delay(10);
-
+  delay(2000);
+  Emm_V5_Pos_Control(1, 0, 100, 0, 320, 0, 0);
 
 //geometry.getRotRad()*3200/(6.28)
 
