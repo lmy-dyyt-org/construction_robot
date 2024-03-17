@@ -34,6 +34,8 @@
 static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 static struct rt_ringbuffer*dj_m_ringfifo;
+static rt_timer_t tmr1 = RT_NULL;
+
 #define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
                                                      .id = __id,         \
                                                      .can_id = __can_id, \
@@ -220,6 +222,8 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
     struct rt_can_msg msg = {0};
     motor_measure_t *__motor = (motor_measure_t *)motor->ops->user_data;
     int16_t tmpout = *value;
+    int time=0;
+
     switch (mode)
     {
     case MOTOR_MODE_TORQUE:
@@ -351,11 +355,20 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 msg.data[5] = iq1_high[2];
                 msg.data[6] = iq1_high[3] >> 8;
                 msg.data[7] = iq1_high[3];
-                rt_size_t size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                if (size == 0)
+                rt_size_t size;
+                size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                if (size != RT_EOK)
                 {
-                    rt_kprintf("can dev write data failed!\n");
+                    LOG_E("can dev write data failed! %d\n",size);
+                }else{
+                    return 0;
                 }
+                // do 
+                // {
+                //     LOG_I("try %d! \n",++time);
+                //     size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                //     rt_thread_mdelay(1);
+                // }while(size != sizeof(msg));
             }
         }
         else
@@ -425,12 +438,20 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 msg.data[5] = iq1_low[2];
                 msg.data[6] = iq1_low[3] >> 8;
                 msg.data[7] = iq1_low[3];
-                rt_size_t size;
-                do 
+                uint8_t size;
+                size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+                if (size != RT_EOK)
                 {
-                    //LOG_E("can dev write data failed! \n");
-size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                }while(size != sizeof(msg));
+                    //LOG_E("can dev write data failed!%d\n",-size);
+                }else{
+                    return 0;
+                }
+                // do 
+                // {
+                //     //LOG_I("try %d! \n",++time);
+                //     size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
+
+                // }while(size != sizeof(msg));
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
                 dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
 #endif
@@ -608,7 +629,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
         }
 
         motor_measure->msg_cnt = 0xff;
-        motor_measure->total_angle = motor_measure->round_cnt * 8192 + motor_measure->angle - motor_measure->offset_angle;
+        motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
         // LOG_D("id %d,cnt %d angle %d %d", motor_measure->id, motor_measure->round_cnt,motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle);
     }
 
@@ -618,13 +639,17 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
     //motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.0439453125f);
-    motor_feedback_pos(id, ((float)(motor_measure->total_angle)) * 0.001220703125f);
+    //0.894为实际测量后的修正系数
+    #define KK (0.001365606437140999)
+    motor_feedback_pos(id, ((float)(motor_measure->total_angle)) *KK);
+    //motor_feedback_pos(id, (((float)(motor_measure->total_angle)) *10.f/8191.f)/0.894);
     // rt_pin_write(GET_PIN(I, 0), 1 - rt_pin_read(GET_PIN(I, 0)));
 
-    // rt_sem_release(&rx_sem);
     
     rt_ringbuffer_putchar_force(dj_m_ringfifo, id);
-	// 	int8_t tt = rt_mb_send(dj_m_mailbox, id);
+    rt_sem_release(&rx_sem);
+
+	//int8_t tt = rt_mb_send(dj_m_mailbox, id);
     // if (tt != RT_EOK)
     // {
     //     LOG_E("dj_m_mailbox send failed %d",-tt);
@@ -635,11 +660,21 @@ static void can_rx_thread1(void *parameter)
 {
     while (1)
     {
-        // motor_shakdown(0);
+        motor_shakdown(1);
         rt_thread_delay(10);
     }
 }
-
+/******************************************************************************
+* @ 函数名  ： timer1_callback
+* @ 功  能  ： 定时器1回调函数
+* @ 参  数  ： parameter 外部传入的参数
+* @ 返回值  ： 无
+******************************************************************************/
+static void timer1_callback(void *parameter)
+{
+	rt_uint32_t tick_num1 = 0;
+	
+}
 static void can_rx_thread(void *parameter)
 {
     static int i;
@@ -664,13 +699,15 @@ static void can_rx_thread(void *parameter)
         /* hdr 值为 0，从 过滤器读取数据 */
         //rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
-        // rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+        //rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
         if(rt_ringbuffer_getchar(dj_m_ringfifo, &i)==0)
         {
             //rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, 1);
             rt_thread_mdelay(1);
             //LOG_E("dj_m_ringfifo get failed");
         }
+
+
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
         // motor_measure->angle,motor_measure->round_cnt);
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
@@ -685,6 +722,8 @@ static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
     return RT_EOK;
 }
 static void set_motor_passive_feedback(void);
+
+
 int motor_tt_init(void)
 {
     struct rt_can_msg msg = {0};
@@ -703,8 +742,8 @@ int motor_tt_init(void)
     }
 
     /* 初始化 CAN 接收信号量 */
-    //rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_FIFO);
-    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 4096, RT_IPC_FLAG_FIFO);
+    rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_PRIO);
+    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 4096, RT_IPC_FLAG_PRIO);
 
     dj_m_ringfifo =  rt_ringbuffer_create(4096);
     /* 以中断接收及中断发送方式打开 CAN 设备 */
@@ -713,6 +752,19 @@ int motor_tt_init(void)
     /* 设置 CAN 通信的波特率为 1Mbit/s*/
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
     RT_ASSERT(res == RT_EOK);
+
+	// 创建一个软件定时器
+	tmr1 =  rt_timer_create("tmr1",                 // 软件定时器名称       
+						timer1_callback,            // 软件定时器超时函数
+						RT_NULL,                    // 超时函数参数
+						10,                       // 超时时间
+						RT_TIMER_FLAG_ONE_SHOT |   
+						RT_TIMER_FLAG_SOFT_TIMER);  // 软件定时器模式，一次模式
+					
+	
+	// 启动定时器
+	if(tmr1 != RT_NULL)
+		rt_timer_start(tmr1);
 
     /* 创建数据接收线程 */
     thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096 * 2, 5, 10);
@@ -725,6 +777,15 @@ int motor_tt_init(void)
         rt_kprintf("create can_rx thread failed!\n");
     }
 
+    thread = rt_thread_create("m_test", can_rx_thread1, RT_NULL, 4096 * 2, 6, 10);
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);
+    }
+    else
+    {
+        rt_kprintf("create can_rx thread failed!\n");
+    }
     return 0;
 }
 INIT_COMPONENT_EXPORT(motor_tt_init);
@@ -790,19 +851,19 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
-    APID_D_PART(motor_get_pid_pos(M2006_1_CAN1), 0.7);
+    //APID_D_PART(motor_get_pid_pos(M2006_1_CAN1), 0.7);
 
 #endif
 #if defined(MOTOR_DJ_M2006_ID2_CAN1)
     motor_set_passive_feedback(M2006_2_CAN1, 1);
-    APID_Set_Out_Limit(motor_get_pid_speed(M2006_2_CAN1), 10000);
+    APID_Set_Out_Limit(motor_get_pid_speed(M2006_2_CAN1), 30000);
     APID_Set_Integral_Limit(motor_get_pid_speed(M2006_2_CAN1), 2000);
     APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_2_CAN1), 20);
-    APID_Set_Bias_Limit(motor_get_pid_speed(M2006_1_CAN1),2000);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M2006_2_CAN1),2000);
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_2_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_2_CAN1), 200);
-    APID_D_PART(motor_get_pid_pos(M2006_2_CAN1), 0.7);
+    //APID_D_PART(motor_get_pid_pos(M2006_2_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M2006_ID3_CAN1)
     motor_set_passive_feedback(M2006_3_CAN1, 1);
@@ -812,7 +873,7 @@ static void set_motor_passive_feedback(void)
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_3_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_3_CAN1), 200);
-    APID_D_PART(motor_get_pid_pos(M2006_2_CAN1), 0.7);
+    //APID_D_PART(motor_get_pid_pos(M2006_3_CAN1), 0.7);
 
 #endif
 #if defined(MOTOR_DJ_M2006_ID4_CAN1)
@@ -821,9 +882,9 @@ static void set_motor_passive_feedback(void)
     APID_Set_Integral_Limit(motor_get_pid_speed(M2006_4_CAN1), 2000);
     APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_4_CAN1), 20);
 
-    APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 20000);
-    APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
-    APID_D_PART(motor_get_pid_pos(M2006_2_CAN1), 0.7);
+    APID_Set_Out_Limit(motor_get_pid_pos(M2006_4_CAN1), 20000);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M2006_4_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M2006_4_CAN1), 0.7);
 
 #endif
 #if defined(MOTOR_DJ_M2006_ID5_CAN1)
