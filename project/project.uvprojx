@@ -1081,11 +1081,6 @@
               <FilePath>.\applications\robotarm\robotGeometry.h</FilePath>
             </File>
             <File>
-              <FileName>drv_chassis.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_chassis.c</FilePath>
-            </File>
-            <File>
               <FileName>abus_topic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\abus\abus_topic.c</FilePath>
@@ -1129,6 +1124,41 @@
               <FileName>drv_process_steppermotor.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\drv_process_steppermotor.c</FilePath>
+            </File>
+            <File>
+              <FileName>chassis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\chassis\chassis.c</FilePath>
+            </File>
+            <File>
+              <FileName>chassis.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\chassis\chassis.h</FilePath>
+            </File>
+            <File>
+              <FileName>chassis_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\chassis\chassis_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>chassis_module_mai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\chassis\chassis_module_mai.c</FilePath>
+            </File>
+            <File>
+              <FileName>chassis_module_mai.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\chassis\chassis_module_mai.h</FilePath>
+            </File>
+            <File>
+              <FileName>chassis_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\chassis\chassis_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>chassis_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\chassis\chassis_port.h</FilePath>
             </File>
           </Files>
         </Group>
