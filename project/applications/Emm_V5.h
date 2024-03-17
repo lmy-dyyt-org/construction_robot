@@ -49,6 +49,7 @@ typedef enum {
 	S_State = 15,			/* 读取系统状态参数 */
 	
 	S_ORG   = 16,     /* 读取正在回零/回零失败状态标志位 */
+	S_IDLE = 17,     /* 读取电机空闲状态标志位 */
 }SysParams_t;
 
 extern uint8_t rxCmd[128];
