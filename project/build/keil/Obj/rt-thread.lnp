@@ -28,6 +28,7 @@
 ".\build\keil\obj\chassis.o"
 ".\build\keil\obj\chassis_module_mai.o"
 ".\build\keil\obj\chassis_port.o"
+".\build\keil\obj\abus_port.o"
 ".\build\keil\obj\syscall_mem.o"
 ".\build\keil\obj\syscalls.o"
 ".\build\keil\obj\cctype.o"

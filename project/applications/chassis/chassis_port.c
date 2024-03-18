@@ -2,18 +2,21 @@
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-17 22:40:19
+ * @LastEditTime: 2024-03-18 16:28:37
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "chassis_port.h"
 #include "chassis_module_mai.h"
 #include "rtthread.h"
+#include "abus_topic.h"
 chassis_t chassis_mai;
 
 chassis_speed_t chassis_speed;
 chassis_pos_t chassis_pos;
 
+
+// 0.55 正中间 400 90度
 void chassis_port_handle(void *parameter)
 {
     // int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data);
@@ -23,8 +26,8 @@ void chassis_port_handle(void *parameter)
     chassis_speed.z_rad_s = 1;
 
     // chassis_pos.x_m = 10;
-    // chassis_pos.y_m = 10;
-    chassis_pos.z_rad = 0;
+    // chassis_pos.y_m = 0.55;
+    chassis_pos.z_rad = 400;
     // chassis_set_speed(&chassis_mai, &chassis_speed);
     chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
@@ -36,13 +39,36 @@ void chassis_port_handle(void *parameter)
         rt_thread_mdelay(50);
     }
 }
+int chassis_sub_callback(abus_topic_t *sub)
+{
+    chassis_ctrl_t ctrl;
+    uint16_t size;
+    size = afifo_out_data(sub->datafifo, (uint8_t*)&ctrl, sizeof(chassis_ctrl_t));
+    if (size!=sizeof(chassis_ctrl_t))
+    {
+        LOG_D("abus_topic_subscribe  afifo_out_data error\n");
+        return -1;
+    }
+    if (ctrl.type == 0)
+    {
+        LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
+        //chassis_set_speed(&chassis_mai, &ctrl.speed);
+    }
+    else
+    {
+        LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
+        //chassis_set_pos(&chassis_mai, &ctrl.pos);
+    }
+    return 0;
+}
+
 int chassis_port_init(void)
 {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
     chassis_init(&chassis_mai, &ops_mai);
 #endif
 
-    rt_thread_t tid_chassis = RT_NULL;
+   rt_thread_t tid_chassis = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
     tid_chassis = rt_thread_create("chassis_mai",

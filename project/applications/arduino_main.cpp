@@ -86,6 +86,8 @@ void loop()
 相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
 
 */
+  interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z+5, INITIAL_E0);
+
   ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
   interpolator.updateActualPosition();
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());
@@ -100,11 +102,10 @@ void loop()
   //  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
   //  Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
 
-	LOG_D("M1:%f M3:%f",geometry.getLowRad(), geometry.getHighRad());
+	//LOG_D("M1:%f M3:%f",geometry.getLowRad(), geometry.getHighRad());
 
   //while(电机运动到位置)
   delay(500);
-  interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, 100, 100, 100, INITIAL_E0);
 
 
 //geometry.getRotRad()*3200/(6.28)

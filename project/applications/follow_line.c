@@ -2,27 +2,28 @@
 #include "apid.h"
 #include "apid.h"
 #include "abus_topic.h"
+#include "chassis_port.h"
+#include "abus_port.h"
 
-apid_t pid_follow_line_front;
-	abus_topic_t line_error_topic;
-static abus_accounter_t acc;
-static abus_accounter_t acc1;
-static abus_accounter_t acc2;
-static abus_accounter_t acc3;
-static abus_accounter_t acc4;
-static abus_accounter_t acc5;
+
+
 float error;
 int asub_callback2 (abus_topic_t* sub)
 {
 	LOG_D("sub_callback2\n");
+		return 0;
+
 }
-int asub_callback1 (abus_topic_t* sub)
+int line_dir_sub_callback (abus_topic_t* sub)
 {
 	LOG_D("sub_callback1\n");
+	return 0;
 }
 int asub_callback (abus_topic_t* sub)
 {
 	LOG_D("sub_callback\n");
+		return 0;
+
 }
 infrared infrared_package;
 
@@ -43,9 +44,6 @@ int follow_line_init(void)
   {
     rt_thread_startup(tid_follow_line);
   }
-	APID_Init(&pid_follow_line_front, PID_POSITION, 0.1, 0.1, 0.1);
-
-	APID_Enable(&pid_follow_line_front);
 
 
 	return 0;
@@ -57,62 +55,10 @@ void follow_line(void *parameter)
 	Infrared_Init();
 	infrared_package.move_direction = front;
 
-    // aStateMachine* sm = (aStateMachine*)malloc(sizeof(aStateMachine));
-    // aStateMachine_Init(sm, "sm");
-    // aState* s1 = (aState*)malloc(sizeof(aState));
-    // aState_Init(s1, "s1", aState_excution, aState_entry, aState_exit);
-    // aState* s2 = (aState*)malloc(sizeof(aState));
-    // aState_Init(s2, "s2", aState_excution, aState_entry, aState_exit);
-    // aState* s3 = (aState*)malloc(sizeof(aState));
-    // aState_Init(s3, "s3", aState_excution, aState_entry, aState_exit);
-    // aState* s4 = (aState*)malloc(sizeof(aState));
-    // aState_Init(s4, "s4", aState_excution, aState_entry, aState_exit);
-    // aStateMachine_addState(sm, s1);
-    // aStateMachine_addState(sm, s2);
-    // aStateMachine_addState(sm, s3);
-    // aStateMachine_addState(sm, s4);
 
-    // aStateMachine_start(sm, s1);
-    // aStateMachine_addTransition1(sm, s1, s2, condition); //[](aStateMachine* sm) {printf("%s condition s1 -> s2", aState_getName(sm->current)); return false; }
-    // aStateMachine_addTransition1(sm, s1, s3, condition);//[](aStateMachine* sm) {printf("%s condition s1 -> s3", aState_getName(sm->current)); return true; }
-    // aStateMachine_addTransition1(sm, s2, s3, condition);//[](aStateMachine* sm) {return true; }
-    // aStateMachine_addTransition1(sm, s3, s4, condition);
-    // aStateMachine_addTransition1(sm, s4, 0, condition);
-    // aStateMachine_showStates(sm);
-
-    // //update 会更新状态机状态，会执行excution 然后判断condtion
-    // aStateMachine_update(sm);
-    // aStateMachine_update(sm);
-    // aStateMachine_update(sm);
-    // aStateMachine_update(sm);
-    // aStateMachine_update(sm);
-
-
-	abus_topic_init_t init;
-	init.buf = (uint8_t*)malloc(1024);
-	init.buf_size = 1024;
-	init.msg_size = sizeof(float);
-	init.name = "test_topic";
-	abus_topic_init(&line_error_topic, &init);
-
-	acc.name = "line_acc";
-	acc.callback = asub_callback;
-	acc.datafifo = NULL;
-	acc.flag.is_sync = 1;
-	abus_topic_subscribe(&line_error_topic, &acc, acc.flag);
-
-	acc1.name = "line_acc1";
-	acc1.callback = asub_callback1;
-	acc1.datafifo = NULL;
-	acc1.flag.is_sync = 1;
-	abus_topic_subscribe(&line_error_topic, &acc1, acc1.flag);
-
-	acc2.name = "line_acc1";
-	acc2.callback = asub_callback2;
-	acc2.datafifo = NULL;
-	acc2.flag.is_sync = 1;
-	abus_topic_subscribe(&line_error_topic, &acc2, acc2.flag);
-		abus_public(&acc, &error);
+	chassis_ctrl_t	ctrl;
+	ctrl.type = 1;
+	ctrl.pos.z_rad=400;
 
   while(1)
   {
@@ -136,6 +82,10 @@ void follow_line(void *parameter)
 	-infrared_package.infrared_data[front_left0_infrared]*FRONT_middle_edge2+
 	infrared_package.infrared_data[front_right1_infrared]*FRONT_middle_edge2;
     rt_thread_mdelay(15);
+
+	//abus_public(&line_chassis_ctrl_acc, &ctrl);
+	abus_public(&line_error_acc, &error);
+
   }
 }
 
@@ -251,4 +201,32 @@ void Print_Infrared_Data(infrared* infrared_package)
 	rt_kprintf("\n");
 }
 
+    // aStateMachine* sm = (aStateMachine*)malloc(sizeof(aStateMachine));
+    // aStateMachine_Init(sm, "sm");
+    // aState* s1 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s1, "s1", aState_excution, aState_entry, aState_exit);
+    // aState* s2 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s2, "s2", aState_excution, aState_entry, aState_exit);
+    // aState* s3 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s3, "s3", aState_excution, aState_entry, aState_exit);
+    // aState* s4 = (aState*)malloc(sizeof(aState));
+    // aState_Init(s4, "s4", aState_excution, aState_entry, aState_exit);
+    // aStateMachine_addState(sm, s1);
+    // aStateMachine_addState(sm, s2);
+    // aStateMachine_addState(sm, s3);
+    // aStateMachine_addState(sm, s4);
 
+    // aStateMachine_start(sm, s1);
+    // aStateMachine_addTransition1(sm, s1, s2, condition); //[](aStateMachine* sm) {printf("%s condition s1 -> s2", aState_getName(sm->current)); return false; }
+    // aStateMachine_addTransition1(sm, s1, s3, condition);//[](aStateMachine* sm) {printf("%s condition s1 -> s3", aState_getName(sm->current)); return true; }
+    // aStateMachine_addTransition1(sm, s2, s3, condition);//[](aStateMachine* sm) {return true; }
+    // aStateMachine_addTransition1(sm, s3, s4, condition);
+    // aStateMachine_addTransition1(sm, s4, 0, condition);
+    // aStateMachine_showStates(sm);
+
+    // //update 会更新状态机状态，会执行excution 然后判断condtion
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);
+    // aStateMachine_update(sm);

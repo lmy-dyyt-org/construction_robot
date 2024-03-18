@@ -2,7 +2,7 @@
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-02 22:00:25
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-15 02:03:18
+ * @LastEditTime: 2024-03-18 18:53:08
  * @FilePath: \project\applications\follow_line.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -82,7 +82,6 @@ typedef struct infrared
 	enum direction move_direction;
 }infrared;
 
-extern abus_topic_t line_error_topic;
 
 void follow_line(void *parameter);
 
