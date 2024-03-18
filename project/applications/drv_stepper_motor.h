@@ -43,6 +43,7 @@ extern uint8_t rxCmd[128];
 extern uint8_t stepper_motor_cmd_state;
 extern rt_mutex_t  mutex_step;
 extern rt_sem_t step_sem;
+extern rt_sem_t cmp_sem;
 
 void drv_stepper_motor(void *parameter);
 

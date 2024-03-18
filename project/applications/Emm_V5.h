@@ -50,6 +50,7 @@ typedef enum {
 	
 	S_ORG   = 16,     /* 读取正在回零/回零失败状态标志位 */
 	S_IDLE = 17,     /* 读取电机空闲状态标志位 */
+	S_Ans = 18,     /* 读取应答命令 */
 }SysParams_t;
 
 extern uint8_t rxCmd[128];
