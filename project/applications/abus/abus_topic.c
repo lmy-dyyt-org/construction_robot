@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-11 00:05:09
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-17 22:31:33
+ * @LastEditTime: 2024-03-17 22:45:49
  * @FilePath: \abus_v2.0.1\abus_v2.0.1\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -19,7 +19,11 @@ int abus_topic_init(abus_topic_t *topic, abus_topic_init_t *init)
     
     return 0;
 }
+//int abus_acc_init(abus_accounter_t *acc, abus_acc_init_t *init)
+//{
 
+//    return 0;
+//}
 int abus_topic_subscribe(abus_topic_t *topic, abus_accounter_t *acc, abus_sub_flag flag)
 {
     acc->flag = flag;

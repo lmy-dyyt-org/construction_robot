@@ -2,7 +2,7 @@
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-17 21:02:55
+ * @LastEditTime: 2024-03-17 22:40:19
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,14 +18,14 @@ void chassis_port_handle(void *parameter)
 {
     // int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data);
     // int chassis_set_pos(chassis_t *chassis, chassis_pos_t *data);
-// chassis_speed.x_m_s = 10;
-// chassis_speed.y_m_s = 10;
-chassis_speed.z_rad_s = 1;
+    // chassis_speed.x_m_s = 10;
+    // chassis_speed.y_m_s = 10;
+    chassis_speed.z_rad_s = 1;
 
-// chassis_pos.x_m = 10;
-// chassis_pos.y_m = 10;   
-chassis_pos.z_rad = 0;
-    //chassis_set_speed(&chassis_mai, &chassis_speed);
+    // chassis_pos.x_m = 10;
+    // chassis_pos.y_m = 10;
+    chassis_pos.z_rad = 0;
+    // chassis_set_speed(&chassis_mai, &chassis_speed);
     chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
     {
@@ -33,7 +33,7 @@ chassis_pos.z_rad = 0;
         chassis_handle(&chassis_mai, 0);
 #endif
 
-	rt_thread_mdelay(50);
+        rt_thread_mdelay(50);
     }
 }
 int chassis_port_init(void)
@@ -55,6 +55,6 @@ int chassis_port_init(void)
     {
         rt_thread_startup(tid_chassis);
     }
-		return 0;
+    return 0;
 }
 INIT_ENV_EXPORT(chassis_port_init);

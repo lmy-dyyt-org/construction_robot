@@ -39,8 +39,8 @@ void drv_stepper_motor(void *parameter)
   // Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
   // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
-  // Emm_V5_Origin_Trigger_Return(1, 2, 0);
-  // Emm_V5_Origin_Trigger_Return(3, 2, 0);
+  Emm_V5_Origin_Trigger_Return(1, 2, 0);
+   Emm_V5_Origin_Trigger_Return(3, 2, 0);
 
   while(1)
   {

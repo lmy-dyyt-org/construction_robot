@@ -96,12 +96,14 @@ void loop()
   #endif
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Emm_V5_Pos_Control(1, 0, 100, 0, geometry.getLowRad()*3200/(6.28), false, false);
-  // Emm_V5_Pos_Control(3, 0, 100, 0, geometry.getHighRad()*3200/(6.28), false, false);
+  //  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
+  //  Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
 
+	LOG_D("M1:%f M3:%f",geometry.getLowRad(), geometry.getHighRad());
 
   //while(电机运动到位置)
-  delay(10);
+  delay(500);
+  interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, 100, 100, 100, INITIAL_E0);
 
 
 //geometry.getRotRad()*3200/(6.28)
