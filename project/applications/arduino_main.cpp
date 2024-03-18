@@ -103,14 +103,9 @@ void loop()
 	LOG_D("M1:%f M3:%f",geometry.getLowRad(), geometry.getHighRad());
 
   //while(电机运动到位置)
-<<<<<<< HEAD
   delay(500);
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, 100, 100, 100, INITIAL_E0);
 
-=======
-  delay(2000);
-  Emm_V5_Pos_Control(1, 0, 100, 0, 320, 0, 0);
->>>>>>> 163e65b9b001325000d8b2ad626f1ed44bf12aee
 
 //geometry.getRotRad()*3200/(6.28)
 
