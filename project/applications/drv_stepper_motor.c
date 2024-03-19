@@ -9,10 +9,10 @@
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
 
-#define DBG_TAG              "drv.step_motor"
+// #define DBG_TAG              "drv.step_motor"
 
-#define DBG_LVL               DBG_INFO
-#include <ulog.h>
+// #define DBG_LVL               DBG_LOG
+// #include <ulog.h>
 
 stepper_motor_t stepper_motor_big_arm;
 stepper_motor_t stepper_motor_small_arm;
@@ -33,6 +33,17 @@ rt_sem_t step_sem = RT_NULL;//信号量
 rt_sem_t cmp_sem = RT_NULL;//信号量
 uint8_t rxCount = 0;
 
+static uint32_t big_arm_pulse;
+static uint32_t small_arm_pulse;
+
+// extern uint8_t big_arm_dir;
+// extern uint8_t small_arm_dir;
+
+void big_arm_get_pulse(uint32_t pulse)
+{
+   big_arm_pulse = pulse;
+}
+
 void drv_stepper_motor(void *parameter)
 {
 	/*通信初始化 电机初始化*/
@@ -42,21 +53,25 @@ void drv_stepper_motor(void *parameter)
   rt_thread_mdelay(2000); //上电需要等两秒 初始化
 
   //回零调参 电机有存储的 没必要每次都重新设置
-  // Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
-  // Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+//   Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+//   Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
-  // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
+//   rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
 //  Emm_V5_Origin_Trigger_Return(1, 2, 0);
 //   Emm_V5_Origin_Trigger_Return(3, 2, 0);
-  // rt_thread_mdelay(100);//延时等待闭环步进参数设置完成（写入flash）
-  // Emm_V5_Origin_Trigger_Return(1, 2, 0);
-  // Emm_V5_Origin_Trigger_Return(3, 2, 0); 
+//   rt_thread_mdelay(100);//延时等待闭环步进参数设置完成（写入flash）
+//   Emm_V5_Origin_Trigger_Return(1, 2, 0);
+//   Emm_V5_Origin_Trigger_Return(3, 2, 0); 
+   
 
-  // Emm_V5_Pos_Control(1, 0, 100, 0, 320, 0, 0);//01 fd 02 6b	
   while(1)
   {
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
+
+  LOG_D("M1:%f M3:%f",big_arm_pulse, small_arm_pulse); 
+  //  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 0, 0);
+  //  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_dir, 0, 0);
 
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
@@ -102,7 +117,7 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
         if(size>=8)  
         {
           // LOG_D("pos,size:%d\n",size);
-          rt_mb_send(&mb1, (uint8_t)size);
+          // rt_mb_send(&mb1, (uint8_t)size);
           rt_sem_release(cmp_sem);
         }
         break;
@@ -117,14 +132,14 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
       case S_FLAG :  
         if(size>=4)  
         {
-          rt_mb_send(&mb1, (uint8_t)size); 
+          // rt_mb_send(&mb1, (uint8_t)size); 
           rt_sem_release(cmp_sem);
         }
         break;
       case S_ORG  :  
         if(size>=4)
         {
-          rt_mb_send(&mb1, (uint8_t)size);
+          // rt_mb_send(&mb1, (uint8_t)size);
           rt_sem_release(cmp_sem);
         }
         break;
@@ -138,12 +153,14 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
       case S_Ans :  
         if(size>=4) 
         {
-          // LOG_D("ansewer,size:%d\n",size); 
+          LOG_D("ansewer,size:%d\n",size); 
         // rt_mb_send(&mb1, (uint8_t)size); 
           rt_sem_release(cmp_sem);
         }
         break;
-      default: break;
+      default: while(1){
+        LOG_E("stepperMotor_cmd_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, rxCmd, 60));
+      }break;
     }
     return RT_EOK;
 }
@@ -330,7 +347,7 @@ void drv_process_steppermotor(void *parameter)
                         break;
           case S_Conf :  break;
           case S_State:  break;
-          case S_Ans :LOG_D("process_answer: %d\n", rt_device_read(Emm_serial1, 0, tmp, 4));  stepper_motor_cmd_state = S_IDLE;  rt_mutex_release(mutex_step); break;
+          case S_Ans :LOG_D("process_answer: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));  stepper_motor_cmd_state = S_IDLE;  rt_mutex_release(mutex_step); break;
           default: LOG_E("stepperMotor_cmd_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60)); rt_mutex_release(mutex_step); break;
         }
       // }

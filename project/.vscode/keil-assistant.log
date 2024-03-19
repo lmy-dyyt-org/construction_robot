@@ -217,3 +217,19 @@ SyntaxError: Unexpected token '<', ..."Path": [
 [info] Log at : 2024/3/19|12:03:59|GMT+0800
 >>>>>>> Stashed changes
 
+[info] Log at : 2024/3/19|12:10:36|GMT+0800
+
+SyntaxError: Expected property name or '}' in JSON at position 3
+    at JSON.parse (<anonymous>)
+    at F.updateCppProperties (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:10911)
+    at F.<anonymous> (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:12641)
+    at Generator.next (<anonymous>)
+    at c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4542
+    at new Promise (<anonymous>)
+    at r (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4287)
+    at F.load (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:11372)
+    at w.<anonymous> (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:8799)
+    at Generator.next (<anonymous>)
+    at a (c:\Users\27774\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4344)
+[info] Log at : 2024/3/19|12:10:41|GMT+0800
+
