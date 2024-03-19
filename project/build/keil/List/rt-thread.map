@@ -11335,7 +11335,7 @@ Image Symbol Table
     [Anonymous Symbol]                       0x2000128c   Section        0  cm_backtrace.o(.bss.call_stack_info)
     can_dev                                  0x2000131c   Data           4  motor_dj_rm_driver.o(.bss.can_dev)
     [Anonymous Symbol]                       0x2000131c   Section        0  motor_dj_rm_driver.o(.bss.can_dev)
-    can_rx_thread.i                          0x20001320   Data           4  motor_dj_rm_driver.o(.bss.can_rx_thread.i)
+    can_rx_thread.i                          0x20001320   Data           1  motor_dj_rm_driver.o(.bss.can_rx_thread.i)
     [Anonymous Symbol]                       0x20001320   Section        0  motor_dj_rm_driver.o(.bss.can_rx_thread.i)
     code_size                                0x200013b0   Data           1  cm_backtrace.o(.bss.code_size)
     [Anonymous Symbol]                       0x200013b0   Section        0  cm_backtrace.o(.bss.code_size)
@@ -13654,7 +13654,8 @@ Memory Map of the image
     0x20001288        -       0x00000004   Zero   RW         1441    .bss.adc.adc_device  adc.o
     0x2000128c        -       0x00000090   Zero   RW          844    .bss.call_stack_info  cm_backtrace.o
     0x2000131c        -       0x00000004   Zero   RW          586    .bss.can_dev        motor_dj_rm_driver.o
-    0x20001320        -       0x00000004   Zero   RW          598    .bss.can_rx_thread.i  motor_dj_rm_driver.o
+    0x20001320        -       0x00000001   Zero   RW          598    .bss.can_rx_thread.i  motor_dj_rm_driver.o
+    0x20001321   COMPRESSED   0x00000003   PAD
     0x20001324        -       0x0000001c   Zero   RW           66    .bss.chassis_acc    abus_port.o
     0x20001340        -       0x0000001c   Zero   RW           62    .bss.chassis_ctrl_topic  abus_port.o
     0x2000135c        -       0x00000038   Zero   RW          327    .bss.chassis_mai    chassis_port.o
@@ -13794,12 +13795,12 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        102          0         71          0          0       2073   aboard_power_switch.o
-       660        156         55          0        336       2791   abus_port.o
-       524        104         29          0        648       7732   abus_topic.o
+       660        156         55          0        336       2780   abus_port.o
+       524        104         29          0        648       7716   abus_topic.o
       1378        276        607          0          4      10261   adc.o
        214          0          0          0          0       5537   afifo.o
-      1078          4          0          0          0       8721   apid.o
-      1150        160         43          0          4      10290   apid_exfunc.o
+      1078          4          0          0          0       8705   apid.o
+      1150        160         43          0          4      10274   apid_exfunc.o
        624        104          4          0        140      18613   arduino_main.o
         58          0          0          0          0       2792   atomic_arm.o
         72          0          9          0          0       1466   avr_stdlib.o
@@ -13843,9 +13844,9 @@ Image component sizes
        204          0         15          0          0      19855   logger.o
         82          0          0          0          0        661   main.o
       1780        408        668          0          0       6392   mem.o
-      2706        176        237         60          0      15675   motor.o
-         0          0          0       1360          0       3038   motor_cfg.o
-      1866        228         67         80         72      13833   motor_dj_rm_driver.o
+      2706        176        237         60          0      15659   motor.o
+         0          0          0       1360          0       3022   motor_cfg.o
+      1866        228         67         80         69      13817   motor_dj_rm_driver.o
       1624        140        184          0          0       9068   msh.o
         62          0          0          0          0       1624   msh_parse.o
       1082        108        124        200         20      11605   object.o
@@ -13887,9 +13888,9 @@ Image component sizes
        536          0          0          0          0      51987   wstring.o
 
     ----------------------------------------------------------------------
-     94044       9712      12992       3116       7892    1069369   Object Totals
+     94044       9712      12992       3116       7892    1069262   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-       452          0          4          3         48          0   (incl. Padding)
+       452          0          4          3         51          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -14040,8 +14041,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-    111514      10746      13962       3116       7988    1072725   Grand Totals
-    111514      10746      13962        584       7988    1072725   ELF Image Totals (compressed)
+    111514      10746      13962       3116       7988    1072618   Grand Totals
+    111514      10746      13962        584       7988    1072618   ELF Image Totals (compressed)
     111514      10746      13962        584          0          0   ROM Totals
 
 ==============================================================================

@@ -27,11 +27,38 @@ Project File Date:  03/19/2024
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
-compiling interpolation.cpp...
+applications/main.c(20): warning: In file included from...
+applications/Emm_V5.h(21): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+applications/drv_stepper_motor.h(40): note: previous definition is here
+}stepper_motor_t;
+ ^
+1 warning generated.
+compiling main.c...
+applications/drv_stepper_motor.c(10): warning: In file included from...
+applications/drv_stepper_motor.h(40): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+}stepper_motor_t;
+ ^
+applications/Emm_V5.h(21): note: previous definition is here
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+1 warning generated.
+compiling drv_stepper_motor.c...
+applications/Emm_V5.c(1): warning: In file included from...
+applications/Emm_V5.h(21): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+applications/drv_stepper_motor.h(40): note: previous definition is here
+}stepper_motor_t;
+ ^
+1 warning generated.
+compiling Emm_V5.c...
+compiling arduino_main.cpp...
 linking...
 Program Size: Code=111514 RO-data=13962 RW-data=3116 ZI-data=7988  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

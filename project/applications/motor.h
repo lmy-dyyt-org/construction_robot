@@ -63,7 +63,7 @@ extern "C"
         motor_ctr control;
         void *user_data;
     } motor_ops_t;
-    typedef struct motor
+     struct motor
     {
         motor_ops_t *ops;
         int id;
@@ -93,7 +93,7 @@ extern "C"
 
         motor_behiver behaver;
         float acc_out;
-    } motor_t;
+    } ;
 
     motor_t *motor_get(int id);
     int motor_get_id(const char *name);

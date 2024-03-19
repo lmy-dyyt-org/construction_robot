@@ -1,7 +1,7 @@
 Dependencies for Project 'project', Target 'rt-thread': (DO NOT MODIFY !)
 CompilerVersion: 6190000::V6.19::ARMCLANG
 F (applications\Emm_V5.c)(0x65F79E00)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/emm_v5.o -MD)
-I (applications\Emm_V5.h)(0x65F79E00)
+I (applications\Emm_V5.h)(0x65F93861)
 I (board\board.h)(0x65F92338)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x65E330FB)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f427xx.h)(0x65E330FB)
@@ -82,7 +82,7 @@ I (rt-thread\components\drivers\include\drivers\adc.h)(0x65E330FC)
 I (rt-thread\components\drivers\include\drivers\rt_drv_pwm.h)(0x65E330FC)
 I (libraries\HAL_Drivers\drv_common.h)(0x65E330FB)
 I (libraries\HAL_Drivers\drivers\drv_dma.h)(0x65E330FB)
-I (applications\drv_stepper_motor.h)(0x65F79E00)
+I (applications\drv_stepper_motor.h)(0x65F937A6)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (libraries\HAL_Drivers\drivers\drv_gpio.h)(0x65E330FB)
@@ -171,7 +171,7 @@ I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
 I (applications\aboard_power_switch.h)(0x65E441B6)
 F (applications\abus\abus_port.c)(0x65F91D4E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/abus_port.o -MD)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
@@ -202,14 +202,14 @@ I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
 I (applications\chassis\chassis_port.h)(0x65F91D4E)
 I (applications\chassis\chassis.h)(0x65F5A01A)
 I (applications\chassis\chassis_cfg.h)(0x65F64436)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
 I (applications\robotManager\robotmanager.h)(0x65F91D4E)
 F (applications\abus\abus_topic.c)(0x65F91D4E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/abus_topic.o -MD)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
@@ -319,12 +319,12 @@ I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x65E33
 I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x65E330FB)
 I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x65E330FB)
 F (applications\apid.c)(0x65EAE418)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/apid.o -MD)
-I (applications\apid.h)(0x65F4440A)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdarg.h)(0x63884908)
 F (applications\apid_exfunc.c)(0x65E81CB8)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/apid_exfunc.o -MD)
-I (applications\apid.h)(0x65F4440A)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdarg.h)(0x63884908)
 I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
@@ -562,7 +562,7 @@ I (applications\robotarm\config.h)(0x65F92326)
 I (applications\robotarm\robotGeometry.h)(0x65EBA9A8)
 I (applications\robotarm\interpolation.h)(0x65EBA9A8)
 I (applications\robotarm\logger.h)(0x65EBA9A8)
-I (applications\Emm_v5.h)(0x65F79E00)
+I (applications\Emm_v5.h)(0x65F93861)
 I (board\board.h)(0x65F92338)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x65E330FB)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f427xx.h)(0x65E330FB)
@@ -602,7 +602,7 @@ I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x65E3
 I (libraries\HAL_Drivers\drivers\drv_usart.h)(0x65F92338)
 I (libraries\HAL_Drivers\drv_common.h)(0x65E330FB)
 I (libraries\HAL_Drivers\drivers\drv_dma.h)(0x65E330FB)
-I (applications\drv_stepper_motor.h)(0x65F79E00)
+I (applications\drv_stepper_motor.h)(0x65F937A6)
 I (libraries\HAL_Drivers\drivers\drv_gpio.h)(0x65E330FB)
 I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
@@ -629,8 +629,8 @@ I (rt-thread\include\rtatomic.h)(0x65E330FC)
 I (rt-thread\include\rthw.h)(0x65F92338)
 I (rt-thread\components\finsh\finsh.h)(0x65E330FC)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
@@ -660,8 +660,8 @@ I (rt-thread\include\rtatomic.h)(0x65E330FC)
 I (rt-thread\include\rthw.h)(0x65F92338)
 I (rt-thread\components\finsh\finsh.h)(0x65E330FC)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
@@ -691,14 +691,14 @@ I (rt-thread\include\rtatomic.h)(0x65E330FC)
 I (rt-thread\include\rthw.h)(0x65F92338)
 I (rt-thread\components\finsh\finsh.h)(0x65E330FC)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
@@ -725,7 +725,7 @@ I (rt-thread\include\rtm.h)(0x65E330FC)
 I (rt-thread\include\rtatomic.h)(0x65E330FC)
 I (rt-thread\include\rthw.h)(0x65F92338)
 I (rt-thread\components\finsh\finsh.h)(0x65E330FC)
-I (applications\drv_stepper_motor.h)(0x65F79E00)
+I (applications\drv_stepper_motor.h)(0x65F937A6)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (rt-thread\components\drivers\include\rtdevice.h)(0x65F92338)
@@ -788,7 +788,7 @@ I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x65E33
 I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x65E330FB)
 I (libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x65E330FB)
 I (libraries\HAL_Drivers\drivers\drv_gpio.h)(0x65E330FB)
-I (applications\Emm_V5.h)(0x65F79E00)
+I (applications\Emm_V5.h)(0x65F93861)
 I (libraries\HAL_Drivers\drivers\drv_usart.h)(0x65F92338)
 I (libraries\HAL_Drivers\drv_common.h)(0x65E330FB)
 I (libraries\HAL_Drivers\drivers\drv_dma.h)(0x65E330FB)
@@ -882,15 +882,15 @@ I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
 I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\abus\alist.h)(0x65EED656)
 I (applications\abus\afifo.h)(0x65F92C42)
-I (applications\apid.h)(0x65F4440A)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (applications\chassis\chassis_port.h)(0x65F91D4E)
 I (applications\chassis\chassis.h)(0x65F5A01A)
 I (applications\chassis\chassis_cfg.h)(0x65F64436)
-I (applications\motor.h)(0x65F1A85A)
+I (applications\motor.h)(0x65F936E5)
 I (applications\motor_cfg.h)(0x65F6E4FE)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
 I (applications\abus\abus_port.h)(0x65F81B5A)
@@ -975,11 +975,11 @@ I (rt-thread\components\drivers\include\drivers\adc.h)(0x65E330FC)
 I (rt-thread\components\drivers\include\drivers\rt_drv_pwm.h)(0x65E330FC)
 I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
-I (applications\Emm_V5.h)(0x65F79E00)
+I (applications\Emm_V5.h)(0x65F93861)
 I (libraries\HAL_Drivers\drivers\drv_usart.h)(0x65F92338)
 I (libraries\HAL_Drivers\drv_common.h)(0x65E330FB)
 I (libraries\HAL_Drivers\drivers\drv_dma.h)(0x65E330FB)
-I (applications\drv_stepper_motor.h)(0x65F79E00)
+I (applications\drv_stepper_motor.h)(0x65F937A6)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (applications\follow_line.h)(0x65F81D16)
@@ -987,12 +987,12 @@ I (applications\statemachine\statemachine.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x63884908)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\abus\alist.h)(0x65EED656)
 I (applications\abus\afifo.h)(0x65F92C42)
 I (applications\aboard_power_switch.h)(0x65E441B6)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
@@ -1010,8 +1010,8 @@ I (applications\map\SemanticMap.h)(0x65F1B2C8)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 F (applications\motor.c)(0x65F64546)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/motor.o -MD)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
@@ -1039,8 +1039,8 @@ I (rt-thread\components\finsh\finsh.h)(0x65E330FC)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
 F (applications\motor_cfg.c)(0x65F64978)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/motor_cfg.o -MD)
 I (applications\motor_cfg.h)(0x65F6E4FE)
-I (applications\motor.h)(0x65F1A85A)
-I (applications\apid.h)(0x65F4440A)
+I (applications\motor.h)(0x65F936E5)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x63884908)
@@ -1048,7 +1048,7 @@ I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
 I (rt-thread\include\rtcompiler.h)(0x65E330FC)
 I (rtconfig.h)(0x65F926BB)
-F (applications\motor_dj_rm_driver.c)(0x65F81A4E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/motor_dj_rm_driver.o -MD)
+F (applications\motor_dj_rm_driver.c)(0x65F93477)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/motor_dj_rm_driver.o -MD)
 I (board\board.h)(0x65F92338)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x65E330FB)
 I (libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f427xx.h)(0x65E330FB)
@@ -1127,10 +1127,10 @@ I (rt-thread\components\drivers\include\drivers\pin.h)(0x65F92338)
 I (rt-thread\components\drivers\include\drivers\can.h)(0x65E330FC)
 I (rt-thread\components\drivers\include\drivers\adc.h)(0x65E330FC)
 I (rt-thread\components\drivers\include\drivers\rt_drv_pwm.h)(0x65E330FC)
-I (applications\apid.h)(0x65F4440A)
+I (applications\apid.h)(0x65F9372E)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x63884908)
 I (applications\motor_dj_rm_driver.h)(0x65EB01B2)
-I (applications\motor.h)(0x65F1A85A)
+I (applications\motor.h)(0x65F936E5)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x63884908)
 I (applications\motor_cfg.h)(0x65F6E4FE)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
@@ -1138,7 +1138,7 @@ I (rt-thread\components\utilities\ulog\ulog.h)(0x65F92338)
 I (rt-thread\components\utilities\ulog\ulog_def.h)(0x65E330FC)
 F (applications\robotManager\robotmanager.c)(0x65F91D4E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I libraries/HAL_Drivers/drivers/config -I board/CubeMX_Config/Inc -I board -I applications -I rt-thread/components/libc/compilers/common/extension/fcntl/octal -I rt-thread/components/libc/posix/io/epoll -I rt-thread/components/libc/compilers/common/include -I packages/CMSIS_5-v5.9.0/CMSIS/Core/Include -I packages/CmBacktrace-v1.4.1 -I rt-thread/components/drivers/include -I rt-thread/components/drivers/include -I . -I rt-thread/components/finsh -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/common -I rt-thread/components/utilities/ulog -I rt-thread/components/drivers/include -I board/ports -I rt-thread/include -I packages/RTduino-latest/core -I libraries/HAL_Drivers -I rt-thread/components/drivers/include -I rt-thread/libcpu/arm/cortex-m4 -I packages/RTduino-latest/libraries/buildin/Servo -I rt-thread/components/libc/posix/io/poll -I packages/RTduino-latest/libraries/user -I rt-thread/components/libc/compilers/common/extension -I rt-thread/components/libc/cplusplus -I packages/RTduino-latest/libraries/buildin/Wire -I rt-thread/components/libc/posix/io/eventfd -I libraries/STM32F4xx_HAL/CMSIS/Device/ST/STM32F4xx/Include -I rt-thread/components/libc/posix/ipc -I rt-thread/components/drivers/include -I libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Inc -I applications/arduino_pinout -I libraries/HAL_Drivers/drivers -I packages/perf_counter-v2.2.4.1 -I rt-thread/components/drivers/include -I ./applications/abus -I ./applications/arduino_pinout -I ./applications/chassis -I ./applications/map -I ./applications/robotarm -I ./applications/robotManager -I ./applications/statemachine   -std=gnu99-IC:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="538" -DSTM32F427xx -D__STDC_LIMIT_MACROS -DRT_USING_ARMLIBC -D__perf_counter_printf__="rt_kprintf" -DARDUINO_ARCH_RTTHREAD="10000" -DUSE_HAL_DRIVER -DRT_USING_LIBC -Dprintf="rt_kprintf" -D__CLK_TCK="RT_TICK_PER_SECOND" -DSTM32F427xx -D__PERF_CNT_USE_RTOS__ -D__RTTHREAD__ -DARDUINO="10819"-o ./build/keil/obj/robotmanager.o -MD)
 I (applications\robotManager\robotManager.h)(0x65F91D4E)
-I (applications\abus\abus_topic.h)(0x65F91D4E)
+I (applications\abus\abus_topic.h)(0x65F93750)
 I (applications\statemachine\cvector.h)(0x65EED656)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x63884908)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x63884908)
