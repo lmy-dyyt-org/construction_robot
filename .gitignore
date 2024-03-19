@@ -52,3 +52,4 @@ project/build/keil/Obj/rt-thread.build_log.htm
 *.map
 *.dep
 *.log
+project/.vscode/c_cpp_properties.json
