@@ -29,8 +29,20 @@ Project File Date:  03/19/2024
 Build target 'rt-thread'
 Note: source file 'rt-thread\src\clock.c' - object file renamed from '.\build\keil\Obj\src_clock.o' to '.\build\keil\Obj\src_clock.o'.
 Note: source file 'rt-thread\src\thread.c' - object file renamed from '.\build\keil\Obj\src_thread.o' to '.\build\keil\Obj\src_thread.o'.
+applications/drv_stepper_motor.c(10): warning: In file included from...
+applications/drv_stepper_motor.h(40): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+}stepper_motor_t;
+ ^
+applications/Emm_V5.h(21): note: previous definition is here
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+1 warning generated.
+compiling drv_stepper_motor.c...
+compiling arduino_main.cpp...
+linking...
+Program Size: Code=122300 RO-data=12784 RW-data=3332 ZI-data=8172  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

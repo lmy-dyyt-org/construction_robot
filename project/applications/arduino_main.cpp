@@ -54,14 +54,9 @@ uint8_t i = 0;
 
 extern "C"
 {
-  void big_arm_get_pulse(uint32_t pulse);
+  int32_t abig_arm_pulse;
+  int32_t asmall_arm_pulse;
 }
-
-uint32_t big_arm_pulse;
-uint32_t small_arm_pulse;
-
-uint8_t big_arm_dir;
-uint8_t small_arm_dir;
 
 void setup()
 {
@@ -96,8 +91,8 @@ void setup()
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0);
 
   interpolator.speed_profile = 0;
-  ymm_absolute = 50;
-  zmm_absolute = 50;
+  ymm_absolute = 20;
+  zmm_absolute = 20;
 
   interpolator.setInterpolation(interpolator.getXPosmm()+0, ymm_absolute-interpolator.getYPosmm(), zmm_absolute-interpolator.getZPosmm(), interpolator.getEPosmm()+0, 5);//这个函数赋的是差值 目标值和当前值之间的距离，插值每次插5mm（细分）
 }
@@ -133,31 +128,11 @@ void loop()
 	LOG_D("arduino:::::::M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
 
   //电机加载
-  if(geometry.getLowRad()>0)
-  {
-    big_arm_dir = 0;
-  }
-  else
-  {
-    big_arm_dir = 1;
-  }
-
-  if(geometry.getHighRad()>0)
-  {
-    small_arm_dir = 0;
-  }
-  else
-  {
-    small_arm_dir = 1;
-  }
-
-  big_arm_pulse = (uint32_t)geometry.getLowRad()*3200/(6.28);
-  small_arm_pulse = (uint32_t)geometry.getHighRad()*3200/(6.28);
-  LOG_D("arduino_run\n"); 
-  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, false, false);
-  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, false, false);
-
-  big_arm_get_pulse(big_arm_pulse);
+  abig_arm_pulse = (int32_t)(geometry.getLowRad()*509.55f);
+  asmall_arm_pulse = (int32_t)(geometry.getHighRad()*509.55f);
+  
+  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, abig_arm_pulse, false, false);
+  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, asmall_arm_pulse, false, false);
 
   delay(500);
 }
