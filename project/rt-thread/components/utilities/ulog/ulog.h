@@ -39,7 +39,6 @@ void ulog_deinit(void);
  *
  * LOG_D("this is a debug log!");
  * LOG_E("this is a error log!");
- * LOG_HEX("this is a error log!",16,buf,sizeof(buf));
  */
 #define LOG_E(...)                      ulog_e(LOG_TAG, __VA_ARGS__)
 #define LOG_W(...)                      ulog_w(LOG_TAG, __VA_ARGS__)

@@ -12,6 +12,7 @@
 #define RT_CPUS_NR 1
 #define RT_ALIGN_SIZE 8
 #define RT_THREAD_PRIORITY_32
+#define RT_USING_CPU_USAGE
 #define RT_THREAD_PRIORITY_MAX 32
 #define RT_TICK_PER_SECOND 1000
 #define RT_USING_OVERFLOW_CHECK
@@ -24,11 +25,8 @@
 #define RT_TIMER_THREAD_PRIO 4
 #define RT_TIMER_THREAD_STACK_SIZE 512
 
-#define RT_USING_THREAD_USAGE
 /* kservice optimization */
 
-#define RT_KSERVICE_USING_STDLIB
-#define RT_KPRINTF_USING_LONGLONG
 #define RT_USING_DEBUG
 #define RT_DEBUGING_COLOR
 #define RT_DEBUGING_CONTEXT
@@ -40,18 +38,13 @@
 #define RT_USING_EVENT
 #define RT_USING_MAILBOX
 #define RT_USING_MESSAGEQUEUE
-#define RT_USING_MESSAGEQUEUE_PRIORITY
-#define RT_USING_SIGNALS
 
 /* Memory Management */
 
-#define RT_USING_MEMPOOL
 #define RT_USING_SMALL_MEM
 #define RT_USING_SMALL_MEM_AS_HEAP
 #define RT_USING_HEAP
 #define RT_USING_DEVICE
-#define RT_USING_INTERRUPT_INFO
-#define RT_USING_THREADSAFE_PRINTF
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
 #define RT_CONSOLE_DEVICE_NAME "uart6"
@@ -86,14 +79,6 @@
 
 /* DFS: device virtual file system */
 
-#define RT_USING_DFS
-#define DFS_USING_POSIX
-#define DFS_USING_WORKDIR
-#define DFS_FD_MAX 16
-#define RT_USING_DFS_V1
-#define DFS_FILESYSTEMS_MAX 4
-#define DFS_FILESYSTEM_TYPES_MAX 4
-#define RT_USING_DFS_DEVFS
 
 /* Device Drivers */
 
@@ -101,16 +86,12 @@
 #define RT_UNAMED_PIPE_NUMBER 64
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V2
-#define RT_USING_CAN
-#define RT_CAN_USING_HDR
-#define RT_CAN_USING_CANFD
+#define RT_SERIAL_USING_DMA
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
-#define RT_USING_PIN
 #define RT_USING_ADC
-#define RT_USING_RTC
-#define RT_USING_SOFT_RTC
-#define RT_USING_KTIME
+#define RT_USING_PWM
+#define RT_USING_PIN
 
 /* Using USB */
 
@@ -121,16 +102,13 @@
 
 /* Timezone and Daylight Saving Time */
 
+#define RT_LIBC_USING_LIGHT_TZ_DST
+#define RT_LIBC_TZ_DEFAULT_HOUR 8
+#define RT_LIBC_TZ_DEFAULT_MIN 0
+#define RT_LIBC_TZ_DEFAULT_SEC 0
 
 /* POSIX (Portable Operating System Interface) layer */
 
-#define RT_USING_POSIX_FS
-#define RT_USING_POSIX_DEVIO
-#define RT_USING_POSIX_STDIO
-#define RT_USING_POSIX_DELAY
-#define RT_USING_POSIX_CLOCK
-#define RT_USING_PTHREADS
-#define PTHREAD_NUM_MAX 8
 
 /* Interprocess Communication (IPC) */
 
@@ -138,8 +116,6 @@
 /* Socket is in the 'Network' category */
 
 #define RT_USING_CPLUSPLUS
-#define RT_USING_CPLUSPLUS11
-#define RT_USING_CPP_WRAPPER
 
 /* Network */
 
@@ -156,7 +132,7 @@
 #define ULOG_ASSERT_ENABLE
 #define ULOG_LINE_BUF_SIZE 128
 #define ULOG_USING_ASYNC_OUTPUT
-#define ULOG_ASYNC_OUTPUT_BUF_SIZE 16384
+#define ULOG_ASYNC_OUTPUT_BUF_SIZE 2048
 #define ULOG_ASYNC_OUTPUT_BY_THREAD
 #define ULOG_ASYNC_OUTPUT_THREAD_STACK 1024
 #define ULOG_ASYNC_OUTPUT_THREAD_PRIORITY 30
@@ -167,9 +143,7 @@
 #define ULOG_OUTPUT_TIME
 #define ULOG_OUTPUT_LEVEL
 #define ULOG_OUTPUT_TAG
-#define ULOG_OUTPUT_THREAD_NAME
 #define ULOG_BACKEND_USING_CONSOLE
-#define RT_USING_VAR_EXPORT
 
 /* RT-Thread online packages */
 
@@ -217,15 +191,17 @@
 
 /* tools packages */
 
+#define PKG_USING_CMBACKTRACE
+#define PKG_CMBACKTRACE_PLATFORM_M4
+#define PKG_CMBACKTRACE_DUMP_STACK
+#define PKG_CMBACKTRACE_PRINT_CHINESE_UTF8
+#define PKG_USING_CMBACKTRACE_V10401
+#define PKG_CMBACKTRACE_VER_NUM 0x10401
 
 /* system packages */
 
 /* enhanced kernel services */
 
-#define PKG_USING_RT_MEMCPY_CM
-#define PKG_USING_RT_MEMCPY_CM_LATEST_VERSION
-#define PKG_USING_RT_KPRINTF_THREADSAFE
-#define PKG_USING_RT_KPRINTF_THREADSAFE_LATEST_VERSION
 #define PKG_USING_RT_VSNPRINTF_FULL
 #define PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
 #define PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
@@ -237,6 +213,7 @@
 #define PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION 6
 #define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
 #define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
+#define RT_VSNPRINTF_FULL_REPLACING_PRINTF
 #define PKG_USING_RT_VSNPRINTF_FULL_LATEST_VERSION
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
@@ -244,10 +221,16 @@
 
 /* CMSIS: ARM Cortex-M Microcontroller Software Interface Standard */
 
+#define PKG_USING_CMSIS_5
+#define PKG_CMSIS_CORE
+#define PKG_USING_CMSIS_5_V50900
+#define PKG_CMSIS_5_VER_NUM 0x50900
+#define PKG_USING_CMSIS_5_AUX
 
 /* Micrium: Micrium software products porting for RT-Thread */
 
 #define PKG_USING_PERF_COUNTER
+#define PKG_PERF_COUNTER_USING_THREAD_STATISTIC
 #define PKG_USING_PERF_COUNTER_V2241
 
 /* peripheral libraries and drivers */
@@ -283,6 +266,9 @@
 #define RTDUINO_THREAD_SIZE 2048
 #define RTDUINO_THREAD_PRIO 30
 #define RTDUINO_SUPPORT_HIGH_PRECISION_MICROS
+#define RTDUINO_USING_WIRE
+#define RTDUINO_WIRE_BUFFER_LENGTH 32
+#define RTDUINO_USING_SERVO
 #define PKG_USING_RTDUINO_LATEST_VERSION
 
 /* Projects and Demos */
@@ -323,31 +309,49 @@
 
 /* Onboard Peripheral Drivers */
 
+#define BSP_USING_ARDUINO
 
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART6
-#define BSP_UART6_RX_BUFSIZE 1024
-#define BSP_UART6_TX_BUFSIZE 1024
 #define BSP_USING_UART3
-#define BSP_UART3_RX_BUFSIZE 1024
-#define BSP_UART3_TX_BUFSIZE 1024
 #define BSP_USING_UART7
-#define BSP_UART7_RX_BUFSIZE 1024
-#define BSP_UART7_TX_BUFSIZE 1024
 #define BSP_USING_UART8
-#define BSP_UART8_RX_BUFSIZE 1024
-#define BSP_UART8_TX_BUFSIZE 1024
 #define BSP_USING_UART1
-#define BSP_UART1_RX_BUFSIZE 1024
-#define BSP_UART1_TX_BUFSIZE 1024
-#define BSP_USING_CAN
-#define BSP_USING_CAN1
-#define BSP_USING_CAN2
 #define BSP_USING_ADC
 #define BSP_USING_ADC1
+#define BSP_USING_I2C
+#define BSP_USING_I2C1
+
+/* Notice: PE4 --> 68; PE5 --> 69 */
+
+#define BSP_I2C1_SCL_PIN 68
+#define BSP_I2C1_SDA_PIN 69
+#define BSP_USING_PWM
+#define BSP_USING_PWM12
+#define BSP_USING_PWM12_CH1
+#define BSP_USING_PWM4
+#define BSP_USING_PWM4_CH1
+#define BSP_USING_PWM4_CH2
+#define BSP_USING_PWM4_CH3
+#define BSP_USING_PWM4_CH4
+#define BSP_USING_PWM5
+#define BSP_USING_PWM5_CH1
+#define BSP_USING_PWM5_CH2
+#define BSP_USING_PWM5_CH3
+#define BSP_USING_PWM5_CH4
+#define BSP_USING_PWM2
+#define BSP_USING_PWM2_CH1
+#define BSP_USING_PWM2_CH2
+#define BSP_USING_PWM2_CH3
+#define BSP_USING_PWM2_CH4
+#define BSP_USING_PWM8
+#define BSP_USING_PWM8_CH1
+#define BSP_USING_PWM8_CH2
+#define BSP_USING_PWM8_CH3
+#define BSP_USING_PWM8_CH4
 
 /* Board extended module Drivers */
 

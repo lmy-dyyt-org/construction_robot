@@ -62,7 +62,7 @@ struct rt_sched_thread_ctx
     struct rt_sched_thread_priv sched_thread_priv;      /**< private context of scheduler */
 };
 
-#define RT_SCHED_THREAD_CTX struct rt_sched_thread_ctx sched_thread_ctx
+#define RT_SCHED_THREAD_CTX struct rt_sched_thread_ctx sched_thread_ctx;
 
 #define RT_SCHED_PRIV(thread) ((thread)->sched_thread_ctx.sched_thread_priv)
 #define RT_SCHED_CTX(thread) ((thread)->sched_thread_ctx)
@@ -99,8 +99,8 @@ struct rt_sched_thread_ctx
     rt_tick_t remaining_tick;           /**< remaining tick */                 \
     rt_uint8_t current_priority;        /**< current priority */               \
     rt_uint8_t init_priority;           /**< initialized priority */           \
-    _RT_SCHED_THREAD_CTX_PRIO_EXT;                                             \
-    rt_uint32_t number_mask; /**< priority number mask */
+    _RT_SCHED_THREAD_CTX_PRIO_EXT                                              \
+    rt_uint32_t number_mask;            /**< priority number mask */
 
 #define RT_SCHED_PRIV(thread) (*thread)
 #define RT_SCHED_CTX(thread) (*thread)
@@ -126,6 +126,8 @@ rt_err_t rt_sched_unlock_n_resched(rt_sched_lock_level_t level);
 
 rt_bool_t rt_sched_is_locked(void);
 
+rt_weak rt_uint64_t rt_thread_usage_get_now_time(void);
+
 #ifdef RT_USING_SMP
 #define RT_SCHED_DEBUG_IS_LOCKED do { RT_ASSERT(rt_sched_is_locked()); } while (0)
 #define RT_SCHED_DEBUG_IS_UNLOCKED do { RT_ASSERT(!rt_sched_is_locked()); } while (0)
@@ -136,7 +138,6 @@ rt_bool_t rt_sched_is_locked(void);
 #define RT_SCHED_DEBUG_IS_UNLOCKED
 #endif /* RT_USING_SMP */
 
-#define __RT_KERNEL_SOURCE__
 /**
  * NOTE: user should NEVER use these APIs directly. See rt_thread_.* or IPC
  * methods instead.

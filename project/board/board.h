@@ -41,6 +41,17 @@ extern int __bss_end;
 
 void SystemClock_Config(void);
 
+
+#define BSP_UART1_TX_BUFSIZE 4096
+#define BSP_UART1_RX_BUFSIZE 4096
+#define BSP_UART3_TX_BUFSIZE 4096
+#define BSP_UART3_RX_BUFSIZE 4096
+#define BSP_UART6_TX_BUFSIZE 4096
+#define BSP_UART6_RX_BUFSIZE 4096
+#define BSP_UART7_TX_BUFSIZE 4096
+#define BSP_UART7_RX_BUFSIZE 4096
+#define BSP_UART8_TX_BUFSIZE 4096
+#define BSP_UART8_RX_BUFSIZE 4096
 #ifdef __cplusplus
 }
 #endif

@@ -84,7 +84,6 @@ void Error_Handler(void);
 #define LED_RED_GPIO_Port GPIOE
 #define LED_GREEN_Pin GPIO_PIN_14
 #define LED_GREEN_GPIO_Port GPIOF
-
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -94,3 +93,5 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
