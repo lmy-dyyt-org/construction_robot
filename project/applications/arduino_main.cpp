@@ -47,8 +47,7 @@
 RobotGeometry geometry(END_EFFECTOR_OFFSET, LOW_SHANK_LENGTH, HIGH_SHANK_LENGTH);
 Interpolation interpolator;
 
-<<<<<<< HEAD
-=======
+
 float ymm_absolute = 0;
 float zmm_absolute = 0;
 uint8_t i = 0;
@@ -65,7 +64,6 @@ uint32_t small_arm_pulse;
 uint8_t big_arm_dir;
 uint8_t small_arm_dir;
 
->>>>>>> 4381c75c021e4c1b281295296ba97030b236cdfd
 void setup()
 {
   //Serial.begin(BAUD);
@@ -114,16 +112,13 @@ void loop()
 注意c++的写法，每个电机继承了 RobotGeometry 类，所以可以直接调用 RobotGeometry 类的函数
 相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
 */
-<<<<<<< HEAD
   interpolator.speed_profile = 0;
    //
 
   ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
   interpolator.updateActualPosition();
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
-=======
 
->>>>>>> 4381c75c021e4c1b281295296ba97030b236cdfd
   // stepperRotate.stepToPositionRad(geometry.getRotRad());//坐标点 转为 角度变量 再转为电机脉冲数
   // stepperLower.stepToPositionRad(geometry.getLowRad());
   // stepperHigher.stepToPositionRad(geometry.getHighRad());
@@ -133,9 +128,8 @@ void loop()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-<<<<<<< HEAD
-	LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
-=======
+ 	LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
+ 
   //设目标值
   // if (i<2) {
   // zmm_absolute = zmm_absolute;
@@ -176,16 +170,12 @@ void loop()
   // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, false, false);
 
   big_arm_get_pulse(big_arm_pulse);
->>>>>>> 4381c75c021e4c1b281295296ba97030b236cdfd
 
   delay(500);
-<<<<<<< HEAD
 
   Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
    Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
 
 //geometry.getRotRad()*3200/(6.28)
 
-=======
->>>>>>> 4381c75c021e4c1b281295296ba97030b236cdfd
 }
