@@ -1524,11 +1524,9 @@ static void _console_take(void)
         {
             /* no preemption is allowed to avoid dead lock */
             critical_level = rt_enter_critical();
-#ifdef  RT_USING_SMP
-					#ifdef RT_USING_DEBUG
+#ifdef RT_USING_DEBUG
             _pr_critical_level = _syscon_lock.critical_level;
             _syscon_lock.critical_level = critical_level;
-					#endif
 #endif
             _pr_curr_user = self_thread;
             break;
@@ -1558,11 +1556,10 @@ static void _console_release(void)
     if (!_pr_curr_user_nested)
     {
         _pr_curr_user = RT_NULL;
-#ifdef  RT_USING_SMP
-					#ifdef RT_USING_DEBUG
+
+#ifdef RT_USING_DEBUG
         rt_exit_critical_safe(_syscon_lock.critical_level);
         _syscon_lock.critical_level = _pr_critical_level;
-			#endif
 #else
         rt_exit_critical();
 #endif
@@ -1719,7 +1716,7 @@ rt_err_t rt_backtrace_thread(rt_thread_t thread)
     return rc;
 }
 
-#ifdef RT_USING_LIBC
+#if defined(RT_USING_LIBC) && defined(RT_USING_FINSH)
 #include <stdlib.h> /* for string service */
 
 static void cmd_backtrace(int argc, char** argv)

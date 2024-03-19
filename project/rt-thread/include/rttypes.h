@@ -12,7 +12,7 @@
 #define __RT_TYPES_H__
 
 #include <rtconfig.h>
-#define RT_USING_DEBUG
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>
@@ -164,6 +164,7 @@ struct rt_spinlock
 #define _SPIN_LOCK_DEBUG_OWNER(lock)
 #define _SPIN_UNLOCK_DEBUG_OWNER(lock)
 #endif
+
 #ifdef RT_USING_DEBUG
 
 #define _SPIN_LOCK_DEBUG_CRITICAL(lock)                   \

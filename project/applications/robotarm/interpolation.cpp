@@ -1,6 +1,6 @@
 #include "interpolation.h"
 #include "config.h"
-#include "queue.h"
+//#include "queue.h"
 #include "logger.h"
 /*
 核心文件，一个运动插补类，用于控制机械臂的运动

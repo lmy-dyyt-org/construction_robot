@@ -10,9 +10,9 @@
 *.idb
 *.ilk
 *.old
+build
 Debug
 documentation/html
-build/
 packages/
 *~
 *.o
@@ -40,4 +40,3 @@ RTE/
 settings/
 *.uvguix*
 cconfig.h
-./.vscode

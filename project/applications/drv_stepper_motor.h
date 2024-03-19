@@ -45,9 +45,6 @@ extern rt_mutex_t  mutex_step;
 extern rt_sem_t step_sem;
 extern rt_sem_t cmp_sem;
 
-extern int32_t big_arm_pulse;
-extern int32_t small_arm_pulse;
-
 void drv_stepper_motor(void *parameter);
 
 rt_device_t Emm_V5_Init(const char* uart);    

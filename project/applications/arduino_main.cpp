@@ -35,10 +35,10 @@
 
 #include "robotGeometry.h"
 #include "interpolation.h"
-#include "RampsStepper.h"
-#include "command.h"
-#include "equipment.h"
-#include "endstop.h"
+//#include "RampsStepper.h"
+//#include "command.h"
+//#include "equipment.h"
+//#include "endstop.h"
 #include "logger.h"
 #include "Emm_v5.h"
 #include "drv_stepper_motor.h"
@@ -47,6 +47,7 @@
 RobotGeometry geometry(END_EFFECTOR_OFFSET, LOW_SHANK_LENGTH, HIGH_SHANK_LENGTH);
 Interpolation interpolator;
 
+
 float ymm_absolute = 0;
 float zmm_absolute = 0;
 uint8_t i = 0;
@@ -54,9 +55,14 @@ uint8_t i = 0;
 
 extern "C"
 {
-  int32_t abig_arm_pulse;
-  int32_t asmall_arm_pulse;
+  void big_arm_get_pulse(uint32_t pulse);
 }
+
+uint32_t big_arm_pulse;
+uint32_t small_arm_pulse;
+
+uint8_t big_arm_dir;
+uint8_t small_arm_dir;
 
 void setup()
 {
@@ -89,10 +95,13 @@ void setup()
 
   LOG_D("arduino_setup\n"); 
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0);
+  
+interpolator.setInterpolation(interpolator.getXPosmm()+0, interpolator.getYPosmm()+0, interpolator.getZPosmm()+20, interpolator.getEPosmm()+20, 5);
+
 
   interpolator.speed_profile = 0;
-  ymm_absolute = 20;
-  zmm_absolute = 20;
+  ymm_absolute = 50;
+  zmm_absolute = 50;
 
   interpolator.setInterpolation(interpolator.getXPosmm()+0, ymm_absolute-interpolator.getYPosmm(), zmm_absolute-interpolator.getZPosmm(), interpolator.getEPosmm()+0, 5);//这个函数赋的是差值 目标值和当前值之间的距离，插值每次插5mm（细分）
 }
@@ -103,6 +112,12 @@ void loop()
 注意c++的写法，每个电机继承了 RobotGeometry 类，所以可以直接调用 RobotGeometry 类的函数
 相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
 */
+  interpolator.speed_profile = 0;
+   //
+
+  ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
+  interpolator.updateActualPosition();
+  geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
 
   // stepperRotate.stepToPositionRad(geometry.getRotRad());//坐标点 转为 角度变量 再转为电机脉冲数
   // stepperLower.stepToPositionRad(geometry.getLowRad());
@@ -113,6 +128,8 @@ void loop()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
+ 	LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
+ 
   //设目标值
   // if (i<2) {
   // zmm_absolute = zmm_absolute;
@@ -128,11 +145,37 @@ void loop()
 	LOG_D("arduino:::::::M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
 
   //电机加载
-  abig_arm_pulse = (int32_t)(geometry.getLowRad()*509.55f);
-  asmall_arm_pulse = (int32_t)(geometry.getHighRad()*509.55f);
-  
-  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, abig_arm_pulse, false, false);
-  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, asmall_arm_pulse, false, false);
+  if(geometry.getLowRad()>0)
+  {
+    big_arm_dir = 0;
+  }
+  else
+  {
+    big_arm_dir = 1;
+  }
+
+  if(geometry.getHighRad()>0)
+  {
+    small_arm_dir = 0;
+  }
+  else
+  {
+    small_arm_dir = 1;
+  }
+
+  big_arm_pulse = (uint32_t)geometry.getLowRad()*3200/(6.28);
+  small_arm_pulse = (uint32_t)geometry.getHighRad()*3200/(6.28);
+  LOG_D("arduino_run\n"); 
+  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, false, false);
+  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, false, false);
+
+  big_arm_get_pulse(big_arm_pulse);
 
   delay(500);
+
+  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
+   Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
+
+//geometry.getRotRad()*3200/(6.28)
+
 }

@@ -32,6 +32,7 @@
  * 2022-07-02     Stanley Lwin add list command
  * 2023-09-15     xqyjlj       perf rt_hw_interrupt_disable/enable
  * 2024-02-09     Bernard      fix the version command
+ * 2024-03-15     Dyyt587      add thread usage for list_thread
  */
 
 #include <rthw.h>
@@ -165,6 +166,9 @@ long list_thread(void)
     rt_list_t *next = (rt_list_t *)RT_NULL;
     const char *item_title = "thread";
     const size_t tcb_strlen = sizeof(void *) * 2 + 2;
+    #ifdef RT_USING_CPU_USAGE
+    const size_t usage_strlen = 4 + 3;
+    #endif
     int maxlen;
 
     list_find_init(&find_arg, RT_Object_Class_Thread, obj_list, sizeof(obj_list) / sizeof(obj_list[0]));
@@ -180,11 +184,20 @@ long list_thread(void)
     object_split(tcb_strlen);
     rt_kprintf("\n");
 #else
-    rt_kprintf("%-*.*s pri  status      sp     stack size max used left tick   error  tcb addr usage tick thread usage\n", maxlen, maxlen, item_title);
+#ifdef RT_USING_CPU_USAGE
+        rt_kprintf("%-*.*s pri  status      sp     stack size max used left tick   error  tcb addr    usage\n", maxlen, maxlen, item_title);
+#else
+    rt_kprintf("%-*.*s pri  status      sp     stack size max used left tick   error  tcb addr\n", maxlen, maxlen, item_title);
+
+#endif
     object_split(maxlen);
     rt_kprintf(" ---  ------- ---------- ----------  ------  ---------- -------");
     rt_kprintf(" ");
     object_split(tcb_strlen);
+    #ifdef RT_USING_CPU_USAGE
+    rt_kprintf(" ");
+    object_split(usage_strlen);
+    #endif
     rt_kprintf("\n");
 #endif /*RT_USING_SMP*/
 
@@ -238,6 +251,7 @@ long list_thread(void)
                     else if (stat == RT_THREAD_INIT)    rt_kprintf(" init   ");
                     else if (stat == RT_THREAD_CLOSE)   rt_kprintf(" close  ");
                     else if (stat == RT_THREAD_RUNNING) rt_kprintf(" running");
+                    
 
 #if defined(ARCH_CPU_STACK_GROWS_UPWARD)
                     ptr = (rt_uint8_t *)thread->stack_addr + thread->stack_size - 1;
@@ -253,6 +267,26 @@ long list_thread(void)
 #else
                     ptr = (rt_uint8_t *)thread->stack_addr;
                     while (*ptr == '#') ptr ++;
+#ifdef RT_USING_CPU_USAGE
+                    rt_kprintf(" 0x%08x 0x%08x    %02d%%   0x%08x %s %p",
+                               thread->stack_size + ((rt_ubase_t)thread->stack_addr - (rt_ubase_t)thread->sp),
+                               thread->stack_size,
+                               (thread->stack_size - ((rt_ubase_t) ptr - (rt_ubase_t) thread->stack_addr)) * 100
+                               / thread->stack_size,
+                               RT_SCHED_PRIV(thread).remaining_tick,
+                               rt_strerror(thread->error),
+                               thread);
+                               rt_uint64_t tick = (thread->duration_tick*10000);
+                               rt_uint64_t now_time = rt_thread_usage_get_now_time();
+
+#ifdef PKG_USING_RT_VSNPRINTF_FULL
+															 //double test= (tick/now_time)/100.f;
+															 double test= (thread->duration_tick*100.f/rt_thread_usage_get_now_time());
+															 rt_kprintf("  %.3f%%\n",test);
+#else
+                    rt_kprintf("%s%02d%%\n","   ", (tick/now_time)/100);
+#endif
+#else
                     rt_kprintf(" 0x%08x 0x%08x    %02d%%   0x%08x %s %p\n",
                                thread->stack_size + ((rt_ubase_t)thread->stack_addr - (rt_ubase_t)thread->sp),
                                thread->stack_size,
@@ -261,6 +295,7 @@ long list_thread(void)
                                RT_SCHED_PRIV(thread).remaining_tick,
                                rt_strerror(thread->error),
                                thread);
+#endif
 #endif
                 }
             }
