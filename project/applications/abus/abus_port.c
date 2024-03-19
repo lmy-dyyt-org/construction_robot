@@ -3,6 +3,7 @@
 #include <ulog.h>
 
 #include "chassis_port.h"
+#include "robotmanager.h"
 
 abus_topic_t line_error_topic;	 /* 由巡线传感器发出-->，指示线路偏差 (float) */
 abus_topic_t line_dir_topic;	 /* 由巡线传感器接收<--，用于更换传感器方向 (uint8_t) */
@@ -99,30 +100,27 @@ int abus_all_init(void)
 
 	acc_init.name = "rbmg_error_acc";
 	acc_init.datafifo = NULL;
-	acc_init.callback = NULL;
+	acc_init.callback = rbmg_error_callback;
 	abus_acc_init(&rbmg_error_acc, &acc_init);
 	abus_topic_subscribe(&line_error_topic, &rbmg_error_acc, (abus_sub_flag){0, 0});
 
 	acc_init.name = "rbmg_dir_acc";
 	acc_init.datafifo = NULL;
-	acc_init.callback = NULL;
+	acc_init.callback = rbmg_dir_callback;
 	abus_acc_init(&rbmg_dir_acc, &acc_init);
 	abus_topic_subscribe(&line_dir_topic, &rbmg_dir_acc, (abus_sub_flag){0, 0});
 
 	acc_init.name = "rbmg_special_point_acc";
 	acc_init.datafifo = NULL;
-	acc_init.callback = NULL;
+	acc_init.callback = rbmg_special_point_callback;
 	abus_acc_init(&rbmg_special_point_acc, &acc_init);
 	abus_topic_subscribe(&line_special_topic, &rbmg_special_point_acc, (abus_sub_flag){0, 0});
 
 	acc_init.name = "rbmg_chassis_acc";
 	acc_init.datafifo = NULL;
-	acc_init.callback = NULL;
+	acc_init.callback = rbmg_chassis_ctrl_callback;
 	abus_acc_init(&rbmg_chassis_acc, &acc_init);
 	abus_topic_subscribe(&chassis_ctrl_topic, &rbmg_chassis_acc, (abus_sub_flag){0, 0});
-
-
-
 
 }
 INIT_BOARD_EXPORT(abus_all_init);

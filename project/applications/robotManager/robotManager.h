@@ -4,8 +4,10 @@
 extern "C" {
 #endif
 
-
-
+int rbmg_error_callback(abus_topic_t *sub);
+int rbmg_dir_callback(abus_topic_t *sub);
+int rbmg_special_point_callback(abus_topic_t *sub);
+int rbmg_chassis_ctrl_callback(abus_topic_t *sub);
 
 #ifdef __cplusplus
 }
