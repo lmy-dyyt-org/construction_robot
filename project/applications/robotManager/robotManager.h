@@ -3,7 +3,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "abus_topic.h"
 int rbmg_error_callback(abus_topic_t *sub);
 int rbmg_dir_callback(abus_topic_t *sub);
 int rbmg_special_point_callback(abus_topic_t *sub);

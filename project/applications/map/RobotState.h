@@ -1,4 +1,4 @@
-﻿#ifndef ROBOTSTATE_H
+#ifndef ROBOTSTATE_H
 #define ROBOTSTATE_H
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +26,7 @@ typedef struct{
 }Robote_State_t;
 
 //触发机器人请求寻路器并且更新位置且发送信息
-void Robot_State_Trigger(Robote_State_t* robot_state);
+int Robot_State_Trigger(Robote_State_t* robot_state);
 
 #ifdef __cplusplus
 }

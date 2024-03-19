@@ -121,6 +121,6 @@ int abus_all_init(void)
 	acc_init.callback = rbmg_chassis_ctrl_callback;
 	abus_acc_init(&rbmg_chassis_acc, &acc_init);
 	abus_topic_subscribe(&chassis_ctrl_topic, &rbmg_chassis_acc, (abus_sub_flag){0, 0});
-
+	return 0;
 }
 INIT_BOARD_EXPORT(abus_all_init);
