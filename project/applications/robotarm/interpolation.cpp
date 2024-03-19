@@ -138,15 +138,15 @@ void Interpolation::updateActualPosition() {
   float t = (microsek - startTime) / 1000000.0;
   float progress;
   switch (speed_profile){
-    // FLAT SPEED CURVE
+    // FLAT SPEED CURVE 平坦速度曲线
     case 0:
       progress = t * tmul;
-      if (progress >= 1.0){
+      if (progress >= 1.0){  //步进
         progress = 1.0;
         state = 1;
       }
       break;
-    // ARCTAN APPROX
+    // ARCTAN APPROX 近似值
     case 1:
       progress = atan((PI * t * tmul) - (PI * 0.5)) * 0.5 + 0.5;
       if (progress >= 1.0) {
@@ -154,7 +154,7 @@ void Interpolation::updateActualPosition() {
         state = 1;
       }
       break;
-    // COSIN APPROX
+    // COSIN APPROX 
     case 2:
       progress = -cos(t * tmul * PI) * 0.5 + 0.5;
       if ((t * tmul) >= 1.0) {
