@@ -1,4 +1,4 @@
-/*
+﻿/*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-07 19:35:50
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
@@ -35,7 +35,7 @@ extern "C"
 		uint8_t is_self_fifo;
 
 	} abus_sub_flag;
-	 struct abus_accounter
+	typedef struct abus_accounter
 	{
 		const char *name;
 		alist_head_t head;
@@ -43,14 +43,14 @@ extern "C"
 		sub_callback callback;
 		abus_sub_flag flag;
 		abus_topic_t *topic;
-	} ;
+	} abus_accounter_t;
 	typedef struct
 	{
 		const char *name;
 		afifo_t *datafifo;
 		sub_callback callback;
 	} abus_acc_init_t;
-	 struct abus_topic
+	typedef struct abus_topic
 	{
 		const char *name;
 		alist_head_t sync_accounter;  // 同步订阅，在发布者支持同步条件下会同步调用
@@ -58,7 +58,7 @@ extern "C"
 		afifo_t *datafifo;			  // 用于给发布者缓存数据，这个fifo支持覆盖
 		uint32_t msg_size;
 
-	} ;
+	} abus_topic_t;
 	typedef struct
 	{
 		const char *name;

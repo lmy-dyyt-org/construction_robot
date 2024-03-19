@@ -47,3 +47,7 @@ project/build/keil/Obj/project_rt-thread.dep
 *.dep
 *.axf
 project/build/keil/Obj/rt-thread.build_log.htm
+*.bin
+*.htm
+*.map
+*.dep

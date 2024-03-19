@@ -675,7 +675,7 @@ static void timer1_callback(void *parameter)
 }
 static void can_rx_thread(void *parameter)
 {
-    static rt_uint8_t i;
+    static int i;
     rt_err_t res;
     struct rt_can_msg msg = {0};
     rt_pin_mode(GET_PIN(I, 0), PIN_MODE_OUTPUT);
