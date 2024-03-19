@@ -230,6 +230,7 @@ void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, ui
   cmd[11] =  snF;                       // 多机同步运动标志，false为不启用，true为启用
   cmd[12] =  0x6B;                      // 校验字节
   
+  LOG_D("stepper_motor_try_to_gey_mutex\n");
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
   LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
