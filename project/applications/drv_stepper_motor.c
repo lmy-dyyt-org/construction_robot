@@ -33,16 +33,14 @@ rt_sem_t step_sem = RT_NULL;//信号量
 rt_sem_t cmp_sem = RT_NULL;//信号量
 uint8_t rxCount = 0;
 
-static uint32_t big_arm_pulse;
-static uint32_t small_arm_pulse;
+int32_t big_arm_pulse;
+int32_t small_arm_pulse;
 
-// extern uint8_t big_arm_dir;
-// extern uint8_t small_arm_dir;
+int8_t big_arm_dir;
+int8_t small_arm_dir;
 
-void big_arm_get_pulse(uint32_t pulse)
-{
-   big_arm_pulse = pulse;
-}
+extern int32_t abig_arm_pulse;
+extern int32_t asmall_arm_pulse;
 
 void drv_stepper_motor(void *parameter)
 {
@@ -62,16 +60,38 @@ void drv_stepper_motor(void *parameter)
 //   rt_thread_mdelay(100);//延时等待闭环步进参数设置完成（写入flash）
 //   Emm_V5_Origin_Trigger_Return(1, 2, 0);
 //   Emm_V5_Origin_Trigger_Return(3, 2, 0); 
-   
 
   while(1)
   {
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
+    
+  big_arm_pulse = abig_arm_pulse;
+  small_arm_pulse = asmall_arm_pulse;
 
-  LOG_D("M1:%f M3:%f",big_arm_pulse, small_arm_pulse); 
-  //  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 0, 0);
-  //  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_dir, 0, 0);
+  if(big_arm_pulse>0)
+  {
+    big_arm_dir = 0;
+  }
+  else
+  {
+    big_arm_pulse = -big_arm_pulse;
+    big_arm_dir = 1;
+  }
+
+  if(small_arm_pulse>0)
+  {
+    small_arm_dir = 0;
+  }
+  else
+  {
+    small_arm_pulse = -small_arm_pulse;
+    small_arm_dir = 1;
+  }
+
+  LOG_D("M1:%d M3:%d",abig_arm_pulse, asmall_arm_pulse);  //int32 用 %f 打印会有问题
+   Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 0, 0);
+   Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_dir, 0, 0);
 
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
