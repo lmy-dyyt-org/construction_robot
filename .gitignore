@@ -51,3 +51,4 @@ project/build/keil/Obj/rt-thread.build_log.htm
 *.htm
 *.map
 *.dep
+*.log
