@@ -75,7 +75,18 @@ extern "C"
 #define ABUS_ASSERT(x) \
 	if (!(x))          \
 		while (1)
-		
+
+#define ABUS_ACC_ALLOC(_name,_datafifo,_callback)do{\
+	abus_acc_init_t init={\
+		.name=_name,\
+		.datafifo=_datafifo,\
+		.callback=_callback,\
+	};\
+	abus_accounter_t*acc = ABUS_MALLOC(sizeof(abus_accounter_t));\
+	ABUS_ASSERT(acc);\
+	abus_acc_init(acc,&init);\
+}while(0)
+	
 	int abus_topic_init(abus_topic_t *topic, abus_topic_init_t *init);
 	int abus_acc_init(abus_accounter_t *acc, abus_acc_init_t *init);
 

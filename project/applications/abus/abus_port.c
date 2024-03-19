@@ -36,6 +36,9 @@ int abus_all_init(void)
 	extern int chassis_sub_callback(abus_topic_t * sub);
 
 	abus_topic_init_t init;
+		abus_acc_init_t acc_init;
+
+
 	init.buf = (uint8_t *)malloc(1024);
 	init.buf_size = 1024;
 	init.msg_size = sizeof(float);
@@ -54,11 +57,7 @@ int abus_all_init(void)
 	init.name = "line_dir_topic";
 	abus_topic_init(&line_dir_topic, &init);
 
-	line_error_acc.name = "line_error_acc";
-	line_error_acc.callback = NULL;
-	line_error_acc.datafifo = NULL;
-	line_error_acc.flag.is_async = 0;
-	abus_topic_subscribe(&line_error_topic, &line_error_acc, line_error_acc.flag);
+
 	// 初始化topic
 	abus_topic_init_t topic_init;
 	topic_init.name = "chassis_ctrl";
@@ -67,31 +66,63 @@ int abus_all_init(void)
 	topic_init.msg_size = sizeof(chassis_ctrl_t);
 	abus_topic_init(&chassis_ctrl_topic, &topic_init);
 
+
+
+	acc_init.name = "line_error_acc";
+	acc_init.callback = NULL;
+	acc_init.datafifo = NULL;
+	abus_acc_init(&line_error_acc, &acc_init);
+	abus_topic_subscribe(&line_error_topic, &line_error_acc,  (abus_sub_flag){0, 0});
+
 	line_dir_acc.name = "line_dir_acc";
 	line_dir_acc.callback = line_dir_sub_callback;
 	line_dir_acc.datafifo = NULL;
 	line_dir_acc.flag.is_async = 0;
-	abus_topic_subscribe(&line_dir_topic, &line_dir_acc, line_dir_acc.flag);
+	abus_acc_init(&line_dir_acc, &acc_init);
+	abus_topic_subscribe(&line_dir_topic, &line_dir_acc, (abus_sub_flag){0, 0});
 
-	line_spacial_point_acc.name = "line_special_acc";
-	line_spacial_point_acc.callback = NULL;
-	line_spacial_point_acc.datafifo = NULL;
-	line_spacial_point_acc.flag.is_async = 0;
-	abus_topic_subscribe(&line_special_topic, &line_spacial_point_acc, line_spacial_point_acc.flag);
+	acc_init.name = "line_special_acc";
+	acc_init.callback = NULL;
+	acc_init.datafifo = NULL;
+	abus_acc_init(&line_spacial_point_acc, &acc_init);
+	abus_topic_subscribe(&line_special_topic, &line_spacial_point_acc,  (abus_sub_flag){0, 0});
 
-	// 初始化acc
-	abus_acc_init_t acc_init;
+
+	// 初始化chassis 模块acc
 	acc_init.name = "chassis_acc";
 	acc_init.datafifo = NULL;
 	acc_init.callback = chassis_sub_callback;
 	abus_acc_init(&chassis_acc, &acc_init);
-	// 订阅
 	abus_topic_subscribe(&chassis_ctrl_topic, &chassis_acc, (abus_sub_flag){0, 0});
 
-	// line_chassis_ctrl_acc.name = "line_chs_ctrl_acc";
-	// line_chassis_ctrl_acc.callback = NULL;
-	// line_chassis_ctrl_acc.datafifo = NULL;
-	// line_chassis_ctrl_acc.flag.is_async = 0;
-	// abus_topic_subscribe(&chassis_ctrl_topic, &line_chassis_ctrl_acc, line_chassis_ctrl_acc.flag);
+//初始化robotManager 模块acc
+
+	acc_init.name = "rbmg_error_acc";
+	acc_init.datafifo = NULL;
+	acc_init.callback = NULL;
+	abus_acc_init(&rbmg_error_acc, &acc_init);
+	abus_topic_subscribe(&line_error_topic, &rbmg_error_acc, (abus_sub_flag){0, 0});
+
+	acc_init.name = "rbmg_dir_acc";
+	acc_init.datafifo = NULL;
+	acc_init.callback = NULL;
+	abus_acc_init(&rbmg_dir_acc, &acc_init);
+	abus_topic_subscribe(&line_dir_topic, &rbmg_dir_acc, (abus_sub_flag){0, 0});
+
+	acc_init.name = "rbmg_special_point_acc";
+	acc_init.datafifo = NULL;
+	acc_init.callback = NULL;
+	abus_acc_init(&rbmg_special_point_acc, &acc_init);
+	abus_topic_subscribe(&line_special_topic, &rbmg_special_point_acc, (abus_sub_flag){0, 0});
+
+	acc_init.name = "rbmg_chassis_acc";
+	acc_init.datafifo = NULL;
+	acc_init.callback = NULL;
+	abus_acc_init(&rbmg_chassis_acc, &acc_init);
+	abus_topic_subscribe(&chassis_ctrl_topic, &rbmg_chassis_acc, (abus_sub_flag){0, 0});
+
+
+
+
 }
 INIT_BOARD_EXPORT(abus_all_init);
