@@ -272,11 +272,6 @@ CONFIG_ULOG_BACKEND_USING_CONSOLE=y
 # CONFIG_RT_USING_VBUS is not set
 
 #
-# RT-Thread Utestcases
-#
-# CONFIG_RT_USING_UTESTCASES is not set
-
-#
 # RT-Thread online packages
 #
 
