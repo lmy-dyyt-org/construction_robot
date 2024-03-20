@@ -59,6 +59,8 @@
   "files.associations": {
     "vector": "c",
     "xstring": "c",
-    "xutility": "c"
+    "xutility": "c",
+    "xlocale": "c",
+    "abus_topic.h": "c"
   }
 }

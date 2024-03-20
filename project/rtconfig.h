@@ -322,6 +322,9 @@
 #define BSP_USING_UART7
 #define BSP_USING_UART8
 #define BSP_USING_UART1
+#define BSP_USING_CAN
+#define BSP_USING_CAN1
+#define BSP_USING_CAN2
 #define BSP_USING_ADC
 #define BSP_USING_ADC1
 #define BSP_USING_I2C

@@ -21,58 +21,14 @@ Target DLL:      CMSIS_AGDI.dll V1.33.15.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-D:\aboard\project\project.uvprojx
-Project File Date:  02/26/2024
+C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
+Project File Date:  03/20/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
-board/ports/dj_motor_driver_rtt.c(2): warning: In file included from...
-board/ports/dj_motor_driver_rtt.h(108): error: unknown type name 'CAN_HandleTypeDef'
-void dj_set_motor_Group_A(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4);
-                          ^
-board/ports/dj_motor_driver_rtt.h(109): error: unknown type name 'CAN_HandleTypeDef'
-void dj_set_motor_Group_B(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4);
-                          ^
-board/ports/dj_motor_driver_rtt.h(114): error: unknown type name 'CAN_HandleTypeDef'
-void set_motor_allGroup(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4,
-                        ^
-board/ports/dj_motor_driver_rtt.h(132): error: unknown type name 'CAN_HandleTypeDef'
-void dj_set_6020_Group_A(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4);
-                         ^
-board/ports/dj_motor_driver_rtt.h(134): error: unknown type name 'CAN_HandleTypeDef'
-void dj_set_6020_Group_B(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4);
-                         ^
-board/ports/dj_motor_driver_rtt.h(137): error: unknown type name 'CAN_HandleTypeDef'
-void set_6020_allGroup(CAN_HandleTypeDef *_hcan, int16_t iq1, int16_t iq2, int16_t iq3, int16_t iq4,
-                       ^
-board/ports/dj_motor_driver_rtt.c(88): error: use of undeclared identifier 'hcan1'
-        set_motor_allGroup(&hcan1,can1_pid0_out,can1_pid1_out,can1_pid2_out,
-                            ^
-board/ports/dj_motor_driver_rtt.c(91): error: use of undeclared identifier 'hcan2'
-        set_motor_allGroup(&hcan2,can2_pid0_out,can2_pid1_out,can2_pid2_out,
-                            ^
-board/ports/dj_motor_driver_rtt.c(94): error: use of undeclared identifier 'hcan1'
-    set_6020_allGroup(&hcan1,0,0,0,
-                       ^
-board/ports/dj_motor_driver_rtt.c(97): error: use of undeclared identifier 'hcan2'
-    set_6020_allGroup(&hcan2,0,0,0,
-                       ^
-board/ports/dj_motor_driver_rtt.c(565): error: call to undeclared function '__can_filter_init_recv_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-        __can_filter_init_recv_all(&hcan1);
-        ^
-board/ports/dj_motor_driver_rtt.c(565): error: use of undeclared identifier 'hcan1'
-        __can_filter_init_recv_all(&hcan1);
-                                    ^
-board/ports/dj_motor_driver_rtt.c(566): error: call to undeclared function '__can_filter_recv_special'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-        __can_filter_recv_special(&hcan2);
-        ^
-board/ports/dj_motor_driver_rtt.c(566): error: use of undeclared identifier 'hcan2'
-        __can_filter_recv_special(&hcan2);
-                                   ^
-14 errors generated.
-compiling dj_motor_driver_rtt.c...
-".\build\keil\Obj\rt-thread.axf" - 14 Error(s), 0 Warning(s).
+After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -85,8 +41,7 @@ Package Vendor: Keil
   C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
-Target not created.
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
