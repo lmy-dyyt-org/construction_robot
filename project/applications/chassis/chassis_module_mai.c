@@ -1,8 +1,9 @@
 #include "chassis_module_mai.h"
 
+
+#include "ulog.h"
 #define DBG_TAG    "Chassis.mai"
 #define DBG_LVL               DBG_INFO
-#include "ulog.h"
 #ifdef CHASSIS_MODULE_MAI
 int module_mai(struct chassis *chassis, const void *output, const void *input);
 #ifdef CHASSIS_USING_MOTOR_HAL
@@ -98,7 +99,7 @@ static int driver_mai(const void *output, const void *input)
         {
         case CHASSIS_SPEED:
             // 速度控制
-            LOG_D("speed get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("speed get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             data->motor1 = motor_get_speed(MOTOR_MAI_ID_1);
             data->motor2 = motor_get_speed(MOTOR_MAI_ID_2);
             data->motor3 = motor_get_speed(MOTOR_MAI_ID_3);
@@ -106,7 +107,7 @@ static int driver_mai(const void *output, const void *input)
             break;
         case CHASSIS_POS:
             // 位置控制
-            LOG_D("pos get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("pos get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             data->motor1 = motor_get_pos(MOTOR_MAI_ID_1);
             data->motor2 = motor_get_pos(MOTOR_MAI_ID_2);
             data->motor3 = motor_get_pos(MOTOR_MAI_ID_3);
@@ -124,7 +125,7 @@ static int driver_mai(const void *output, const void *input)
         {
         case CHASSIS_SPEED:
             // 速度控制
-            LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
             motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
             motor_set_speed(MOTOR_MAI_ID_3, data->motor3);
@@ -133,7 +134,7 @@ static int driver_mai(const void *output, const void *input)
         case CHASSIS_POS:
 
             // 位置控制
-            LOG_D("pos set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("pos set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             motor_set_pos(MOTOR_MAI_ID_1, data->motor1);
             motor_set_pos(MOTOR_MAI_ID_2, data->motor2);
             motor_set_pos(MOTOR_MAI_ID_3, data->motor3);

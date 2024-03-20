@@ -4,6 +4,7 @@
 #include "abus_topic.h"
 #include "chassis_port.h"
 #include "abus_port.h"
+infrared infrared_package;
 
 float error;
 int asub_callback2(abus_topic_t *sub)
@@ -13,7 +14,8 @@ int asub_callback2(abus_topic_t *sub)
 }
 int line_dir_sub_callback(abus_topic_t *sub)
 {
-	LOG_D("sub_callback1\n");
+	//读取数据
+	afifo_out_data(sub->datafifo, &infrared_package.move_direction, sizeof(infrared_package.move_direction));
 	return 0;
 }
 int asub_callback(abus_topic_t *sub)
@@ -21,7 +23,6 @@ int asub_callback(abus_topic_t *sub)
 	LOG_D("sub_callback\n");
 	return 0;
 }
-infrared infrared_package;
 
 int follow_line_init(void)
 {
@@ -76,7 +77,7 @@ void follow_line(void *parameter)
 			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2;
 		rt_thread_mdelay(15);
 
-		//abus_public(&line_error_acc, &error);
+		abus_public(&line_error_acc, &error);
 	}
 }
 
