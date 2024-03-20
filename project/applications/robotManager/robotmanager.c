@@ -42,7 +42,6 @@ void action_half_car(void)
     extern chassis_t chassis_mai;
     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
     // 打印电机位置
-    LOG_D("pos x:%f y:%f z:%f", ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
@@ -52,10 +51,15 @@ void action_half_car(void)
 
     while (1)
     {
-        if (fabs(nowpos->y_m - ctrl.pos.x_m) < 0.001)
+        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 1)
         {
             break;
+        }else{
+            if(nowpos->y_m - ctrl.pos.y_m > 0){
+                break;7
+            }
         }
+        LOG_D("[action]pos x:%f y:%f z:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad);
         rt_thread_mdelay(10);
     }
 }
@@ -137,21 +141,21 @@ void rbmg_handle(void *parameter)
         LOG_D("rbmg heart tick");
 
         // 接到处理数据的消息
-        // rbmg_mode = ACTION_MODE;
+        rbmg_mode = ACTION_MODE;
 
-        // if (rbmg_mode == LINE_MODE)
-        // {
-        //     // 巡线都在回调中处理
-        // }
-        // else if (rbmg_mode == ACTION_MODE)
-        // {
-        //     // 动作模式下的处理
-        //     // 完成动作后切换回巡线模式
-        //     rbmg_mode = LINE_MODE;
-             action_half_car();
+        if (rbmg_mode == LINE_MODE)
+        {
+            // 巡线都在回调中处理
+        }
+        else if (rbmg_mode == ACTION_MODE)
+        {
+            // 动作模式下的处理
+            // 完成动作后切换回巡线模式
+            rbmg_mode = LINE_MODE;
+            action_half_car();
 
-        //     LOG_D("action completion");
-        // }
+            LOG_D("action completion");
+        }
         rt_thread_mdelay(50);
     }
 }

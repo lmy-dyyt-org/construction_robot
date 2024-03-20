@@ -16,6 +16,7 @@ int line_dir_sub_callback(abus_topic_t *sub)
 {
 	//读取数据
 	afifo_out_data(sub->datafifo, &infrared_package.move_direction, sizeof(infrared_package.move_direction));
+	LOG_D("line_dir_sub_callback:%d\n", infrared_package.move_direction);
 	return 0;
 }
 int asub_callback(abus_topic_t *sub)
