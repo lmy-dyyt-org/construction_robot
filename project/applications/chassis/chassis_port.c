@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-18 16:28:37
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-20 14:38:54
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -22,17 +22,18 @@ void chassis_port_handle(void *parameter)
     // int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data);
     // int chassis_set_pos(chassis_t *chassis, chassis_pos_t *data);
     // chassis_speed.x_m_s = 10;
-    // chassis_speed.y_m_s = 10;
-    chassis_speed.z_rad_s = 1;
+    chassis_speed.y_m_s = 10;
+    //chassis_speed.z_rad_s = 10;
 
     // chassis_pos.x_m = 10;
     // chassis_pos.y_m = 0.55;
-    chassis_pos.z_rad = 400;
+    chassis_pos.z_rad = 10;
     // chassis_set_speed(&chassis_mai, &chassis_speed);
     chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
+
         chassis_handle(&chassis_mai, 0);
 #endif
 
@@ -51,13 +52,13 @@ int chassis_sub_callback(abus_topic_t *sub)
     }
     if (ctrl.type == 0)
     {
-        //LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
-        //chassis_set_speed(&chassis_mai, &ctrl.speed);
+        LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
+        chassis_set_speed(&chassis_mai, &ctrl.speed);
     }
     else
     {
-        //LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
-        //chassis_set_pos(&chassis_mai, &ctrl.pos);
+        LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
+        chassis_set_pos(&chassis_mai, &ctrl.pos);
     }
     return 0;
 }

@@ -76,8 +76,7 @@ void follow_line(void *parameter)
 			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2;
 		rt_thread_mdelay(15);
 
-		// abus_public(&line_chassis_ctrl_acc, &ctrl);
-		abus_public(&line_error_acc, &error);
+		//abus_public(&line_error_acc, &error);
 	}
 }
 

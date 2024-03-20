@@ -123,7 +123,7 @@ void loop()
   // stepperLower.stepToPositionRad(geometry.getLowRad());
   // stepperHigher.stepToPositionRad(geometry.getHighRad());
   #if RAIL
-    stepperRail.stepToPositionMM(interpolator.getEPosmm(), STEPS_PER_MM_RAIL);
+    stepperRail.stepToPositionMM(interpolator.getEPosmm(), STEPS_PE11R_MM_RAIL);
   #endif
 //////////////////////////////////////////////////////////////////////////////////////////////
 

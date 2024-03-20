@@ -71,7 +71,7 @@ int rbmg_error_callback(abus_topic_t *sub)
             ctrl.speed.z_rad_s = line_error*KK ;
             break;
         }
-        abus_public(&rbmg_chassis_acc, &ctrl);
+        //abus_public(&rbmg_chassis_acc, &ctrl);
     }
 
     return 0;

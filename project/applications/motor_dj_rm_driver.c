@@ -27,6 +27,7 @@
 #include "motor_dj_rm_driver.h"
 #include "ulog.h"
 #include "motor_cfg.h"
+#include "perf_counter.h"
 
 #define pi (3.1415926f)
 #define CAN_DEV_NAME "can1" /* CAN 设备名称 */
@@ -355,9 +356,9 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 msg.data[5] = iq1_high[2];
                 msg.data[6] = iq1_high[3] >> 8;
                 msg.data[7] = iq1_high[3];
-                rt_size_t size;
+                rt_ssize_t size;
                 size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                if (size != RT_EOK)
+                if (size != sizeof(msg))
                 {
                     LOG_E("can dev write data failed! %d\n",size);
                 }else{
@@ -425,7 +426,7 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
 #ifdef MOTOR_DJ_M3508_ID4_CAN2
                 dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
 #endif
-                1)
+                1 )
             {
                 iq1_low[tt] = tmpout;
                 /* 待发送的 8 字节数据 */
@@ -438,20 +439,15 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 msg.data[5] = iq1_low[2];
                 msg.data[6] = iq1_low[3] >> 8;
                 msg.data[7] = iq1_low[3];
-                uint8_t size;
+                rt_ssize_t size;
                 size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                if (size != RT_EOK)
+                if (size != sizeof(msg))
                 {
-                    //LOG_E("can dev write data failed!%d\n",-size);
+                    LOG_E("can dev write failed!%d\n",size);
                 }else{
                     return 0;
                 }
-                // do 
-                // {
-                //     //LOG_I("try %d! \n",++time);
-                //     size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
 
-                // }while(size != sizeof(msg));
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
                 dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
 #endif
@@ -505,7 +501,6 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
 #endif
             }
         }
-        // msg.data[3]=12;
 
         break;
     case MOTOR_MODE_SPEED:
@@ -645,9 +640,9 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 
     
     rt_ringbuffer_putchar_force(dj_m_ringfifo, id);
-    rt_sem_release(&rx_sem);
+    //rt_sem_release(&rx_sem);
 
-	//int8_t tt = rt_mb_send(dj_m_mailbox, id);
+	// int8_t tt = rt_mb_send(dj_m_mailbox, id);
     // if (tt != RT_EOK)
     // {
     //     LOG_E("dj_m_mailbox send failed %d",-tt);
@@ -698,9 +693,10 @@ static void can_rx_thread(void *parameter)
         //rxmsg.hdr_index = 0;
         /* 阻塞等待接收信号量 */
         //rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+        //rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, RT_WAITING_FOREVER);
+
         if(rt_ringbuffer_getchar(dj_m_ringfifo, &i)==0)
         {
-            //rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, 1);
             rt_thread_mdelay(1);
             //LOG_E("dj_m_ringfifo get failed");
         }
@@ -709,7 +705,10 @@ static void can_rx_thread(void *parameter)
         // LOG_D("id %d,total_angle %f angle %d count %d", motor_measure->id, motor_get_pos(id),
         // motor_measure->angle,motor_measure->round_cnt);
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
+        static uint32_t last_time=0;
+        //motor_handle(i, get_system_ms()-last_time);
         motor_handle(i, 1);
+        last_time = get_system_ms();
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
     }
 }
@@ -749,15 +748,18 @@ int motor_tt_init(void)
     RT_ASSERT(res == RT_EOK);
     /* 设置 CAN 通信的波特率为 1Mbit/s*/
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_BAUD, (void *)CAN1MBaud);
-    RT_ASSERT(res == RT_EOK);
 
-	// 创建一个软件定时器
-	tmr1 =  rt_timer_create("tmr1",                 // 软件定时器名称       
-						timer1_callback,            // 软件定时器超时函数
-						RT_NULL,                    // 超时函数参数
-						10,                       // 超时时间
-						RT_TIMER_FLAG_ONE_SHOT |   
-						RT_TIMER_FLAG_SOFT_TIMER);  // 软件定时器模式，一次模式
+    RT_ASSERT(res == RT_EOK);
+    res = rt_device_control(can_dev, RT_CAN_CMD_SET_PRIV, (void *)1);
+        RT_ASSERT(res == RT_EOK);
+
+	// // 创建一个软件定时器
+	// tmr1 =  rt_timer_create("tmr1",                 // 软件定时器名称       
+	// 					timer1_callback,            // 软件定时器超时函数
+	// 					RT_NULL,                    // 超时函数参数
+	// 					10,                       // 超时时间
+	// 					RT_TIMER_FLAG_ONE_SHOT |   
+	// 					RT_TIMER_FLAG_SOFT_TIMER);  // 软件定时器模式，一次模式
 					
 	
 	// 启动定时器
@@ -765,7 +767,7 @@ int motor_tt_init(void)
 		rt_timer_start(tmr1);
 
     /* 创建数据接收线程 */
-    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096 * 2, 5, 10);
+    thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096 * 2, 3, 10);
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);

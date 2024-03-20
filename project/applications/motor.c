@@ -27,8 +27,7 @@ static int motor_id = 0; // 用于分配电机id
                          // 电机操作函数的
 #define MOTOR_ASSERT_ID(id) \
     if (id >= MOTOR_NUM)    \
-        while (1)           \
-            ;
+        return 0;
 #define MOTOR_MALLOC(x) malloc(x); // 电机操作函数的内存分配
 #define MOTOR_FREE(x) free(x);     // 电机操作函数的内存释放
 
