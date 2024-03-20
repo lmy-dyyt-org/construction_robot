@@ -8,11 +8,12 @@
  */
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
+#include "math.h"
 
-// #define DBG_TAG              "drv.step_motor"
+#define DBG_TAG              "drv.step_motor"
 
-// #define DBG_LVL               DBG_LOG
-// #include <ulog.h>
+#define DBG_LVL               DBG_INFO
+#include <ulog.h>
 
 stepper_motor_t stepper_motor_big_arm;
 stepper_motor_t stepper_motor_small_arm;
@@ -42,6 +43,9 @@ int8_t small_arm_dir;
 extern int32_t abig_arm_pulse;
 extern int32_t asmall_arm_pulse;
 
+int8_t big_arm_init_flag;
+int8_t small_arm_init_flag;
+
 void drv_stepper_motor(void *parameter)
 {
 	/*通信初始化 电机初始化*/
@@ -51,20 +55,53 @@ void drv_stepper_motor(void *parameter)
   rt_thread_mdelay(2000); //上电需要等两秒 初始化
 
   //回零调参 电机有存储的 没必要每次都重新设置
-//   Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
-//   Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+  // Emm_V5_Origin_Modify_Params(1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  // Emm_V5_Origin_Modify_Params(3, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
-//   rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！
-//  Emm_V5_Origin_Trigger_Return(1, 2, 0);
-//   Emm_V5_Origin_Trigger_Return(3, 2, 0);
-//   rt_thread_mdelay(100);//延时等待闭环步进参数设置完成（写入flash）
-//   Emm_V5_Origin_Trigger_Return(1, 2, 0);
-//   Emm_V5_Origin_Trigger_Return(3, 2, 0); 
-   
+  // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！延时等待闭环步进参数设置完成（写入flash）
+  // Emm_V5_Origin_Trigger_Return(1, 2, 0);
+  // Emm_V5_Origin_Trigger_Return(3, 2, 0);
+
+  //电机卸力
+  Emm_V5_En_Control(1, 0, 0);
+  Emm_V5_En_Control(3, 0, 0); 
+  
+  while(1)////////////////////上电先到初始位置
+  {
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
+    LOG_D("big:%f small:%f",stepper_motor_big_arm.stepper_motor_angle, stepper_motor_small_arm.stepper_motor_angle);
+    if( fabs(stepper_motor_big_arm.stepper_motor_angle - 252.7f ) < 1.0f && big_arm_init_flag != 1) 
+      {
+        LOG_D("big_arm_go_over");
+        Emm_V5_En_Control(1, 1, 0);
+        big_arm_init_flag = 1;
+      }
+    if( fabs(stepper_motor_small_arm.stepper_motor_angle - (-45.2f)) < 1.0f && small_arm_init_flag != 1)
+      {
+        LOG_D("small_arm_go_over");
+        Emm_V5_En_Control(3, 1, 0);
+        small_arm_init_flag = 1;
+      }
+    if(big_arm_init_flag == 1 && small_arm_init_flag == 1)
+    {
+      break;
+    }
+  }
+    // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
+    // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
+    // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
+    rt_thread_mdelay(500);
+
+  // Emm_V5_Pos_Control(3, 0, 100, 20, 402, 1, 0);//-45.2 * 3200 / 360
+  // rt_thread_mdelay(2000);
+  // Emm_V5_Pos_Control(1, 0, 100, 20, 2246, 1, 0);//252.7 * 3200 / 360
+  // rt_thread_mdelay(2000); 
   while(1)
   {
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
+
   big_arm_pulse = abig_arm_pulse;
   small_arm_pulse = asmall_arm_pulse;
 
@@ -89,8 +126,9 @@ void drv_stepper_motor(void *parameter)
   }
 
   // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
-  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
-  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
+  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
+  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
+
 
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
@@ -511,3 +549,10 @@ uint8_t Emm_V5_ID_judge(stepper_motor_t** stepper_motor)
   }
   return 0;
 }
+
+void my_hello(void)
+{
+	rt_kprintf("hello world\n");
+}
+
+MSH_CMD_EXPORT(my_hello, msh cmd test);

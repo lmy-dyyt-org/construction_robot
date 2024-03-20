@@ -52,6 +52,7 @@
 RobotGeometry geometry(END_EFFECTOR_OFFSET, LOW_SHANK_LENGTH, HIGH_SHANK_LENGTH);
 Interpolation interpolator;
 
+
 uint8_t i = 0;
 
 extern "C"
@@ -108,35 +109,9 @@ void loop()
   interpolator.updateActualPosition();
   //空间解算得夹角
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
-<<<<<<< Updated upstream
-
-  // stepperRotate.stepToPositionRad(geometry.getRotRad());//坐标点 转为 角度变量 再转为电机脉冲数
-  // stepperLower.stepToPositionRad(geometry.getLowRad());
-  // stepperHigher.stepToPositionRad(geometry.getHighRad());
-  #if RAIL
-    stepperRail.stepToPositionMM(interpolator.getEPosmm(), STEPS_PE11R_MM_RAIL);
-  #endif
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-
- 	//LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
- 
-  //设目标值
-  // if (i<2) {
-  // zmm_absolute = zmm_absolute;
-  // interpolator.setInterpolation(interpolator.getXPosmm()+0, ymm_absolute-interpolator.getYPosmm(), zmm_absolute-interpolator.getZPosmm(), interpolator.getEPosmm()+0, 5);//这个函数赋的是差值 目标值和当前值之间的距离
-  // i++;
-  // }
-
-  ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
-  //interpolator.updateActualPosition();
-  geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
-
-=======
   //计算电机需要的脉冲数
   big_arm_TargetPosition = (int32_t)(geometry.getLowRad() * radToStepFactor );//严格按照别人的公式来算，不要自己瞎想
   small_arm_TargetPosition = (int32_t)(geometry.getHighRad() * radToStepFactor );
->>>>>>> Stashed changes
   //打印当前角度信息
 	LOG_D("arduino:::angle::::big:%f small:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
   LOG_D("arduino::::pulse:::big:%d small:%d",big_arm_TargetPosition, small_arm_TargetPosition-3600); //因为机械臂的初始值是90度，所以每次运算脉冲时，要减去90度的脉冲数
