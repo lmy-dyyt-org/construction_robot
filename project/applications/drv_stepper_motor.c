@@ -70,8 +70,8 @@ void drv_stepper_motor(void *parameter)
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
 
   LOG_D("M1:%f M3:%f",big_arm_pulse, small_arm_pulse); 
-  //  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 0, 0);
-  //  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_dir, 0, 0);
+  Emm_V5_Pos_Control(1, 0, 100, 20, 2200, 0, 0);
+  Emm_V5_Pos_Control(3, 0, 100, 20, 2200, 0, 0);
 
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);

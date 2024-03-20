@@ -176,7 +176,7 @@ typedef struct _var_list {
     } PID_Config_t;
     typedef  struct _PID_T apid_t;
 
-    typedef struct _PID_T
+     struct _PID_T
     {
         ALL_PID_Flag flag;
         PID_Parameter parameter;
@@ -186,7 +186,7 @@ typedef struct _var_list {
         void (*i_handle)(apid_t *pid);
         void (*d_handle)(apid_t *pid);
         void (*variable)(apid_t *pid); // 变速积分
-    }apid_t;
+    };
 
 /*用户不该使用该注释下面的函数*/
 	void _PID_Hander(apid_t* pid, PID_TYPE cycle);

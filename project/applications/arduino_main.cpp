@@ -128,7 +128,7 @@ void loop()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
- 	LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
+ 	//LOG_D("M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14);
  
   //设目标值
   // if (i<2) {
@@ -138,11 +138,11 @@ void loop()
   // }
 
   ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
-  interpolator.updateActualPosition();
+  //interpolator.updateActualPosition();
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
 
   //打印当前角度信息
-	LOG_D("arduino:::::::M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
+	//LOG_D("arduino:::::::M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
 
   //电机加载
   if(geometry.getLowRad()>0)
@@ -165,7 +165,7 @@ void loop()
 
   big_arm_pulse = (uint32_t)geometry.getLowRad()*3200/(6.28);
   small_arm_pulse = (uint32_t)geometry.getHighRad()*3200/(6.28);
-  LOG_D("arduino_run\n"); 
+  //LOG_D("arduino_run\n"); 
   // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, false, false);
   // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, false, false);
 
@@ -173,8 +173,8 @@ void loop()
 
   delay(500);
 
-  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
-   Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
+//  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
+//   Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
 
 //geometry.getRotRad()*3200/(6.28)
 
