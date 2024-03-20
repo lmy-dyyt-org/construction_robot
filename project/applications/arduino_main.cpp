@@ -43,32 +43,32 @@
 #include "Emm_v5.h"
 #include "drv_stepper_motor.h"
 
+#define main_gear_teeth 90.0
+#define motor_gear_teeth 20.0
+#define microsteps 16
+#define steps_per_rev 200
+
 //EXECUTION & COMMAND OBJECTS 执行和命令对象
 RobotGeometry geometry(END_EFFECTOR_OFFSET, LOW_SHANK_LENGTH, HIGH_SHANK_LENGTH);
 Interpolation interpolator;
 
-
-float ymm_absolute = 0;
-float zmm_absolute = 0;
 uint8_t i = 0;
-
 
 extern "C"
 {
-  void big_arm_get_pulse(uint32_t pulse);
+  int32_t abig_arm_pulse;
+  int32_t asmall_arm_pulse;
 }
 
-uint32_t big_arm_pulse;
-uint32_t small_arm_pulse;
+int32_t big_arm_TargetPosition;
+int32_t small_arm_TargetPosition;
 
-uint8_t big_arm_dir;
-uint8_t small_arm_dir;
+float radToStepFactor;
 
 void setup()
 {
   //Serial.begin(BAUD);
-    
-  // stepperHigher.setPositionRad(PI / 2.0); // 90°
+  // stepperHigher.setPositionRad(PI / 2.0); // 90° //设置初始位置
   // stepperLower.setPositionRad(0);         // 0°
   // stepperRotate.setPositionRad(0);        // 0°
   #if RAIL
@@ -94,30 +94,21 @@ void setup()
   }
 
   LOG_D("arduino_setup\n"); 
-  interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0);
+  interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0); //设初始位置
   
-interpolator.setInterpolation(interpolator.getXPosmm()+0, interpolator.getYPosmm()+0, interpolator.getZPosmm()+20, interpolator.getEPosmm()+20, 5);
-
-
   interpolator.speed_profile = 0;
-  ymm_absolute = 50;
-  zmm_absolute = 50;
-
-  interpolator.setInterpolation(interpolator.getXPosmm()+0, ymm_absolute-interpolator.getYPosmm(), zmm_absolute-interpolator.getZPosmm(), interpolator.getEPosmm()+0, 5);//这个函数赋的是差值 目标值和当前值之间的距离，插值每次插5mm（细分）
+  radToStepFactor = (main_gear_teeth / motor_gear_teeth) * (microsteps * steps_per_rev) / 2 / PI; //减速比设置
 }
 
 void loop() 
 {
-/*
-注意c++的写法，每个电机继承了 RobotGeometry 类，所以可以直接调用 RobotGeometry 类的函数
-相当于我们要自己写一个类继承 RobotGeometry 类，然后在这个类里面写我们的电机控制函数
-*/
-  interpolator.speed_profile = 0;
-   //
-
-  ///////////////////////////////插值控制器得运算并且得出结果////////////////////////////////////////////////
+  //输入目标绝对值！！！！！！！！！注意原点的位置！！！！！！！
+  interpolator.setInterpolation(0,INITIAL_Y,INITIAL_Z-50,0,5);// 1.注意原点是底座而不是末端执行器  2.注意用绝对坐标，，同时电机也就需要绝对坐标
+  //由插值器计算每一次插值后得位置
   interpolator.updateActualPosition();
+  //空间解算得夹角
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
+<<<<<<< Updated upstream
 
   // stepperRotate.stepToPositionRad(geometry.getRotRad());//坐标点 转为 角度变量 再转为电机脉冲数
   // stepperLower.stepToPositionRad(geometry.getLowRad());
@@ -141,41 +132,17 @@ void loop()
   //interpolator.updateActualPosition();
   geometry.set(interpolator.getXPosmm(), interpolator.getYPosmm(), interpolator.getZPosmm());//笛卡尔坐标系，把线性插值的每一次小步，更新到笛卡尔坐标系的坐标移动
 
+=======
+  //计算电机需要的脉冲数
+  big_arm_TargetPosition = (int32_t)(geometry.getLowRad() * radToStepFactor );//严格按照别人的公式来算，不要自己瞎想
+  small_arm_TargetPosition = (int32_t)(geometry.getHighRad() * radToStepFactor );
+>>>>>>> Stashed changes
   //打印当前角度信息
-	//LOG_D("arduino:::::::M1:%f M3:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
-
-  //电机加载
-  if(geometry.getLowRad()>0)
-  {
-    big_arm_dir = 0;
-  }
-  else
-  {
-    big_arm_dir = 1;
-  }
-
-  if(geometry.getHighRad()>0)
-  {
-    small_arm_dir = 0;
-  }
-  else
-  {
-    small_arm_dir = 1;
-  }
-
-  big_arm_pulse = (uint32_t)geometry.getLowRad()*3200/(6.28);
-  small_arm_pulse = (uint32_t)geometry.getHighRad()*3200/(6.28);
-  //LOG_D("arduino_run\n"); 
-  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, false, false);
-  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, false, false);
-
-  big_arm_get_pulse(big_arm_pulse);
+	LOG_D("arduino:::angle::::big:%f small:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
+  LOG_D("arduino::::pulse:::big:%d small:%d",big_arm_TargetPosition, small_arm_TargetPosition-3600); //因为机械臂的初始值是90度，所以每次运算脉冲时，要减去90度的脉冲数
+  //逻辑线程丢坐标到这个文件，然后其只用来计算脉冲，然后再丢到电机发送线程里，避免两个线程发送冲突
+  abig_arm_pulse = big_arm_TargetPosition;
+  asmall_arm_pulse = small_arm_TargetPosition-3600;
 
   delay(500);
-
-//  Emm_V5_Pos_Control(1, 0, 100, 20, geometry.getLowRad()*3200/(6.28), false, false);
-//   Emm_V5_Pos_Control(3, 0, 100, 20, geometry.getHighRad()*3200/(6.28), false, false);
-
-//geometry.getRotRad()*3200/(6.28)
-
 }
