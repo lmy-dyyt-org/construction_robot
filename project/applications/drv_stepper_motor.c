@@ -42,6 +42,8 @@ int8_t small_arm_dir;
 
 extern int32_t abig_arm_pulse;
 extern int32_t asmall_arm_pulse;
+extern float ymm;
+extern float zmm;
 
 int8_t big_arm_init_flag;
 int8_t small_arm_init_flag;
@@ -62,11 +64,11 @@ void drv_stepper_motor(void *parameter)
   // Emm_V5_Origin_Trigger_Return(1, 2, 0);
   // Emm_V5_Origin_Trigger_Return(3, 2, 0);
 
-  //电机卸力
+////////////////////上电先到初始位置///////////////////////////////////
+ //电机卸力
   Emm_V5_En_Control(1, 0, 0);
   Emm_V5_En_Control(3, 0, 0); 
-  
-  while(1)////////////////////上电先到初始位置
+  while(1)
   {
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
@@ -85,18 +87,14 @@ void drv_stepper_motor(void *parameter)
       }
     if(big_arm_init_flag == 1 && small_arm_init_flag == 1)
     {
+      Emm_V5_Reset_CurPos_To_Zero(1); // 将当前位置清零
+      Emm_V5_Reset_CurPos_To_Zero(3); // 将当前位置清零
       break;
     }
   }
-    // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
-    // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
-    // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
-    rt_thread_mdelay(500);
+////////////////////////////////////////////////////////////////////////
 
-  // Emm_V5_Pos_Control(3, 0, 100, 20, 402, 1, 0);//-45.2 * 3200 / 360
-  // rt_thread_mdelay(2000);
-  // Emm_V5_Pos_Control(1, 0, 100, 20, 2246, 1, 0);//252.7 * 3200 / 360
-  // rt_thread_mdelay(2000); 
+
   while(1)
   {
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
@@ -126,8 +124,8 @@ void drv_stepper_motor(void *parameter)
   }
 
   // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
-  // Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
-  // Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
+  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
+  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
 
 
     // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
@@ -550,9 +548,23 @@ uint8_t Emm_V5_ID_judge(stepper_motor_t** stepper_motor)
   return 0;
 }
 
-void my_hello(void)
+void arm_y_add20(void)
 {
-	rt_kprintf("hello world\n");
+	ymm += 20;
 }
-
-MSH_CMD_EXPORT(my_hello, msh cmd test);
+MSH_CMD_EXPORT(arm_y_add20, arm_y_add20);
+void arm_y_reduce20(void)
+{
+	ymm -= 20;
+}
+MSH_CMD_EXPORT(arm_y_reduce20, arm_y_reduce20);
+void arm_z_add20(void)
+{
+	zmm += 20;
+}
+MSH_CMD_EXPORT(arm_z_add20, arm_z_add20);
+void arm_z_reduce20(void)
+{
+	zmm -= 20;
+}
+MSH_CMD_EXPORT(arm_z_reduce20, arm_z_reduce20);
