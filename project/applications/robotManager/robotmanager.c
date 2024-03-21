@@ -21,7 +21,7 @@ enum
     ACTION_MODE,
 };
 
-uint8_t rbmg_mode = 0;
+uint8_t rbmg_mode = LINE_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
@@ -54,12 +54,22 @@ void action_half_car(void)
         if (fabs(nowpos->y_m - ctrl.pos.y_m) < 1)
         {
             break;
+<<<<<<< Updated upstream
         }else{
             if(nowpos->y_m - ctrl.pos.y_m > 0){
                 break;
             }
         }
         // LOG_D("[action]pos x:%f y:%f z:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad);
+=======
+        }
+        else if (nowpos->y_m - ctrl.pos.y_m > 0)
+        {
+            break;
+        }
+
+        //LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+>>>>>>> Stashed changes
         rt_thread_mdelay(10);
     }
 }
