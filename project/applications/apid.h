@@ -274,6 +274,8 @@ typedef struct _var_list {
     PID_TYPE APID_Get_Target(apid_t *pid);
     PID_TYPE APID_Get_Present(apid_t *pid);
     PID_TYPE APID_Get_Predict(apid_t *pid);
+		
+		
 #define VAR_CMD_REGISTER(var,type) do{\
     var_register(&var,#var,type);\
 }while (0)

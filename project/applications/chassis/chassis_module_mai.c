@@ -1,9 +1,8 @@
 #include "chassis_module_mai.h"
 
-
-#include "ulog.h"
 #define DBG_TAG    "Chassis.mai"
 #define DBG_LVL               DBG_INFO
+#include <rtdbg.h>
 #ifdef CHASSIS_MODULE_MAI
 int module_mai(struct chassis *chassis, const void *output, const void *input);
 #ifdef CHASSIS_USING_MOTOR_HAL

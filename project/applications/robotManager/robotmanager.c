@@ -1,15 +1,15 @@
+
+#include <rtthread.h>
+#define DBG_TAG "RobotManager"
+#define DBG_LVL DBG_LOG
+#include <rtdbg.h>
+
 #include "robotManager.h"
 #include "abus_topic.h"
 #include "chassis_port.h"
-#include "rtthread.h"
 #include "abus_topic.h"
 #include "math.h"
 
-#include "ulog.h"
-#undef DBG_TAG
-#undef DBG_LVL
-#define DBG_TAG "RobotManager"
-#define DBG_LVL DBG_LOG
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
@@ -54,22 +54,13 @@ void action_half_car(void)
         if (fabs(nowpos->y_m - ctrl.pos.y_m) < 1)
         {
             break;
-<<<<<<< Updated upstream
-        }else{
-            if(nowpos->y_m - ctrl.pos.y_m > 0){
-                break;
-            }
-        }
-        // LOG_D("[action]pos x:%f y:%f z:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad);
-=======
         }
         else if (nowpos->y_m - ctrl.pos.y_m > 0)
         {
             break;
         }
 
-        //LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
->>>>>>> Stashed changes
+        // LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
 }
@@ -161,9 +152,8 @@ void rbmg_handle(void *parameter)
         {
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
-            rbmg_mode = LINE_MODE;
             action_half_car();
-
+            rbmg_mode = LINE_MODE;
             // LOG_D("action completion");
         }
         rt_thread_mdelay(50);

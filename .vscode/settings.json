@@ -55,5 +55,13 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "files.associations": {
+    "abus_topic.h": "c",
+    "math.h": "c",
+    "ulog.h": "c",
+    "rtdbg.h": "c",
+    "robotmanager.h": "c",
+    "chassis_port.h": "c"
+  }
 }
