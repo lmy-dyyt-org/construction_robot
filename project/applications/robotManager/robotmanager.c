@@ -56,10 +56,10 @@ void action_half_car(void)
             break;
         }else{
             if(nowpos->y_m - ctrl.pos.y_m > 0){
-                break;7
+                break;
             }
         }
-        LOG_D("[action]pos x:%f y:%f z:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad);
+        // LOG_D("[action]pos x:%f y:%f z:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad);
         rt_thread_mdelay(10);
     }
 }
@@ -138,7 +138,7 @@ void rbmg_handle(void *parameter)
 
     while (1)
     {
-        LOG_D("rbmg heart tick");
+        // LOG_D("rbmg heart tick");
 
         // 接到处理数据的消息
         rbmg_mode = ACTION_MODE;
@@ -154,7 +154,7 @@ void rbmg_handle(void *parameter)
             rbmg_mode = LINE_MODE;
             action_half_car();
 
-            LOG_D("action completion");
+            // LOG_D("action completion");
         }
         rt_thread_mdelay(50);
     }

@@ -119,7 +119,7 @@ void loop()
   small_arm_TargetPosition = (int32_t)(geometry.getHighRad() * radToStepFactor );
   //打印当前角度信息
 	// LOG_D("arduino:::angle::::big:%f small:%f",geometry.getLowRad()*180/3.14, geometry.getHighRad()*180/3.14); 
-  LOG_D("arduino::::pulse:::big:%d small:%d",big_arm_TargetPosition, small_arm_TargetPosition-3600); //因为机械臂的初始值是90度，所以每次运算脉冲时，要减去90度的脉冲数
+  // LOG_D("arduino::::pulse:::big:%d small:%d",big_arm_TargetPosition, small_arm_TargetPosition-3600); //因为机械臂的初始值是90度，所以每次运算脉冲时，要减去90度的脉冲数
   //逻辑线程丢坐标到这个文件，然后其只用来计算脉冲，然后再丢到电机发送线程里，避免两个线程发送冲突
   abig_arm_pulse = big_arm_TargetPosition;
   asmall_arm_pulse = small_arm_TargetPosition-3600;

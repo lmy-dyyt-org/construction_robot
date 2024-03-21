@@ -208,7 +208,7 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
       case S_Ans :  
         if(size>=4) 
         {
-          LOG_D("ansewer,size:%d\n",size); 
+          // LOG_D("ansewer,size:%d\n",size); 
         // rt_mb_send(&mb1, (uint8_t)size); 
           rt_sem_release(cmp_sem);
         }
@@ -402,7 +402,11 @@ void drv_process_steppermotor(void *parameter)
                         break;
           case S_Conf :  break;
           case S_State:  break;
-          case S_Ans :LOG_D("process_answer: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));  stepper_motor_cmd_state = S_IDLE;  rt_mutex_release(mutex_step); break;
+          case S_Ans :
+          rt_device_read(Emm_serial1, 0, tmp, 60);
+            // LOG_D("process_answer: %d\n", ); 
+            stepper_motor_cmd_state = S_IDLE;  rt_mutex_release(mutex_step); 
+            break;
           default: LOG_E("stepperMotor_cmd_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60)); rt_mutex_release(mutex_step); break;
         }
       // }
@@ -568,3 +572,24 @@ void arm_z_reduce20(void)
 	zmm -= 20;
 }
 MSH_CMD_EXPORT(arm_z_reduce20, arm_z_reduce20);
+void arm_ctrl(int argc, char **argv)
+{
+	if(argc != 3)
+	{
+		rt_kprintf("正确格式: arm_ctrl ymm zmm\n");
+		return;
+	}
+  ymm = atof(argv[1]);
+  zmm = atof(argv[2]);
+  LOG_D("ymm:%f,zmm:%f",ymm,zmm);
+}
+MSH_CMD_EXPORT(arm_ctrl, "arm_ymm,zmm"); 
+void arm_h(void)
+{
+  LOG_D("arm_y_add20  arm_y_add20\n");
+  LOG_D("arm_z_add20  arm_z_add20\n");
+  LOG_D("arm_y_reduce20  arm_y_reduce20\n");
+  LOG_D("arm_z_reduce20  arm_z_reduce20\n");
+  LOG_D("arm_ctrl  arm_ymm,zmm\n");
+}
+MSH_CMD_EXPORT(arm_h, "arm command help");

@@ -32,7 +32,7 @@ void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -56,7 +56,7 @@ void Emm_V5_Reset_Clog_Pro(uint8_t addr)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -103,7 +103,7 @@ void Emm_V5_Read_Sys_Params(stepper_motor_t* stepper_motor, uint8_t addr, SysPar
   // LOG_D("trans_take_mutex\n");
 
   stepper_motor_cmd_state = s;//置状态应该放在 发送前面 ，不然callback的时候还是 idle 就会先把一些数据发送出去
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, i);  
 
   rt_mutex_release(mutex_step);
@@ -134,7 +134,7 @@ void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, rt_bool_t svF, uint8_t ctrl_mode)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -162,7 +162,7 @@ void Emm_V5_En_Control(uint8_t addr, rt_bool_t state, rt_bool_t snF)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -194,7 +194,7 @@ void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, rt
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 8);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -230,10 +230,10 @@ void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, ui
   cmd[11] =  snF;                       // 多机同步运动标志，false为不启用，true为启用
   cmd[12] =  0x6B;                      // 校验字节
   
-  LOG_D("stepper_motor_try_to_gey_mutex\n");
+  // LOG_D("stepper_motor_try_to_gey_mutex\n");
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 13);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -259,7 +259,7 @@ void Emm_V5_Stop_Now(uint8_t addr, rt_bool_t snF)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -283,7 +283,7 @@ void Emm_V5_Synchronous_motion(uint8_t addr)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -309,7 +309,7 @@ void Emm_V5_Origin_Set_O(uint8_t addr, rt_bool_t svF)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -358,7 +358,7 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, rt_bool_t svF, uint8_t o_mode, ui
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 20);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -386,7 +386,7 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, rt_bool_t snF)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 5);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
@@ -410,7 +410,7 @@ void Emm_V5_Origin_Interrupt(uint8_t addr)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 4);
   rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
