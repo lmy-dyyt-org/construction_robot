@@ -52,7 +52,6 @@
 RobotGeometry geometry(END_EFFECTOR_OFFSET, LOW_SHANK_LENGTH, HIGH_SHANK_LENGTH);
 Interpolation interpolator;
 
-
 uint8_t i = 0;
 
 extern "C"
@@ -67,8 +66,6 @@ int32_t big_arm_TargetPosition;
 int32_t small_arm_TargetPosition;
 
 float radToStepFactor;
-
-
 
 void setup()
 {

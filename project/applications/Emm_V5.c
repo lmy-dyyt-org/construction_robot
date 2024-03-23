@@ -162,9 +162,9 @@ void Emm_V5_En_Control(uint8_t addr, rt_bool_t state, rt_bool_t snF)
   // 发送命令
   rt_mutex_take(mutex_step, RT_WAITING_FOREVER); 
   stepper_motor_cmd_state = S_Ans;
-  // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
+  LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
- 
+  rt_mutex_release(mutex_step);
   rt_sem_release(step_sem);
 }
 

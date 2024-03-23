@@ -1,7 +1,7 @@
 
 #include <rtthread.h>
 #define DBG_TAG "RobotManager"
-#define DBG_LVL DBG_LOG
+#define DBG_LVL DBG_INFO
 #include <rtdbg.h>
 
 #include "robotManager.h"
