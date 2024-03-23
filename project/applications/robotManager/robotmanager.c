@@ -45,7 +45,7 @@ void action_half_car(void)
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m +0.1554;
+    ctrl.pos.y_m = nowpos->y_m +0.30;
     ctrl.pos.z_rad = nowpos->z_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
