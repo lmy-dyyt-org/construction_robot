@@ -55,6 +55,39 @@ void action_half_car(void)
         {
             break;
         }
+<<<<<<< Updated upstream
+=======
+        else if (nowpos->y_m - ctrl.pos.y_m > 0)
+        {
+            break;
+        }
+            abus_public(&rbmg_chassis_acc, &ctrl);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+        rt_thread_mdelay(10);
+    }
+}
+
+void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
+{
+    extern chassis_t chassis_mai;
+    const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
+    // 打印电机位置
+    // 发布底盘控制速度，前进
+    ctrl.type = 1;
+    ctrl.pos.x_m = nowpos->x_m + _x_m;
+    ctrl.pos.y_m = nowpos->y_m + _y_m;
+    ctrl.pos.z_rad = nowpos->z_rad+_w_rad;
+    abus_public(&rbmg_chassis_acc, &ctrl);
+
+    while (1)
+    {
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
+        {
+            break;
+        }
+
+        abus_public(&rbmg_chassis_acc, &ctrl);
+>>>>>>> Stashed changes
         abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
@@ -129,13 +162,21 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
+<<<<<<< Updated upstream
     rbmg_mode = ACTION_MODE;
+=======
+        rbmg_mode = ACTION_MODE;
+     
+>>>>>>> Stashed changes
     while (1)
     {
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
+<<<<<<< Updated upstream
         
+=======
+>>>>>>> Stashed changes
 
         if (rbmg_mode == LINE_MODE)
         {
@@ -147,7 +188,7 @@ void rbmg_handle(void *parameter)
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
             LOG_D("action start");
-            action_half_car();
+            action_front_car(0.214f);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }
