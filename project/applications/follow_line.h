@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-02 22:00:25
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-18 18:53:08
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-24 02:37:35
  * @FilePath: \project\applications\follow_line.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -30,18 +30,25 @@ extern "C" {
 #define FRONT_INFRARED4_PIN    GET_PIN(E, 5)	//前右0 J1
 #define FRONT_INFRARED5_PIN    GET_PIN(F, 1)	//前右1 I1
 	
-#define LEFT_INFRARED0_PIN    GET_PIN(F, 0)		//左左0 I2
-#define LEFT_INFRARED1_PIN    GET_PIN(E, 4)		//左左1 J2
-#define LEFT_INFRARED2_PIN    GET_PIN(E, 12)	//左中0 K2
-#define LEFT_INFRARED3_PIN    GET_PIN(B, 0)		//左中1 L2
-#define LEFT_INFRARED4_PIN    GET_PIN(B, 1)		//左右0 M2
-#define LEFT_INFRARED5_PIN    GET_PIN(C, 0)		//左右1 N2
+#define LEFT_INFRARED0_PIN    GET_PIN(C, 0)		//左左0 I2
+#define LEFT_INFRARED1_PIN    GET_PIN(B, 1)		//左左1 J2
+#define LEFT_INFRARED2_PIN    GET_PIN(B, 0)    	//左中0 K2
+#define LEFT_INFRARED3_PIN    GET_PIN(E, 12)		//左中1 L2
+#define LEFT_INFRARED4_PIN    GET_PIN(E, 4)		//左右0 M2
+#define LEFT_INFRARED5_PIN    GET_PIN(F, 0)		//左右1 N2
 
-#define RIGHT_INFRARED0_PIN    GET_PIN(C, 5)	//右左0 O1
-#define RIGHT_INFRARED1_PIN    GET_PIN(C, 1)	//右左1 O2
-#define RIGHT_INFRARED2_PIN    GET_PIN(A, 5)	//右中0 P1
-#define RIGHT_INFRARED3_PIN    GET_PIN(A, 4)	//右中1 P2
-#define RIGHT_INFRARED4_PIN    GET_PIN(F, 10)	//右右0 Q1
+// #define LEFT_INFRARED0_PIN    GET_PIN(F, 0)		//左左0 I2
+// #define LEFT_INFRARED1_PIN    GET_PIN(E, 4)		//左左1 J2
+// #define LEFT_INFRARED2_PIN    GET_PIN(E, 12)	//左中0 K2
+// #define LEFT_INFRARED3_PIN    GET_PIN(B, 0)		//左中1 L2
+// #define LEFT_INFRARED4_PIN    GET_PIN(B, 1)		//左右0 M2
+// #define LEFT_INFRARED5_PIN    GET_PIN(C, 0)		//左右1 N2
+
+#define RIGHT_INFRARED0_PIN    GET_PIN(F, 10)	//右左0 O1
+#define RIGHT_INFRARED1_PIN    GET_PIN(A, 5)	//右左1 O2
+#define RIGHT_INFRARED2_PIN    GET_PIN(C, 5)	//右中0 P1
+#define RIGHT_INFRARED3_PIN    GET_PIN(C, 1)	//右中1 P2
+#define RIGHT_INFRARED4_PIN    GET_PIN(A, 4)	//右右0 Q1
 #define RIGHT_INFRARED5_PIN    GET_PIN(I, 9)	//右右1 Q2
 
 enum{
