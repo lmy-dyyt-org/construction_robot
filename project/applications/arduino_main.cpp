@@ -101,7 +101,7 @@ void setup()
   LOG_D("arduino_setup\n"); 
   interpolator.setInterpolation(INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0, INITIAL_X, INITIAL_Y, INITIAL_Z, INITIAL_E0); //设初始位置
   ymm = INITIAL_Y;
-  zmm = INITIAL_Z;
+  zmm = INITIAL_Z;    
   interpolator.speed_profile = 0;
   radToStepFactor = (main_gear_teeth / motor_gear_teeth) * (microsteps * steps_per_rev) / 2 / PI; //减速比设置
 }

@@ -136,7 +136,7 @@ void rbmg_handle(void *parameter)
 
     while (1)
     {
-        // LOG_D("rbmg heart tick");
+        // LOG_D("rbmg he
 
         // 接到处理数据的消息
         rbmg_mode = ACTION_MODE;
