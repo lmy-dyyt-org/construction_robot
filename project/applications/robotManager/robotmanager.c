@@ -1,7 +1,7 @@
 
 #include <rtthread.h>
 #define DBG_TAG "RobotManager"
-#define DBG_LVL DBG_INFO
+#define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
 #include "robotManager.h"
@@ -45,7 +45,7 @@ void action_half_car(void)
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m +40;
+    ctrl.pos.y_m = nowpos->y_m +0.1554;
     ctrl.pos.z_rad = nowpos->z_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
@@ -55,11 +55,7 @@ void action_half_car(void)
         {
             break;
         }
-        else if (nowpos->y_m - ctrl.pos.y_m > 0)
-        {
-            break;
-        }
-            abus_public(&rbmg_chassis_acc, &ctrl);
+        abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
@@ -133,13 +129,13 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
-
+    rbmg_mode = ACTION_MODE;
     while (1)
     {
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
-        rbmg_mode = ACTION_MODE;
+        
 
         if (rbmg_mode == LINE_MODE)
         {

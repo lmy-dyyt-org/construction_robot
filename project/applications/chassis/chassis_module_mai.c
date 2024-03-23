@@ -55,7 +55,6 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
             data->motor2 = ((chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) *conversion ;
             data->motor3 = ((-chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) *conversion ;
             data->motor4 = ((-chassis->target.pos.x_m + chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) *conversion ;
-
             break;
         default:
             break;
@@ -71,10 +70,9 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
         case CHASSIS_SPEED:
             // 速度控制
             // 将电机数据(rpm/min)转换为速度(m/s) 使用车轮半径和车体尺寸
-            chassis->present.speed.x_m_s = ((data->motor1 + data->motor2 + data->motor3 + data->motor4) * CHASSIS_2PIR / 60.f) / 4.f;
-            chassis->present.speed.y_m_s = ((data->motor1 - data->motor2 + data->motor3 - data->motor4) * CHASSIS_2PIR / 60.f) / 4.f;
-            chassis->present.speed.z_rad_s = ((data->motor1 - data->motor3 + data->motor2 - data->motor4) * CHASSIS_2PIR / 60.f) / (4.f * (CHSSIS_MAI_A_M + CHSSIS_MAI_B_M));
-
+            chassis->present.speed.x_m_s = ((data->motor1 + data->motor2 - data->motor3 - data->motor4) * CHASSIS_2PIR / 60.f) / 4.f;
+            chassis->present.speed.y_m_s = ((data->motor1 - data->motor2 - data->motor3 + data->motor4) * CHASSIS_2PIR / 60.f) / 4.f;
+            chassis->present.speed.z_rad_s = ((-data->motor1 - data->motor3 - data->motor2 - data->motor4) * CHASSIS_2PIR / 60.f) / (4.f * (CHSSIS_MAI_A_M + CHSSIS_MAI_B_M));
         break;
         case CHASSIS_POS:
             // 位置控制

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\build\keil\Obj\rt-thread.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\build\keil\Obj\rt-thread.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Mar 24 00:20:26 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Mar 24 01:17:23 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1108 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2514,9 +2514,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[cf]"></a>Stream::~Stream__sub_object()</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hardwareserial.o(.text._ZN6StreamD2Ev))
-<BR>[Address Reference Count : 3]<UL><LI> wire.o(.rodata._ZTV7TwoWire)
-<LI> hardwareserial.o(.rodata._ZTV14HardwareSerial)
+<BR>[Address Reference Count : 3]<UL><LI> hardwareserial.o(.rodata._ZTV14HardwareSerial)
 <LI> hardwareserial.o(.rodata._ZTV13ConsoleSerial)
+<LI> wire.o(.rodata._ZTV7TwoWire)
 </UL>
 <P><STRONG><a name="[1ed]"></a>String::String(char const*)</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, wstring.o(.text._ZN6StringC2EPKc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 828 + Unknown Stack Size
@@ -2852,15 +2852,19 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abus_all_init
 </UL>
 
-<P><STRONG><a name="[23b]"></a>action_half_car</STRONG> (Thumb, 164 bytes, Stack size 32 bytes, robotmanager.o(.text.action_half_car))
-<BR><BR>[Stack]<UL><LI>Max Depth = 876 + Unknown Stack Size
+<P><STRONG><a name="[23b]"></a>action_half_car</STRONG> (Thumb, 272 bytes, Stack size 96 bytes, robotmanager.o(.text.action_half_car))
+<BR><BR>[Stack]<UL><LI>Max Depth = 940 + Unknown Stack Size
 <LI>Call Chain = action_half_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
 <LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_get_pos
 <LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abus_public
+<LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmplt
+<LI><a href="#[1d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpge
+<LI><a href="#[1e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
+<LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
 </UL>
@@ -3382,8 +3386,8 @@ Global Symbols
 <LI><a href="#[299]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_usage_get_now_time
 <LI><a href="#[298]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_strerror
 <LI><a href="#[296]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_get_information
-<LI><a href="#[29a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ul2f
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[29a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ul2f
 </UL>
 <BR>[Called By]<UL><LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
 <LI><a href="#[279]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
@@ -3750,12 +3754,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> abus_port.o(.text.abus_all_init)
 </UL>
-<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
-<BR><BR>[Stack]<UL><LI>Max Depth = 876 + Unknown Stack Size
+<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 88 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
+<BR><BR>[Stack]<UL><LI>Max Depth = 940 + Unknown Stack Size
 <LI>Call Chain = rbmg_handle &rArr; action_half_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_half_car
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
+<LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.rbmg_init)
 </UL>
@@ -6465,7 +6470,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[326]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_call
+<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
+<LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_half_car
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_call
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_ctr
 <LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_driver
 <LI><a href="#[266]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_pos
@@ -6961,6 +6968,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_d2f
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotGeometry::calculateGrad()
+<LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_half_car
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_dj_can_motor_callback
 <LI><a href="#[266]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_pos
 <LI><a href="#[265]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_speed
@@ -6982,7 +6990,8 @@ Global Symbols
 <P><STRONG><a name="[1e4]"></a>__aeabi_dadd</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, daddsub_clz.o(x$fpl$dadd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_dadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;follow_line
+<BR>[Called By]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_half_car
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;follow_line
 <LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;module_mai
 <LI><a href="#[1e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Interpolation::updateActualPosition()
 <LI><a href="#[2bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
@@ -7250,6 +7259,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_dcmpge
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Interpolation::isAllowedPosition(float*)
+<LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_half_car
 <LI><a href="#[2bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
 <LI><a href="#[2c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
 </UL>
