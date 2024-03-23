@@ -68,7 +68,7 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
             // 速度控制
             // 将电机数据(rpm/min)转换为速度(m/s) 使用车轮半径和车体尺寸
             chassis->present.speed.x_m_s = ((data->motor1 + data->motor2) / CHASSIS_2PIR * 60.f) / 2.f;
-            chassis->present.speed.y_m_s = ((data->motor2 - data->motor4 ) / CHASSIS_2PIR * 60.f) / 2.f;
+            chassis->present.speed.y_m_s = ((-data->motor2 + data->motor4 ) / CHASSIS_2PIR * 60.f) / 2.f;
             chassis->present.speed.z_rad_s = ((data->motor3 - data->motor2) / CHASSIS_2PIR * 60.f) / (2.f * (CHASSIS_HALF_A_B));
         break;
         case CHASSIS_POS:
