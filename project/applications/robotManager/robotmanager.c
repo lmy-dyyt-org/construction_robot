@@ -37,7 +37,8 @@ enum
 };
 uint8_t action_type;
 
-void action_half_car(void)
+
+void action_front_car(float _y_m)
 {
     extern chassis_t chassis_mai;
     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
@@ -45,8 +46,31 @@ void action_half_car(void)
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m +40;
+    ctrl.pos.y_m = nowpos->y_m + _y_m;
     ctrl.pos.z_rad = nowpos->z_rad;
+    abus_public(&rbmg_chassis_acc, &ctrl);
+
+    while (1)
+    {
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
+        {
+            break;
+        }
+            abus_public(&rbmg_chassis_acc, &ctrl);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+        rt_thread_mdelay(10);
+    }
+}
+void action_rotate_car(float _w_rad)
+{
+    extern chassis_t chassis_mai;
+    const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
+    // 打印电机位置
+    // 发布底盘控制速度，前进
+    ctrl.type = 1;
+    ctrl.pos.x_m = nowpos->x_m;
+    ctrl.pos.y_m = nowpos->y_m  ;
+    ctrl.pos.z_rad = nowpos->z_rad+_w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
     while (1)
@@ -64,6 +88,32 @@ void action_half_car(void)
         rt_thread_mdelay(10);
     }
 }
+
+void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
+{
+    extern chassis_t chassis_mai;
+    const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
+    // 打印电机位置
+    // 发布底盘控制速度，前进
+    ctrl.type = 1;
+    ctrl.pos.x_m = nowpos->x_m + _x_m;
+    ctrl.pos.y_m = nowpos->y_m + _y_m;
+    ctrl.pos.z_rad = nowpos->z_rad+_w_rad;
+    abus_public(&rbmg_chassis_acc, &ctrl);
+
+    while (1)
+    {
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
+        {
+            break;
+        }
+
+            abus_public(&rbmg_chassis_acc, &ctrl);
+        abus_public(&rbmg_chassis_acc, &ctrl);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+        rt_thread_mdelay(10);
+    }
+}    
 
 /**
  * @brief 巡线使用的callback,注意要支持禁用操作
