@@ -146,6 +146,8 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
      *
      */
+        rbmg_mode = ACTION_MODE;
+        LOG_D("special point! now action mode");
     return 0;
 }
 int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
@@ -156,7 +158,7 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
-    rbmg_mode = ACTION_MODE;
+    //rbmg_mode = ACTION_MODE;
      
     while (1)
     {
