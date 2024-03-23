@@ -42,10 +42,10 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
         case CHASSIS_SPEED:
             // 速度控制
             // 将速度(m/s)转换为电机数据(rpm/min) 使用车轮半径和车体尺寸
-            data->motor1 = ((chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
-            data->motor2 = ((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
-            data->motor3 = ((-chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
-            data->motor4 = ((-chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
+            data->motor1 = -((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
+            data->motor2 = -((chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
+            data->motor3 = -((chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
+            data->motor4 = -((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
             break;
         case CHASSIS_POS:
             // 位置控制
@@ -126,11 +126,16 @@ static int driver_mai(const void *output, const void *input)
         {
         case CHASSIS_SPEED:
             // 速度控制
-            // LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
             motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
             motor_set_speed(MOTOR_MAI_ID_3, data->motor3);
             motor_set_speed(MOTOR_MAI_ID_4, data->motor4);
+
+            // motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
+            // motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
+            // motor_set_speed(MOTOR_MAI_ID_3, data->motor3);
+            // motor_set_speed(MOTOR_MAI_ID_4, data->motor4);
             break;
         case CHASSIS_POS:
 

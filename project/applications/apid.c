@@ -10,6 +10,7 @@
 #include "apid.h"
 #include "stdio.h"
 #include <stdarg.h>
+#include "ulog.h"
 #ifdef __cplusplus
 extern "C"
 {
@@ -245,12 +246,22 @@ extern "C"
   */
 	void i_handle_Position_Saturation(apid_t* pid)
 	{
+//		//抗积分饱和
+//		if (pid->process.integral_bias * pid->parameter.ki > pid->parameter.integral_limit)
+//			pid->process.integral_bias = pid->parameter.integral_limit * pid->parameter.ki;
+
+//		else if (pid->process.integral_bias * pid->parameter.ki < -pid->parameter.integral_limit)
+//			pid->process.integral_bias = -pid->parameter.integral_limit * pid->parameter.ki;
+
+//		else
+//			pid->process.integral_bias += pid->process.bias * pid->cycle;
+		
 		//抗积分饱和
 		if (pid->process.integral_bias * pid->parameter.ki > pid->parameter.integral_limit)
-			pid->process.integral_bias = pid->parameter.integral_limit / pid->parameter.ki;
+			pid->process.integral_bias = pid->parameter.integral_limit;
 
 		else if (pid->process.integral_bias * pid->parameter.ki < -pid->parameter.integral_limit)
-			pid->process.integral_bias = -pid->parameter.integral_limit / pid->parameter.ki;
+			pid->process.integral_bias = -pid->parameter.integral_limit;
 
 		else
 			pid->process.integral_bias += pid->process.bias * pid->cycle;
@@ -383,7 +394,7 @@ extern "C"
 		pid->d_handle(pid);
 		////////////////////////////////输出操作，包含p操作
 		__PID_Out(pid);
-		//LOG_RAW("t p o:%f,%f,%f\r\n",pid->parameter.target,pid->parameter.present,pid->parameter.out);
+		// LOG_RAW("t p o:%f,%f,%f\r\n",pid->parameter.target,pid->parameter.present,pid->parameter.out);
 	}
 
  /**

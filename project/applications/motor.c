@@ -447,7 +447,7 @@ void motor_shakdown(int id)
     {
         //  将力矩环路pid的当前值，设定值，输出值
         if (MOTOD_IS_TORQUE_TIME(motor))
-            LOG_RAW("q:%f,%f,%f\r\n",
+            LOG_RAW("q%d:%f,%f,%f\r\n",id,
                     motor->pid_torque->parameter.target,
                     motor->pid_torque->parameter.present,
                     motor->pid_torque->parameter.out);
@@ -457,7 +457,7 @@ void motor_shakdown(int id)
         //  将速度环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("s:%f,%f,%f\r\n",
+            LOG_RAW("s%d:%f,%f,%f\r\n",id,
                     motor->pid_speed->parameter.target,
                     motor->pid_speed->parameter.present,
                     motor->pid_speed->parameter.out);
@@ -468,7 +468,7 @@ void motor_shakdown(int id)
         //  将位置环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("p:%f,%f,%f\r\n",
+            LOG_RAW("p%f:%f,%f,%f\r\n",id,
                     motor->pid_pos->parameter.target,
                     motor->pid_pos->parameter.present,
                     motor->pid_pos->parameter.out);

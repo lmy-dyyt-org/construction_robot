@@ -37,7 +37,7 @@ enum
 };
 uint8_t action_type;
 
-void action_half_car(void)
+void action_front_car(float _y_m)
 {
     extern chassis_t chassis_mai;
     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
@@ -45,7 +45,7 @@ void action_half_car(void)
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m +0.30;
+    ctrl.pos.y_m = nowpos->y_m + _y_m;
     ctrl.pos.z_rad = nowpos->z_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
@@ -96,33 +96,35 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
  */
 int rbmg_error_callback(abus_topic_t *sub)
 {
-#define KK 40.f
+#define KK 1.3f   //1.3
+#define SPEED 0.15
     if (rbmg_mode == LINE_MODE)
     {
         // 巡线模式下的处理
         afifo_out_data(sub->datafifo, (uint8_t *)&line_error, sizeof(float));
         // 发布控制到底盘
         ctrl.type = 0;
+        chassis_dir=0;
         switch (chassis_dir)
         {
         case 0: // 前
-            ctrl.speed.x_m_s = 1;
-            ctrl.speed.y_m_s = 0;
+            ctrl.speed.x_m_s = 0;
+            ctrl.speed.y_m_s = SPEED;
             ctrl.speed.z_rad_s = line_error * KK;
             break;
         case 1: // 右边
-            ctrl.speed.x_m_s = 0;
-            ctrl.speed.y_m_s = 1;
-            ctrl.speed.z_rad_s = line_error * KK;
-            break;
-        case 2: // 后边
-            ctrl.speed.x_m_s = -1;
+            ctrl.speed.x_m_s = SPEED;
             ctrl.speed.y_m_s = 0;
             ctrl.speed.z_rad_s = line_error * KK;
             break;
-        case 3: // 左边
+        case 2: // 后边
             ctrl.speed.x_m_s = 0;
-            ctrl.speed.y_m_s = -1;
+            ctrl.speed.y_m_s = -SPEED;
+            ctrl.speed.z_rad_s = line_error * KK;
+            break;
+        case 3: // 左边
+            ctrl.speed.x_m_s = -SPEED;
+            ctrl.speed.y_m_s = 0;
             ctrl.speed.z_rad_s = line_error * KK;
             break;
         }
@@ -170,7 +172,7 @@ void rbmg_handle(void *parameter)
         if (rbmg_mode == LINE_MODE)
         {
             // 巡线都在回调中处理
-            LOG_D("line mode");
+            //LOG_D("line mode");
         }
         else if (rbmg_mode == ACTION_MODE)
         {

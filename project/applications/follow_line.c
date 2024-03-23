@@ -65,17 +65,17 @@ void follow_line(void *parameter)
 		/* 线程处理 */
 		GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-		    Print_Infrared_Data(&infrared_package);
+		    //Print_Infrared_Data(&infrared_package);
 		// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 		error =
-			-infrared_package.infrared_data[front_middle0_infrared] * FRONT_middle_factor +
+			(-infrared_package.infrared_data[front_middle0_infrared] * FRONT_middle_factor +
 			infrared_package.infrared_data[front_middle1_infrared] * FRONT_middle_factor
 
 			- infrared_package.infrared_data[front_left1_infrared] * FRONT_middle_edge1 +
 			infrared_package.infrared_data[front_right0_infrared] * FRONT_middle_edge1
 
 			- infrared_package.infrared_data[front_left0_infrared] * FRONT_middle_edge2 +
-			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2;
+			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2);
 		rt_thread_mdelay(15);
 
 		abus_public(&line_error_acc, &error);

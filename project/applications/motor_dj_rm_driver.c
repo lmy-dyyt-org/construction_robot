@@ -631,7 +631,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
     int id = motor_measure->id;
     uint16_t pos = 0;
     // 9.549279f*功率/转速=扭矩
-    motor_feedback_speed(id, ((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3])));
+    motor_feedback_speed(id, ((float)((int16_t)(rxmsg.data[2] << 8 | rxmsg.data[3]))/36.f));
     motor_feedback_torque(id, ((int16_t)(rxmsg.data[4] << 8 | rxmsg.data[5])));
     //0.894为实际测量后的修正系数
     #define KK (1.06*(10.f/8192.f))
@@ -653,6 +653,7 @@ static void can_rx_thread1(void *parameter)
 {
     while (1)
     {
+        // motor_shakdown(0);
         //motor_shakdown(1);
         rt_thread_delay(10);
     }
