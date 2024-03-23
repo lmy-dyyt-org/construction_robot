@@ -55,12 +55,7 @@ void action_half_car(void)
         {
             break;
         }
-<<<<<<< Updated upstream
-=======
-        else if (nowpos->y_m - ctrl.pos.y_m > 0)
-        {
-            break;
-        }
+
             abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
@@ -87,7 +82,6 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
         }
 
         abus_public(&rbmg_chassis_acc, &ctrl);
->>>>>>> Stashed changes
         abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
@@ -162,21 +156,14 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
-<<<<<<< Updated upstream
     rbmg_mode = ACTION_MODE;
-=======
-        rbmg_mode = ACTION_MODE;
      
->>>>>>> Stashed changes
     while (1)
     {
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
-<<<<<<< Updated upstream
         
-=======
->>>>>>> Stashed changes
 
         if (rbmg_mode == LINE_MODE)
         {
