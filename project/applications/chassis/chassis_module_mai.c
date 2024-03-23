@@ -49,10 +49,10 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
         case CHASSIS_POS:
             // 位置控制
             // 将位置(m)转换为电机数据(rpm/min) 使用车轮半径和车体尺寸
-            data->motor1 = ((chassis->target.pos.x_m + chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) *CHASSIS_MAI_WHELL_R_M* PI/180.f ;
-            data->motor2 = ((chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) *CHASSIS_MAI_WHELL_R_M* PI/180.f ;
-            data->motor3 = ((-chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B))*CHASSIS_MAI_WHELL_R_M* PI/180.f ;
-            data->motor4 = ((-chassis->target.pos.x_m + chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B))*CHASSIS_MAI_WHELL_R_M* PI/180.f ;
+            data->motor1 = ((chassis->target.pos.x_m + chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) * PI*180.f/CHASSIS_MAI_WHELL_R_M ;
+            data->motor2 = ((chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B)) * PI*180.f/CHASSIS_MAI_WHELL_R_M ;
+            data->motor3 = ((-chassis->target.pos.x_m - chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B))* PI*180.f/CHASSIS_MAI_WHELL_R_M ;
+            data->motor4 = ((-chassis->target.pos.x_m + chassis->target.pos.y_m) - (chassis->target.pos.z_rad * CHASSIS_HALF_A_B))* PI*180.f/CHASSIS_MAI_WHELL_R_M ;
 
             break;
         default:
