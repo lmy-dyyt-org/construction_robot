@@ -164,7 +164,7 @@ void Emm_V5_En_Control(uint8_t addr, rt_bool_t state, rt_bool_t snF)
   stepper_motor_cmd_state = S_Ans;
   // LOG_D("stepper_motor_cmd_state: %d\n", stepper_motor_cmd_state);
   Emm_V5_Transmit(cmd, 6);
-  rt_mutex_release(mutex_step);
+ 
   rt_sem_release(step_sem);
 }
 

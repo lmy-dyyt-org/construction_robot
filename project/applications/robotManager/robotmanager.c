@@ -45,13 +45,13 @@ void action_half_car(void)
     // 发布底盘控制速度，前进
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m + 400;
+    ctrl.pos.y_m = nowpos->y_m +40;
     ctrl.pos.z_rad = nowpos->z_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
     while (1)
     {
-        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 1)
+        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)
         {
             break;
         }
@@ -59,8 +59,8 @@ void action_half_car(void)
         {
             break;
         }
-
-        // LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+            abus_public(&rbmg_chassis_acc, &ctrl);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
 }
@@ -133,9 +133,6 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
-    rbmg_mode = ACTION_MODE;
-    // action_half_car();
-    // LOG_D("action completion");
 
     while (1)
     {
@@ -147,14 +144,16 @@ void rbmg_handle(void *parameter)
         if (rbmg_mode == LINE_MODE)
         {
             // 巡线都在回调中处理
+            LOG_D("line mode");
         }
         else if (rbmg_mode == ACTION_MODE)
         {
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
+            LOG_D("action start");
             action_half_car();
             rbmg_mode = LINE_MODE;
-            // LOG_D("action completion");
+            LOG_D("action completion");
         }
         rt_thread_mdelay(50);
     }

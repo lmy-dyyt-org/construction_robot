@@ -1,19 +1,19 @@
 /*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-06 16:16:14
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-15 01:46:20
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-22 19:41:23
  * @FilePath: \project\applications\drv_stepper_motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+#include <rtdbg.h>
+#define DBG_TAG              "drv.step_motor"
+#define DBG_LVL               DBG_INFO
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
 #include "math.h"
 
-#define DBG_TAG              "drv.step_motor"
 
-#define DBG_LVL               DBG_INFO
-#include <ulog.h>
 
 stepper_motor_t stepper_motor_big_arm;
 stepper_motor_t stepper_motor_small_arm;
@@ -72,7 +72,7 @@ void drv_stepper_motor(void *parameter)
   {
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
-    LOG_D("big:%f small:%f",stepper_motor_big_arm.stepper_motor_angle, stepper_motor_small_arm.stepper_motor_angle);
+    //LOG_D("big:%f small:%f",stepper_motor_big_arm.stepper_motor_angle, stepper_motor_small_arm.stepper_motor_angle);
     if( fabs(stepper_motor_big_arm.stepper_motor_angle - 252.7f ) < 1.0f && big_arm_init_flag != 1) 
       {
         LOG_D("big_arm_go_over");

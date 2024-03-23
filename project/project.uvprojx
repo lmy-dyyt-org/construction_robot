@@ -2120,6 +2120,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>bsp_sbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\bsp_sbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

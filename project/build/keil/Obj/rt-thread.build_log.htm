@@ -22,25 +22,15 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
-Project File Date:  03/21/2024
+Project File Date:  03/22/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
 Note: source file 'applications\arduino_main.cpp' - object file renamed from '.\build\keil\Obj\arduino_main.o' to '.\build\keil\Obj\applications_arduino_main.o'.
 Note: source file 'applications\arduino_pinout\pins_arduino.c' - object file renamed from '.\build\keil\Obj\pins_arduino.o' to '.\build\keil\Obj\arduino_pinout_pins_arduino.o'.
-applications/apid_exfunc.c(87): warning: passing an object that undergoes default argument promotion to 'va_start' has undefined behavior [-Wvarargs]
-          va_start(ap, imode); // 初始化，第二个参数为最后一个确定的形参      
-                       ^
-applications/apid_exfunc.c(84): note: parameter of type 'ALL_PID_I_Function' (aka 'enum ALL_PID_I_Function') is declared here
-void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...)
-                                                         ^
-1 warning generated.
-compiling apid_exfunc.c...
-linking...
-Program Size: Code=120974 RO-data=14350 RW-data=3820 ZI-data=8060  
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 1 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
