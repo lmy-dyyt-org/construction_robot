@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-17 09:19:59
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-24 15:50:43
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -447,7 +447,7 @@ void motor_shakdown(int id)
     {
         //  将力矩环路pid的当前值，设定值，输出值
         if (MOTOD_IS_TORQUE_TIME(motor))
-            LOG_RAW("q%d:%f,%f,%f\r\n",id,
+            LOG_RAW("q%d :%f,%f,%f\r\n",id,
                     motor->pid_torque->parameter.target,
                     motor->pid_torque->parameter.present,
                     motor->pid_torque->parameter.out);
@@ -457,7 +457,7 @@ void motor_shakdown(int id)
         //  将速度环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("s%d:%f,%f,%f\r\n",id,
+            LOG_RAW("s%d :%f,%f,%f\r\n",id,
                     motor->pid_speed->parameter.target,
                     motor->pid_speed->parameter.present,
                     motor->pid_speed->parameter.out);
@@ -468,7 +468,7 @@ void motor_shakdown(int id)
         //  将位置环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("p%f:%f,%f,%f\r\n",id,
+            LOG_RAW("p%d:%f,%f,%f\r\n",id,
                     motor->pid_pos->parameter.target,
                     motor->pid_pos->parameter.present,
                     motor->pid_pos->parameter.out);
@@ -507,14 +507,7 @@ int motor_updata_cfg(int id, int level)
         APID_Init(motor->pid_speed, PID_POSITION, motor->pid_speed->parameter.kp, motor->pid_speed->parameter.ki, motor->pid_speed->parameter.kd);
         APID_Init(motor->pid_pos, PID_POSITION, motor->pid_pos->parameter.kp, motor->pid_pos->parameter.ki, motor->pid_pos->parameter.kd);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        var_register(&(motor->tar_speed), "tarspeed", _f);
-        var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
-        var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
-        var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
-        var_register(&(motor->tar_pos), "tarpos", _f);
-        var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
-        var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
-        var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
+
         break;
     case 2:
         motor->behaver = motor_behiver_3;

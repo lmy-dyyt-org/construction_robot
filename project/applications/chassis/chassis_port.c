@@ -2,7 +2,7 @@
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-22 19:50:39
+ * @LastEditTime: 2024-03-24 16:22:14
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -34,6 +34,8 @@ void chassis_port_handle(void *parameter)
     // chassis_pos.y_m = 0.55;
     chassis_pos.z_rad = 0;
     // chassis_set_speed(&chassis_mai, &chassis_speed);
+
+
     chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
     {
