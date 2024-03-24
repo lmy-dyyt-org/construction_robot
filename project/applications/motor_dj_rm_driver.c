@@ -651,20 +651,20 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 }
 static void can_rx_thread1(void *parameter)
 {
-            motor_t *motor = motor_get(0);
-        var_register(&(motor->tar_speed), "tarspeed", _f);
-        var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
-        var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
-        var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
-        var_register(&(motor->tar_pos), "tarpos", _f);
-        var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
-        var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
-        var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
+        //     motor_t *motor = motor_get(0);
+        // var_register(&(motor->tar_speed), "tarspeed", _f);
+        // var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
+        // var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
+        // var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
+        // var_register(&(motor->tar_pos), "tarpos", _f);
+        // var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
+        // var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
+        // var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
 
-        motor_set_pos(0,100);
+        // motor_set_pos(0,100);
     while (1)
     {
-        motor_shakdown(0);
+        //motor_shakdown(0);
         //motor_shakdown(1);
         rt_thread_delay(10);
     }

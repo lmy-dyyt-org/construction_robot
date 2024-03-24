@@ -51,7 +51,7 @@ void action_front_car(float _y_m)
 
     while (1)
     {
-        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)
+        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.1)
         {
             break;
         }
@@ -96,8 +96,8 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
  */
 int rbmg_error_callback(abus_topic_t *sub)
 {
-#define KK 1.3f   //1.3
-#define SPEED 0.15
+#define KK 1.1f   //1.3
+#define SPEED 0.25
     if (rbmg_mode == LINE_MODE)
     {
         // 巡线模式下的处理

@@ -66,7 +66,7 @@ void follow_line(void *parameter)
 		GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
 		    //Print_Infrared_Data(&infrared_package);
-		// rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
+		//rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 		error =
 			(-infrared_package.infrared_data[front_middle0_infrared] * FRONT_middle_factor +
 			infrared_package.infrared_data[front_middle1_infrared] * FRONT_middle_factor
@@ -76,9 +76,16 @@ void follow_line(void *parameter)
 
 			- infrared_package.infrared_data[front_left0_infrared] * FRONT_middle_edge2 +
 			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2);
+
+		if(Is_Spacial_point(&infrared_package)){
+			uint8_t bool_=1;
+		abus_public(&line_spacial_point_acc, &bool_);
+
+		}
+				abus_public(&line_error_acc, &error);
+
 		rt_thread_mdelay(15);
 
-		abus_public(&line_error_acc, &error);
 	}
 }
 
@@ -116,6 +123,7 @@ uint8_t Is_Spacial_point(infrared *infrared_package)
 		infrared_package->is_spacial_point_flag = 0;
 		break;
 	}
+	
 	return infrared_package->is_spacial_point_flag;
 }
 
