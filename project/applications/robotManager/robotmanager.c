@@ -56,7 +56,7 @@ void action_front_car(float _y_m)
             //break;
         }
 
-            abus_public(&rbmg_chassis_acc, &ctrl);
+            //abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
@@ -81,7 +81,6 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
             break;
         }
 
-        abus_public(&rbmg_chassis_acc, &ctrl);
         abus_public(&rbmg_chassis_acc, &ctrl);
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
         rt_thread_mdelay(10);
@@ -196,7 +195,7 @@ int rbmg_init(void)
     tid_rbmg = rt_thread_create("robotmanger",
                                 rbmg_handle, RT_NULL,
                                 4096,
-                                12, 1);
+                                8, 1);
 
     /* 线程创建成功，则启动线程 */
     if (tid_rbmg != RT_NULL)
