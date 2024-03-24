@@ -123,7 +123,6 @@ uint8_t Is_Spacial_point(infrared *infrared_package)
 		infrared_package->is_spacial_point_flag = 0;
 		break;
 	}
-	
 	return infrared_package->is_spacial_point_flag;
 }
 
