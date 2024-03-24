@@ -21,7 +21,7 @@ enum
     ACTION_MODE,
 };
 
-uint8_t rbmg_mode = LINE_MODE;
+uint8_t rbmg_mode = ACTION_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
@@ -148,7 +148,7 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
      *
      */
-        rbmg_mode = ACTION_MODE;
+        // rbmg_mode = ACTION_MODE;
         LOG_D("special point! now action mode");
     return 0;
 }
@@ -161,7 +161,7 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 void rbmg_handle(void *parameter)
 {
     //rbmg_mode = ACTION_MODE;
-     
+     action_front_car(0.107f);
     while (1)
     {
         // LOG_D("rbmg he
@@ -169,20 +169,20 @@ void rbmg_handle(void *parameter)
         // 接到处理数据的消息
         
 
-        if (rbmg_mode == LINE_MODE)
-        {
-            // 巡线都在回调中处理
-            //LOG_D("line mode");
-        }
-        else if (rbmg_mode == ACTION_MODE)
-        {
-            // 动作模式下的处理
-            // 完成动作后切换回巡线模式
-            LOG_D("action start");
-            action_front_car(0.214f);
-            rbmg_mode = LINE_MODE;
-            LOG_D("action completion");
-        }
+        // if (rbmg_mode == LINE_MODE)
+        // {
+        //     // 巡线都在回调中处理
+        //     //LOG_D("line mode");
+        // }
+        // else if (rbmg_mode == ACTION_MODE)
+        // {
+        //     // 动作模式下的处理
+        //     // 完成动作后切换回巡线模式
+        //     LOG_D("action start");
+        //     action_front_car(0.107f);
+        //     rbmg_mode = LINE_MODE;
+        //     LOG_D("action completion");
+        // }
         rt_thread_mdelay(50);
     }
 }

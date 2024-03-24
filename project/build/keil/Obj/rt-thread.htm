@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\build\keil\Obj\rt-thread.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\build\keil\Obj\rt-thread.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Mar 24 16:46:50 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Mar 24 17:09:40 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1108 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3756,13 +3756,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> abus_port.o(.text.abus_all_init)
 </UL>
-<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 80 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
+<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 940 + Unknown Stack Size
 <LI>Call Chain = rbmg_handle &rArr; action_front_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_front_car
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
-<LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.rbmg_init)
 </UL>
@@ -3775,7 +3774,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[8b]"></a>rbmg_special_point_callback</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, robotmanager.o(.text.rbmg_special_point_callback))
+<P><STRONG><a name="[8b]"></a>rbmg_special_point_callback</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, robotmanager.o(.text.rbmg_special_point_callback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 696 + Unknown Stack Size
 <LI>Call Chain = rbmg_special_point_callback &rArr; ulog_output &rArr; ulog_voutput &rArr;  rt_assert_handler (Cycle)
 </UL>
@@ -6476,8 +6475,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[326]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
-<LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_front_car
+<BR>[Called By]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_front_car
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_call
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_ctr
 <LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_driver
