@@ -1,3 +1,11 @@
+/*
+ * @Author: Dyyt587 805207319@qq.com
+ * @Date: 2024-03-13 22:05:59
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-03-25 22:58:34
+ * @FilePath: \construction_robot\project\applications\map\PathFinder.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include "PathFinder.h"
 
 /*
@@ -63,9 +71,9 @@ void Path_table_init(Path_table_t* table,Path_table_element_t* table_data,char* 
 }
 uint8_t Path_get_next_dir(Path_table_t* table)
 {
-    if(table->table[table->index]==0){
-        return 0;
-    }
+    // if(table->table[table->index]==0){
+    //     return 0;
+    // }
     return table->table[table->index++];
 }
 

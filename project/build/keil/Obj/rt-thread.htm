@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\build\keil\Obj\rt-thread.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\build\keil\Obj\rt-thread.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Mon Mar 25 22:35:09 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Mon Mar 25 23:03:04 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1108 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2225,7 +2225,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;follow_line
 </UL>
 
-<P><STRONG><a name="[2c4]"></a>Path_get_next_dir</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, pathfinder.o(.text.Path_get_next_dir))
+<P><STRONG><a name="[2c4]"></a>Path_get_next_dir</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, pathfinder.o(.text.Path_get_next_dir))
 <BR><BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
 </UL>
 
@@ -2862,8 +2862,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abus_all_init
 </UL>
 
-<P><STRONG><a name="[23b]"></a>action_relative_movement_car</STRONG> (Thumb, 416 bytes, Stack size 136 bytes, robotmanager.o(.text.action_relative_movement_car))
-<BR><BR>[Stack]<UL><LI>Max Depth = 980 + Unknown Stack Size
+<P><STRONG><a name="[23b]"></a>action_relative_movement_car</STRONG> (Thumb, 288 bytes, Stack size 56 bytes, robotmanager.o(.text.action_relative_movement_car))
+<BR><BR>[Stack]<UL><LI>Max Depth = 900 + Unknown Stack Size
 <LI>Call Chain = action_relative_movement_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
@@ -3771,8 +3771,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> abus_port.o(.text.abus_all_init)
 </UL>
-<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 160 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1020 + Unknown Stack Size
+<P><STRONG><a name="[9a]"></a>rbmg_handle</STRONG> (Thumb, 176 bytes, Stack size 8 bytes, robotmanager.o(.text.rbmg_handle))
+<BR><BR>[Stack]<UL><LI>Max Depth = 940 + Unknown Stack Size
 <LI>Call Chain = rbmg_handle &rArr; turn_actions &rArr; action_relative_movement_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turn_actions
@@ -3782,7 +3782,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.rbmg_init)
 </UL>
-<P><STRONG><a name="[103]"></a>rbmg_init</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, robotmanager.o(.text.rbmg_init))
+<P><STRONG><a name="[103]"></a>rbmg_init</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, robotmanager.o(.text.rbmg_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 884 + Unknown Stack Size
 <LI>Call Chain = rbmg_init &rArr; rt_thread_create &rArr; rt_object_allocate &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -6000,6 +6000,7 @@ Global Symbols
 <LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
+<LI><a href="#[2c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turn_actions
 <LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_relative_movement_car
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_thread
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;follow_line
@@ -6366,11 +6367,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
 </UL>
 
-<P><STRONG><a name="[2c5]"></a>turn_actions</STRONG> (Thumb, 176 bytes, Stack size 40 bytes, robotmanager.o(.text.turn_actions))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1020 + Unknown Stack Size
+<P><STRONG><a name="[2c5]"></a>turn_actions</STRONG> (Thumb, 288 bytes, Stack size 32 bytes, robotmanager.o(.text.turn_actions))
+<BR><BR>[Stack]<UL><LI>Max Depth = 932 + Unknown Stack Size
 <LI>Call Chain = turn_actions &rArr; action_relative_movement_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_relative_movement_car
+<LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
 <LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 </UL>

@@ -73,6 +73,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
     extern chassis_t chassis_mai;
     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
+
     // 打印电机位置
     // 发布底盘控制速度，前进
     ctrl.type = 1;
@@ -89,7 +90,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
             break;
         }
         abus_public(&rbmg_chassis_acc, &ctrl);
-        LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
+        // LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
         rt_thread_mdelay(10);
     }
 }
@@ -112,37 +113,42 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
     // float delta_angle = (will_dir - 1) * M_PI_2;
     // LOG_D("front start");
 
-    float delta_angle = 0;
+    static float delta_angle = 0;
 
     switch (will_dir)
     {
     case END:
         while (1)
         {
+action_relative_movement_car(0,0,0);
             LOG_D("stop");
+            rt_thread_mdelay(100);
         }
         break;
     case FORWARD:
-
+        delta_angle = 0.001;
         break;
     case RIGHT:
         delta_angle = -M_PI_2;
         break;
     case BACKWARD:
-        delta_angle = M_PI_2*2;
+        delta_angle = M_PI_2 * 2;
         break;
     case LEFT:
         delta_angle = M_PI_2;
-
+        break;
+    default:
+        LOG_D("error dir");
         break;
     }
+    LOG_D("rota start %f", delta_angle);
 
     action_relative_movement_car(0, HALF_CAR_WIDTH, 0);
 
     LOG_D("front end");
-    LOG_D("rota start %f",delta_angle);
+    LOG_D("rota start %f", delta_angle);
 
-    action_relative_movement_car(0, 0, delta_angle);
+    action_relative_movement_car(0, 0, delta_angle );
     LOG_D("rota end");
 
     return 0;
@@ -243,10 +249,10 @@ void rbmg_handle(void *parameter)
             // action_relative_movement_car(0, 0.135f, 0);
             // action_relative_movement_car(0, 0, 3.14f/2.0f);
 
-
             /* 更新寻路器*/
             now_dir = next_dir;
             next_dir = Path_get_next_dir(this_table);
+            LOG_D("now dir %d next dir %d", now_dir, next_dir);
             // 判断当前是否寻路完成进行切换或者特殊action
             if (now_dir == 0)
                 while (1)
@@ -263,11 +269,13 @@ void rbmg_handle(void *parameter)
         rt_thread_mdelay(50);
     }
 }
-Path_table_element_t test_go[] = {LEFT,LEFT,LEFT, END};
+
+
+Path_table_element_t test_go[] = { FORWARD, RIGHT, END, END};
 int rbmg_init(void)
 {
 
-    Path_table_init(&test_go_table, 0, "test go table", 0, 0);
+    Path_table_init(&test_go_table, test_go, "test go table", 0, 0);
     this_table = &test_go_table;
     rt_thread_t tid_rbmg = RT_NULL;
 
