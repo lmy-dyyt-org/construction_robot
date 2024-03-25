@@ -27,15 +27,6 @@ uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
 
-enum
-{
-    NONE = 0U,
-    FORWARD,
-    RIGHT,
-    BACKWARD,
-    LEFT,
-    ROTATION,
-};
 
 enum
 {
@@ -44,11 +35,14 @@ enum
     RIGHT,
     BACKWARD,
     LEFT,
+	    ROTATION,
+
 };
 uint8_t action_type;
 uint8_t now_dir;  // 当前方向
 uint8_t next_dir; // 下一个方向
 Path_table_t* this_table;
+Path_table_t test_go_table;
 #define HALF_CAR_WIDTH 0.107f
 
 void action_front_car(float _y_m)
@@ -217,7 +211,12 @@ void rbmg_handle(void *parameter)
             // action_relative_movement_car(0, 0, 3.14f/2.0f);
 
             //判断当前是否寻路完成进行切换或者特殊action
+            if(now_dir == 0)while(1)
+            {
+                LOG_D("end");
+                rt_thread_mdelay(500);
 
+            }
             //转弯
             turn_actions(now_dir,next_dir);
             rbmg_mode = LINE_MODE;
@@ -226,10 +225,13 @@ void rbmg_handle(void *parameter)
         rt_thread_mdelay(50);
     }
 }
-
+Path_table_element_t test_go[]={4,0};
 int rbmg_init(void)
 {
 
+    
+    Path_table_init(&test_go_table,0,"test go table",0,0);
+    this_table = &test_go_table;
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
