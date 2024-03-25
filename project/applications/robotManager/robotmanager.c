@@ -27,48 +27,47 @@ uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
 
-
 enum
 {
     END = 0U,
-    FORWARD ,
+    FORWARD,
     RIGHT,
     BACKWARD,
     LEFT,
-	    ROTATION,
+    ROTATION,
 
 };
 uint8_t action_type;
-uint8_t now_dir;  // 当前方向
-uint8_t next_dir; // 下一个方向
-Path_table_t* this_table;
+uint8_t now_dir = 1;  // 当前方向
+uint8_t next_dir = 1; // 下一个方向
+Path_table_t *this_table;
 Path_table_t test_go_table;
-#define HALF_CAR_WIDTH 0.107f
+#define HALF_CAR_WIDTH 0.135f
 
-void action_front_car(float _y_m)
-{
-    extern chassis_t chassis_mai;
-    const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
-    // 打印电机位置
-    // 发布底盘控制速度，前进
-    ctrl.type = 1;
-    ctrl.pos.x_m = nowpos->x_m;
-    ctrl.pos.y_m = nowpos->y_m + _y_m;
-    ctrl.pos.z_rad = nowpos->z_rad;
-    abus_public(&rbmg_chassis_acc, &ctrl);
+// void action_front_car(float _y_m)
+// {
+//     extern chassis_t chassis_mai;
+//     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
+//     // 打印电机位置
+//     // 发布底盘控制速度，前进
+//     ctrl.type = 1;
+//     ctrl.pos.x_m = nowpos->x_m;
+//     ctrl.pos.y_m = nowpos->y_m + _y_m;
+//     ctrl.pos.z_rad = nowpos->z_rad;
+//     abus_public(&rbmg_chassis_acc, &ctrl);
 
-    while (1)
-    {
-        if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.1)
-        {
-            // break;
-        }
+//     while (1)
+//     {
+//         if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.1)
+//         {
+//             break;
+//         }
 
-        // abus_public(&rbmg_chassis_acc, &ctrl);
-        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
-        rt_thread_mdelay(10);
-    }
-}
+//         abus_public(&rbmg_chassis_acc, &ctrl);
+//         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
+//         rt_thread_mdelay(10);
+//     }
+// }
 
 void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
@@ -84,13 +83,13 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     LOG_D("begin action");
     while (1)
     {
-        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1))
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1))
         {
             LOG_D("action over");
             break;
         }
         abus_public(&rbmg_chassis_acc, &ctrl);
-        LOG_D("[action]pos x:%f y:%f z:%f _x_m:%f _y_m:%f _w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,_x_m,_y_m,_w_rad);
+        LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
         rt_thread_mdelay(10);
     }
 }
@@ -98,18 +97,54 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
 {
     int8_t delta_dir = will_dir - now_dir;
-    if(delta_dir == 0){
-        /* 直接直走 */
-        action_front_car(HALF_CAR_WIDTH);
-        return 0;
-    }else if(delta_dir >2){
-        delta_dir -= 4;
-    }
-    #define M_PI_2 (1.5707963267948966192313216916398)
-    float delta_angle = delta_dir * M_PI_2;
+    // if (delta_dir == 0)
+    // {
+    //     /* 直接直走 */
+    //     action_relative_movement_car(0, HALF_CAR_WIDTH, 0);
+    //     return 0;
+    // }
+    // else if (delta_dir > 2)
+    // {
+    //     delta_dir -= 4;
+    // }
+#define M_PI_2 (1.5707963267948966192313216916398)
+    // float delta_angle = delta_dir * M_PI_2;
+    // float delta_angle = (will_dir - 1) * M_PI_2;
+    // LOG_D("front start");
 
-    action_front_car(HALF_CAR_WIDTH);
+    float delta_angle = 0;
+
+    switch (will_dir)
+    {
+    case END:
+        while (1)
+        {
+            LOG_D("stop");
+        }
+        break;
+    case FORWARD:
+
+        break;
+    case RIGHT:
+        delta_angle = -M_PI_2;
+        break;
+    case BACKWARD:
+        delta_angle = M_PI_2*2;
+        break;
+    case LEFT:
+        delta_angle = M_PI_2;
+
+        break;
+    }
+
+    action_relative_movement_car(0, HALF_CAR_WIDTH, 0);
+
+    LOG_D("front end");
+    LOG_D("rota start %f",delta_angle);
+
     action_relative_movement_car(0, 0, delta_angle);
+    LOG_D("rota end");
+
     return 0;
 }
 
@@ -153,6 +188,7 @@ int rbmg_error_callback(abus_topic_t *sub)
             ctrl.speed.z_rad_s = line_error * KK;
             break;
         }
+        //        LOG_D("line mode");
         abus_public(&rbmg_chassis_acc, &ctrl);
     }
 
@@ -174,9 +210,6 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      *
      */
 
-    /* 更新寻路器*/
-    now_dir = next_dir;
-    next_dir = Path_get_next_dir(this_table);
     rbmg_mode = ACTION_MODE;
     LOG_D("special point! now action mode");
     return 0;
@@ -210,27 +243,31 @@ void rbmg_handle(void *parameter)
             // action_relative_movement_car(0, 0.135f, 0);
             // action_relative_movement_car(0, 0, 3.14f/2.0f);
 
-            //判断当前是否寻路完成进行切换或者特殊action
-            if(now_dir == 0)while(1)
-            {
-                LOG_D("end");
-                rt_thread_mdelay(500);
 
-            }
-            //转弯
-            turn_actions(now_dir,next_dir);
+            /* 更新寻路器*/
+            now_dir = next_dir;
+            next_dir = Path_get_next_dir(this_table);
+            // 判断当前是否寻路完成进行切换或者特殊action
+            if (now_dir == 0)
+                while (1)
+                {
+                    LOG_D("finder end");
+                    rt_thread_mdelay(500);
+                }
+
+            // 转弯
+            turn_actions(now_dir, next_dir);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }
         rt_thread_mdelay(50);
     }
 }
-Path_table_element_t test_go[]={4,0};
+Path_table_element_t test_go[] = {LEFT,LEFT,LEFT, END};
 int rbmg_init(void)
 {
 
-    
-    Path_table_init(&test_go_table,0,"test go table",0,0);
+    Path_table_init(&test_go_table, 0, "test go table", 0, 0);
     this_table = &test_go_table;
     rt_thread_t tid_rbmg = RT_NULL;
 
