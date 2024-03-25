@@ -86,17 +86,26 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     ctrl.pos.y_m = nowpos->y_m + _y_m;
     ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
-
+    LOG_D("begin action");
     while (1)
     {
+<<<<<<< HEAD
         if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
+=======
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1))
+>>>>>>> 08a55de8490d4d1eabff5e26d2e5f46da22ae6ff
         {
+            LOG_D("action over");
             break;
         }
-
         abus_public(&rbmg_chassis_acc, &ctrl);
+<<<<<<< HEAD
         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
         rt_thread_mdelay(10);
+=======
+        LOG_D("[action]pos x:%f y:%f z:%f _x_m:%f _y_m:%f _w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,_x_m,_y_m,_w_rad);
+        rt_thread_mdelay(100);
+>>>>>>> 08a55de8490d4d1eabff5e26d2e5f46da22ae6ff
     }
 }
 
@@ -208,8 +217,13 @@ void rbmg_handle(void *parameter)
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
             LOG_D("action start");
+<<<<<<< HEAD
             // action_front_car(0.107f);
             action_front_car(0.0f);
+=======
+            action_relative_movement_car(0, 0.135f, 0);
+            action_relative_movement_car(0, 0, 3.14f/2.0f);
+>>>>>>> 08a55de8490d4d1eabff5e26d2e5f46da22ae6ff
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }
