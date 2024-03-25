@@ -9,6 +9,7 @@
 #include "chassis_port.h"
 #include "abus_topic.h"
 #include "math.h"
+#include "PathFinder.h"
 
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
@@ -35,7 +36,19 @@ enum
     LEFT,
     ROTATION,
 };
+
+enum
+{
+    END = 0U,
+    FORWARD ,
+    RIGHT,
+    BACKWARD,
+    LEFT,
+};
 uint8_t action_type;
+uint8_t now_dir;  // 当前方向
+uint8_t next_dir; // 下一个方向
+#define HALF_CAR_WIDTH 0.107f
 
 void action_front_car(float _y_m)
 {
@@ -53,11 +66,11 @@ void action_front_car(float _y_m)
     {
         if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.1)
         {
-            //break;
+            // break;
         }
 
-            //abus_public(&rbmg_chassis_acc, &ctrl);
-        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+        // abus_public(&rbmg_chassis_acc, &ctrl);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
 }
@@ -71,20 +84,38 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     ctrl.type = 1;
     ctrl.pos.x_m = nowpos->x_m + _x_m;
     ctrl.pos.y_m = nowpos->y_m + _y_m;
-    ctrl.pos.z_rad = nowpos->z_rad+_w_rad;
+    ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
 
     while (1)
     {
-        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01)&&(fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01)&&(fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
+        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.01))
         {
             break;
         }
 
         abus_public(&rbmg_chassis_acc, &ctrl);
-        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.y_m);
+        LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
         rt_thread_mdelay(10);
     }
+}
+
+int turn_actions(uint8_t now_dir, uint8_t will_dir)
+{
+    int8_t delta_dir = will_dir - now_dir;
+    if(delta_dir == 0){
+        /* 直接直走 */
+        action_front_car(HALF_CAR_WIDTH);
+        return 0;
+    }else if(delta_dir >2){
+        delta_dir -= 4;
+    }
+    #define M_PI_2 (1.5707963267948966192313216916398)
+    float delta_angle = delta_dir * M_PI_2;
+
+    action_front_car(HALF_CAR_WIDTH);
+    action_relative_movement_car(0, 0, delta_angle);
+    return 0;
 }
 
 /**
@@ -95,7 +126,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
  */
 int rbmg_error_callback(abus_topic_t *sub)
 {
-#define KK 1.1f   //1.3
+#define KK 1.1f // 1.3
 #define SPEED 0.25
     if (rbmg_mode == LINE_MODE)
     {
@@ -103,7 +134,7 @@ int rbmg_error_callback(abus_topic_t *sub)
         afifo_out_data(sub->datafifo, (uint8_t *)&line_error, sizeof(float));
         // 发布控制到底盘
         ctrl.type = 0;
-        chassis_dir=0;
+        chassis_dir = 0;
         switch (chassis_dir)
         {
         case 0: // 前
@@ -147,8 +178,8 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
      *
      */
-        rbmg_mode = ACTION_MODE;
-        LOG_D("special point! now action mode");
+    rbmg_mode = ACTION_MODE;
+    LOG_D("special point! now action mode");
     return 0;
 }
 int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
@@ -159,26 +190,25 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 void rbmg_handle(void *parameter)
 {
-    //rbmg_mode = ACTION_MODE;
-     //action_front_car(0.107f);
+    // rbmg_mode = ACTION_MODE;
+    // action_front_car(0.107f);
     while (1)
     {
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
-        
 
         if (rbmg_mode == LINE_MODE)
         {
             // 巡线都在回调中处理
-            //LOG_D("line mode");
+            // LOG_D("line mode");
         }
         else if (rbmg_mode == ACTION_MODE)
         {
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
             LOG_D("action start");
-            //action_front_car(0.107f);
+            // action_front_car(0.107f);
             action_front_car(0.0f);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");

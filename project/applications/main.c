@@ -67,7 +67,7 @@ int main(void)
  
 
 	power_on(SWITCH_24V_1);
-	power_on(SWITCH_24V_2);
+	power_off(SWITCH_24V_2);
 	power_on(SWITCH_24V_3);
 	power_on(SWITCH_24V_4);
 	power_on(SWITCH_5V_1 );
