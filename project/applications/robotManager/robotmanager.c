@@ -178,7 +178,8 @@ void rbmg_handle(void *parameter)
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
             LOG_D("action start");
-            action_front_car(0.107f);
+            //action_front_car(0.107f);
+            action_front_car(0.0f);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }

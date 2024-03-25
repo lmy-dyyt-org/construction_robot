@@ -11,7 +11,7 @@ set 方法接收三个参数：axmm、aymm 和 azmm，
 分别代表机器人在三个方向（x、y、z）上的位置
 在设置这些位置后，会调用 calculateGrad 方法来计算一些必要的参数。
 
-getXmm、getYmm 和 getZmm 方法分别用于获取机器人在三个方向上的位置。
+getXmm、getYm    m 和 getZmm 方法分别用于获取机器人在三个方向上的位置。
 
 注意！！
 我们要了解这个文件的作用，可以尝试理解这个文件的代码，注意我们机器人没有z轴的运动，rotation

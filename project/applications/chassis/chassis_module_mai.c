@@ -1,8 +1,9 @@
-#include "chassis_module_mai.h"
 
 #define DBG_TAG "Chassis.mai"
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
+#include "chassis_module_mai.h"
+
 #ifdef CHASSIS_MODULE_MAI
 int module_mai(struct chassis *chassis, const void *output, const void *input);
 #ifdef CHASSIS_USING_MOTOR_HAL
@@ -31,13 +32,13 @@ chassis_ops_t ops_mai = {
 #define CHASSIS_2PIR (6.28318530718 * CHASSIS_MAI_WHELL_R_M)
 
 #define conversion (180.f/CHASSIS_MAI_WHELL_R_M/PI)
-int module_mai(struct chassis *chassis, const void *output, const void *input)
+int module_mai(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {
     if (output != NULL)
     {
         chassis_mai_data_t *data = (chassis_mai_data_t *)output;
-        data->type = chassis->run_status;
-        switch (chassis->run_status)
+        data->type = require_cmd;
+        switch (require_cmd)
         {
         case CHASSIS_SPEED:
             // 速度控制
@@ -62,7 +63,7 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
     if (input != NULL)
     {
         chassis_mai_data_t *data = (chassis_mai_data_t *)input;
-        switch (chassis->run_status)
+        switch (require_cmd)
         {
         case CHASSIS_SPEED:
             // 速度控制
@@ -90,13 +91,13 @@ int module_mai(struct chassis *chassis, const void *output, const void *input)
     return 0;
 }
 #ifdef CHASSIS_USING_MOTOR_HAL
-static int driver_mai(const void *output, const void *input)
+static int driver_mai(struct chassis *chassis,const void *output, const void *input, chassis_status require_cmd)
 {
     if (input != NULL)
     {
         // 读取电机数据输出
         chassis_mai_data_t *data = (chassis_mai_data_t *)input;
-        switch (data->type)
+        switch (require_cmd)
         {
         case CHASSIS_SPEED:
             // 速度控制
@@ -122,7 +123,7 @@ static int driver_mai(const void *output, const void *input)
     {
         // 写入电机数据
         chassis_mai_data_t *data = (chassis_mai_data_t *)output;
-        switch (data->type)
+        switch (require_cmd)
         {
         case CHASSIS_SPEED:
             // 速度控制
