@@ -48,6 +48,7 @@ enum
 uint8_t action_type;
 uint8_t now_dir;  // 当前方向
 uint8_t next_dir; // 下一个方向
+Path_table_t* this_table;
 #define HALF_CAR_WIDTH 0.107f
 
 void action_front_car(float _y_m)
@@ -178,6 +179,10 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
      *
      */
+
+    /* 更新寻路器*/
+    now_dir = next_dir;
+    next_dir = Path_get_next_dir(this_table);
     rbmg_mode = ACTION_MODE;
     LOG_D("special point! now action mode");
     return 0;
@@ -208,8 +213,13 @@ void rbmg_handle(void *parameter)
             // 动作模式下的处理
             // 完成动作后切换回巡线模式
             LOG_D("action start");
-            action_relative_movement_car(0, 0.135f, 0);
-            action_relative_movement_car(0, 0, 3.14f/2.0f);
+            // action_relative_movement_car(0, 0.135f, 0);
+            // action_relative_movement_car(0, 0, 3.14f/2.0f);
+
+            //判断当前是否寻路完成进行切换或者特殊action
+
+            //转弯
+            turn_actions(now_dir,next_dir);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }
