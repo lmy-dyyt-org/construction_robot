@@ -23,7 +23,7 @@ typedef struct chassis_mai_data
     float motor4;
 
 } chassis_mai_data_t;
-int module_mai(struct chassis *chassis, const void *output, const void *input);
+int module_mai(struct chassis *chassis, const void *output, const void *input,chassis_status require_cmd);
 #ifdef __cplusplus
 }
 #endif

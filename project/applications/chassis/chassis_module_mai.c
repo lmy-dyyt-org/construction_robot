@@ -5,9 +5,9 @@
 #include "chassis_module_mai.h"
 
 #ifdef CHASSIS_MODULE_MAI
-int module_mai(struct chassis *chassis, const void *output, const void *input);
+int module_mai(struct chassis *chassis, const void *output, const void *input,chassis_status require_cmd);
 #ifdef CHASSIS_USING_MOTOR_HAL
-static int driver_mai(const void *output, const void *input);
+static int driver_mai(struct chassis *chassis,const void *output, const void *input, chassis_status require_cmd);
 #endif
 
 chassis_mai_data_t mai_data;
