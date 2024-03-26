@@ -59,6 +59,7 @@
   "files.associations": {
     "pathfinder.h": "c",
     "drv_stepper_motor.h": "c",
-    "aboard_power_switch.h": "c"
+    "aboard_power_switch.h": "c",
+    "robotmanager.h": "c"
   }
 }

@@ -7,7 +7,8 @@ extern "C" {
 
 enum
 {
-    LINE_MODE = 0U,
+    CAB_MODE = 0U,
+    LINE_MODE ,
     ACTION_MODE,
 };
 

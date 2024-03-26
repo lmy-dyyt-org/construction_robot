@@ -17,12 +17,7 @@ extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
-enum
-{
-    CAB_MODE = 0U,
-    LINE_MODE ,
-    ACTION_MODE,
-};
+
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
