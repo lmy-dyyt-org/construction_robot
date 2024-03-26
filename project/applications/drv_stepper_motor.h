@@ -37,6 +37,8 @@ typedef struct stepper_motor
 	uint8_t stepper_motor_calibrationflag;			/* 校准就绪标志位 */
 	uint8_t stepper_motor_returnzeroingflag;		/* 正在回零状态标志位 */
 	uint8_t stepper_motor_returnzero_failflag; 		/* 回零失败状态标志位 */
+
+	uint16_t stepper_motor_current;      		/* 读取相电流 */
 }stepper_motor_t;
 
 extern uint8_t rxCmd[128];

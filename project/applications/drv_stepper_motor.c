@@ -12,7 +12,7 @@
 #include "rtthread.h"
 #include "drv_stepper_motor.h"
 #include "math.h"
-
+#include "robotManager.h"
 
 
 stepper_motor_t stepper_motor_big_arm;
@@ -93,6 +93,8 @@ void drv_stepper_motor(void *parameter)
     }
     rt_thread_mdelay(10);
   }
+  extern uint8_t rbmg_mode;
+  rbmg_mode = LINE_MODE;
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -133,14 +135,16 @@ void drv_stepper_motor(void *parameter)
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
     Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPHA);
 
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
     Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
-    
-    LOG_D("big:%f small:%f",stepper_motor_big_arm.stepper_motor_angle, stepper_motor_small_arm.stepper_motor_angle);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPHA);
+
+    LOG_D("big_current:%d small_current:%d",stepper_motor_big_arm.stepper_motor_current, stepper_motor_small_arm.stepper_motor_current);
     rt_thread_mdelay(500);
   }
 }
@@ -159,7 +163,14 @@ static rt_err_t Emm_uart_receive_callback(rt_device_t dev, rt_size_t size)
       case S_RL   :  break;
       case S_PID  :  break;
       case S_VBUS :  break;
-      case S_CPHA :  break;
+      case S_CPHA : 
+        if(size>=5)  
+        {
+          // LOG_D("vel,size:%d\n",size);
+      // rt_mb_send(&mb1, (uint8_t)size); 
+          rt_sem_release(cmp_sem);
+        }
+        break;
       case S_ENCL :  break;
       case S_TPOS :  break;
       case S_VEL  :  
@@ -258,7 +269,33 @@ void drv_process_steppermotor(void *parameter)
           case S_RL   :  break;
           case S_PID  :  break;
           case S_VBUS :  break;
-          case S_CPHA :  break;
+          case S_CPHA :  
+                       if(rxCount >= 5)
+                        {
+                            Emm_V5_Receive(rxCmd, 5);
+                            if(Emm_V5_ID_judge(&stepper_motor) == 0)
+                            {
+                              break;
+                            }
+                            if(rxCmd[1] == 0x27)
+                            {  
+                              stepper_motor->stepper_motor_current = (uint16_t)(
+                                                ((uint16_t)rxCmd[2] << 8)    |
+                                                ((uint16_t)rxCmd[3] << 0)    
+                                              );
+                              stepper_motor_cmd_state = S_IDLE; // 清除状态
+                              LOG_I("stepperMotor_%d_Cur_Speed: %d\n",stepper_motor->stepper_motor_id ,stepper_motor->stepper_motor_current);
+                              rt_mutex_release(mutex_step);
+                              // LOG_D("mutex_release\n");
+                            }
+                        } 
+
+                        else 
+                        {
+                          LOG_E("stepperMotor_Vel_Receive_Error: %d\n", rt_device_read(Emm_serial1, 0, tmp, 60));
+                          break;
+                        }
+                        break;
           case S_ENCL :  break;
           case S_TPOS :  break;
           case S_VEL  :  
