@@ -91,6 +91,7 @@ void drv_stepper_motor(void *parameter)
       Emm_V5_Reset_CurPos_To_Zero(3); // 将当前位置清零
       break;
     }
+    rt_thread_mdelay(10);
   }
 ////////////////////////////////////////////////////////////////////////
 
@@ -100,45 +101,46 @@ void drv_stepper_motor(void *parameter)
 		// Emm_V5_Vel_Control(1, 0, 100, 0, 0); 
     // rt_thread_mdelay(600);//这里的延时要根据 速度 和 转动圈数来取
 
-  big_arm_pulse = abig_arm_pulse;
-  small_arm_pulse = asmall_arm_pulse;
+    big_arm_pulse = abig_arm_pulse;
+    small_arm_pulse = asmall_arm_pulse;
 
-  if(big_arm_pulse>0)
-  {
-    big_arm_dir = 0;
-  }
-  else
-  {
-    big_arm_pulse = -big_arm_pulse;
-    big_arm_dir = 1;
-  }
+    if(big_arm_pulse>0)
+    {
+      big_arm_dir = 0;
+    }
+    else
+    {
+      big_arm_pulse = -big_arm_pulse;
+      big_arm_dir = 1;
+    }
 
-  if(small_arm_pulse>0)
-  {
-    small_arm_dir = 1;
-  }
-  else
-  {
-    small_arm_pulse = -small_arm_pulse;
-    small_arm_dir = 0;
-  }
+    if(small_arm_pulse>0)
+    {
+      small_arm_dir = 1;
+    }
+    else
+    {
+      small_arm_pulse = -small_arm_pulse;
+      small_arm_dir = 0;
+    }
 
-  // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
-  Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
-  Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
+    // LOG_D("big:%d small:%d",big_arm_pulse, small_arm_pulse);  //int32 用 %f 打印会有问题
+    Emm_V5_Pos_Control(1, big_arm_dir, 100, 20, big_arm_pulse, 1, 0);
+    Emm_V5_Pos_Control(3, small_arm_dir, 100, 20, small_arm_pulse, 1, 0);
 
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
 
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_CPOS);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_VEL);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_PERR);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_FLAG);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_big_arm, 1, S_ORG);
-
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
-    // Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_CPOS);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_VEL);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_PERR);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_FLAG);
+    Emm_V5_Read_Sys_Params(&stepper_motor_small_arm, 3, S_ORG);
+    
+    LOG_D("big:%f small:%f",stepper_motor_big_arm.stepper_motor_angle, stepper_motor_small_arm.stepper_motor_angle);
     rt_thread_mdelay(500);
   }
 }

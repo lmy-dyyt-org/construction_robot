@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.38.0.0
 Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: ed s, s, LIC=RC93N-YYV10-DYKV3-AKSKU-J8CHC-5VFJA
+License Information: lmy 2777400275@qq.com, lmy, LIC=WHYH9-4LIQE-VEGHA-18IYC-ZQP6C-NL0JA
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
@@ -21,7 +21,7 @@ Target DLL:      CMSIS_AGDI.dll V1.33.15.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
+d:\out\competition\construction robot\code\construction_robot\project\project.uvprojx
 Project File Date:  03/24/2024
 
 <h2>Output:</h2>
@@ -29,14 +29,25 @@ Project File Date:  03/24/2024
 Build target 'rt-thread'
 Note: source file 'applications\arduino_main.cpp' - object file renamed from '.\build\keil\Obj\arduino_main.o' to '.\build\keil\Obj\applications_arduino_main.o'.
 Note: source file 'applications\arduino_pinout\pins_arduino.c' - object file renamed from '.\build\keil\Obj\pins_arduino.o' to '.\build\keil\Obj\arduino_pinout_pins_arduino.o'.
-compiling robotmanager.c...
+compiling pins_arduino.c...
+compiling arduino_pinout_pins_arduino.c...
+applications/drv_stepper_motor.c(13): warning: In file included from...
+applications/drv_stepper_motor.h(40): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
+}stepper_motor_t;
+ ^
+applications/Emm_V5.h(21): note: previous definition is here
+typedef struct stepper_motor stepper_motor_t;
+                             ^
+1 warning generated.
+compiling drv_stepper_motor.c...
+compiling applications_arduino_main.cpp...
 linking...
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\applications_arduino_main.o ignored.
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\arduino_pinout_pins_arduino.o ignored.
-Program Size: Code=121478 RO-data=14418 RW-data=3840 ZI-data=8088  
+Program Size: Code=121606 RO-data=14418 RW-data=3840 ZI-data=8088  
 Finished: 0 information, 2 warning and 0 error messages.
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 2 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -46,10 +57,10 @@ Package Vendor: Keil
                 STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
 
 <h2>Collection of Component include folders:</h2>
-  C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+  C:/Keil_v5/ARM/PACK/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
