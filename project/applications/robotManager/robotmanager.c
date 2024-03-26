@@ -10,6 +10,7 @@
 #include "abus_topic.h"
 #include "math.h"
 #include "PathFinder.h"
+#include "aboard_power_switch.h"
 
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
@@ -18,11 +19,12 @@ extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
 enum
 {
-    LINE_MODE = 0U,
+    CAB_MODE = 0U,
+    LINE_MODE ,
     ACTION_MODE,
 };
 
-uint8_t rbmg_mode = LINE_MODE;
+uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
@@ -118,9 +120,26 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
     switch (will_dir)
     {
     case END:
+
+            power_on(SWITCH_24V_3);
+            action_relative_movement_car(-0.096f, 0, 0);
+
+            extern float ymm;
+            extern float zmm;
+            
+            /*抓*/
+            ymm = 250;
+            zmm = -15;
+            rt_thread_mdelay(2000);
+
+            ymm = 250;
+            zmm = 15;
+            rt_thread_mdelay(2000);
+
+            action_relative_movement_car(0.096f, 0, 0);
+            action_relative_movement_car(0.f, 0, 1.57*2.f);
         while (1)
         {
-action_relative_movement_car(0,0,0);
             LOG_D("stop");
             rt_thread_mdelay(100);
         }
@@ -148,7 +167,7 @@ action_relative_movement_car(0,0,0);
     LOG_D("front end");
     LOG_D("rota start %f", delta_angle);
 
-    action_relative_movement_car(0, 0, delta_angle );
+    action_relative_movement_car(0, 0, delta_angle);
     LOG_D("rota end");
 
     return 0;
@@ -235,8 +254,17 @@ void rbmg_handle(void *parameter)
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
-
-        if (rbmg_mode == LINE_MODE)
+        if (rbmg_mode == CAB_MODE)
+        {
+            while(1){
+                if(rbmg_mode != CAB_MODE)
+                {
+                    break;
+                    rt_thread_mdelay(10);
+                }
+            }
+        }
+        else if (rbmg_mode == LINE_MODE)
         {
             // 巡线都在回调中处理
             // LOG_D("line mode");
@@ -270,8 +298,7 @@ void rbmg_handle(void *parameter)
     }
 }
 
-
-Path_table_element_t test_go[] = { FORWARD, RIGHT, END, END};
+Path_table_element_t test_go[] = {LEFT, END, END};
 int rbmg_init(void)
 {
 
@@ -283,7 +310,7 @@ int rbmg_init(void)
     tid_rbmg = rt_thread_create("robotmanger",
                                 rbmg_handle, RT_NULL,
                                 4096,
-                                8, 1);
+                                7, 1);
 
     /* 线程创建成功，则启动线程 */
     if (tid_rbmg != RT_NULL)

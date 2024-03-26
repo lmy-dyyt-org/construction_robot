@@ -15,10 +15,10 @@ extern "C"
 {
 #endif
 #include "float.h"
-
-#ifndef u8
-#define u8 unsigned char
-#endif
+#include "stdint.h"
+//#ifndef uint8_t
+//#define uint8_t unsigned char
+//#endif
 
 #define TARGET_MAX FLT_MAX // 默认最大限幅值
 #define OUT_MAX FLT_MAX    // 默认最大限幅值
@@ -85,7 +85,7 @@ typedef struct _var_list {
 
     typedef struct
     {
-        u8 run_status;
+        uint8_t run_status;
         ALL_PID_I_Function integral_way;
         ALL_PID_D_Function differential_way;
         ALL_PID_Mode pid_mode; // 判定pid为增量或者位置
