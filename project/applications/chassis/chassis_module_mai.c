@@ -44,7 +44,7 @@ int module_mai(struct chassis *chassis, const void *output, const void *input, c
         {
         case CHASSIS_SPEED:
             // 速度控制
-                        data->motor1 = -((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
+            data->motor1 = -((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
             data->motor2 = -((chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)   - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
             data->motor3 = -((chassis->target.speed.x_m_s + chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
             data->motor4 = -((chassis->target.speed.x_m_s - chassis->target.speed.y_m_s)  - (chassis->target.speed.z_rad_s * CHASSIS_HALF_A_B)) / CHASSIS_2PIR*60.f;
