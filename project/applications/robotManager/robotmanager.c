@@ -17,8 +17,6 @@ extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
-
-
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
@@ -39,32 +37,12 @@ uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
+Path_table_element_t test_go[] = {LEFT, END, END};
+
+Path_table_t test_back_table;
+Path_table_element_t test_back[] = {RIGHT, END};
+
 #define HALF_CAR_WIDTH 0.135f
-
-// void action_front_car(float _y_m)
-// {
-//     extern chassis_t chassis_mai;
-//     const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
-//     // 打印电机位置
-//     // 发布底盘控制速度，前进
-//     ctrl.type = 1;
-//     ctrl.pos.x_m = nowpos->x_m;
-//     ctrl.pos.y_m = nowpos->y_m + _y_m;
-//     ctrl.pos.z_rad = nowpos->z_rad;
-//     abus_public(&rbmg_chassis_acc, &ctrl);
-
-//     while (1)
-//     {
-//         if (fabs(nowpos->y_m - ctrl.pos.y_m) < 0.1)
-//         {
-//             break;
-//         }
-
-//         abus_public(&rbmg_chassis_acc, &ctrl);
-//         LOG_D("[action]pos x:%f y:%f z:%f ctrly:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.y_m);
-//         rt_thread_mdelay(10);
-//     }
-// }
 
 void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
@@ -92,51 +70,54 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     }
 }
 
+int special_action_1(void)
+{
+#define HALF_LINE 0.125f
+    power_on(SWITCH_24V_3);
+    action_relative_movement_car(-HALF_LINE, 0, 0);
+
+    extern float ymm;
+    extern float zmm;
+
+    /*抓*/
+    ymm = 250;
+    zmm = -25;
+    rt_thread_mdelay(4000);
+
+    ymm = 250;
+    zmm = 15;
+    rt_thread_mdelay(4000);
+
+    action_relative_movement_car(HALF_LINE, 0, 0);
+    action_relative_movement_car(0.f, 0, 1.57 * 2.f);
+    this_table = &test_back_table;
+    rbmg_mode = LINE_MODE;
+    LOG_D("special action 1 end now %s", this_table->name);
+}
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
 {
     int8_t delta_dir = will_dir - now_dir;
-    // if (delta_dir == 0)
-    // {
-    //     /* 直接直走 */
-    //     action_relative_movement_car(0, HALF_CAR_WIDTH, 0);
-    //     return 0;
-    // }
-    // else if (delta_dir > 2)
-    // {
-    //     delta_dir -= 4;
-    // }
+
 #define M_PI_2 (1.5707963267948966192313216916398)
-    // float delta_angle = delta_dir * M_PI_2;
-    // float delta_angle = (will_dir - 1) * M_PI_2;
-    // LOG_D("front start");
 
     static float delta_angle = 0;
 
     switch (will_dir)
     {
     case END:
-
-            power_on(SWITCH_24V_3);
-            action_relative_movement_car(-0.096f, 0, 0);
-
-            extern float ymm;
-            extern float zmm;
-            
-            /*抓*/
-            ymm = 250;
-            zmm = -15;
-            rt_thread_mdelay(2000);
-
-            ymm = 250;
-            zmm = 15;
-            rt_thread_mdelay(2000);
-
-            action_relative_movement_car(0.096f, 0, 0);
-            action_relative_movement_car(0.f, 0, 1.57*2.f);
-        while (1)
+        if (this_table == &test_go_table)
         {
-            LOG_D("stop");
-            rt_thread_mdelay(100);
+            special_action_1();
+            return 0;
+        }
+        else if (this_table == &test_back_table)
+        {
+            action_relative_movement_car(0.0, 0, 0.f);
+            while (1)
+            {
+                LOG_D("stop");
+                rt_thread_mdelay(100);
+            }
         }
         break;
     case FORWARD:
@@ -229,9 +210,12 @@ int rbmg_special_point_callback(abus_topic_t *sub)
      * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
      *
      */
+    if (rbmg_mode != CAB_MODE)
+    {
+        rbmg_mode = ACTION_MODE;
+        LOG_D("special point! now action mode");
+    }
 
-    rbmg_mode = ACTION_MODE;
-    LOG_D("special point! now action mode");
     return 0;
 }
 int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
@@ -251,12 +235,15 @@ void rbmg_handle(void *parameter)
         // 接到处理数据的消息
         if (rbmg_mode == CAB_MODE)
         {
-            while(1){
-                if(rbmg_mode != CAB_MODE)
+            while (1)
+            {
+                LOG_D("cab mode");
+                if (rbmg_mode != CAB_MODE)
                 {
+
                     break;
-                    rt_thread_mdelay(10);
                 }
+                rt_thread_mdelay(500);
             }
         }
         else if (rbmg_mode == LINE_MODE)
@@ -277,14 +264,14 @@ void rbmg_handle(void *parameter)
             next_dir = Path_get_next_dir(this_table);
             LOG_D("now dir %d next dir %d", now_dir, next_dir);
             // 判断当前是否寻路完成进行切换或者特殊action
-            if (now_dir == 0)
-                while (1)
-                {
-                    LOG_D("finder end");
-                    rt_thread_mdelay(500);
-                }
+            // if (now_dir == 0)
+            //     while (1)
+            //     {
+            //         LOG_D("finder end");
+            //         rt_thread_mdelay(500);
+            //     }
 
-            // 转弯
+            // 转弯或特殊action
             turn_actions(now_dir, next_dir);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
@@ -293,11 +280,11 @@ void rbmg_handle(void *parameter)
     }
 }
 
-Path_table_element_t test_go[] = {LEFT, END, END};
 int rbmg_init(void)
 {
 
     Path_table_init(&test_go_table, test_go, "test go table", 0, 0);
+    Path_table_init(&test_back_table, test_back, "test back table", 0, 0);
     this_table = &test_go_table;
     rt_thread_t tid_rbmg = RT_NULL;
 
