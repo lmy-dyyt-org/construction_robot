@@ -37,10 +37,10 @@ uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
-Path_table_element_t test_go[] = {LEFT, END, END};
+Path_table_element_t test_go[] = {END, END};
 
 Path_table_t test_back_table;
-Path_table_element_t test_back[] = {RIGHT, END};
+Path_table_element_t test_back[] = {END, END};
 
 #define HALF_CAR_WIDTH 0.135f
 
@@ -73,7 +73,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 int special_action_1(void)
 {
 #define HALF_LINE 0.125f
-    power_on(SWITCH_24V_3);
+    power_on(SWITCH_24V_4);
     action_relative_movement_car(-HALF_LINE, 0, 0);
 
     extern float ymm;
@@ -82,11 +82,11 @@ int special_action_1(void)
     /*抓*/
     ymm = 250;
     zmm = -25;
-    rt_thread_mdelay(4000);
+    rt_thread_mdelay(3000);
 
     ymm = 250;
     zmm = 15;
-    rt_thread_mdelay(4000);
+    rt_thread_mdelay(3000);
 
     action_relative_movement_car(HALF_LINE, 0, 0);
     action_relative_movement_car(0.f, 0, 1.57 * 2.f);
@@ -94,6 +94,33 @@ int special_action_1(void)
     rbmg_mode = LINE_MODE;
     LOG_D("special action 1 end now %s", this_table->name);
 }
+
+int special_action_2(void)
+{
+#define HALF_LINE 0.125f
+
+    extern float ymm;
+    extern float zmm;
+    action_relative_movement_car(0.0, 0, 0.f);
+
+    /*抓*/
+    ymm = 250;
+    zmm = -25;
+    rt_thread_mdelay(3000);
+
+    power_off(SWITCH_24V_4);
+    ymm = 250;
+    zmm = 15;
+    rt_thread_mdelay(3000);
+
+    // action_relative_movement_car(HALF_LINE, 0, 0);
+    // action_relative_movement_car(0.f, 0, 1.57 * 2.f);
+    // this_table = &test_back_table;
+
+    rbmg_mode = CAB_MODE;
+    LOG_D("special action 2 end now %s", this_table->name);
+}
+
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
 {
     int8_t delta_dir = will_dir - now_dir;
@@ -112,7 +139,9 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         }
         else if (this_table == &test_back_table)
         {
-            action_relative_movement_car(0.0, 0, 0.f);
+            // LOG_D("test_back_table end special action start");
+            // LOG_D("test_back_table end special action end!");
+            special_action_2();
             while (1)
             {
                 LOG_D("stop");

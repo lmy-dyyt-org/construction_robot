@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\build\keil\Obj\rt-thread.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\build\keil\Obj\rt-thread.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Tue Mar 26 15:56:12 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Tue Mar 26 21:46:23 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1108 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1402,11 +1402,11 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 340<LI>Call Chain = _scanf_really_real &rArr; _fp_value &rArr; _btod_etento &rArr; _btod_emul &rArr; _e2e
 </UL>
 <BR>[Calls]<UL><LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_is_digit
-<LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_infnan
-<LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_hex_real
 <LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_value
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_locale
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_narrow
+<LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_infnan
+<LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_hex_real
 </UL>
 <BR>[Called By]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_real
 </UL>
@@ -3726,7 +3726,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_pin_write
 </UL>
-<BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;$Super$$main
+<BR>[Called By]<UL><LI><a href="#[2c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turn_actions
+<LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;$Super$$main
 </UL>
 
 <P><STRONG><a name="[2a2]"></a>power_on</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, aboard_power_switch.o(.text.power_on))
@@ -6368,12 +6369,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
 </UL>
 
-<P><STRONG><a name="[2c5]"></a>turn_actions</STRONG> (Thumb, 488 bytes, Stack size 40 bytes, robotmanager.o(.text.turn_actions))
+<P><STRONG><a name="[2c5]"></a>turn_actions</STRONG> (Thumb, 588 bytes, Stack size 40 bytes, robotmanager.o(.text.turn_actions))
 <BR><BR>[Stack]<UL><LI>Max Depth = 940 + Unknown Stack Size
 <LI>Call Chain = turn_actions &rArr; action_relative_movement_car &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;action_relative_movement_car
 <LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
+<LI><a href="#[2a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_off
 <LI><a href="#[2a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_on
 <LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
@@ -8588,14 +8590,14 @@ Local Symbols
 <P><STRONG><a name="[284]"></a>get_components</STRONG> (Thumb, 336 bytes, Stack size 80 bytes, rt_vsnprintf.o(.text.get_components))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = get_components &rArr; __aeabi_d2lz
 </UL>
-<BR>[Calls]<UL><LI><a href="#[286]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
-<LI><a href="#[285]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
+<BR>[Calls]<UL><LI><a href="#[285]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
 <LI><a href="#[289]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmplt
 <LI><a href="#[1d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
 <LI><a href="#[287]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpgt
 <LI><a href="#[288]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpeq
 <LI><a href="#[1e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[286]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
@@ -8618,7 +8620,6 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[2be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_broken_up_decimal
 <LI><a href="#[284]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[2c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_integer
-<LI><a href="#[286]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 <LI><a href="#[285]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
 <LI><a href="#[2c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
@@ -8631,6 +8632,7 @@ Local Symbols
 <LI><a href="#[1e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[1e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[286]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
 </UL>

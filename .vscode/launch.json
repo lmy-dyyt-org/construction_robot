@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/80520/Documents/GitHub/construction_robot/project/applications/chassis",
-      "program": "c:/Users/80520/Documents/GitHub/construction_robot/project/applications/chassis/build/Debug/outDebug",
+      "cwd": "c:/Users/80520/Documents/GitHub/construction_robot/project/applications/robotManager",
+      "program": "c:/Users/80520/Documents/GitHub/construction_robot/project/applications/robotManager/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
