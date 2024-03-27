@@ -17,7 +17,7 @@ extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
-uint8_t rbmg_mode = CAB_MODE;
+uint8_t rbmg_mode = ACTION_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
@@ -37,10 +37,10 @@ uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
-Path_table_element_t test_go[] = {FORWARD,END, END};
+Path_table_element_t test_go[] = {END, END};
 
 Path_table_t test_back_table;
-Path_table_element_t test_back[] = {LEFT,END, END};
+Path_table_element_t test_back[] = {END, END};
 
 #define HALF_CAR_WIDTH 0.135f
 
