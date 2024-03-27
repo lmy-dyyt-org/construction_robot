@@ -37,10 +37,10 @@ uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
-Path_table_element_t test_go[] = {END, END};
+Path_table_element_t test_go[] = {FORWARD,END, END};
 
 Path_table_t test_back_table;
-Path_table_element_t test_back[] = {END, END};
+Path_table_element_t test_back[] = { LEFT,END, END};
 
 #define HALF_CAR_WIDTH 0.135f
 
@@ -74,7 +74,8 @@ int special_action_1(void)
 {
 #define HALF_LINE 0.125f
     power_on(SWITCH_24V_4);
-    action_relative_movement_car(-HALF_LINE, 0, 0);
+   // action_relative_movement_car(-HALF_LINE, 0, 0);
+    action_relative_movement_car(0, 0, 0);
 
     extern float ymm;
     extern float zmm;

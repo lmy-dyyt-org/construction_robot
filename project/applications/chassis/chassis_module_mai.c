@@ -22,9 +22,9 @@ chassis_ops_t ops_mai = {
 #endif
     .date = &mai_data};
 
-#define CHASSIS_MAI_WHELL_R_M (0.04f)
+#define CHASSIS_MAI_WHELL_R_M (0.0375f)
 #define CHSSIS_MAI_A_M (0.1275f)
-#define CHSSIS_MAI_B_M (0.1676f)
+#define CHSSIS_MAI_B_M (0.1790f)
 #define PI (3.14159265359f)
 #define CHASSIS_HALF_A_B (0.5 * (CHSSIS_MAI_A_M + CHSSIS_MAI_B_M))
 #define CHASSIS_A_B ((CHSSIS_MAI_A_M + CHSSIS_MAI_B_M))
