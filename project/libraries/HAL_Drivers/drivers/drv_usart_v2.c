@@ -11,7 +11,7 @@
 #include "board.h"
 #include "drv_usart_v2.h"
 
-#ifdef RT_USING_SERIAL_V2
+#if 1
 
 //#define DRV_DEBUG
 #define DBG_TAG              "drv.usart"
