@@ -94,6 +94,7 @@ int special_action_1(void)
     this_table = &test_back_table;
     rbmg_mode = LINE_MODE;
     LOG_D("special action 1 end now %s", this_table->name);
+		return 0;
 }
 
 int special_action_2(void)
@@ -120,6 +121,7 @@ int special_action_2(void)
 
     rbmg_mode = CAB_MODE;
     LOG_D("special action 2 end now %s", this_table->name);
+		return 0;
 }
 
 int turn_actions(uint8_t now_dir, uint8_t will_dir)

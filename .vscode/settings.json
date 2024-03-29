@@ -60,6 +60,8 @@
     "pathfinder.h": "c",
     "drv_stepper_motor.h": "c",
     "aboard_power_switch.h": "c",
-    "robotmanager.h": "c"
+    "robotmanager.h": "c",
+    "fashion_star_uart_servo.h": "c",
+    "rtdevice.h": "c"
   }
 }
