@@ -8,10 +8,9 @@
 #include <rtdevice.h>
 #include "math.h"
 
-#define DBG_TAG           "drv.servo.fus"
-#define DBG_LVL           DBG_LOG
+#define DBG_TAG "drv.servo.fus"
+#define DBG_LVL DBG_LOG
 #include <rtdbg.h>
-
 
 servo_t servo1;
 struct rt_semaphore FSUS_sem1;
@@ -21,70 +20,75 @@ void FSUS_DelayMs(uint16_t time)
 {
 	rt_thread_mdelay(100);
 }
-//用户实现，用于发送pkg到串口
-void FSUS_UART_Send(servo_t *servo,PackageTypeDef* pkg)
+// 用户实现，用于发送pkg到串口
+void FSUS_UART_Send(servo_t *servo, PackageTypeDef *pkg)
 {
-	//将pkg的数据拷贝到servo的tx_buf
-	rt_memcpy(servo->tx_buf,&pkg->header,2);
-	rt_memcpy(servo->tx_buf+2,&pkg->cmdId,1);
-	rt_memcpy(servo->tx_buf+3,&pkg->size,1);
-	rt_memcpy(servo->tx_buf+4,pkg->content,pkg->size);
-	rt_memcpy(servo->tx_buf+4+pkg->size,&pkg->checksum,1);
-	rt_ssize_t ret = rt_device_write(servo->uart,0,servo->tx_buf,pkg->size+5);
-	if(ret != pkg->size+5)
+	// 将pkg的数据拷贝到servo的tx_buf
+	rt_memcpy(servo->tx_buf, &pkg->header, 2);
+	rt_memcpy(servo->tx_buf + 2, &pkg->cmdId, 1);
+	rt_memcpy(servo->tx_buf + 3, &pkg->size, 1);
+	rt_memcpy(servo->tx_buf + 4, pkg->content, pkg->size);
+	rt_memcpy(servo->tx_buf + 4 + pkg->size, &pkg->checksum, 1);
+	rt_ssize_t ret = rt_device_write(servo->uart, 0, servo->tx_buf, pkg->size + 5);
+	if (ret != pkg->size + 5)
 	{
 		LOG_D("FSUS_SendPackage: uart write error");
-	}else{
-		
+	}
+	else
+	{
 	}
 }
 
 /* 接收数据回调函数 */
 static rt_err_t FSUS_uart_receive_callback1(rt_device_t dev, rt_size_t size)
 {
-	//发送信号量给线程
+	// 发送信号量给线程
 	rt_sem_release(&FSUS_sem1);
 	return 0;
 }
 
-	// 舵机控制相关的参数
-uint8_t servoId = 0; 	// 舵机的ID
-float curAngle = 0;		// 舵机当前所在的角度
-float nextAngle = 0; 	// 舵机的目标角度
-uint16_t speed = 200; 	// 舵机的转速 单位 °/s
-uint16_t interval = 0; 	// 舵机旋转的周期
-uint16_t power = 0; 	// 舵机执行功率 mV 默认为0	W
-uint8_t wait = 0;  		// 0:不等待 1:等待舵机旋转到特定的位置;
+// 舵机控制相关的参数
+uint8_t servoId = 0;   // 舵机的ID
+float curAngle = 0;	   // 舵机当前所在的角度
+float nextAngle = 0;   // 舵机的目标角度
+uint16_t speed = 200;  // 舵机的转速 单位 °/s
+uint16_t interval = 0; // 舵机旋转的周期
+uint16_t power = 0;	   // 舵机执行功率 mV 默认为0	W
+uint8_t wait = 0;	   // 0:不等待 1:等待舵机旋转到特定的位置;
 // 舵机角度死区, 如果舵机当前角度跟
 // 目标角度相差小于死区则代表舵机到达目标角度, 舵机不再旋转
 // <注意事项>
 // 		死区跟舵机的型号有关系, 取决于舵机固件的设置, 不同型号的舵机会有差别
-float servoDeadBlock = 1.0; 
+float servoDeadBlock = 1.0;
 // 查询舵机的角度
-uint16_t calcIntervalMs(servo_t* servo, uint8_t servoId, float nextAngle, float speed){
+uint16_t calcIntervalMs(servo_t *servo, uint8_t servoId, float nextAngle, float speed)
+{
 	// 读取一下舵机的角度
 	FSUS_QueryServoAngle(servo, servoId, &curAngle);
 	// 计算角度误差
-	float dAngle =  (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
+	float dAngle = (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
 	// 计算所需的时间
 	return (uint16_t)((dAngle / speed) * 1000.0);
 }
 
 // 等待舵机进入空闲状态IDLE, 即舵机到达目标角度
-void waitUntilServoIDLE(servo_t* servo, uint8_t servoId, float nextAngle){
-	
-	while(1){
+void waitUntilServoIDLE(servo_t *servo, uint8_t servoId, float nextAngle)
+{
+
+	while (1)
+	{
 		// 读取一下舵机的角度
 		FSUS_QueryServoAngle(servo, servoId, &curAngle);
-		
+
 		// 判断舵机是否达到目标角度
-		float dAngle =  (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
-		
+		float dAngle = (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
+
 		// 打印一下当前的舵机角度
 		printf("curAngle: %f dAngle: %f\r\n", curAngle, dAngle);
-		
+
 		// 判断是否小于死区
-		if (dAngle <= servoDeadBlock){
+		if (dAngle <= servoDeadBlock)
+		{
 			break;
 		}
 		// 等待一小段时间
@@ -93,18 +97,19 @@ void waitUntilServoIDLE(servo_t* servo, uint8_t servoId, float nextAngle){
 }
 void FSUS_process(void *parameter)
 {
-	servo_t*servo = (servo_t*)parameter;
-	uint8_t ret=FSUS_Ping(&servo1,0);
-	if(ret!=FSUS_STATUS_SUCCESS)
+	servo_t *servo = (servo_t *)parameter;
+	uint8_t ret = FSUS_Ping(&servo1, 0);
+	if (ret != FSUS_STATUS_SUCCESS)
 	{
-		LOG_E("FSUS_Init: Ping error%d",ret);
-	}else{
-		LOG_D("FSUS_Init: Ping success");
-				rt_thread_mdelay(100);
+		LOG_E("FSUS_Init: Ping error%d", ret);
 	}
-	
+	else
+	{
+		LOG_D("FSUS_Init: Ping success");
+		rt_thread_mdelay(100);
+	}
 
-	while(1)
+	while (1)
 	{
 
 		// 设置舵机的目标角度
@@ -117,14 +122,14 @@ void FSUS_process(void *parameter)
 		rt_thread_mdelay(interval);
 		// rt_thread_mdelay(5);
 		// waitUntilServoIDLE(servo,servoId, nextAngle);
-		
+
 		// 等待1s 看舵机死区范围
 		rt_thread_mdelay(1000);
 		// 读取一下舵机的角度
 		FSUS_QueryServoAngle(servo, servoId, &curAngle);
 		LOG_D("Final Angle: %f", curAngle);
 		rt_thread_mdelay(1000);
-		
+
 		// 设置舵机的目标角度
 		nextAngle = -120;
 		// 根据转速还有角度误差计算周期
@@ -134,10 +139,10 @@ void FSUS_process(void *parameter)
 		// 需要延时一会儿，确保舵机接收并开始执行舵机控制指令
 		// 如果马上发送舵机角度查询信息,新发送的这条指令可能会覆盖舵机角度控制信息
 		rt_thread_mdelay(5);
-				rt_thread_mdelay(interval);
+		rt_thread_mdelay(interval);
 
-		//waitUntilServoIDLE(servo, servoId, nextAngle);
-		
+		// waitUntilServoIDLE(servo, servoId, nextAngle);
+
 		// 等待1s 看舵机死区范围
 		rt_thread_mdelay(1000);
 		// 读取一下舵机的角度
@@ -149,23 +154,21 @@ void FSUS_process(void *parameter)
 int FSUS_Init(void)
 {
 	rt_thread_t fsus_thread = RT_NULL;
-	//创建信号量
-	rt_sem_init( &FSUS_sem1, "fsus_sem", 0, RT_IPC_FLAG_FIFO);
-	servo1.rx_sem =  &FSUS_sem1;
-   /* 初始化静态互斥量 */
-    rt_err_t result = rt_mutex_init(&static_fsus_mutex1, "fsus_mutex", RT_IPC_FLAG_FIFO);
-    if (result != RT_EOK)
-    {
-        rt_kprintf("init static mutex failed.\n");
-        return -1;
-    }
+	// 创建信号量
+	rt_sem_init(&FSUS_sem1, "fsus_sem", 0, RT_IPC_FLAG_FIFO);
+	servo1.rx_sem = &FSUS_sem1;
+	/* 初始化静态互斥量 */
+	rt_err_t result = rt_mutex_init(&static_fsus_mutex1, "fsus_mutex", RT_IPC_FLAG_FIFO);
+	if (result != RT_EOK)
+	{
+		rt_kprintf("init static mutex failed.\n");
+		return -1;
+	}
 	servo1.mutex = &static_fsus_mutex1;
 
-
-
-	//初始化串口
+	// 初始化串口
 	servo1.uart = rt_device_find("uart3");
-	if(servo1.uart==RT_NULL)
+	if (servo1.uart == RT_NULL)
 	{
 		rt_kprintf("Can't find uart device\n");
 		return -1;
@@ -298,12 +301,12 @@ void FSUS_SendPackage(servo_t *servo, uint8_t cmdId, uint8_t size, uint8_t *cont
 		pkg.content[i] = content[i];
 	}
 	uint8_t checksum = FSUS_CalcChecksum(&pkg);
-	//pkg.content[size] = checksum;
+	// pkg.content[size] = checksum;
 	pkg.checksum = checksum;
 	// 将pkg发送到发送缓冲区sendBuf里面
-	//FSUS_Package2RingBuffer(&pkg, servo->sendBuf);
+	// FSUS_Package2RingBuffer(&pkg, servo->sendBuf);
 	// 通过串口将数据发送出去
-	FSUS_UART_Send(servo,&pkg);
+	FSUS_UART_Send(servo, &pkg);
 }
 
 // 接收数据帧 (在接收的时候动态的申请内存)
@@ -316,31 +319,30 @@ FSUS_STATUS FSUS_RecvPackage(servo_t *servo, PackageTypeDef *pkg)
 
 	uint8_t bIdx = 0;	 // 接收的参数字节索引号
 	uint16_t header = 0; // 帧头
-	uint8_t tmpdata=0;	 
+	uint8_t tmpdata = 0;
 
 	// 如果没有超时
-	//while (!SysTick_CountdownIsTimeout())
+	// while (!SysTick_CountdownIsTimeout())
 	while (1)
 	{
 
-		//尝试有数据读取
-		if(rt_device_read(servo->uart, 0, &tmpdata, 1)==0)
+		// 尝试有数据读取
+		if (rt_device_read(servo->uart, 0, &tmpdata, 1) == 0)
 		{
-			//没有数据了
-			//等待信号量,等待有数据
-			if(rt_sem_take(servo->rx_sem, FSUS_TIMEOUT_MS)!=RT_EOK){
-				//超时啦
+			// 没有数据了
+			// 等待信号量,等待有数据
+			if (rt_sem_take(servo->rx_sem, FSUS_TIMEOUT_MS) != RT_EOK)
+			{
+				// 超时啦
 
-				//TODO:应该做一些清理工作，比如清空接收缓冲区等等
-				//rt_device_read()
+				// TODO:应该做一些清理工作，比如清空接收缓冲区等等
+				// rt_device_read()
 
 				return FSUS_STATUS_TIMEOUT;
 			}
 			continue;
 		}
-		//真的有数据了
-
-
+		// 真的有数据了
 
 		// 查看校验码是否已经接收到
 		if (pkg->status & FSUS_RECV_FLAG_CONTENT)
@@ -450,12 +452,12 @@ FSUS_STATUS FSUS_RecvPackage(servo_t *servo, PackageTypeDef *pkg)
 // 注: 如果没有舵机响应这个Ping指令的话, 就会超时
 FSUS_STATUS FSUS_Ping(servo_t *servo, uint8_t servo_id)
 {
-	//TODO:加锁！！！！！！！！！！！
+	// TODO:加锁！！！！！！！！！！！
 	uint8_t statusCode;	 // 状态码
 	uint8_t ehcoServoId; // PING得到的舵机ID
-	// LOG_D("[PING]Send Ping Package\r\n");
-	// 发送请求包
-		if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+						 // LOG_D("[PING]Send Ping Package\r\n");
+						 // 发送请求包
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
@@ -463,7 +465,7 @@ FSUS_STATUS FSUS_Ping(servo_t *servo, uint8_t servo_id)
 	// 接收返回的Ping
 	PackageTypeDef pkg;
 	statusCode = FSUS_RecvPackage(servo, &pkg);
-		rt_mutex_release(servo->mutex);
+	rt_mutex_release(servo->mutex);
 
 	if (statusCode == FSUS_STATUS_SUCCESS)
 	{
@@ -483,7 +485,7 @@ FSUS_STATUS FSUS_ResetUserData(servo_t *servo, uint8_t servo_id)
 {
 	const uint8_t size = 1;
 	FSUS_STATUS statusCode;
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
@@ -492,7 +494,7 @@ FSUS_STATUS FSUS_ResetUserData(servo_t *servo, uint8_t servo_id)
 	// 接收重置结果
 	PackageTypeDef pkg;
 	statusCode = FSUS_RecvPackage(servo, &pkg);
-		rt_mutex_release(servo->mutex);
+	rt_mutex_release(servo->mutex);
 
 	if (statusCode == FSUS_STATUS_SUCCESS)
 	{
@@ -593,13 +595,13 @@ FSUS_STATUS FSUS_WheelMove(servo_t *servo, uint8_t servo_id, uint8_t method, uin
 	buffer[4] = value & 0xFF;
 	buffer[5] = (value >> 8) & 0xFF;
 
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
 	// 发送请求包
-	//FSUS_SendPackage(servo, FSUS_CMD_SPIN, size, buffer + 1);
-	FSUS_SendPackage(servo, FSUS_CMD_SPIN, size, buffer );
+	// FSUS_SendPackage(servo, FSUS_CMD_SPIN, size, buffer + 1);
+	FSUS_SendPackage(servo, FSUS_CMD_SPIN, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	return FSUS_STATUS_SUCCESS;
@@ -688,11 +690,11 @@ FSUS_STATUS FSUS_SetServoAngle(servo_t *servo, uint8_t servo_id, float angle, ui
 	buffer[6] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_ROTATE, size, buffer );
+	FSUS_SendPackage(servo, FSUS_CMD_ROTATE, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -712,7 +714,7 @@ FSUS_STATUS FSUS_SetServoAngleByInterval(servo_t *servo, uint8_t servo_id,
 {
 	// 创建环形缓冲队列
 	const uint8_t size = 11;
-	uint8_t buffer[size  ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 	// 数值约束
@@ -754,11 +756,11 @@ FSUS_STATUS FSUS_SetServoAngleByInterval(servo_t *servo, uint8_t servo_id,
 	buffer[10] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_BY_INTERVAL, size, buffer);
+	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_BY_INTERVAL, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -778,7 +780,7 @@ FSUS_STATUS FSUS_SetServoAngleByVelocity(servo_t *servo, uint8_t servo_id,
 {
 	// 创建环形缓冲队列
 	const uint8_t size = 11;
-	uint8_t buffer[size  ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 
@@ -815,7 +817,7 @@ FSUS_STATUS FSUS_SetServoAngleByVelocity(servo_t *servo, uint8_t servo_id,
 	// RingBuffer_WriteUShort(&ringBuf, t_acc);
 	// RingBuffer_WriteUShort(&ringBuf, t_dec);
 	// RingBuffer_WriteUShort(&ringBuf, power);
-	
+
 	buffer[0] = servo_id;
 	buffer[1] = (int16_t)(10 * angle) & 0xFF;
 	buffer[2] = ((int16_t)(10 * angle) >> 8) & 0xFF;
@@ -829,11 +831,11 @@ FSUS_STATUS FSUS_SetServoAngleByVelocity(servo_t *servo, uint8_t servo_id,
 	buffer[10] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_BY_VELOCITY, size, buffer  );
+	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_BY_VELOCITY, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -852,7 +854,7 @@ FSUS_STATUS FSUS_QueryServoAngle(servo_t *servo, uint8_t servo_id, float *angle)
 	const uint8_t size = 1; // 请求包content的长度
 	uint8_t ehcoServoId;
 	int16_t echoAngle;
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
@@ -861,7 +863,7 @@ FSUS_STATUS FSUS_QueryServoAngle(servo_t *servo, uint8_t servo_id, float *angle)
 	// 接收返回的Ping
 	PackageTypeDef pkg;
 	uint8_t statusCode = FSUS_RecvPackage(servo, &pkg);
-		rt_mutex_release(servo->mutex);
+	rt_mutex_release(servo->mutex);
 
 	if (statusCode == FSUS_STATUS_SUCCESS)
 	{
@@ -887,7 +889,7 @@ FSUS_STATUS FSUS_SetServoAngleMTurn(servo_t *servo, uint8_t servo_id, float angl
 {
 	// 创建环形缓冲队列
 	const uint8_t size = 11;
-	uint8_t buffer[size  ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 	// 数值约束
@@ -922,11 +924,11 @@ FSUS_STATUS FSUS_SetServoAngleMTurn(servo_t *servo, uint8_t servo_id, float angl
 	buffer[10] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN, size, buffer );
+	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -945,7 +947,7 @@ FSUS_STATUS FSUS_SetServoAngleMTurnByInterval(servo_t *servo, uint8_t servo_id, 
 {
 	// 创建环形缓冲队列
 	const uint8_t size = 15;
-	uint8_t buffer[size  ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 
@@ -995,11 +997,11 @@ FSUS_STATUS FSUS_SetServoAngleMTurnByInterval(servo_t *servo, uint8_t servo_id, 
 	buffer[14] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN_BY_INTERVAL, size, buffer );
+	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN_BY_INTERVAL, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -1018,7 +1020,7 @@ FSUS_STATUS FSUS_SetServoAngleMTurnByVelocity(servo_t *servo, uint8_t servo_id, 
 {
 	// 创建环形缓冲队列
 	const uint8_t size = 13;
-	uint8_t buffer[size  ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 	// 数值约束
@@ -1069,11 +1071,11 @@ FSUS_STATUS FSUS_SetServoAngleMTurnByVelocity(servo_t *servo, uint8_t servo_id, 
 	buffer[12] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN_BY_VELOCITY, size, buffer );
+	FSUS_SendPackage(servo, FSUS_CMD_SET_SERVO_ANGLE_MTURN_BY_VELOCITY, size, buffer);
 	rt_mutex_release(servo->mutex);
 
 	if (wait)
@@ -1093,7 +1095,7 @@ FSUS_STATUS FSUS_QueryServoAngleMTurn(servo_t *servo, uint8_t servo_id, float *a
 	const uint8_t size = 1; // 请求包content的长度
 	uint8_t ehcoServoId;
 	int32_t echoAngle;
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
@@ -1124,8 +1126,8 @@ FSUS_STATUS FSUS_QueryServoAngleMTurn(servo_t *servo, uint8_t servo_id, float *a
 /* 舵机阻尼模式 */
 FSUS_STATUS FSUS_DampingMode(servo_t *servo, uint8_t servo_id, uint16_t power)
 {
-	const uint8_t size = 3;					 // 请求包content的长度
-	uint8_t buffer[size ];				 // content缓冲区
+	const uint8_t size = 3; // 请求包content的长度
+	uint8_t buffer[size];	// content缓冲区
 	// RingBufferTypeDef ringBuf;				 // 创建环形缓冲队列
 	// RingBuffer_Init(&ringBuf, size, buffer); // 缓冲队列初始化
 	// 构造content
@@ -1137,12 +1139,12 @@ FSUS_STATUS FSUS_DampingMode(servo_t *servo, uint8_t servo_id, uint16_t power)
 	buffer[2] = (power >> 8) & 0xFF;
 
 	// 发送请求包
-	if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
+	if (rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS) != RT_EOK)
 	{
 		return FSUS_STATUS_TIMEOUT;
 	}
-		FSUS_SendPackage(servo, FSUS_CMD_DAMPING, size, buffer );
-			rt_mutex_release(servo->mutex);
+	FSUS_SendPackage(servo, FSUS_CMD_DAMPING, size, buffer);
+	rt_mutex_release(servo->mutex);
 
 	return FSUS_STATUS_SUCCESS;
 }

@@ -245,7 +245,7 @@ int rbmg_special_point_callback(abus_topic_t *sub)
     if (rbmg_mode != CAB_MODE)
     {
         rbmg_mode = ACTION_MODE;
-        LOG_D("special point! now action mode");
+        //LOG_D("special point! now action mode");
     }
 
     return 0;

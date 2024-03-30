@@ -647,7 +647,7 @@ static void can_rx_thread(void *parameter)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
     RT_ASSERT(res == RT_EOK);
 #endif
-    static timeout_counter=0;
+    static int timeout_counter=0;
     while (1)
     {
 
@@ -655,7 +655,7 @@ static void can_rx_thread(void *parameter)
         {
             timeout_counter++;
             if(timeout_counter>4){
-                LOG_W("We have lost too many can motor device (last received id %d) data, the motor may be lose position,please check!",i);
+                //LOG_W("We have lost too many can motor device (last received id %d) data, the motor may be lose position,please check!",i);
             }
             rt_thread_mdelay(1);
             //LOG_E("dj_m_ringfifo get failed");

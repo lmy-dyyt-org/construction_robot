@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-22 21:49:31
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-22 21:54:25
+ * @LastEditTime: 2024-03-31 01:00:24
  * @FilePath: \construction_robot\project\applications\bus_sbus.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -15,8 +15,8 @@ extern "C" {
 #include "stdint.h"
 
 #define UART_RX_DMA_SIZE (1024)
-#define DBUS_MAX_LEN     (50)
-#define DJI 1
+#define DBUS_MAX_LEN     (25)
+#define DJI 0
 
 #if DJI
 #define DBUS_BUFLEN      (18)
@@ -54,7 +54,7 @@ typedef struct
 
 
 
-void dbus_uart_init(void);
+//void dbus_uart_init(void);
 void sw_judge(rc_info_t *rc);
 const rc_info_t *get_remote_control_point(void);
 
