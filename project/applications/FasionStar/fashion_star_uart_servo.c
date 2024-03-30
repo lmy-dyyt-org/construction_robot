@@ -35,6 +35,8 @@ void FSUS_UART_Send(servo_t *servo,PackageTypeDef* pkg)
 	if(ret != pkg->size+5)
 	{
 		LOG_D("FSUS_SendPackage: uart write error");
+	}else{
+		
 	}
 }
 
@@ -45,15 +47,104 @@ static rt_err_t FSUS_uart_receive_callback1(rt_device_t dev, rt_size_t size)
 	rt_sem_release(&FSUS_sem1);
 	return 0;
 }
+
+	// 舵机控制相关的参数
+uint8_t servoId = 0; 	// 舵机的ID
+float curAngle = 0;		// 舵机当前所在的角度
+float nextAngle = 0; 	// 舵机的目标角度
+uint16_t speed = 200; 	// 舵机的转速 单位 °/s
+uint16_t interval = 0; 	// 舵机旋转的周期
+uint16_t power = 0; 	// 舵机执行功率 mV 默认为0	W
+uint8_t wait = 0;  		// 0:不等待 1:等待舵机旋转到特定的位置;
+// 舵机角度死区, 如果舵机当前角度跟
+// 目标角度相差小于死区则代表舵机到达目标角度, 舵机不再旋转
+// <注意事项>
+// 		死区跟舵机的型号有关系, 取决于舵机固件的设置, 不同型号的舵机会有差别
+float servoDeadBlock = 1.0; 
+// 查询舵机的角度
+uint16_t calcIntervalMs(servo_t* servo, uint8_t servoId, float nextAngle, float speed){
+	// 读取一下舵机的角度
+	FSUS_QueryServoAngle(servo, servoId, &curAngle);
+	// 计算角度误差
+	float dAngle =  (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
+	// 计算所需的时间
+	return (uint16_t)((dAngle / speed) * 1000.0);
+}
+
+// 等待舵机进入空闲状态IDLE, 即舵机到达目标角度
+void waitUntilServoIDLE(servo_t* servo, uint8_t servoId, float nextAngle){
+	
+	while(1){
+		// 读取一下舵机的角度
+		FSUS_QueryServoAngle(servo, servoId, &curAngle);
+		
+		// 判断舵机是否达到目标角度
+		float dAngle =  (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
+		
+		// 打印一下当前的舵机角度
+		printf("curAngle: %f dAngle: %f\r\n", curAngle, dAngle);
+		
+		// 判断是否小于死区
+		if (dAngle <= servoDeadBlock){
+			break;
+		}
+		// 等待一小段时间
+		rt_thread_mdelay(5);
+	}
+}
 void FSUS_process(void *parameter)
 {
 	servo_t*servo = (servo_t*)parameter;
+	uint8_t ret=FSUS_Ping(&servo1,0);
+	if(ret!=FSUS_STATUS_SUCCESS)
+	{
+		LOG_E("FSUS_Init: Ping error%d",ret);
+	}else{
+		LOG_D("FSUS_Init: Ping success");
+				rt_thread_mdelay(100);
+	}
+	
+
 	while(1)
 	{
 
-		//处理数据
-		//FSUS_RecvPackage()
-		rt_thread_mdelay(100);
+		// 设置舵机的目标角度
+		nextAngle = 120.0;
+		// 根据转速还有角度误差计算周期
+		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
+		LOG_D("Set Servo %f-> %f", curAngle, nextAngle);
+		// 控制舵机角度
+		FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
+		rt_thread_mdelay(interval);
+		// rt_thread_mdelay(5);
+		// waitUntilServoIDLE(servo,servoId, nextAngle);
+		
+		// 等待1s 看舵机死区范围
+		rt_thread_mdelay(1000);
+		// 读取一下舵机的角度
+		FSUS_QueryServoAngle(servo, servoId, &curAngle);
+		LOG_D("Final Angle: %f", curAngle);
+		rt_thread_mdelay(1000);
+		
+		// 设置舵机的目标角度
+		nextAngle = -120;
+		// 根据转速还有角度误差计算周期
+		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
+		// 控制舵机角度
+		FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
+		// 需要延时一会儿，确保舵机接收并开始执行舵机控制指令
+		// 如果马上发送舵机角度查询信息,新发送的这条指令可能会覆盖舵机角度控制信息
+		rt_thread_mdelay(5);
+				rt_thread_mdelay(interval);
+
+		//waitUntilServoIDLE(servo, servoId, nextAngle);
+		
+		// 等待1s 看舵机死区范围
+		rt_thread_mdelay(1000);
+		// 读取一下舵机的角度
+		FSUS_QueryServoAngle(servo, servoId, &curAngle);
+		LOG_D("Final Angle: %f", curAngle);
+		rt_thread_mdelay(1000);
 	}
 }
 int FSUS_Init(void)
@@ -74,7 +165,7 @@ int FSUS_Init(void)
 
 
 	//初始化串口
-	servo1.uart = rt_device_find("uart1");
+	servo1.uart = rt_device_find("uart3");
 	if(servo1.uart==RT_NULL)
 	{
 		rt_kprintf("Can't find uart device\n");
@@ -193,7 +284,7 @@ FSUS_STATUS FSUS_IsValidResponsePackage(PackageTypeDef *pkg)
 void FSUS_SendPackage(servo_t *servo, uint8_t cmdId, uint8_t size, uint8_t *content)
 {
 	// 申请内存
-	// printf("[Package] malloc for pkg\r\n");
+	// LOG_D("[Package] malloc for pkg\r\n");
 	PackageTypeDef pkg;
 
 	// 设置帧头
@@ -363,7 +454,7 @@ FSUS_STATUS FSUS_Ping(servo_t *servo, uint8_t servo_id)
 	//TODO:加锁！！！！！！！！！！！
 	uint8_t statusCode;	 // 状态码
 	uint8_t ehcoServoId; // PING得到的舵机ID
-	// printf("[PING]Send Ping Package\r\n");
+	// LOG_D("[PING]Send Ping Package\r\n");
 	// 发送请求包
 		if(rt_mutex_take(servo->mutex, FSUS_TIMEOUT_MS)!=RT_EOK)
 	{
@@ -1076,7 +1167,7 @@ FSUS_STATUS FSUS_Wait(servo_t *servo, uint8_t servo_id, float target_angle, uint
 		}
 
 		angle_error = fabsf(target_angle - angle_read);
-		// printf("status:%d, angle:%.1f ,angle_error: %.1f\r\n", status, angle_read, angle_error);
+		// LOG_D("status:%d, angle:%.1f ,angle_error: %.1f\r\n", status, angle_read, angle_error);
 		if (angle_error <= FSUS_ANGLE_DEADAREA)
 		{
 			return FSUS_STATUS_SUCCESS;
