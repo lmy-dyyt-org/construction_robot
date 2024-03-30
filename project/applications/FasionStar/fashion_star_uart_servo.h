@@ -217,6 +217,7 @@ typedef struct{
 	rt_sem_t rx_sem;
     rt_mutex_t  mutex;
 	rt_size_t rx_size; 
+	uint8_t tx_buf[FSUS_PACK_RESPONSE_MAX_SIZE+5];
 }servo_t;
 // // 数据帧转换为字节数组
 // void FSUS_Package2RingBuffer(PackageTypeDef *pkg,  RingBufferTypeDef *ringBuf);

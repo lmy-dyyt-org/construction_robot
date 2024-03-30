@@ -228,6 +228,8 @@
 #define PKG_USING_CMSIS_5_V50900
 #define PKG_CMSIS_5_VER_NUM 0x50900
 #define PKG_USING_CMSIS_5_AUX
+#define PKG_USING_CMSIS_RTOS2
+#define PKG_USING_CMSIS_RTOS2_LATEST_VERSION
 
 /* Micrium: Micrium software products porting for RT-Thread */
 

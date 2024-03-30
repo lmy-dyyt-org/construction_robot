@@ -20,6 +20,11 @@
   "name": "CMSIS_5_AUX"
  }, 
  {
+  "path": "/packages/system/CMSIS/CMSIS_RTOS2", 
+  "ver": "latest", 
+  "name": "CMSIS_RTOS2"
+ }, 
+ {
   "path": "/packages/system/perf_counter", 
   "ver": "v2.2.4.1", 
   "name": "PERF_COUNTER"

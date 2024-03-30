@@ -8,6 +8,9 @@
 #include <rtdevice.h>
 #include "math.h"
 
+#define DBG_TAG           "drv.servo.fus"
+#define DBG_LVL           DBG_LOG
+#include <rtdbg.h>
 
 
 servo_t servo1;
@@ -17,11 +20,22 @@ struct rt_mutex static_fsus_mutex1;
 
 void FSUS_DelayMs(uint16_t time)
 {
-
+	rt_thread_mdelay(100);
 }
 //用户实现，用于发送pkg到串口
 void FSUS_UART_Send(servo_t *servo,PackageTypeDef* pkg)
 {
+	//将pkg的数据拷贝到servo的tx_buf
+	rt_memcpy(servo->tx_buf,&pkg->header,2);
+	rt_memcpy(servo->tx_buf+2,&pkg->cmdId,1);
+	rt_memcpy(servo->tx_buf+3,&pkg->size,1);
+	rt_memcpy(servo->tx_buf+4,pkg->content,pkg->size);
+	rt_memcpy(servo->tx_buf+4+pkg->size,&pkg->checksum,1);
+	rt_ssize_t ret = rt_device_write(servo->uart,0,servo->tx_buf,pkg->size+5);
+	if(ret != pkg->size+5)
+	{
+		LOG_D("FSUS_SendPackage: uart write error");
+	}
 }
 
 /* 接收数据回调函数 */
@@ -39,6 +53,7 @@ void FSUS_process(void *parameter)
 
 		//处理数据
 		//FSUS_RecvPackage()
+		rt_thread_mdelay(100);
 	}
 }
 int FSUS_Init(void)
@@ -223,7 +238,7 @@ FSUS_STATUS FSUS_RecvPackage(servo_t *servo, PackageTypeDef *pkg)
 		{
 			//没有数据了
 			//等待信号量,等待有数据
-			if(rt_sem_take(&servo->rx_sem, FSUS_TIMEOUT_MS)!=RT_EOK){
+			if(rt_sem_take(servo->rx_sem, FSUS_TIMEOUT_MS)!=RT_EOK){
 				//超时啦
 
 				//TODO:应该做一些清理工作，比如清空接收缓冲区等等
