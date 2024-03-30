@@ -237,10 +237,10 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         // LOG_D("id %d out %f",tt,value);
         static int time = 0;
 
-        if ((msg.id - CAN_Motor1_ID) > 8) // 云台电机
+        if ((msg.id - CAN_Motor1_ID) > 8) // 6020
         {
         }
-        else if ((msg.id - CAN_Motor1_ID) > 4)
+        else if ((msg.id - CAN_Motor1_ID) > 4) //6020 3508 2006
         {
             iq1_high[tt] = tmpout;
             if (
@@ -364,12 +364,9 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 }else{
                     return 0;
                 }
-                // do 
-                // {
-                //     LOG_I("try %d! \n",++time);
-                //     size = rt_device_write(can_dev, 0, &msg, sizeof(msg));
-                //     rt_thread_mdelay(1);
-                // }while(size != sizeof(msg));
+
+            }else{
+                //TODO: 如果超时则汇报是那个电机超时并且出现问题
             }
         }
         else
@@ -447,58 +444,10 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
                 }else{
                     return 0;
                 }
-
-#ifdef MOTOR_DJ_M2006_ID1_CAN1
-                dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID2_CAN1
-                dj_motors[DJ_M_CAN1_2].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID3_CAN1
-                dj_motors[DJ_M_CAN1_3].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID4_CAN1
-                dj_motors[DJ_M_CAN1_4].msg_cnt = 50;
-#endif
-
-#ifdef MOTOR_DJ_M2006_ID1_CAN2
-                dj_motors[DJ_M_CAN2_1].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID2_CAN2
-                dj_motors[DJ_M_CAN2_2].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID3_CAN2
-                dj_motors[DJ_M_CAN2_3].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M2006_ID4_CAN2
-                dj_motors[DJ_M_CAN2_4].msg_cnt = 50;
-#endif
-
-#ifdef MOTOR_DJ_M3508_ID1_CAN1
-                dj_motors[DJ_M_CAN1_1].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID2_CAN1
-                dj_motors[DJ_M_CAN1_2].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID3_CAN1
-                dj_motors[DJ_M_CAN1_3].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN1
-                dj_motors[DJ_M_CAN1_4].msg_cnt = 50;
-#endif
-
-#ifdef MOTOR_DJ_M3508_ID1_CAN2
-                dj_motors[DJ_M_CAN2_1].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID2_CAN2
-                dj_motors[DJ_M_CAN2_2].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID3_CAN2
-                dj_motors[DJ_M_CAN2_3].msg_cnt = 50;
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN2
-                dj_motors[DJ_M_CAN2_4].msg_cnt = 50;
-#endif
+                for(int i=0;i<DJ_M_NUM; ++i)
+                {
+                  dj_motors[i].msg_cnt = 50;  
+                }
             }
         }
 
@@ -698,19 +647,21 @@ static void can_rx_thread(void *parameter)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_FILTER, &cfg);
     RT_ASSERT(res == RT_EOK);
 #endif
-
+    static timeout_counter=0;
     while (1)
     {
-        /* hdr 值为 0，从 过滤器读取数据 */
-        //rxmsg.hdr_index = 0;
-        /* 阻塞等待接收信号量 */
-        //rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
-        //rt_mb_recv(dj_m_mailbox, (rt_ubase_t *)&i, RT_WAITING_FOREVER);
 
         if(rt_ringbuffer_getchar(dj_m_ringfifo, &i)==0)
         {
+            timeout_counter++;
+            if(timeout_counter>4){
+                LOG_W("We have lost too many can motor device (last received id %d) data, the motor may be lose position,please check!",i);
+            }
             rt_thread_mdelay(1);
             //LOG_E("dj_m_ringfifo get failed");
+        }else{
+            timeout_counter=0;
+            motor_handle(i, 1);
         }
 
 
@@ -719,7 +670,7 @@ static void can_rx_thread(void *parameter)
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
         static uint32_t last_time=0;
         //motor_handle(i, get_system_ms()-last_time);
-        motor_handle(i, 1);
+        //motor_handle(i, 1);
         last_time = get_system_ms();
         // rt_pin_write(GET_PIN(I, 2), 1 - rt_pin_read(GET_PIN(I, 2)));
     }
@@ -733,7 +684,7 @@ static rt_err_t can_rx_call(rt_device_t dev, rt_size_t size)
 static void set_motor_passive_feedback(void);
 
 
-int motor_tt_init(void)
+int motor_dj_init(void)
 {
     struct rt_can_msg msg = {0};
     rt_err_t res;
@@ -765,18 +716,18 @@ int motor_tt_init(void)
     res = rt_device_control(can_dev, RT_CAN_CMD_SET_PRIV, (void *)1);
         RT_ASSERT(res == RT_EOK);
 
-	// // 创建一个软件定时器
-	// tmr1 =  rt_timer_create("tmr1",                 // 软件定时器名称       
-	// 					timer1_callback,            // 软件定时器超时函数
-	// 					RT_NULL,                    // 超时函数参数
-	// 					10,                       // 超时时间
-	// 					RT_TIMER_FLAG_ONE_SHOT |   
-	// 					RT_TIMER_FLAG_SOFT_TIMER);  // 软件定时器模式，一次模式
+	// 创建一个软件定时器
+	tmr1 =  rt_timer_create("tmr1",                 // 软件定时器名称       
+						timer1_callback,            // 软件定时器超时函数
+						RT_NULL,                    // 超时函数参数
+						10,                       // 超时时间
+						RT_TIMER_FLAG_ONE_SHOT |   
+						RT_TIMER_FLAG_SOFT_TIMER);  // 软件定时器模式，一次模式
 					
 	
-	// 启动定时器
-	if(tmr1 != RT_NULL)
-		rt_timer_start(tmr1);
+	// // 启动定时器
+	// if(tmr1 != RT_NULL)
+	// 	rt_timer_start(tmr1);
 
     /* 创建数据接收线程 */
     thread = rt_thread_create("m_dj_driver", can_rx_thread, RT_NULL, 4096 * 2, 3, 10);
@@ -800,7 +751,7 @@ int motor_tt_init(void)
     }
     return 0;
 }
-INIT_COMPONENT_EXPORT(motor_tt_init);
+INIT_COMPONENT_EXPORT(motor_dj_init);
 
 // void motor_cmd_
 static void set_motor_passive_feedback(void)
