@@ -26,8 +26,8 @@ extern "C"
 #define MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, _torque_pid, _speed_pid, _pos_pid) [index] = {.ops = (&((motor_ops_t)__ops)), .flag_accept_level = __level, .pid_torque = _torque_pid, .pid_speed = _speed_pid, .pid_pos = _pos_pid}
 
 #define MOTOR_INIT_OPS(_index, _ops, _level)  MOTOR_INIT_OPS_PID_ALL(_index, _ops, (_level), (NULL), (NULL), (NULL))
-#define MOTOR_INIT_OPS_PID_POS(index, __ops, __level, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, NULL, NULL, _pos_pid)
-#define MOTOR_INIT_OPS_PID_SPEED(index, __ops, __level, _speed_pid, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, NULL, _speed_pid, _pos_pid)
+#define MOTOR_INIT_OPS_PID_POS(index, __ops, __level, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), (NULL), _pos_pid)
+#define MOTOR_INIT_OPS_PID_SPEED(index, __ops, __level, _speed_pid, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), _speed_pid, _pos_pid)
 
     /**
      * @brief 配置电机是否启用的宏，如果启用则定义，否则注释

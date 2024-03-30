@@ -15,7 +15,6 @@
 
 servo_t servo1;
 struct rt_semaphore FSUS_sem1;
-/* 互斥量控制块 */
 struct rt_mutex static_fsus_mutex1;
 
 void FSUS_DelayMs(uint16_t time)
@@ -662,7 +661,7 @@ FSUS_STATUS FSUS_SetServoAngle(servo_t *servo, uint8_t servo_id, float angle, ui
 
 	// 创建环形缓冲队列
 	const uint8_t size = 7;
-	uint8_t buffer[size ];
+	uint8_t buffer[size];
 	// RingBufferTypeDef ringBuf;
 	// RingBuffer_Init(&ringBuf, size, buffer);
 	// 数值约束
