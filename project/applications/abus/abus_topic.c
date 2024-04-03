@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-11 00:05:09
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-19 10:00:01
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-04-03 11:05:51
  * @FilePath: \abus_v2.0.1\abus_v2.0.1\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -103,7 +103,7 @@ int abus_topic_subscribe(abus_topic_t *topic, abus_accounter_t *acc, abus_sub_fl
     else
     {
         LOG_W("abus_topic_subscribe  async\n");
-        // async
+        /* async 将调用一个线程去完成传输*/
         list_add(&acc->head, &topic->async_accounter);
     }
     return 0;
