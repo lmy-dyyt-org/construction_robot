@@ -93,7 +93,7 @@ void Data_Analyse(uint8_t rec)
 
 
 
-void Action_set_zero()
+void Action_set_zero(void)
 {
     rt_device_write(uart, 0, "ACTO", sizeof("ACTO"));
 }
