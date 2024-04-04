@@ -91,9 +91,14 @@ void Data_Analyse(uint8_t rec)
     }
 }
 
-//float Action_get_pos()
-//{
-//}
+
+
+void Action_set_zero()
+{
+    rt_device_write(uart, 0, "ACTO", sizeof("ACTO"));
+}
+
+
 
 static rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {

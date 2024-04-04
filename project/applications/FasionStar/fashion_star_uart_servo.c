@@ -51,9 +51,9 @@ static rt_err_t FSUS_uart_receive_callback1(rt_device_t dev, rt_size_t size)
 uint8_t servoId = 0;   // 舵机的ID
 float curAngle = 0;	   // 舵机当前所在的角度
 float nextAngle = 0;   // 舵机的目标角度
-uint16_t speed = 200;  // 舵机的转速 单位 °/s
+uint16_t speed = 100;  // 舵机的转速 单位 °/s
 uint16_t interval = 0; // 舵机旋转的周期
-uint16_t power = 0;	   // 舵机执行功率 mV 默认为0	W
+uint16_t power = 100;	   // 舵机执行功率 mV 默认为0	W
 uint8_t wait = 0;	   // 0:不等待 1:等待舵机旋转到特定的位置;
 // 舵机角度死区, 如果舵机当前角度跟
 // 目标角度相差小于死区则代表舵机到达目标角度, 舵机不再旋转
@@ -113,7 +113,7 @@ void FSUS_process(void *parameter)
 	{
 
 		// 设置舵机的目标角度
-		nextAngle = 120.0;
+		nextAngle = 60.0;
 		// 根据转速还有角度误差计算周期
 		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
 		LOG_D("Set Servo %f-> %f", curAngle, nextAngle);
@@ -121,7 +121,7 @@ void FSUS_process(void *parameter)
 		FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
 		rt_thread_mdelay(interval);
 		// rt_thread_mdelay(5);
-		// waitUntilServoIDLE(servo,servoId, nextAngle);
+		//waitUntilServoIDLE(servo,servoId, nextAngle);
 
 		// 等待1s 看舵机死区范围
 		rt_thread_mdelay(1000);
@@ -131,7 +131,7 @@ void FSUS_process(void *parameter)
 		rt_thread_mdelay(1000);
 
 		// 设置舵机的目标角度
-		nextAngle = -120;
+		nextAngle = -60;
 		// 根据转速还有角度误差计算周期
 		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
 		// 控制舵机角度
@@ -141,7 +141,7 @@ void FSUS_process(void *parameter)
 		rt_thread_mdelay(5);
 		rt_thread_mdelay(interval);
 
-		// waitUntilServoIDLE(servo, servoId, nextAngle);
+		//waitUntilServoIDLE(servo, servoId, nextAngle);
 
 		// 等待1s 看舵机死区范围
 		rt_thread_mdelay(1000);

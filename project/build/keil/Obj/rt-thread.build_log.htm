@@ -29,23 +29,14 @@ Project File Date:  04/02/2024
 Build target 'rt-thread'
 Note: source file 'applications\arduino_main.cpp' - object file renamed from '.\build\keil\Obj\arduino_main.o' to '.\build\keil\Obj\applications_arduino_main.o'.
 Note: source file 'applications\arduino_pinout\pins_arduino.c' - object file renamed from '.\build\keil\Obj\pins_arduino.o' to '.\build\keil\Obj\arduino_pinout_pins_arduino.o'.
-compiling drv_action.c...
-applications/main.c(20): warning: In file included from...
-applications/Emm_V5.h(21): warning: redefinition of typedef 'stepper_motor_t' is a C11 feature [-Wtypedef-redefinition]
-typedef struct stepper_motor stepper_motor_t;
-                             ^
-applications/drv_stepper_motor.h(42): note: previous definition is here
-}stepper_motor_t;
- ^
-1 warning generated.
-compiling main.c...
+compiling fashion_star_uart_servo.c...
 linking...
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\applications_arduino_main.o ignored.
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\arduino_pinout_pins_arduino.o ignored.
-Program Size: Code=125926 RO-data=14582 RW-data=3828 ZI-data=8444  
+Program Size: Code=125926 RO-data=14582 RW-data=3832 ZI-data=8432  
 Finished: 0 information, 2 warning and 0 error messages.
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 3 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
