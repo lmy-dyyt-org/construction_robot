@@ -96,6 +96,7 @@ void waitUntilServoIDLE(servo_t *servo, uint8_t servoId, float nextAngle)
 	}
 }
 
+
 void My_FSUS_pick(servo_t *servo)
 {
 	uint8_t buf[] = {
@@ -124,6 +125,14 @@ void My_FSUS_up(servo_t *servo)
 
 	FSUS_WheelMoveTime(servo, 0, 0, 500, 1800);
 	rt_thread_mdelay(2000);
+}
+void mypick(void)
+{
+My_FSUS_pick(&servo1);
+}
+void myup(void)
+{
+My_FSUS_up(&servo1);
 }
 
 void FSUS_process(void *parameter)

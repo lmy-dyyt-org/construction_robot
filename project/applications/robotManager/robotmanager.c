@@ -82,8 +82,8 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     ctrl.pos.y_m = nowpos->y_m + _y_m;
     ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
-    //LOG_D("begin relative action %f %f %f", _x_m, _y_m, _w_rad);
-   // LOG_D("action begin now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
+    // LOG_D("begin relative action %f %f %f", _x_m, _y_m, _w_rad);
+    // LOG_D("action begin now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
     int counter = 0;
     while (1)
     {
@@ -109,7 +109,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 
 int take_action(void)
 {
-
+    LOG_D("\ttake action start");
     power_on(SWITCH_24V_4);
     // 先判断左右移动距离
     if (take_cnt == 1 || take_cnt == 4 || take_cnt == 7)
@@ -143,6 +143,12 @@ int take_action(void)
     }
 
     // 抓取
+    extern void mypick(void);
+    extern void myup(void);
+    power_on(SWITCH_24V_4);
+    mypick();
+    rt_thread_mdelay(500);
+    myup();
     rt_thread_mdelay(2000);
 
     // 回去巡线
@@ -174,35 +180,36 @@ int take_action(void)
     // 切换循迹表
     rbmg_mode = LINE_MODE;
     LOG_D("take action end");
-    LOG_D("table now: %s", this_table->name);
+
     return 0;
 }
 
 int put_action(void)
 {
+    LOG_D("\tput action start");
     // 先判断抓取物体颜色，左右移动
     switch (color_type)
     {
     case RED:
         action_relative_movement_car(0.6f, 0.f, 0.f);
         red_cnt++;
-        action_relative_movement_car(0.f, (2 - red_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, (3 - red_cnt) * 0.2f, 0.f);
 
         break;
     case BLUE:
         action_relative_movement_car(0.0f, 0.f, 0.f);
         blue_cnt++;
-        action_relative_movement_car(0.f, (2 - blue_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, (3 - blue_cnt) * 0.2f, 0.f);
 
         break;
     case YELLOW:
         action_relative_movement_car(-0.6f, 0.f, 0.f);
         yellow_cnt++;
-        action_relative_movement_car(0.f, (2 - yellow_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, (3 - yellow_cnt) * 0.2f, 0.f);
 
         break;
     default:
-    LOG_E("error color");
+        LOG_E("error color");
         break;
     }
 
@@ -216,15 +223,15 @@ int put_action(void)
     switch (color_type)
     {
     case RED:
-        action_relative_movement_car(0.f, -(2 - red_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - red_cnt) * 0.2f, 0.f);
         action_relative_movement_car(-0.6f, 0.f, 0.f);
 
         break;
     case BLUE:
-        action_relative_movement_car(0.f, -(2 - blue_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - blue_cnt) * 0.2f, 0.f);
         break;
     case YELLOW:
-        action_relative_movement_car(0.f, -(2 - yellow_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - yellow_cnt) * 0.2f, 0.f);
         action_relative_movement_car(0.6f, 0.f, 0.f);
 
         break;
@@ -237,18 +244,8 @@ int put_action(void)
     // 转弯
     action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
-    // 切换循迹表
-    //	if(take_cnt<9)
-    //	{
-    //	}
-    //	else
-    //	{
-    //		this_table = &back_table;
-    //	}
-    //
     rbmg_mode = LINE_MODE;
     LOG_D(" put action end");
-    LOG_D("table now: %s", this_table->name);
     return 0;
 }
 
@@ -264,25 +261,39 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
     switch (will_dir)
     {
     case END:
-        LOG_D("begin action");
+        LOG_D("table end! now we will start special action");
         if (this_table == &init_table)
         {
             take_action();
+            Path_table_init(&put_table, put, "put table", 0, 0);
             this_table = &put_table;
-
+            LOG_D("table now: %s", this_table->name);
             return 0;
         }
         else if (this_table == &take_table)
         {
             take_action();
-            this_table = &put_table;
+            Path_table_init(&put_table, put, "put table", 0, 0);
 
+            this_table = &put_table;
+            LOG_D("table now: %s", this_table->name);
             return 0;
         }
         else if (this_table == &put_table)
         {
             put_action();
-            this_table = &take_table;
+            Path_table_init(&take_table, take, "take table", 0, 0);
+            // 切换循迹表
+            if (take_cnt < 9)
+            {
+                this_table = &take_table;
+            }
+            else
+            {
+                this_table = &back_table;
+            }
+
+            LOG_D("table now: %s", this_table->name);
 
             //            while (1)
             //            {
@@ -305,7 +316,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         delta_angle = M_PI_2;
         break;
     default:
-        LOG_E("error dir will_dir%d now_dir",will_dir,now_dir);
+        LOG_E("error dir will_dir%d now_dir", will_dir, now_dir);
         break;
     }
 

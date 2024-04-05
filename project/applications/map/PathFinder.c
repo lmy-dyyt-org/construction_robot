@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-13 22:05:59
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-25 22:58:34
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-06 01:22:19
  * @FilePath: \construction_robot\project\applications\map\PathFinder.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -68,6 +68,7 @@ void Path_table_init(Path_table_t* table,Path_table_element_t* table_data,char* 
     table->name=name;
     table->start_point_x=start_point_x;
     table->start_point_y=start_point_y;
+    table->index=0;
 }
 uint8_t Path_get_next_dir(Path_table_t* table)
 {
