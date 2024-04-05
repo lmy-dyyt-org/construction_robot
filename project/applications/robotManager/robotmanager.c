@@ -32,15 +32,22 @@ enum
     ROTATION,
 
 };
+
+/*
+7 8 9
+4 5 6
+1 2 3
+*/
+
 uint8_t action_type;
 uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
-Path_table_element_t test_go[] = {FORWARD,FORWARD,END, END};
+Path_table_element_t go_1[] = {FORWARD,FORWARD,END, END};
 
 Path_table_t test_back_table;
-Path_table_element_t test_back[] = {LEFT,END, END};
+Path_table_element_t back_1[] = {LEFT,END, END};
 
 #define HALF_CAR_WIDTH 0.09f
 
