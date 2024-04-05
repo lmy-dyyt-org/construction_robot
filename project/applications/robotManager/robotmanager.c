@@ -56,7 +56,7 @@ Path_table_t init_table;
 Path_table_element_t init[] = {FORWARD, FORWARD, END, END}; // 初始
 
 Path_table_t put_table;
-Path_table_element_t put[] = {LEFT, END, END}; // 放
+Path_table_element_t put[] = {RIGHT, END, END}; // 放
 
 Path_table_t take_table;
 Path_table_element_t take[] = {RIGHT, END, END}; // 拿
@@ -111,23 +111,6 @@ int take_action(void)
 {
     LOG_D("\ttake action start");
     power_on(SWITCH_24V_4);
-    // 先判断左右移动距离
-    if (take_cnt == 1 || take_cnt == 4 || take_cnt == 7)
-    {
-        action_relative_movement_car(0.2f, 0.f, 0.f);
-        color_type = RED;
-    }
-    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
-    {
-        action_relative_movement_car(-0.2f, 0.f, 0.f);
-        color_type = YELLOW;
-    }
-    else
-    {
-        action_relative_movement_car(0.f, 0.f, 0.f);
-        color_type = BLUE;
-    }
-
     // 再判断前进距离
     if (take_cnt > 3 && take_cnt < 7)
     {
@@ -142,6 +125,29 @@ int take_action(void)
         action_relative_movement_car(0.f, 0.f, 0.f);
     }
 
+    // 先判断左右移动距离
+    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)
+    {
+        action_relative_movement_car(0.f, -0.05f, 0.f);
+        action_relative_movement_car(0.2f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.05f, 0.f);
+        color_type = RED;
+    }
+    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
+    {
+        action_relative_movement_car(0.f, -0.05f, 0.f);
+        action_relative_movement_car(-0.2f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.05f, 0.f);
+        color_type = YELLOW;
+    }
+    else
+    {
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        color_type = BLUE;
+    }
+
+
+
     // 抓取
     extern void mypick(void);
     extern void myup(void);
@@ -149,10 +155,10 @@ int take_action(void)
     mypick();
     rt_thread_mdelay(1000);
     myup();
-    rt_thread_mdelay(2000);
+    // rt_thread_mdelay(2000);
 
     // 回去巡线
-    if (take_cnt == 1 || take_cnt == 4 || take_cnt == 7)
+    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)
     {
         action_relative_movement_car(-0.2f, 0.f, 0.f);
     }
@@ -172,7 +178,9 @@ int take_action(void)
     }
 
     // 转弯
-    action_relative_movement_car(0.f, 0.f, 3.1415926f);
+    // action_relative_movement_car(0.f, 0.f, 3.1415926f);
+
+    action_relative_movement_car(0.f, -0.35f, 0.f);
 
     // 抓取次数记录
     take_cnt++;
@@ -191,21 +199,32 @@ int put_action(void)
     switch (color_type)
     {
     case RED:
-        action_relative_movement_car(0.6f, 0.f, 0.f);
         red_cnt++;
-        action_relative_movement_car(0.f, (3 - red_cnt) * 0.2f, 0.f);
+        switch(red_cnt)
+        {
+            case 1: 
+                action_relative_movement_car(0.6f, 0.f, 0.f); 
+                action_relative_movement_car(0.f, 0.375f + 0.05f, 0.f);
+                break;
+            case 1: 
+                action_relative_movement_car(0.6f, 0.f, 0.f); 
+                action_relative_movement_car(0.f, 0.375f + 0.05f, 0.f);
+                break;
+            case 3: action_relative_movement_car(0.6f - 0.125f, 0.f, 0.f); break;
+        }
+        
 
         break;
     case BLUE:
         action_relative_movement_car(0.0f, 0.f, 0.f);
         blue_cnt++;
-        action_relative_movement_car(0.f, (3 - blue_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, (3 - blue_cnt) * 0.15f + 0.05f, 0.f);
 
         break;
     case YELLOW:
         action_relative_movement_car(-0.6f, 0.f, 0.f);
         yellow_cnt++;
-        action_relative_movement_car(0.f, (3 - yellow_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, (3 - yellow_cnt) * 0.15f + 0.05f, 0.f);
 
         break;
     default:
@@ -223,15 +242,15 @@ int put_action(void)
     switch (color_type)
     {
     case RED:
-        action_relative_movement_car(0.f, -(3 - red_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - red_cnt) * 0.15f - 0.05f, 0.f);
         action_relative_movement_car(-0.6f, 0.f, 0.f);
 
         break;
     case BLUE:
-        action_relative_movement_car(0.f, -(3 - blue_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - blue_cnt) * 0.15f - 0.05f, 0.f);
         break;
     case YELLOW:
-        action_relative_movement_car(0.f, -(3 - yellow_cnt) * 0.2f, 0.f);
+        action_relative_movement_car(0.f, -(3 - yellow_cnt) * 0.15f - 0.05f, 0.f);
         action_relative_movement_car(0.6f, 0.f, 0.f);
 
         break;
