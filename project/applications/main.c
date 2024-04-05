@@ -69,12 +69,7 @@ int main(void)
 	power_on(SWITCH_24V_4);
 	power_on(SWITCH_5V_1);
 
-	extern float pos_x  ;
-	extern float pos_y  ;
-	extern float zangle  ;
-	extern float xangle  ;
-	extern float yangle  ;
-	extern float w_z  ;
+
 	// 	rt_adc_device_t adc_dev;
 	// 	rt_uint32_t value;
 	// float 	vol;
@@ -84,7 +79,6 @@ int main(void)
 
 	while (1)
 	{
-		LOG_D("pos_x=%f pos_y=%f zangle=%f",pos_x,pos_y,zangle);
 		/* 查找设备 */
 		// adc_dev = (rt_adc_device_t)rt_device_find(ADC_DEV_NAME);
 		// if(adc_dev == RT_NULL)

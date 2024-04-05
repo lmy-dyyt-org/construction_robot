@@ -10,7 +10,7 @@
       <TargetName>rt-thread</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -2349,6 +2349,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\drv_action.c</FilePath>
             </File>
+            <File>
+              <FileName>robot_move_direct.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\robot_move_direct.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2373,18 +2378,6 @@
         </Group>
         <Group>
           <GroupName>CMSIS-RTOS2</GroupName>
-          <Files>
-            <File>
-              <FileName>os_systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\CMSIS_RTOS2-latest\os_systick.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmsis_rtthread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\CMSIS_RTOS2-latest\cmsis_rtthread.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>Compiler</GroupName>

@@ -17,7 +17,7 @@ extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
-uint8_t rbmg_mode = ACTION_MODE;
+uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
@@ -37,12 +37,12 @@ uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 Path_table_t test_go_table;
-Path_table_element_t test_go[] = {END, END};
+Path_table_element_t test_go[] = {FORWARD,FORWARD,END, END};
 
 Path_table_t test_back_table;
-Path_table_element_t test_back[] = {END, END};
+Path_table_element_t test_back[] = {LEFT,END, END};
 
-#define HALF_CAR_WIDTH 0.135f
+#define HALF_CAR_WIDTH 0.09f
 
 void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
@@ -57,6 +57,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
     LOG_D("begin action");
+    int counter=0;
     while (1)
     {
         if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1))
@@ -67,6 +68,10 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
         abus_public(&rbmg_chassis_acc, &ctrl);
         // LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
         rt_thread_mdelay(10);
+        counter++;
+        if(counter>2000){
+            break;
+        }
     }
 }
 
@@ -74,27 +79,27 @@ int special_action_1(void)
 {
 #define HALF_LINE 0.125f
     power_on(SWITCH_24V_4);
-    //action_relative_movement_car(-HALF_LINE, 0, 0);
+    // action_relative_movement_car(-HALF_LINE, 0, 0);
     action_relative_movement_car(0, 0, 0);
 
     extern float ymm;
     extern float zmm;
 
-    /*抓*/
-    ymm = 250;
-    zmm = -25;
-    rt_thread_mdelay(3000);
+    // /*抓*/
+    // ymm = 250;
+    // zmm = -25;
+    // rt_thread_mdelay(3000);
 
-    ymm = 250;
-    zmm = 15;
-    rt_thread_mdelay(3000);
+    // ymm = 250;
+    // zmm = 15;
+    // rt_thread_mdelay(3000);
 
-    //action_relative_movement_car(HALF_LINE, 0, 0);
+    // action_relative_movement_car(HALF_LINE, 0, 0);
     action_relative_movement_car(0.f, 0, 1.57 * 2.f);
     this_table = &test_back_table;
     rbmg_mode = LINE_MODE;
     LOG_D("special action 1 end now %s", this_table->name);
-		return 0;
+    return 0;
 }
 
 int special_action_2(void)
@@ -104,16 +109,16 @@ int special_action_2(void)
     extern float ymm;
     extern float zmm;
     action_relative_movement_car(0.0, 0, 0.f);
-    
-    /*抓*/
-    ymm = 250;
-    zmm = -25;
-    rt_thread_mdelay(3000);
 
-    power_off(SWITCH_24V_4);
-    ymm = 250;
-    zmm = 15;
-    rt_thread_mdelay(3000);
+    // /*抓*/
+    // ymm = 250;
+    // zmm = -25;
+    // rt_thread_mdelay(3000);
+
+    // power_off(SWITCH_24V_4);
+    // ymm = 250;
+    // zmm = 15;
+    // rt_thread_mdelay(3000);
 
     // action_relative_movement_car(HALF_LINE, 0, 0);
     // action_relative_movement_car(0.f, 0, 1.57 * 2.f);
@@ -121,7 +126,7 @@ int special_action_2(void)
 
     rbmg_mode = CAB_MODE;
     LOG_D("special action 2 end now %s", this_table->name);
-		return 0;
+    return 0;
 }
 
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
@@ -148,7 +153,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
             while (1)
             {
                 LOG_D("stop");
-                rt_thread_mdelay(100);
+                rt_thread_mdelay(5000);
             }
         }
         break;
@@ -189,7 +194,8 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
  */
 int rbmg_error_callback(abus_topic_t *sub)
 {
-#define KK 1.1f // 1.3
+//#define KK 1.1f // 1.3
+#define KK 0.9f // 1.3
 #define SPEED 0.25
     if (rbmg_mode == LINE_MODE)
     {
@@ -245,7 +251,7 @@ int rbmg_special_point_callback(abus_topic_t *sub)
     if (rbmg_mode != CAB_MODE)
     {
         rbmg_mode = ACTION_MODE;
-        //LOG_D("special point! now action mode");
+        // LOG_D("special point! now action mode");
     }
 
     return 0;
@@ -267,6 +273,7 @@ void rbmg_handle(void *parameter)
         // 接到处理数据的消息
         if (rbmg_mode == CAB_MODE)
         {
+            rbmg_mode=LINE_MODE;
             while (1)
             {
                 LOG_D("cab mode");
@@ -275,6 +282,54 @@ void rbmg_handle(void *parameter)
 
                     break;
                 }
+//                 rt_thread_mdelay(15000);
+// ///////////////////////////////////
+//                 action_relative_movement_car(0.f,0.5f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 action_relative_movement_car(0.f,-1.0f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 //action_relative_movement_car(0.1f,0.f,0);
+
+//                 action_relative_movement_car(-1.45f, 0.f, 0);
+//                 //rt_thread_mdelay(8000);
+
+// ////////////////////////////////////////
+//                 action_relative_movement_car(1.25f,0.f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 action_relative_movement_car(0.f,1.f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 //action_relative_movement_car(0.1f,0.f,0);
+
+//                 action_relative_movement_car(0.f, -0.4f, 0);
+//                 //rt_thread_mdelay(8000);
+
+//                 action_relative_movement_car(-1.25f, 0.f, 0);
+//                 //rt_thread_mdelay(8000);
+// // ////////////////////////////////////////
+//                 action_relative_movement_car(1.05f,0.f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 action_relative_movement_car(0.f,0.4f,0);
+//                 //rt_thread_mdelay(8000);
+
+//                 //action_relative_movement_car(0.1f,0.f,0);
+
+//                 action_relative_movement_car(-1.05f, 0.f, 0);
+//                 //rt_thread_mdelay(8000);
+
+//                 action_relative_movement_car(0.f, 0.2f, 0);
+//                 //rt_thread_mdelay(8000);
+
+////////////////////////////////////////
+                while (1)
+                {
+                    rt_thread_mdelay(50);
+                }
+
                 rt_thread_mdelay(500);
             }
         }

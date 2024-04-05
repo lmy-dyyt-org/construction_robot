@@ -9,7 +9,7 @@
 #include "math.h"
 
 #define DBG_TAG "drv.servo.fus"
-#define DBG_LVL DBG_LOG
+#define DBG_LVL DBG_INFO
 #include <rtdbg.h>
 
 servo_t servo1;
@@ -84,7 +84,7 @@ void waitUntilServoIDLE(servo_t *servo, uint8_t servoId, float nextAngle)
 		float dAngle = (nextAngle > curAngle) ? (nextAngle - curAngle) : (curAngle - nextAngle);
 
 		// 打印一下当前的舵机角度
-		printf("curAngle: %f dAngle: %f\r\n", curAngle, dAngle);
+		LOG_D("curAngle: %f dAngle: %f\r\n", curAngle, dAngle);
 
 		// 判断是否小于死区
 		if (dAngle <= servoDeadBlock)

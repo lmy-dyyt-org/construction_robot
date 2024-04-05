@@ -3,53 +3,73 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.38.0.0
-Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: ed s, s, LIC=RC93N-YYV10-DYKV3-AKSKU-J8CHC-5VFJA
+IDE-Version: ¦ÌVision V5.39.0.0
+Copyright (C) 2023 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: d 805207319@qq.com, d, LIC=RC93N-Y6I5C-749S0-BB47H-1DVAV-GFK1A
  
 Tool Versions:
-Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
+Toolchain:       MDK-ARM Plus  Version: 5.39.0.0
 Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
-C Compiler:      ArmClang.exe V6.19
-Assembler:       Armasm.exe V6.19
-Linker/Locator:  ArmLink.exe V6.19
-Library Manager: ArmAr.exe V6.19
-Hex Converter:   FromElf.exe V6.19
-CPU DLL:         SARMCM3.DLL V5.38.0.0
+C Compiler:      ArmClang.exe V6.21
+Assembler:       Armasm.exe V6.21
+Linker/Locator:  ArmLink.exe V6.21
+Library Manager: ArmAr.exe V6.21
+Hex Converter:   FromElf.exe V6.21
+CPU DLL:         SARMCM3.DLL V5.39.0.0
 Dialog DLL:      DCM.DLL V1.17.5.0
-Target DLL:      CMSIS_AGDI.dll V1.33.15.0
+Target DLL:      CMSIS_AGDI.dll V1.33.16.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\80520\Documents\GitHub\construction_robot\project\project.uvprojx
-Project File Date:  04/02/2024
+C:\Users\33368\Documents\GitHub\construction_robot\project\project.uvprojx
+Project File Date:  04/04/2024
 
 <h2>Output:</h2>
-*** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+*** Using Compiler 'V6.21', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'rt-thread'
 Note: source file 'applications\arduino_main.cpp' - object file renamed from '.\build\keil\Obj\arduino_main.o' to '.\build\keil\Obj\applications_arduino_main.o'.
 Note: source file 'applications\arduino_pinout\pins_arduino.c' - object file renamed from '.\build\keil\Obj\pins_arduino.o' to '.\build\keil\Obj\arduino_pinout_pins_arduino.o'.
-compiling fashion_star_uart_servo.c...
+compiling thread.c...
+compiling pipe.c...
+compiling abus_port.c...
+compiling robotmanager.c...
+compiling showmem.c...
+compiling components.c...
+compiling ringblk_buf.c...
+compiling timer.c...
+compiling object.c...
+warning: unknown warning option '-Wstack-usage=4096'; did you mean '-Wstack-protector'? [-Wunknown-warning-option]
+1 warning generated.
+compiling msh.c...
+warning: unknown warning option '-Wstack-usage=4096'; did you mean '-Wstack-protector'? [-Wunknown-warning-option]
+1 warning generated.
+compiling shell.c...
+compiling serial_v2.c...
+warning: unknown warning option '-Wstack-usage=4096'; did you mean '-Wstack-protector'? [-Wunknown-warning-option]
+1 warning generated.
+compiling cmd.c...
+compiling can.c...
+compiling kservice.c...
 linking...
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\applications_arduino_main.o ignored.
 .\build\keil\Obj\rt-thread.axf: Warning: L6304W: Duplicate input file .\build\keil\obj\arduino_pinout_pins_arduino.o ignored.
-Program Size: Code=125926 RO-data=14582 RW-data=3832 ZI-data=8432  
+Program Size: Code=125262 RO-data=15754 RW-data=3856 ZI-data=8416  
 Finished: 0 information, 2 warning and 0 error messages.
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
-".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 2 Warning(s).
+".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: Keil
                 https://www.keil.com/pack/Keil.STM32F4xx_DFP.2.17.1.pack
-                Keil.STM32F4xx_DFP.2.17.1
+                Keil::STM32F4xx_DFP@2.17.1
                 STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
 
 <h2>Collection of Component include folders:</h2>
-  C:/Users/80520/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+  C:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 09:10:35
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-25 07:57:20
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-04 11:00:34
  * @FilePath: \project\applications\chassis\chassis.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -58,7 +58,7 @@ typedef struct chassis
     chassis_data_t present;
     chassis_status run_status;
     chassis_ops_t *ops;
-
+    chassis_data_t offset;
 } chassis_t;
 
 int chassis_init(chassis_t *chassis, chassis_ops_t *ops);

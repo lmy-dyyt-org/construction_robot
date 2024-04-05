@@ -55,27 +55,30 @@ void follow_line(void *parameter)
 	chassis_ctrl_t ctrl;
 	ctrl.type = 1;
 	ctrl.pos.z_rad = 400;
-
+	rt_thread_mdelay(1000);
 	while (1)
 	{
-#define FRONT_middle_factor 0.1
-#define FRONT_middle_edge1 0.3
-#define FRONT_middle_edge2 0.6
-
+#define factor0 0.1
+#define factor1 0.2
+#define factor2 0.3
+#define factor3 0.4
 		/* 线程处理 */
 		GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */
-		    // Print_Infrared_Data(&infrared_package);
+		    //Print_Infrared_Data(&infrared_package);
 		//rt_kprintf("is_spacial_point_flag:%d\n",Is_Spacial_point(&infrared_package));
 		error =
-			(-infrared_package.infrared_data[front_middle0_infrared] * FRONT_middle_factor +
-			infrared_package.infrared_data[front_middle1_infrared] * FRONT_middle_factor
+			(-infrared_package.infrared_data[0] * factor0 +
+			infrared_package.infrared_data[7] * factor0
 
-			- infrared_package.infrared_data[front_left1_infrared] * FRONT_middle_edge1 +
-			infrared_package.infrared_data[front_right0_infrared] * FRONT_middle_edge1
+			- infrared_package.infrared_data[1] * factor1 +
+			infrared_package.infrared_data[6] * factor1
 
-			- infrared_package.infrared_data[front_left0_infrared] * FRONT_middle_edge2 +
-			infrared_package.infrared_data[front_right1_infrared] * FRONT_middle_edge2);
+			- infrared_package.infrared_data[2] * factor2 +
+			infrared_package.infrared_data[5] * factor2
+
+			- infrared_package.infrared_data[3] * factor3 +
+			infrared_package.infrared_data[4] * factor3);
 
 		if(Is_Spacial_point(&infrared_package)){
 			uint8_t bool_=1;
@@ -95,25 +98,28 @@ uint8_t Is_Spacial_point(infrared *infrared_package)
 	switch (infrared_package->move_direction)
 	{
 	case front:
-		if ((infrared_package->infrared_data[front_left0_infrared] || infrared_package->infrared_data[front_right1_infrared]) && (infrared_package->infrared_data[front_middle0_infrared] || infrared_package->infrared_data[front_middle1_infrared]))
+		if (( (infrared_package->infrared_data[0]&&infrared_package->infrared_data[1]) || (infrared_package->infrared_data[7]&&infrared_package->infrared_data[6])) && (infrared_package->infrared_data[3] || infrared_package->infrared_data[4]))
+			{
 			infrared_package->is_spacial_point_flag = 1;
+			Print_Infrared_Data(infrared_package);
+			}
 		else
 			infrared_package->is_spacial_point_flag = 0;
 		break;
 
-	case left:
-		if (infrared_package->infrared_data[left_left0_infrared] || infrared_package->infrared_data[left_right1_infrared] && (infrared_package->infrared_data[left_middle0_infrared] || infrared_package->infrared_data[left_middle1_infrared]))
-			infrared_package->is_spacial_point_flag = 1;
-		else
-			infrared_package->is_spacial_point_flag = 0;
-		break;
+	// case left:
+	// 	if (infrared_package->infrared_data[left_left0_infrared] || infrared_package->infrared_data[left_right1_infrared] && (infrared_package->infrared_data[left_middle0_infrared] || infrared_package->infrared_data[left_middle1_infrared]))
+	// 		infrared_package->is_spacial_point_flag = 1;
+	// 	else
+	// 		infrared_package->is_spacial_point_flag = 0;
+	// 	break;
 
-	case right:
-		if (infrared_package->infrared_data[right_left0_infrared] || infrared_package->infrared_data[right_right1_infrared] && (infrared_package->infrared_data[right_middle0_infrared] || infrared_package->infrared_data[right_middle1_infrared]))
-			infrared_package->is_spacial_point_flag = 1;
-		else
-			infrared_package->is_spacial_point_flag = 0;
-		break;
+	// case right:
+	// 	if (infrared_package->infrared_data[right_left0_infrared] || infrared_package->infrared_data[right_right1_infrared] && (infrared_package->infrared_data[right_middle0_infrared] || infrared_package->infrared_data[right_middle1_infrared]))
+	// 		infrared_package->is_spacial_point_flag = 1;
+	// 	else
+	// 		infrared_package->is_spacial_point_flag = 0;
+	// 	break;
 
 	case rotate:
 		infrared_package->is_spacial_point_flag = 0;
@@ -128,66 +134,39 @@ uint8_t Is_Spacial_point(infrared *infrared_package)
 
 void Infrared_Init(void)
 {
-	rt_pin_mode(FRONT_INFRARED0_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(FRONT_INFRARED1_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(FRONT_INFRARED2_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(FRONT_INFRARED3_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(FRONT_INFRARED4_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(FRONT_INFRARED5_PIN, PIN_MODE_INPUT);
-
-	rt_pin_mode(LEFT_INFRARED0_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(LEFT_INFRARED1_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(LEFT_INFRARED2_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(LEFT_INFRARED3_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(LEFT_INFRARED4_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(LEFT_INFRARED5_PIN, PIN_MODE_INPUT);
-
-	rt_pin_mode(RIGHT_INFRARED0_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(RIGHT_INFRARED1_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(RIGHT_INFRARED2_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(RIGHT_INFRARED3_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(RIGHT_INFRARED4_PIN, PIN_MODE_INPUT);
-	rt_pin_mode(RIGHT_INFRARED5_PIN, PIN_MODE_INPUT);
+	rt_pin_mode(INFRARED0_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED1_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED2_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED3_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED4_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED5_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED6_PIN, PIN_MODE_INPUT_PULLDOWN);
+	rt_pin_mode(INFRARED7_PIN, PIN_MODE_INPUT_PULLDOWN);
 }
 
 void GET_Infrared_Data(infrared *infrared_package)
 {
-	infrared_package->infrared_data[front_left0_infrared] = rt_pin_read(FRONT_INFRARED0_PIN);
-	infrared_package->infrared_data[front_left1_infrared] = rt_pin_read(FRONT_INFRARED1_PIN);
-	infrared_package->infrared_data[front_middle0_infrared] = rt_pin_read(FRONT_INFRARED2_PIN);
-	infrared_package->infrared_data[front_middle1_infrared] = rt_pin_read(FRONT_INFRARED3_PIN);
-	infrared_package->infrared_data[front_right0_infrared] = rt_pin_read(FRONT_INFRARED4_PIN);
-	infrared_package->infrared_data[front_right1_infrared] = rt_pin_read(FRONT_INFRARED5_PIN);
-
-	infrared_package->infrared_data[left_left0_infrared] = rt_pin_read(LEFT_INFRARED0_PIN);
-	infrared_package->infrared_data[left_left1_infrared] = rt_pin_read(LEFT_INFRARED1_PIN);
-	infrared_package->infrared_data[left_middle0_infrared] = rt_pin_read(LEFT_INFRARED2_PIN);
-	infrared_package->infrared_data[left_middle1_infrared] = rt_pin_read(LEFT_INFRARED3_PIN);
-	infrared_package->infrared_data[left_right0_infrared] = rt_pin_read(LEFT_INFRARED4_PIN);
-	infrared_package->infrared_data[left_right1_infrared] = rt_pin_read(LEFT_INFRARED5_PIN);
-
-	infrared_package->infrared_data[right_left0_infrared] = rt_pin_read(RIGHT_INFRARED0_PIN);
-	infrared_package->infrared_data[right_left1_infrared] = rt_pin_read(RIGHT_INFRARED1_PIN);
-	infrared_package->infrared_data[right_middle0_infrared] = rt_pin_read(RIGHT_INFRARED2_PIN);
-	infrared_package->infrared_data[right_middle1_infrared] = rt_pin_read(RIGHT_INFRARED3_PIN);
-	infrared_package->infrared_data[right_right0_infrared] = rt_pin_read(RIGHT_INFRARED4_PIN);
-	infrared_package->infrared_data[right_right1_infrared] = rt_pin_read(RIGHT_INFRARED5_PIN);
+	#define TT(x) ((x)?0:1)
+	infrared_package->infrared_data[0] = TT(rt_pin_read(INFRARED0_PIN));
+	infrared_package->infrared_data[1] = TT(rt_pin_read(INFRARED1_PIN));
+	infrared_package->infrared_data[2] = TT(rt_pin_read(INFRARED2_PIN));
+	infrared_package->infrared_data[3] = TT(rt_pin_read(INFRARED3_PIN));
+	infrared_package->infrared_data[4] = TT(rt_pin_read(INFRARED4_PIN));
+	infrared_package->infrared_data[5] = TT(rt_pin_read(INFRARED5_PIN));
+	infrared_package->infrared_data[6] = TT(rt_pin_read(INFRARED6_PIN));
+	infrared_package->infrared_data[7] = TT(rt_pin_read(INFRARED7_PIN));
 }
 
 void Print_Infrared_Data(infrared *infrared_package)
 {
-	rt_kprintf("infrared_package_data:\n");
-	rt_kprintf("          ");
-
-	rt_kprintf("%d %d %d %d %d %d\n", infrared_package->infrared_data[front_left0_infrared], infrared_package->infrared_data[front_left1_infrared], infrared_package->infrared_data[front_middle0_infrared], infrared_package->infrared_data[front_middle1_infrared], infrared_package->infrared_data[front_right0_infrared], infrared_package->infrared_data[front_right1_infrared]);
-
-	rt_kprintf("%d %d %d %d %d %d", infrared_package->infrared_data[left_left0_infrared], infrared_package->infrared_data[left_left1_infrared], infrared_package->infrared_data[left_middle0_infrared], infrared_package->infrared_data[left_middle1_infrared], infrared_package->infrared_data[left_right0_infrared], infrared_package->infrared_data[left_right1_infrared]);
-
-	rt_kprintf("          ");
-
-	rt_kprintf("%d %d %d %d %d %d\n", infrared_package->infrared_data[right_left0_infrared], infrared_package->infrared_data[right_left1_infrared], infrared_package->infrared_data[right_middle0_infrared], infrared_package->infrared_data[right_middle1_infrared], infrared_package->infrared_data[right_right0_infrared], infrared_package->infrared_data[right_right1_infrared]);
-
-	rt_kprintf("\n");
+	LOG_D("data %d %d %d %d %d %d %d %d ",infrared_package->infrared_data[0],
+	infrared_package->infrared_data[1],
+	infrared_package->infrared_data[2],
+	infrared_package->infrared_data[3],
+	infrared_package->infrared_data[4],
+	infrared_package->infrared_data[5],
+	infrared_package->infrared_data[6],
+	infrared_package->infrared_data[7]);
 }
 
 // aStateMachine* sm = (aStateMachine*)malloc(sizeof(aStateMachine));
