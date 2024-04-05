@@ -101,7 +101,7 @@ uint8_t Is_Spacial_point(infrared *infrared_package)
 		if (( (infrared_package->infrared_data[0]&&infrared_package->infrared_data[1]) || (infrared_package->infrared_data[7]&&infrared_package->infrared_data[6])) && (infrared_package->infrared_data[3] || infrared_package->infrared_data[4]))
 			{
 			infrared_package->is_spacial_point_flag = 1;
-			Print_Infrared_Data(infrared_package);
+			// Print_Infrared_Data(infrared_package);
 			}
 		else
 			infrared_package->is_spacial_point_flag = 0;

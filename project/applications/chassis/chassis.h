@@ -72,6 +72,7 @@ const chassis_status chassis_get_runstate(chassis_t *chassis);
 
 int chassis_handle(chassis_t *chassis, int time_ms);
 
+const void chassis_pos_clean(chassis_t *chassis);
 
 
 #ifdef __cpluscplus
