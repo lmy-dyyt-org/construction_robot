@@ -1,4 +1,3 @@
-
 #include <rtthread.h>
 #define DBG_TAG "RobotManager"
 #define DBG_LVL DBG_LOG
@@ -33,6 +32,15 @@ enum
 
 };
 
+enum 
+{
+	RED,
+	BLUE,
+	YELLOW,
+};
+
+rt_uint8_t color_type;
+
 /*
 7 8 9
 4 5 6
@@ -43,11 +51,23 @@ uint8_t action_type;
 uint8_t now_dir = 1;  // 当前方向
 uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
-Path_table_t test_go_table;
-Path_table_element_t go_1[] = {FORWARD,FORWARD,END, END};
 
-Path_table_t test_back_table;
-Path_table_element_t back_1[] = {LEFT,END, END};
+Path_table_t init_table;
+Path_table_element_t init[] = {FORWARD,FORWARD,END, END};//初始
+
+Path_table_t put_table;
+Path_table_element_t put[] = {LEFT,END, END}; //放
+
+Path_table_t take_table;
+Path_table_element_t take[] = {RIGHT,END, END};//拿
+
+Path_table_t back_table;
+Path_table_element_t back[] = {LEFT,END, END};//回
+
+uint8_t take_cnt=1;
+uint8_t red_cnt;
+uint8_t blue_cnt;
+uint8_t yellow_cnt;
 
 #define HALF_CAR_WIDTH 0.09f
 
@@ -82,59 +102,119 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     }
 }
 
-int special_action_1(void)
+int take_action(void)
 {
-#define HALF_LINE 0.125f
-    power_on(SWITCH_24V_4);
-    // action_relative_movement_car(-HALF_LINE, 0, 0);
-    action_relative_movement_car(0, 0, 0);
+	
+	power_on(SWITCH_24V_4);
+	//先判断左右移动距离
+	if(take_cnt==1||take_cnt==4||take_cnt==7)
+	{
+		action_relative_movement_car(0.2f, 0.f, 0.f);
+	}
+	if(take_cnt==3||take_cnt==6||take_cnt==9)
+	{
+		action_relative_movement_car(-0.2f, 0.f, 0.f);
+	}
+	
+	//再判断前进距离
+	if(take_cnt>3 && take_cnt<7)
+	{
+		action_relative_movement_car(0.f, 0.2f, 0.f);
+	}
+	if(take_cnt>6)
+	{
+		action_relative_movement_car(0.f, 0.4f, 0.f);
+	}
+	
+	//抓取
+	//
+	
+	//回去巡线
+	if(take_cnt==1||take_cnt==4||take_cnt==7)
+	{
+		action_relative_movement_car(-0.2f, 0.f, 0.f);
+	}
+	if(take_cnt==3||take_cnt==6||take_cnt==9)
+	{
+		action_relative_movement_car(0.2f, 0.f, 0.f);
+	}
 
-    extern float ymm;
-    extern float zmm;
-
-    // /*抓*/
-    // ymm = 250;
-    // zmm = -25;
-    // rt_thread_mdelay(3000);
-
-    // ymm = 250;
-    // zmm = 15;
-    // rt_thread_mdelay(3000);
-
-    // action_relative_movement_car(HALF_LINE, 0, 0);
-    action_relative_movement_car(0.f, 0, 1.57 * 2.f);
-    this_table = &test_back_table;
-    rbmg_mode = LINE_MODE;
-    LOG_D("special action 1 end now %s", this_table->name);
-    return 0;
+	//
+	if(take_cnt>3 && take_cnt<7)
+	{
+		action_relative_movement_car(0.f, -0.2f, 0.f);
+	}
+	if(take_cnt>6)
+	{
+		action_relative_movement_car(0.f, -0.4f, 0.f);
+	}
+	
+	//转弯
+	action_relative_movement_car(0.f, 0.f, 3.1415926f);
+	
+	//抓取次数记录
+	take_cnt++;
+	
+	//切换循迹表
+	this_table = &put_table;
+	rbmg_mode = LINE_MODE;
+	LOG_D("special action 1 end now %s", this_table->name);
+	return 0;
 }
 
-int special_action_2(void)
+int put_action(void)
 {
-#define HALF_LINE 0.125f
-
-    extern float ymm;
-    extern float zmm;
-    action_relative_movement_car(0.0, 0, 0.f);
-
-    // /*抓*/
-    // ymm = 250;
-    // zmm = -25;
-    // rt_thread_mdelay(3000);
-
-    // power_off(SWITCH_24V_4);
-    // ymm = 250;
-    // zmm = 15;
-    // rt_thread_mdelay(3000);
-
-    // action_relative_movement_car(HALF_LINE, 0, 0);
-    // action_relative_movement_car(0.f, 0, 1.57 * 2.f);
-    // this_table = &test_back_table;
-
-    rbmg_mode = CAB_MODE;
-    LOG_D("special action 2 end now %s", this_table->name);
-    return 0;
+	//先判断抓取物体颜色，左右移动
+	switch(color_type)
+	{
+		case RED: action_relative_movement_car(0.9f, 0.f, 0.f);  red_cnt++; break;
+		case BLUE: blue_cnt++; break;
+		case YELLOW: action_relative_movement_car(-0.9f, 0.f, 0.f); yellow_cnt++; break;
+		default : break;
+	}
+	
+	//判断第几次抓取
+	switch(color_type)
+	{
+		case RED: action_relative_movement_car(0.f, (2-red_cnt)*0.15f, 0.f); break;
+		case BLUE: action_relative_movement_car(0.f, (2-blue_cnt)*0.15f, 0.f); break;
+		case YELLOW: action_relative_movement_car(0.f, (2-yellow_cnt)*0.15f, 0.f); break;
+		default : break;
+	}
+	
+	//放
+	//
+	power_off(SWITCH_24V_4);
+	
+	//回去巡线
+	switch(color_type)
+	{
+		case RED: action_relative_movement_car(0.f, -(2-red_cnt)*0.15f, 0.f); break;
+		case BLUE: action_relative_movement_car(0.f, -(2-blue_cnt)*0.15f, 0.f); break;
+		case YELLOW: action_relative_movement_car(0.f, -(2-yellow_cnt)*0.15f, 0.f); break;
+		default : break;
+	}	
+	switch(color_type)
+	{
+		case RED: action_relative_movement_car(-0.9f, 0.f, 0.f); break;
+		case YELLOW: action_relative_movement_car(0.9f, 0.f, 0.f); break;
+		default : break;
+	}
+	
+	//切换循迹表
+	if(take_cnt==9)
+	{
+		this_table = &back_table;
+	}
+	else
+	{
+		this_table = &take_table;
+	}
+	rbmg_mode = LINE_MODE;
+	LOG_D("special action 1 end now %s", this_table->name);
+	return 0;
 }
+
 
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
 {
@@ -147,21 +227,19 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
     switch (will_dir)
     {
     case END:
-        if (this_table == &test_go_table)
+        if (this_table == &take_table)
         {
-            special_action_1();
+            take_action();
             return 0;
         }
-        else if (this_table == &test_back_table)
+        else if (this_table == &put_table)
         {
-            // LOG_D("test_back_table end special action start");
-            // LOG_D("test_back_table end special action end!");
-            special_action_2();
-            while (1)
-            {
-                LOG_D("stop");
-                rt_thread_mdelay(5000);
-            }
+            put_action();
+//            while (1)
+//            {
+//                LOG_D("stop");
+//                rt_thread_mdelay(5000);
+//            }
         }
         break;
     case FORWARD:
@@ -289,49 +367,8 @@ void rbmg_handle(void *parameter)
 
                     break;
                 }
-//                 rt_thread_mdelay(15000);
-// ///////////////////////////////////
-//                 action_relative_movement_car(0.f,0.5f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 action_relative_movement_car(0.f,-1.0f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 //action_relative_movement_car(0.1f,0.f,0);
-
-//                 action_relative_movement_car(-1.45f, 0.f, 0);
-//                 //rt_thread_mdelay(8000);
-
-// ////////////////////////////////////////
-//                 action_relative_movement_car(1.25f,0.f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 action_relative_movement_car(0.f,1.f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 //action_relative_movement_car(0.1f,0.f,0);
-
-//                 action_relative_movement_car(0.f, -0.4f, 0);
-//                 //rt_thread_mdelay(8000);
-
-//                 action_relative_movement_car(-1.25f, 0.f, 0);
-//                 //rt_thread_mdelay(8000);
-// // ////////////////////////////////////////
-//                 action_relative_movement_car(1.05f,0.f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 action_relative_movement_car(0.f,0.4f,0);
-//                 //rt_thread_mdelay(8000);
-
-//                 //action_relative_movement_car(0.1f,0.f,0);
-
-//                 action_relative_movement_car(-1.05f, 0.f, 0);
-//                 //rt_thread_mdelay(8000);
-
-//                 action_relative_movement_car(0.f, 0.2f, 0);
-//                 //rt_thread_mdelay(8000);
-
-////////////////////////////////////////
+								
+								
                 while (1)
                 {
                     rt_thread_mdelay(50);
@@ -377,9 +414,11 @@ void rbmg_handle(void *parameter)
 int rbmg_init(void)
 {
 
-    Path_table_init(&test_go_table, test_go, "test go table", 0, 0);
-    Path_table_init(&test_back_table, test_back, "test back table", 0, 0);
-    this_table = &test_go_table;
+    Path_table_init(&take_table, take, "test go table", 0, 0);
+    Path_table_init(&put_table, put, "test back table", 0, 0);
+		Path_table_init(&init_table, put, "test back table", 0, 0);
+		Path_table_init(&back_table, put, "test back table", 0, 0);
+    this_table = &init_table;
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
