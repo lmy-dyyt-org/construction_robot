@@ -95,6 +95,24 @@ void waitUntilServoIDLE(servo_t *servo, uint8_t servoId, float nextAngle)
 		rt_thread_mdelay(5);
 	}
 }
+
+void My_FSUS_pick(servo_t *servo)
+{
+	uint8_t buf[]={
+		0x01,0x00, 0x69, 0x12, 0x4C, 0x06,0x21, 0x00, 0x01, 0x00, 0x00, 0x01, 0x05, 0x01, 0x01, 0x00, 0xD3, 0x14, 0x8E, 0x23, 0x22, 0x04, 0x01, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x95, 0x02, 0xBC, 0x02, 0x40, 0xFC, 0x00, 0x00, 0x2E, 0x12, 0x4C, 0x05, 0x01, 0x00, 0x64, 0x12, 0x4C, 0x0A
+	};
+	rt_device_write(servo->uart,0,buf,sizeof(buf));
+	rt_thread_mdelay(10);
+uint8_t buf1[]={
+	0x01, 0x00, 0x69, 0x12, 0x4C, 0x06, 0x21, 0x00, 0x01, 0x00, 0x00, 0x01, 0x05, 0x01, 0x01, 0x00, 0xD3, 0x14, 0x8E, 0x23, 0x22, 0x04, 0x01, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x95, 0x02, 0xBC, 0x02, 0x40, 0xFC, 0x00, 0x00, 0x2E, 0x12, 0x4C, 0x05, 0x01, 0x00, 0x64, 0x12, 0x4C, 0x0A
+};
+	rt_device_write(servo->uart,0,buf1,sizeof(buf1));
+	rt_thread_mdelay(10);
+
+FSUS_WheelMoveTime(servo,0,1,500,1800);
+rt_thread_mdelay(1800);
+}
+
 void FSUS_process(void *parameter)
 {
 	servo_t *servo = (servo_t *)parameter;
@@ -112,43 +130,47 @@ void FSUS_process(void *parameter)
 	while (1)
 	{
 
-		// 设置舵机的目标角度
-		nextAngle = 60.0;
-		// 根据转速还有角度误差计算周期
-		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
-		LOG_D("Set Servo %f-> %f", curAngle, nextAngle);
-		// 控制舵机角度
-		FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
-		rt_thread_mdelay(interval);
+
+
+		My_FSUS_pick(&servo1);
+
+		// // 设置舵机的目标角度
+		// nextAngle = 60.0;
+		// // 根据转速还有角度误差计算周期
+		// interval = calcIntervalMs(servo, servoId, nextAngle, speed);
+		// LOG_D("Set Servo %f-> %f", curAngle, nextAngle);
+		// // 控制舵机角度
+		// FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
+		// rt_thread_mdelay(interval);
+		// // rt_thread_mdelay(5);
+		// //waitUntilServoIDLE(servo,servoId, nextAngle);
+
+		// // 等待1s 看舵机死区范围
+		// rt_thread_mdelay(1000);
+		// // 读取一下舵机的角度
+		// FSUS_QueryServoAngle(servo, servoId, &curAngle);
+		// LOG_D("Final Angle: %f", curAngle);
+		// rt_thread_mdelay(1000);
+
+		// // 设置舵机的目标角度
+		// nextAngle = -60;
+		// // 根据转速还有角度误差计算周期
+		// interval = calcIntervalMs(servo, servoId, nextAngle, speed);
+		// // 控制舵机角度
+		// FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
+		// // 需要延时一会儿，确保舵机接收并开始执行舵机控制指令
+		// // 如果马上发送舵机角度查询信息,新发送的这条指令可能会覆盖舵机角度控制信息
 		// rt_thread_mdelay(5);
-		//waitUntilServoIDLE(servo,servoId, nextAngle);
+		// rt_thread_mdelay(interval);
 
-		// 等待1s 看舵机死区范围
-		rt_thread_mdelay(1000);
-		// 读取一下舵机的角度
-		FSUS_QueryServoAngle(servo, servoId, &curAngle);
-		LOG_D("Final Angle: %f", curAngle);
-		rt_thread_mdelay(1000);
+		// //waitUntilServoIDLE(servo, servoId, nextAngle);
 
-		// 设置舵机的目标角度
-		nextAngle = -60;
-		// 根据转速还有角度误差计算周期
-		interval = calcIntervalMs(servo, servoId, nextAngle, speed);
-		// 控制舵机角度
-		FSUS_SetServoAngle(servo, servoId, nextAngle, interval, power, wait);
-		// 需要延时一会儿，确保舵机接收并开始执行舵机控制指令
-		// 如果马上发送舵机角度查询信息,新发送的这条指令可能会覆盖舵机角度控制信息
-		rt_thread_mdelay(5);
-		rt_thread_mdelay(interval);
-
-		//waitUntilServoIDLE(servo, servoId, nextAngle);
-
-		// 等待1s 看舵机死区范围
-		rt_thread_mdelay(1000);
-		// 读取一下舵机的角度
-		FSUS_QueryServoAngle(servo, servoId, &curAngle);
-		LOG_D("Final Angle: %f", curAngle);
-		rt_thread_mdelay(1000);
+		// // 等待1s 看舵机死区范围
+		// rt_thread_mdelay(1000);
+		// // 读取一下舵机的角度
+		// FSUS_QueryServoAngle(servo, servoId, &curAngle);
+		// LOG_D("Final Angle: %f", curAngle);
+		// rt_thread_mdelay(1000);
 	}
 }
 int FSUS_Init(void)
@@ -191,23 +213,6 @@ int FSUS_Init(void)
 }
 INIT_COMPONENT_EXPORT(FSUS_Init);
 
-// 数据帧转换为字节数组
-// void FSUS_Package2RingBuffer(PackageTypeDef *pkg, RingBufferTypeDef *ringBuf)
-// {
-// 	uint8_t checksum; // 校验和
-// 	// 写入帧头
-// 	RingBuffer_WriteUShort(ringBuf, pkg->header);
-// 	// 写入指令ID
-// 	RingBuffer_WriteByte(ringBuf, pkg->cmdId);
-// 	// 写入包的长度
-// 	RingBuffer_WriteByte(ringBuf, pkg->size);
-// 	// 写入内容主题
-// 	RingBuffer_WriteByteArray(ringBuf, pkg->content, pkg->size);
-// 	// 计算校验和
-// 	checksum = RingBuffer_GetChecksum(ringBuf);
-// 	// 写入校验和
-// 	RingBuffer_WriteByte(ringBuf, checksum);
-// }
 
 // 计算Package的校验和
 uint8_t FSUS_CalcChecksum(PackageTypeDef *pkg)
@@ -260,27 +265,6 @@ FSUS_STATUS FSUS_IsValidResponsePackage(PackageTypeDef *pkg)
 	// 数据有效
 	return FSUS_STATUS_SUCCESS;
 }
-
-// 字节数组转换为数据帧
-// FSUS_STATUS FSUS_RingBuffer2Package(RingBufferTypeDef *ringBuf, PackageTypeDef *pkg)
-// {
-// 	// 申请内存
-// 	pkg = (PackageTypeDef *)malloc(sizeof(PackageTypeDef));
-// 	// 读取帧头
-// 	pkg->header = RingBuffer_ReadUShort(ringBuf);
-// 	// 读取指令ID
-// 	pkg->cmdId = RingBuffer_ReadByte(ringBuf);
-// 	// 读取包的长度
-// 	pkg->size = RingBuffer_ReadByte(ringBuf);
-// 	// 申请参数的内存空间
-// 	// pkg->content = (uint8_t *)malloc(pkg->size);
-// 	// 写入content
-// 	RingBuffer_ReadByteArray(ringBuf, pkg->content, pkg->size);
-// 	// 写入校验和
-// 	pkg->checksum = RingBuffer_ReadByte(ringBuf);
-// 	// 返回当前的数据帧是否为有效反馈数据帧
-// 	return FSUS_IsValidResponsePackage(pkg);
-// }
 
 // 构造发送数据帧
 void FSUS_SendPackage(servo_t *servo, uint8_t cmdId, uint8_t size, uint8_t *content)
