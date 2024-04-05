@@ -32,11 +32,11 @@ enum
 
 };
 
-enum 
+enum
 {
-	RED,
-	BLUE,
-	YELLOW,
+    RED,
+    BLUE,
+    YELLOW,
 };
 
 rt_uint8_t color_type;
@@ -53,18 +53,18 @@ uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 
 Path_table_t init_table;
-Path_table_element_t init[] = {FORWARD,FORWARD,END, END};//初始
+Path_table_element_t init[] = {FORWARD, FORWARD, END, END}; // 初始
 
 Path_table_t put_table;
-Path_table_element_t put[] = {LEFT,END, END}; //放
+Path_table_element_t put[] = {LEFT, END, END}; // 放
 
 Path_table_t take_table;
-Path_table_element_t take[] = {LEFT,END, END};//拿
+Path_table_element_t take[] = {RIGHT, END, END}; // 拿
 
 Path_table_t back_table;
-Path_table_element_t back[] = {LEFT,END, END};//回
+Path_table_element_t back[] = {LEFT, END, END}; // 回
 
-uint8_t take_cnt=1;
+uint8_t take_cnt = 1;
 uint8_t red_cnt;
 uint8_t blue_cnt;
 uint8_t yellow_cnt;
@@ -82,25 +82,26 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
     ctrl.pos.y_m = nowpos->y_m + _y_m;
     ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
     abus_public(&rbmg_chassis_acc, &ctrl);
-    LOG_D("begin relative action %f %f %f",_x_m,_y_m,_w_rad);
-    LOG_D("action begin timeout now:%f %f %f target:%f %f %f",nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
-    int counter=0;
+    LOG_D("begin relative action %f %f %f", _x_m, _y_m, _w_rad);
+    LOG_D("action begin timeout now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
+    int counter = 0;
     while (1)
     {
-        //LOG_D("action begin timeout now:%f %f %f ",nowpos->x_m, nowpos->y_m, nowpos->z_rad);
+        // LOG_D("action begin timeout now:%f %f %f ",nowpos->x_m, nowpos->y_m, nowpos->z_rad);
         if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01f) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01f) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1f))
         {
             chassis_pos_clean(&chassis_mai);
             LOG_D("action over");
             break;
         }
-            ctrl.type = 1;
-         abus_public(&rbmg_chassis_acc, &ctrl);
+        ctrl.type = 1;
+        abus_public(&rbmg_chassis_acc, &ctrl);
         // LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
         rt_thread_mdelay(50);
         counter++;
-        if(counter>1000){
-            LOG_D("action error timeout now:%f %f %f target:%f %f %f",nowpos->x_m, nowpos->y_m, nowpos->z_rad,ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
+        if (counter > 1000)
+        {
+            LOG_D("action error timeout now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
             break;
         }
     }
@@ -108,130 +109,162 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 
 int take_action(void)
 {
-	
-	power_on(SWITCH_24V_4);
-	//先判断左右移动距离
-	if(take_cnt==1||take_cnt==4||take_cnt==7)
-	{
-		action_relative_movement_car(0.2f, 0.f, 0.f);
-		color_type = RED;
-	}
-	else if(take_cnt==3||take_cnt==6||take_cnt==9)
-	{
-		action_relative_movement_car(-0.2f, 0.f, 0.f);
-		color_type = BLUE;
-	}
-	else 
-	{
-		color_type = YELLOW;
-	}
-	
-	//再判断前进距离
-	if(take_cnt>3 && take_cnt<7)
-	{
-		action_relative_movement_car(0.f, 0.2f, 0.f);
-	}
-	else if(take_cnt>6)
-	{
-		action_relative_movement_car(0.f, 0.4f, 0.f);
-	}
-	
-	//抓取
-	rt_thread_mdelay(2000);
-	
-	//回去巡线
-	if(take_cnt==1||take_cnt==4||take_cnt==7)
-	{
-		action_relative_movement_car(-0.2f, 0.f, 0.f);
-	}
-	else if(take_cnt==3||take_cnt==6||take_cnt==9)
-	{
-		action_relative_movement_car(0.2f, 0.f, 0.f);
-	}
 
-	//
-	if(take_cnt>3 && take_cnt<7)
-	{
-		action_relative_movement_car(0.f, -0.2f, 0.f);
-	}
-	else if(take_cnt>6)
-	{
-		action_relative_movement_car(0.f, -0.4f, 0.f);
-	}
-	
-	//转弯
-	action_relative_movement_car(0.f, 0.f, 3.1415926f);
-	
-	//抓取次数记录
-	take_cnt++;
-	
-	//切换循迹表
-    	rbmg_mode = LINE_MODE;
-	this_table = &put_table;
-	LOG_D("take action end");
-	LOG_D("table now: %s", this_table->name);
-	return 0;
+    power_on(SWITCH_24V_4);
+    // 先判断左右移动距离
+    if (take_cnt == 1 || take_cnt == 4 || take_cnt == 7)
+    {
+        action_relative_movement_car(0.2f, 0.f, 0.f);
+        color_type = RED;
+    }
+    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
+    {
+        action_relative_movement_car(-0.2f, 0.f, 0.f);
+        color_type = YELLOW;
+    }
+    else
+    {
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        color_type = BLUE;
+    }
+
+    // 再判断前进距离
+    if (take_cnt > 3 && take_cnt < 7)
+    {
+        action_relative_movement_car(0.f, 0.2f, 0.f);
+    }
+    else if (take_cnt > 6)
+    {
+        action_relative_movement_car(0.f, 0.4f, 0.f);
+    }
+    else
+    {
+        action_relative_movement_car(0.f, 0.f, 0.f);
+    }
+
+    // 抓取
+    rt_thread_mdelay(2000);
+
+    // 回去巡线
+    if (take_cnt == 1 || take_cnt == 4 || take_cnt == 7)
+    {
+        action_relative_movement_car(-0.2f, 0.f, 0.f);
+    }
+    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
+    {
+        action_relative_movement_car(0.2f, 0.f, 0.f);
+    }
+
+    //
+    if (take_cnt > 3 && take_cnt < 7)
+    {
+        action_relative_movement_car(0.f, -0.2f, 0.f);
+    }
+    else if (take_cnt > 6)
+    {
+        action_relative_movement_car(0.f, -0.4f, 0.f);
+    }
+
+    // 转弯
+    action_relative_movement_car(0.f, 0.f, 3.1415926f);
+
+    // 抓取次数记录
+    take_cnt++;
+
+    // 切换循迹表
+    rbmg_mode = LINE_MODE;
+    this_table = &put_table;
+    LOG_D("take action end");
+    LOG_D("table now: %s", this_table->name);
+    return 0;
 }
 
 int put_action(void)
 {
-	//先判断抓取物体颜色，左右移动
-	switch(color_type)
-	{
-		case RED: action_relative_movement_car(0.6f, 0.f, 0.f);  red_cnt++; break;
-		case BLUE: blue_cnt++; break;
-		case YELLOW: action_relative_movement_car(-0.6f, 0.f, 0.f); yellow_cnt++; break;
-		default : break;
-	}
-	
-	//判断第几次抓取
-	switch(color_type)
-	{
-		case RED: action_relative_movement_car(0.f, (2-red_cnt)*0.2f, 0.f); break;
-		case BLUE: action_relative_movement_car(0.f, (2-blue_cnt)*0.2f, 0.f); break;
-		case YELLOW: action_relative_movement_car(0.f, (2-yellow_cnt)*0.2f, 0.f); break;
-		default : break;
-	}
-	
-	//放
-	power_off(SWITCH_24V_4);
-	rt_thread_mdelay(2000);
-	
-	
-	//回去巡线
-	switch(color_type)
-	{
-		case RED: action_relative_movement_car(0.f, -(2-red_cnt)*0.2f, 0.f); break;
-		case BLUE: action_relative_movement_car(0.f, -(2-blue_cnt)*0.2f, 0.f); break;
-		case YELLOW: action_relative_movement_car(0.f, -(2-yellow_cnt)*0.2f, 0.f); break;
-		default : break;
-	}	
-	switch(color_type)
-	{
-		case RED: action_relative_movement_car(-0.6f, 0.f, 0.f); break;
-		case YELLOW: action_relative_movement_car(0.6f, 0.f, 0.f); break;
-		default : break;
-	}
-	
-	//转弯
-	action_relative_movement_car(0.f, 0.f, 3.1415926f);
-	
-	//切换循迹表
-//	if(take_cnt<9)
-//	{
-		this_table = &take_table;
-//	}
-//	else
-//	{
-//		this_table = &back_table;
-//	}
-//	
-	rbmg_mode = LINE_MODE;
-	LOG_D(" put action end");
-	LOG_D("table now: %s", this_table->name);
-	return 0;
-}
+    // 先判断抓取物体颜色，左右移动
+    switch (color_type)
+    {
+    case RED:
+        action_relative_movement_car(0.6f, 0.f, 0.f);
+        red_cnt++;
+        break;
+    case BLUE:
+         action_relative_movement_car(0.0f, 0.f, 0.f);
+        blue_cnt++;
+        break;
+    case YELLOW:
+        action_relative_movement_car(-0.6f, 0.f, 0.f);
+        yellow_cnt++;
+        break;
+    default:
+        break;
+    }
 
+    // 判断第几次抓取
+    switch (color_type)
+    {
+    case RED:
+        action_relative_movement_car(0.f, (2 - red_cnt) * 0.2f, 0.f);
+        break;
+    case BLUE:
+        action_relative_movement_car(0.f, (2 - blue_cnt) * 0.2f, 0.f);
+        break;
+    case YELLOW:
+        action_relative_movement_car(0.f, (2 - yellow_cnt) * 0.2f, 0.f);
+        break;
+    default:
+        break;
+    }
+
+    // 放
+    power_off(SWITCH_24V_4);
+    rt_thread_mdelay(2000);
+
+    // 回去巡线
+    switch (color_type)
+    {
+    case RED:
+        action_relative_movement_car(0.f, -(2 - red_cnt) * 0.2f, 0.f);
+        break;
+    case BLUE:
+        action_relative_movement_car(0.f, -(2 - blue_cnt) * 0.2f, 0.f);
+        break;
+    case YELLOW:
+        action_relative_movement_car(0.f, -(2 - yellow_cnt) * 0.2f, 0.f);
+        break;
+    default:
+        break;
+    }
+    switch (color_type)
+    {
+    case RED:
+        action_relative_movement_car(-0.6f, 0.f, 0.f);
+        break;
+    case YELLOW:
+        action_relative_movement_car(0.6f, 0.f, 0.f);
+        break;
+    default:
+        break;
+    }
+
+    // 转弯
+    action_relative_movement_car(0.f, 0.f, 3.1415926f);
+
+    // 切换循迹表
+    //	if(take_cnt<9)
+    //	{
+    this_table = &take_table;
+    //	}
+    //	else
+    //	{
+    //		this_table = &back_table;
+    //	}
+    //
+    rbmg_mode = LINE_MODE;
+    LOG_D(" put action end");
+    LOG_D("table now: %s", this_table->name);
+    return 0;
+}
 
 int turn_actions(uint8_t now_dir, uint8_t will_dir)
 {
@@ -239,18 +272,18 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
 
 #define M_PI_2 (1.5707963267948966192313216916398)
 
-//    static float delta_angle = 0;
-		float delta_angle = 1;
-	
+    //    static float delta_angle = 0;
+    float delta_angle = 0;
+
     switch (will_dir)
     {
     case END:
-         LOG_D("begin action");
+        LOG_D("begin action");
         if (this_table == &init_table)
         {
-                take_action();
-                
-                return 0;
+            take_action();
+
+            return 0;
         }
         else if (this_table == &take_table)
         {
@@ -260,15 +293,16 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         else if (this_table == &put_table)
         {
             put_action();
-//            while (1)
-//            {
-//                LOG_D("stop");
-//                rt_thread_mdelay(5000);
-//            }
+            //            while (1)
+            //            {
+            //                LOG_D("stop");
+            //                rt_thread_mdelay(5000);
+            //            }
+            return 0;
         }
         break;
     case FORWARD:
-        delta_angle = 0.001;
+        delta_angle = 0.000;
         break;
     case RIGHT:
         delta_angle = -M_PI_2;
@@ -284,7 +318,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         break;
     }
 
-    rbmg_mode  =ACTION_MODE;
+    rbmg_mode = ACTION_MODE;
     LOG_D("front start %f", HALF_CAR_WIDTH);
     action_relative_movement_car(0, HALF_CAR_WIDTH, 0);
     LOG_D("front end");
@@ -292,7 +326,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
     LOG_D("rota start %f", delta_angle);
     action_relative_movement_car(0, 0, delta_angle);
     LOG_D("rota end");
-    rbmg_mode  =LINE_MODE;
+    rbmg_mode = LINE_MODE;
 
     return 0;
 }
@@ -305,8 +339,9 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
  */
 int rbmg_error_callback(abus_topic_t *sub)
 {
-//#define KK 1.1f // 1.3
+// #define KK 1.1f // 1.3
 #define KK 0.9f // 1.3
+//#define SPEED 0.25
 #define SPEED 0.25
     if (rbmg_mode == LINE_MODE)
     {
@@ -385,7 +420,16 @@ void rbmg_handle(void *parameter)
         // 接到处理数据的消息
         if (rbmg_mode == CAB_MODE)
         {
-            rbmg_mode=LINE_MODE;
+
+            /*
+                校准模式，也可以用来简单测试
+
+            */
+
+            //action_relative_movement_car(0, 0.f, 3.1415926f*8.f);
+            //action_relative_movement_car(0, 1.8f, 0);
+
+             rbmg_mode = LINE_MODE;
             while (1)
             {
                 LOG_D("cab mode");
@@ -394,8 +438,7 @@ void rbmg_handle(void *parameter)
 
                     break;
                 }
-								
-								
+
                 while (1)
                 {
                     rt_thread_mdelay(50);
@@ -443,11 +486,11 @@ int rbmg_init(void)
 
     Path_table_init(&take_table, take, "take table", 0, 0);
     Path_table_init(&put_table, put, "put table", 0, 0);
-		Path_table_init(&init_table, init, "init table", 0, 0);
-		Path_table_init(&back_table, back, "back table", 0, 0);
-	
+    Path_table_init(&init_table, init, "init table", 0, 0);
+    Path_table_init(&back_table, back, "back table", 0, 0);
+
     this_table = &init_table;
-	
+
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/

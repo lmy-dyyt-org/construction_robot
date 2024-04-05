@@ -22,8 +22,8 @@ chassis_ops_t ops_mai = {
 #endif
     .date = &mai_data};
 
-#define CHASSIS_MAI_WHELL_R_M (0.036804f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
-//#define CHASSIS_MAI_WHELL_R_M (0.034704f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
+//#define CHASSIS_MAI_WHELL_R_M (0.036804f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
+#define CHASSIS_MAI_WHELL_R_M (0.035304f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
 //#define CHASSIS_MAI_WHELL_R_M (0.034904f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
 #define CHSSIS_MAI_A_M (0.129f)
 #define CHSSIS_MAI_B_M (0.17906f)

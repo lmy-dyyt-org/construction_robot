@@ -42,7 +42,7 @@ const chassis_pos_t *chassis_get_pos(chassis_t *chassis)
 
     return &chassis->present.pos;
 }
-const void chassis_pos_clean(chassis_t *chassis)
+void chassis_pos_clean(chassis_t *chassis)
 {
     chassis->present.pos=chassis->target.pos;
 }

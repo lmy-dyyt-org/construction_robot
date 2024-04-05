@@ -58,10 +58,10 @@ void follow_line(void *parameter)
 	rt_thread_mdelay(1000);
 	while (1)
 	{
-#define factor0 0.1
-#define factor1 0.2
-#define factor2 0.3
-#define factor3 0.4
+#define factor3 0.1
+#define factor2 0.2
+#define factor1 0.3
+#define factor0 0.4
 		/* 线程处理 */
 		GET_Infrared_Data(&infrared_package);
 		/* 线程运行，打印计数 */

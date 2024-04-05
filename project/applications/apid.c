@@ -64,6 +64,8 @@ extern "C"
   */
 	void APID_Enable(apid_t* pid)
 	{
+		//pid->parameter.present = pid->parameter.target;
+		pid->parameter.target = pid->parameter.present;
 		pid->flag.run_status = PID_ENABLE;
 	}
 
