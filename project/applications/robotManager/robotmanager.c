@@ -147,7 +147,7 @@ int take_action(void)
     extern void myup(void);
     power_on(SWITCH_24V_4);
     mypick();
-    rt_thread_mdelay(500);
+    rt_thread_mdelay(1000);
     myup();
     rt_thread_mdelay(2000);
 
@@ -284,7 +284,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
             put_action();
             Path_table_init(&take_table, take, "take table", 0, 0);
             // 切换循迹表
-            if (take_cnt < 9)
+            if (take_cnt < 10)
             {
                 this_table = &take_table;
             }
@@ -302,6 +302,21 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
             //            }
             return 0;
         }
+        else if (this_table == &back_table)
+        {
+                    action_relative_movement_car(0.f, 0.4f, 0.f);
+            Path_table_init(&back_table, back, "back table", 0, 0);
+
+            this_table = &put_table;
+            LOG_D("table now: %s", this_table->name);
+            while(1)
+            {
+                LOG_D("over");
+                rt_thread_mdelay(1000);
+            }
+            return 0;
+        }
+
         break;
     case FORWARD:
         delta_angle = 0.000;
@@ -429,6 +444,7 @@ void rbmg_handle(void *parameter)
 
             // action_relative_movement_car(0, 0.f, 3.1415926f*8.f);
             // action_relative_movement_car(0, 1.8f, 0);
+            //action_relative_movement_car( 0.6f,0, 0);
 
             rbmg_mode = LINE_MODE;
             while (1)
