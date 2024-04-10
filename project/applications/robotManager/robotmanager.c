@@ -196,68 +196,56 @@ int put_action(void)
 {
     LOG_D("\tput action start");
     // 先判断抓取物体颜色，左右移动
+		
     switch (color_type)
     {
-    case RED:
-        red_cnt++;
-        switch(red_cnt)
-        {
-            case 1: 
-                action_relative_movement_car(0.6f, 0.f, 0.f); 
-                action_relative_movement_car(0.f, 0.375f + 0.05f, 0.f);
-                break;
-            case 1: 
-                action_relative_movement_car(0.6f, 0.f, 0.f); 
-                action_relative_movement_car(0.f, 0.375f + 0.05f, 0.f);
-                break;
-            case 3: action_relative_movement_car(0.6f - 0.125f, 0.f, 0.f); break;
-        }
-        
-
-        break;
-    case BLUE:
-        action_relative_movement_car(0.0f, 0.f, 0.f);
-        blue_cnt++;
-        action_relative_movement_car(0.f, (3 - blue_cnt) * 0.15f + 0.05f, 0.f);
-
-        break;
-    case YELLOW:
-        action_relative_movement_car(-0.6f, 0.f, 0.f);
-        yellow_cnt++;
-        action_relative_movement_car(0.f, (3 - yellow_cnt) * 0.15f + 0.05f, 0.f);
-
-        break;
-    default:
-        LOG_E("error color");
-        break;
+			case RED:
+					red_cnt++;
+					action_relative_movement_car(0.6f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.3f, 0.f);
+					break;
+			case BLUE:
+					blue_cnt++;
+					action_relative_movement_car(0.0f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.3f, 0.f);
+					break;
+			case YELLOW:
+					yellow_cnt++;
+					action_relative_movement_car(-0.6f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.3f, 0.f);
+					break;
+			default:
+					LOG_E("error color");
+					break;
     }
 
     // 判断第几次抓取
 
     // 放
     power_off(SWITCH_24V_4);
-    rt_thread_mdelay(2000);
+    rt_thread_mdelay(4000);
 
     // 回去巡线
     switch (color_type)
     {
-    case RED:
-        action_relative_movement_car(0.f, -(3 - red_cnt) * 0.15f - 0.05f, 0.f);
-        action_relative_movement_car(-0.6f, 0.f, 0.f);
-
-        break;
-    case BLUE:
-        action_relative_movement_car(0.f, -(3 - blue_cnt) * 0.15f - 0.05f, 0.f);
-        break;
-    case YELLOW:
-        action_relative_movement_car(0.f, -(3 - yellow_cnt) * 0.15f - 0.05f, 0.f);
-        action_relative_movement_car(0.6f, 0.f, 0.f);
-
-        break;
-    default:
-        LOG_E("error color");
-
-        break;
+			case RED:
+					red_cnt++;
+					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(-0.6f, 0.f, 0.f); 
+					break;
+			case BLUE:
+					blue_cnt++;
+					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(0.f, 0.f, 0.f); 
+					break;
+			case YELLOW:
+					yellow_cnt++;
+					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(0.6f, 0.f, 0.f); 
+					break;
+			default:
+					LOG_E("error color");
+					break;
     }
 
     // 转弯
