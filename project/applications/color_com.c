@@ -6,7 +6,7 @@
 #include "math.h"
 uint8_t color[128]={0};
 rt_device_t uart=0;
-
+uint8_t color_flag=0;
 // extern rt_uint8_t color_type;
 
 // enum
@@ -42,6 +42,7 @@ rt_err_t uart_rx_ind(rt_device_t dev, rt_size_t size)
 		// 	break;
 		// }
 		
+		color_flag=1;
 		// LOG_D("color:%d",color_type);
 		return RT_EOK;
 }

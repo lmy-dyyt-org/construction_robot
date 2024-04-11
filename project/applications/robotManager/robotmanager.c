@@ -17,6 +17,7 @@ extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
 extern uint8_t color[128];
+extern uint8_t color_flag;
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
@@ -40,6 +41,7 @@ enum
     BLUE,
     YELLOW,
     NONE,
+    IDLE,
 };
 
 rt_uint8_t color_type;
@@ -150,28 +152,35 @@ int take_action(void)
         // color_type = BLUE;
     }
 
-//只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
-    switch (color[0])
+    //只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
+    if(color_flag)
     {
-    case 114:
-        color_type = RED;
-        break;
-    case 121:
-        color_type = YELLOW;
-        break;
-    case 98:
-        color_type = BLUE;
-        break;
-    case 120:
-        color_type = NONE;
-        break;								
-    default:
-        LOG_E("color error!");
-        color_type = NONE;
-        break;
+        switch (color[0])
+        {
+        case 114:
+            color_type = RED;
+            break;
+        case 121:
+            color_type = YELLOW;
+            break;
+        case 98:
+            color_type = BLUE;
+            break;
+        case 120:
+            color_type = NONE;
+            break;								
+        default:
+            LOG_E("color error!");
+            color_type = NONE;
+            break;
+        }
+        
+        LOG_D("color_type:%d",color_type);
     }
 
+   
     // 抓取
+    rt_thread_mdelay(2000);
     extern void mypick(void);
     extern void myup(void);
     power_on(SWITCH_24V_4);
@@ -248,7 +257,11 @@ int put_action(void)
             case NONE:
 					action_relative_movement_car(0.f, 0.f, 0.f); 
 					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                    
+					break;
+            case IDLE:
+					action_relative_movement_car(0.f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.f, 0.f);
+					break;                      
 			default:
 					LOG_E("error color");
 					break;
@@ -278,7 +291,11 @@ int put_action(void)
             case NONE:
 					action_relative_movement_car(0.f, 0.f, 0.f); 
 					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                           
+					break;
+            case IDLE:
+					action_relative_movement_car(0.f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.f, 0.f);
+					break;                                                 
 			default:
 					LOG_E("error color");
 					break;
@@ -286,6 +303,9 @@ int put_action(void)
 
     // 转弯
     action_relative_movement_car(0.f, 0.f, 3.1415926f);
+
+    color_type = IDLE;
+    color_flag=0;
 
     rbmg_mode = LINE_MODE;
     LOG_D(" put action end");
