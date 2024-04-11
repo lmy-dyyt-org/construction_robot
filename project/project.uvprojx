@@ -2298,6 +2298,16 @@
               <FileType>1</FileType>
               <FilePath>.\applications\robot_move_direct.c</FilePath>
             </File>
+            <File>
+              <FileName>color_com.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\color_com.c</FilePath>
+            </File>
+            <File>
+              <FileName>color.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\color.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

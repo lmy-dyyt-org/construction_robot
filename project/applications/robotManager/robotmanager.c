@@ -16,6 +16,8 @@ extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
 extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
+extern uint8_t color[128];
+
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
@@ -37,6 +39,7 @@ enum
     RED,
     BLUE,
     YELLOW,
+    NONE,
 };
 
 rt_uint8_t color_type;
@@ -111,6 +114,7 @@ int take_action(void)
 {
     LOG_D("\ttake action start");
     power_on(SWITCH_24V_4);
+
     // 再判断前进距离
     if (take_cnt > 3 && take_cnt < 7)
     {
@@ -131,22 +135,41 @@ int take_action(void)
         action_relative_movement_car(0.f, -0.05f, 0.f);
         action_relative_movement_car(0.2f, 0.f, 0.f);
         action_relative_movement_car(0.f, 0.05f, 0.f);
-        color_type = RED;
+        // color_type = RED;
     }
     else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
     {
         action_relative_movement_car(0.f, -0.05f, 0.f);
         action_relative_movement_car(-0.2f, 0.f, 0.f);
         action_relative_movement_car(0.f, 0.05f, 0.f);
-        color_type = YELLOW;
+        // color_type = YELLOW;
     }
     else
     {
         action_relative_movement_car(0.f, 0.f, 0.f);
-        color_type = BLUE;
+        // color_type = BLUE;
     }
 
-
+//只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
+    switch (color[0])
+    {
+    case 114:
+        color_type = RED;
+        break;
+    case 121:
+        color_type = YELLOW;
+        break;
+    case 98:
+        color_type = BLUE;
+        break;
+    case 120:
+        color_type = NONE;
+        break;								
+    default:
+        LOG_E("color error!");
+        color_type = NONE;
+        break;
+    }
 
     // 抓取
     extern void mypick(void);
@@ -197,23 +220,35 @@ int put_action(void)
     LOG_D("\tput action start");
     // 先判断抓取物体颜色，左右移动
 		
+		// switch(color_type)
+		// {
+		// 	case 'r': color_type = RED;break;
+		// 	case 'b': color_type = BLUE;break;
+		// 	case 'y': color_type = YELLOW;break;
+		// 	default : LOG_E("color error!");
+		// }
+	
     switch (color_type)
     {
 			case RED:
 					red_cnt++;
 					action_relative_movement_car(0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.3f, 0.f);
+					action_relative_movement_car(0.f, 0.18f, 0.f);
 					break;
 			case BLUE:
 					blue_cnt++;
 					action_relative_movement_car(0.0f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.3f, 0.f);
+					action_relative_movement_car(0.f, 0.18f, 0.f);
 					break;
 			case YELLOW:
 					yellow_cnt++;
 					action_relative_movement_car(-0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.3f, 0.f);
+					action_relative_movement_car(0.f, 0.18f, 0.f);
 					break;
+            case NONE:
+					action_relative_movement_car(0.f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.f, 0.f);
+					break;                    
 			default:
 					LOG_E("error color");
 					break;
@@ -229,20 +264,21 @@ int put_action(void)
     switch (color_type)
     {
 			case RED:
-					red_cnt++;
-					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(0.f, -0.18f, 0.f);
 					action_relative_movement_car(-0.6f, 0.f, 0.f); 
 					break;
 			case BLUE:
-					blue_cnt++;
-					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(0.f, -0.18f, 0.f);
 					action_relative_movement_car(0.f, 0.f, 0.f); 
 					break;
 			case YELLOW:
-					yellow_cnt++;
-					action_relative_movement_car(0.f, -0.3f, 0.f);
+					action_relative_movement_car(0.f, -0.18f, 0.f);
 					action_relative_movement_car(0.6f, 0.f, 0.f); 
 					break;
+            case NONE:
+					action_relative_movement_car(0.f, 0.f, 0.f); 
+					action_relative_movement_car(0.f, 0.f, 0.f);
+					break;                           
 			default:
 					LOG_E("error color");
 					break;
@@ -446,9 +482,9 @@ void rbmg_handle(void *parameter)
 
             /*
                 校准模式，也可以用来简单测试
-
+                
             */
-
+            rt_thread_mdelay(30000);
             // action_relative_movement_car(0, 0.f, 3.1415926f*8.f);
             // action_relative_movement_car(0, 1.8f, 0);
             //action_relative_movement_car( 0.6f,0, 0);

@@ -108,7 +108,7 @@ void My_FSUS_up(servo_t *servo)
 	rt_device_write(servo->uart, 0, buf1, sizeof(buf1));
 	rt_thread_mdelay(200);
 
-	FSUS_WheelMoveTime(servo, 0, 1, 500, 1800);
+	FSUS_WheelMoveTime(servo, 0, 1, 500, 3800);
 	rt_thread_mdelay(2000);
 }
 
@@ -123,7 +123,7 @@ void My_FSUS_pick(servo_t *servo)
 	rt_device_write(servo->uart, 0, buf1, sizeof(buf1));
 	rt_thread_mdelay(200);
 
-	FSUS_WheelMoveTime(servo, 0, 0, 500, 1800);
+	FSUS_WheelMoveTime(servo, 0, 0, 500, 3800);
 	rt_thread_mdelay(2000);
 }
 void mypick(void)
