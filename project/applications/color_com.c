@@ -4,6 +4,8 @@
 #include "rtthread.h"
 #include <rtdevice.h>
 #include "math.h"
+#include "board.h"
+#include "aboard_power_switch.h"
 uint8_t color[128]={0};
 rt_device_t uart=0;
 uint8_t color_flag=0;
@@ -21,26 +23,47 @@ rt_err_t uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
 		// while(size--){
 					rt_device_read(uart, 0, &color, size);	
-		// }
-		// switch (color[0])
-		// {
-		// case 114:
-		// 	color_type = RED;
-		// 	break;
-		// case 121:
-		// 	color_type = YELLOW;
-		// 	break;
-		// case 98:
-		// 	color_type = BLUE;
-		// 	break;
-		// case 120:
-		// 	color_type = NONE;
-		// 	break;								
-		// default:
-		// 	LOG_E("color error!");
-		// 	color_type = NONE;
-		// 	break;
-		// }
+		 //}
+		 switch (color[0])
+		 {
+		 case 114:
+			 	rt_pin_write(GET_PIN(G,1),0);
+				rt_pin_write(GET_PIN(G,3),1);
+				rt_pin_write(GET_PIN(G,5),1);
+				rt_pin_write(GET_PIN(G,7),1);
+		 	//color_type = RED; 
+		 //rt_pin_write(GET_PIN(A,1),0);
+		 	break;
+		 case 121:
+//		 	color_type = YELLOW;
+			 	rt_pin_write(GET_PIN(G,1),1);
+				rt_pin_write(GET_PIN(G,3),1);
+				rt_pin_write(GET_PIN(G,5),0);
+				rt_pin_write(GET_PIN(G,7),1);	 
+		 	break;
+		 case 98:
+//		 	color_type = BLUE;
+			 	rt_pin_write(GET_PIN(G,1),1);
+				rt_pin_write(GET_PIN(G,3),0);
+				rt_pin_write(GET_PIN(G,5),1);
+				rt_pin_write(GET_PIN(G,7),1);
+		 	break;
+		 case 120:
+//		 	color_type = NONE;
+			 	rt_pin_write(GET_PIN(G,1),1);
+				rt_pin_write(GET_PIN(G,3),1);
+				rt_pin_write(GET_PIN(G,5),1);
+				rt_pin_write(GET_PIN(G,7),1);
+		 	break;								
+		 default:
+		 	LOG_E("color error!");
+//		 	color_type = NONE;
+			 	rt_pin_write(GET_PIN(G,1),1);
+				rt_pin_write(GET_PIN(G,3),1);
+				rt_pin_write(GET_PIN(G,5),1);
+				rt_pin_write(GET_PIN(G,7),1);
+		 	break;
+		 }
 		
 		color_flag=1;
 		// LOG_D("color:%d",color_type);
@@ -49,6 +72,10 @@ rt_err_t uart_rx_ind(rt_device_t dev, rt_size_t size)
 
 void color_com(void *parameter)
 {
+	rt_pin_mode(GET_PIN(G,1),OUTPUT_PP);
+	rt_pin_mode(GET_PIN(G,3),OUTPUT_PP);
+	rt_pin_mode(GET_PIN(G,5),OUTPUT_PP);
+	rt_pin_mode(GET_PIN(G,7),OUTPUT_PP);
 	uart = rt_device_find("uart7");
 	if (uart == RT_NULL)
 	{

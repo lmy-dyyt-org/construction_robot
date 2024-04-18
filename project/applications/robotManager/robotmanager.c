@@ -152,6 +152,8 @@ int take_action(void)
         // color_type = BLUE;
     }
 
+//		rt_thread_mdelay(4000);
+		
     //只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
     if(color_flag)
     {
@@ -180,7 +182,7 @@ int take_action(void)
 
    
     // 抓取
-    rt_thread_mdelay(2000);
+    
     extern void mypick(void);
     extern void myup(void);
     power_on(SWITCH_24V_4);
@@ -213,7 +215,8 @@ int take_action(void)
     // action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
     action_relative_movement_car(0.f, -0.35f, 0.f);
-
+		
+		rt_thread_mdelay(500);
     // 抓取次数记录
     take_cnt++;
 
