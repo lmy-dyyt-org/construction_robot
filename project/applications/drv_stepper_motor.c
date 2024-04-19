@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-06 16:16:14
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-22 19:41:23
+ * @LastEditTime: 2024-04-19 01:22:02
  * @FilePath: \project\applications\drv_stepper_motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -568,7 +568,7 @@ int stepper_motor_init(void)
   }
 
 	return 0;
-}INIT_DEVICE_EXPORT(stepper_motor_init);
+}//INIT_DEVICE_EXPORT(stepper_motor_init);
 
 
 

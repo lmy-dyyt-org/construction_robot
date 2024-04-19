@@ -4,7 +4,14 @@
     "ulog.h": "c",
     "chassis_module_mai_ops.h": "c",
     "chassis_module_mai.h": "c",
-    "follow_line.h": "c"
+    "follow_line.h": "c",
+    "drv_emm_v5.h": "c",
+    "rtdbg.h": "c",
+    "rtthread.h": "c",
+    "robotmanager.h": "c",
+    "drv_stepper_motor.h": "c",
+    "atomic": "c",
+    "condition_variable": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
