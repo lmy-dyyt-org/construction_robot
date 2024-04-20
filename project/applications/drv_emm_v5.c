@@ -51,6 +51,7 @@ void emm_cmd_ana(uint8_t cmd, uint8_t *buf)
             {
                 stepper11.stepper_motor_speed = -stepper11.stepper_motor_speed;
             }
+            LOG_D("emm_cmd_ana v:%d", stepper11.stepper_motor_speed);
         }
         else
             return;
@@ -59,7 +60,7 @@ void emm_cmd_ana(uint8_t cmd, uint8_t *buf)
         return;
     default:
         if (buf[2] != 0x6B)
-            LOG_E("emm_cmd answer error");
+            LOG_W("emm_cmd answer nuknown");
         return;
     }
 }
@@ -526,7 +527,10 @@ void drv_emm_v5_entry(void *t)
     {
         Emm_V5_Vel_Control(0, 0, 1000, 0, 0);
         rt_thread_mdelay(500);
-        Emm_V5_Stop_Now(0,0);
+          Emm_V5_Read_Sys_Params(0, S_VEL);
+        rt_thread_mdelay(500);
+
+        //Emm_V5_Stop_Now(0,0);
     }
 }
 int emm_v5_init(void)
