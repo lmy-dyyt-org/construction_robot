@@ -22,18 +22,27 @@ chassis_ops_t ops_mai = {
 #endif
     .date = &mai_data};
 
+		
+		
+		//俯视14
+		//俯视23
+		
+		
+		
+		
+		
 //#define CHASSIS_MAI_WHELL_R_M (0.036804f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
-#define CHASSIS_MAI_WHELL_R_M (0.035304f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
+#define CHASSIS_MAI_WHELL_R_M (0.07f/2.f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
 //#define CHASSIS_MAI_WHELL_R_M (0.034904f) // 3个都差1mm 导致地盘旋转180会有5.6度偏差，，，测量误差！！！！！没想过这些会影响这么大，，学会使用工具和是适当的替换距离
-#define CHSSIS_MAI_A_M (0.129f)
-#define CHSSIS_MAI_B_M (0.17906f)
+#define CHSSIS_MAI_A_M (0.1235f)
+#define CHSSIS_MAI_B_M (0.1775f)
 #define PI (3.14159265359f)
 #define CHASSIS_HALF_A_B (0.5 * (CHSSIS_MAI_A_M + CHSSIS_MAI_B_M))
 #define CHASSIS_A_B ((CHSSIS_MAI_A_M + CHSSIS_MAI_B_M))
-#define COS45 (0.70710678118)
-#define SIN45 (0.70710678118)
+//#define COS45 (0.70710678118)
+//#define SIN45 (0.70710678118)
 #define CHASSIS_2PIR (6.28318530718 * CHASSIS_MAI_WHELL_R_M)
-#define CHASSIS_R (sqrt((CHSSIS_MAI_A_M / 2.f) * (CHSSIS_MAI_A_M / 2.f) + (CHSSIS_MAI_B_M / 2.f) * (CHSSIS_MAI_B_M / 2.f)))
+//#define CHASSIS_R (sqrt((CHSSIS_MAI_A_M / 2.f) * (CHSSIS_MAI_A_M / 2.f) + (CHSSIS_MAI_B_M / 2.f) * (CHSSIS_MAI_B_M / 2.f)))
 
 #define conversion (180.f / CHASSIS_MAI_WHELL_R_M / PI)
 int module_mai(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
