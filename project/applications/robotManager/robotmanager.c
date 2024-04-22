@@ -96,7 +96,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
         if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01f) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01f) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1f))
         {
             chassis_pos_clean(&chassis_mai);
-					        rt_thread_mdelay(500);
+					        rt_thread_mdelay(300);
 
             LOG_D("action over");
             break;
@@ -137,13 +137,13 @@ int take_action(void)
     if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)//左边
     {
         action_relative_movement_car(0.f, -0.06f, 0.f);
-        action_relative_movement_car(0.185f, 0.f, 0.f);
+        action_relative_movement_car(0.182f, 0.f, 0.f);
         action_relative_movement_car(0.f, 0.068f, 0.f);
     }
     else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)//右边
     {
         action_relative_movement_car(0.f, -0.045f, 0.f);
-        action_relative_movement_car(-0.208f, 0.f, 0.f);
+        action_relative_movement_car(-0.215f, 0.f, 0.f);
         action_relative_movement_car(0.f, 0.043f, 0.f);
     }
     else
@@ -194,11 +194,11 @@ int take_action(void)
     // 回去巡线
     if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)
     {
-        action_relative_movement_car(-0.2f, 0.f, 0.f);
+        action_relative_movement_car(-0.182f, 0.f, 0.f);
     }
     else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
     {
-        action_relative_movement_car(0.2f, 0.f, 0.f);
+        action_relative_movement_car(0.215f, 0.f, 0.f);
     }
 
     //
