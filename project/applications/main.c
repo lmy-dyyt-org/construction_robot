@@ -40,6 +40,9 @@
 #define THREAD_STACK_SIZE_CHASSIS 1024
 #define THREAD_TIMESLICE_CHASSIS 5
 apid_auto_tune_ZNmode_t tuner;
+
+#include "Trajectory_planning.h"
+
 int main(void)
 {
 	// //////////////////////////////////////////////////////////////创建红外循迹线程
@@ -73,54 +76,37 @@ int main(void)
 
 	power_off(SWITCH_24V_4);
 
-	// 	rt_adc_device_t adc_dev;
-	// 	rt_uint32_t value;
-	// float 	vol;
-	// 	rt_err_t ret = RT_EOK;
-	// 	rt_uint8_t count =0;
-	// rt_thread_mdelay(2000);
-	static motor_plannning_t plan;
-	motor_t *motor = motor_get(0);
-	// motor_set_speed(0, 100);
-	//  #define N 500
-	// motor_planning_init(&plan,motor,200,200,200,0.1);
-	// motor_plan_set_pos(&plan,1800*2);
 
-	// apid_auto_tune_ZNmode_init(&tuner, 5, 5, 100, 0, 0, ZNModeLessOvershoot);
-	// setOutputRange(&tuner, -20000, 20000);
-	// startTuningLoop(&tuner);
-	// while (!isFinished(&tuner))
-	// {
-	// 	// APID_Pause(motor->pid_pos);
-	// 	// APID_Pause(motor->pid_speed);
-	// 	//        // This loop must run at the same speed as the PID control loop being tuned
-	// 	//        long prevMicroseconds = microseconds;
-	// 	//        microseconds = micros();
+/////////////////////////////////////////////////////////////////////////////////////////
+//使用示例
+	 motor_set_pos(0, 0);
+		CurveObjectType curve;
+		
+		
+		curve.targetPosm = 0.4f;//m
+		
+    curve.startPos = 0.0f;     // 初始位置
+    curve.currentPos = 0.0f;   
+    curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
+    curve.stepPos = 0.1f;     // 位置变化的步长
+		curve.max_pos = 1000.0f;
+    curve.PosMax = curve.max_pos;    // 最大位置限制
+    curve.PosMin = -curve.max_pos;      // 最小位置限制
+    curve.aTimes = 0;            // 当前时间步
+    curve.maxTimes = 500;          // 总时间步，实际使用时需要根据实际情况计算
+    curve.curveMode = CURVE_SPTA; // 使用S型曲线
+    curve.flexible = 10.f;       // S曲线的柔性因子
 
-	// 	// Get input value here (temperature, encoder position, velocity, etc)
-	// 	float input = motor_get_speed(0);
 
-	// 	// Call tunePID() with the input value and current time in microseconds
-	// 	float output = tunePID(&tuner, input, 5);
+    for (int i = 0; i < curve.maxTimes; ++i)
+    {
+				rt_thread_mdelay(10);
+        mine_plan(&curve);
+			//LOG_D("Current Pos:%f\n", curve.currentPos);
+				 motor_set_pos(0, curve.currentPos);
+    }
+////////////////////////////////////////////////////////////////////////////////////////
 
-	// 	// Set the output - tunePid() will return values within the range configured
-	// 	// by setOutputRange(). Don't change the value or the tuning results will be
-	// 	// incorrect.
-	// 	// doSomethingToSetOutput(output);
-	// 	// tuner.i++;
-	// 	static int cnt = 0;
-	// 	if (cnt++ % 10 == 0)
-	// 		LOG_D("in out:%f,%f,%d", input, output, tuner.i);
-	// 	motor_set_torque(0, output);
-
-	// 	// motor->ops->driver(0,MOTOR_MODE_TORQUE,&output,motor->ops->user_data);
-	// 	// This loop must run at the same speed as the PID control loop being tuned
-	// 	// while (micros() - microseconds < loopInterval) delayMicroseconds(1);
-	// 	rt_thread_mdelay(5);
-	// }
-	// motor_set_torque(0, 0);
-	 motor_set_speed(0, 0);
-	// LOG_D("kp:%f ki:%f kd:%f", getKp(&tuner), getKi(&tuner), getKd(&tuner));
 
 	while (1)
 	{
@@ -131,5 +117,8 @@ int main(void)
 		rt_thread_mdelay(500);
 		rt_pin_write(LED0_PIN, PIN_LOW);
 		rt_thread_mdelay(500);
+		
 	}
 }
+
+
