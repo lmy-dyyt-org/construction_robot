@@ -22,6 +22,8 @@
 #include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
 #include "motor.h"
+#include "motor_planning.h"
+#include "apid_auto_tune_ZNmode.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN GET_PIN(F, 14)
 
@@ -37,7 +39,7 @@
 #define THREAD_PRIORITY_CHASSIS 25
 #define THREAD_STACK_SIZE_CHASSIS 1024
 #define THREAD_TIMESLICE_CHASSIS 5
-
+apid_auto_tune_ZNmode_t tuner;
 int main(void)
 {
 	// //////////////////////////////////////////////////////////////创建红外循迹线程
@@ -77,39 +79,54 @@ int main(void)
 	// 	rt_err_t ret = RT_EOK;
 	// 	rt_uint8_t count =0;
 	// rt_thread_mdelay(2000);
+	static motor_plannning_t plan;
+	motor_t *motor = motor_get(0);
+	// motor_set_speed(0, 100);
+	//  #define N 500
+	// motor_planning_init(&plan,motor,200,200,200,0.1);
+	// motor_plan_set_pos(&plan,1800*2);
+
+	// apid_auto_tune_ZNmode_init(&tuner, 5, 5, 100, 0, 0, ZNModeLessOvershoot);
+	// setOutputRange(&tuner, -20000, 20000);
+	// startTuningLoop(&tuner);
+	// while (!isFinished(&tuner))
+	// {
+	// 	// APID_Pause(motor->pid_pos);
+	// 	// APID_Pause(motor->pid_speed);
+	// 	//        // This loop must run at the same speed as the PID control loop being tuned
+	// 	//        long prevMicroseconds = microseconds;
+	// 	//        microseconds = micros();
+
+	// 	// Get input value here (temperature, encoder position, velocity, etc)
+	// 	float input = motor_get_speed(0);
+
+	// 	// Call tunePID() with the input value and current time in microseconds
+	// 	float output = tunePID(&tuner, input, 5);
+
+	// 	// Set the output - tunePid() will return values within the range configured
+	// 	// by setOutputRange(). Don't change the value or the tuning results will be
+	// 	// incorrect.
+	// 	// doSomethingToSetOutput(output);
+	// 	// tuner.i++;
+	// 	static int cnt = 0;
+	// 	if (cnt++ % 10 == 0)
+	// 		LOG_D("in out:%f,%f,%d", input, output, tuner.i);
+	// 	motor_set_torque(0, output);
+
+	// 	// motor->ops->driver(0,MOTOR_MODE_TORQUE,&output,motor->ops->user_data);
+	// 	// This loop must run at the same speed as the PID control loop being tuned
+	// 	// while (micros() - microseconds < loopInterval) delayMicroseconds(1);
+	// 	rt_thread_mdelay(5);
+	// }
+	// motor_set_torque(0, 0);
+	 motor_set_speed(0, 0);
+	// LOG_D("kp:%f ki:%f kd:%f", getKp(&tuner), getKi(&tuner), getKd(&tuner));
 
 	while (1)
 	{
-		/* 查找设备 */
-		// adc_dev = (rt_adc_device_t)rt_device_find(ADC_DEV_NAME);
-		// if(adc_dev == RT_NULL)
-		// {
-		// 	rt_kprintf("adc smaple run failed! can't find %s device!\n", ADC_DEV_NAME);
-		// 	return RT_ERROR;
-		// }
+		// motor_set_pos(0,2000);
+		// motor_planning(&plan);
 
-		/* 使能设备 */
-
-		// ret  = rt_adc_enable(adc_dev, ADC_DEV_CHANNEL);
-
-		// while(count <10)
-		// 	count ++;
-		// 	/* 读取采集值 */
-		// 	value = rt_adc_read(adc_dev, ADC_DEV_CHANNEL);
-		// 	rt_kprintf("the value is :%d \n", value);
-
-		// 	/* 转换为对应电压值 */
-		// 	vol = (float)(value * 3.3f) / CONVERT_BITS;
-		// 	rt_kprintf("the voltage is :%f \n", vol);
-		// 	float tt = (1.43 - vol)/0.0043 + 25;   //根据公式算出温度值
-		// LOG_D("VSense:%.2f\r\n",tt);
-
-		// 	rt_thread_mdelay(500);
-
-		//  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
-		// Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
-
-		//
 		rt_pin_write(LED0_PIN, PIN_HIGH);
 		rt_thread_mdelay(500);
 		rt_pin_write(LED0_PIN, PIN_LOW);

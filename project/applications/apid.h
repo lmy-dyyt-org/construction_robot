@@ -186,6 +186,10 @@ typedef struct _var_list {
         void (*i_handle)(apid_t *pid);
         void (*d_handle)(apid_t *pid);
         void (*variable)(apid_t *pid); // 变速积分
+			
+			        void (*auto_pid_handler)(apid_t *pid, PID_TYPE cycle);
+        void * auto_pid;
+
     };
 
 /*用户不该使用该注释下面的函数*/

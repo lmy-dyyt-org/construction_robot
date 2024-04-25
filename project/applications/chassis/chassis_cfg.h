@@ -38,9 +38,9 @@
  */
 /* 用户配置使用的电机id */
 #define MOTOR_MAI_ID_1 M2006_1_CAN1
-#define MOTOR_MAI_ID_2 M2006_2_CAN1
-#define MOTOR_MAI_ID_3 M2006_3_CAN1
-#define MOTOR_MAI_ID_4 M2006_4_CAN1
+#define MOTOR_MAI_ID_2 M2006_1_CAN1
+#define MOTOR_MAI_ID_3 M2006_1_CAN1
+#define MOTOR_MAI_ID_4 M2006_1_CAN1
 #endif
 
 #endif

@@ -38,8 +38,11 @@ extern "C"
         MOTOR_MODE_VOLTAGE,      /* 电压 mv 毫伏 */
         MOTOR_MODE_TEMP,         /* 温度 °C */
 
-			        MOTOR_MODE_SAFETY_STOP,  /* 紧急关闭 */
+		MOTOR_MODE_SAFETY_STOP,  /* 紧急关闭 */
         MOTOR_MODE_SAFETY_START, /* 安全启动 */
+
+        MOTOR_MODE_VELOCITY_LIMIT, /* 安全启动 */
+
         MOTOR_MODE_MAX,
     } MOTOR_VALUE_TYPE;
 
@@ -113,6 +116,7 @@ extern "C"
     int motor_start(int id);
 
     int motor_set_speed(int id, float value);
+    int motor_set_speed_limit(int id, float value);
 
     int motor_set_pos(int id, float value);
 

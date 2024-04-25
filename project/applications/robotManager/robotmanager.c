@@ -622,4 +622,4 @@ int rbmg_init(void)
     }
     return 0;
 }
-INIT_APP_EXPORT(rbmg_init);
+//INIT_APP_EXPORT(rbmg_init);

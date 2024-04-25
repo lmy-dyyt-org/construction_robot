@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-24 15:50:43
+ * @LastEditTime: 2024-04-21 01:33:09
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -337,6 +337,28 @@ int motor_set_speed(int id, float value)
     return M_EOK;
 
 }
+
+/**
+ * @brief 设置电机速度限幅
+ * 
+ * @param id 电机id
+ * @param value 限速值
+ * @return int 
+ */
+int motor_set_speed_limit(int id, float value)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    if(motor->pid_speed){
+        APID_Set_Out_Limit(motor->pid_pos, value);
+    }
+    else{
+        while(1);
+    }
+    return M_EOK;
+}
+
+
  /**
    * @brief 设置电机的位置
    *
@@ -457,10 +479,11 @@ void motor_shakdown(int id)
         //  将速度环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("s%d :%f,%f,%f\r\n",id,
+            LOG_RAW("s%d :%f,%f,%f,%f\r\n",id,
                     motor->pid_speed->parameter.target,
                     motor->pid_speed->parameter.present,
-                    motor->pid_speed->parameter.out);
+                    motor->pid_speed->parameter.out,motor->pid_speed->parameter.target-
+                    motor->pid_speed->parameter.present);
         }
     }
     if (motor->flag_run_mode == MOTOR_MODE_POS)

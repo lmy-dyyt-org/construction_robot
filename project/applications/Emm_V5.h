@@ -18,7 +18,7 @@
 #include <rtdevice.h>
 #include "drv_stepper_motor.h"
 #include "ulog.h"
-typedef struct stepper_motor stepper_motor_t;
+//typedef struct stepper_motor stepper_motor_t;
 
 /**********************************************************
 ***	Emm_V5.0步进闭环控制例程

@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-08 15:41:56
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-04-25 00:50:10
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.c
  * @Description:pid库
  */
@@ -248,15 +248,6 @@ extern "C"
   */
 	void i_handle_Position_Saturation(apid_t* pid)
 	{
-//		//抗积分饱和
-//		if (pid->process.integral_bias * pid->parameter.ki > pid->parameter.integral_limit)
-//			pid->process.integral_bias = pid->parameter.integral_limit * pid->parameter.ki;
-
-//		else if (pid->process.integral_bias * pid->parameter.ki < -pid->parameter.integral_limit)
-//			pid->process.integral_bias = -pid->parameter.integral_limit * pid->parameter.ki;
-
-//		else
-//			pid->process.integral_bias += pid->process.bias * pid->cycle;
 		
 		//抗积分饱和
 		if (pid->process.integral_bias * pid->parameter.ki > pid->parameter.integral_limit)
@@ -304,7 +295,7 @@ extern "C"
 		//计算输出
 		pid->parameter.out = pid->parameter.kp * pid->process.bias +
 			pid->parameter.ki * pid->process.integral_bias +
-			pid->parameter.kd * pid->process.lpf_differential_bias / pid->cycle + 	//可以将cycle注释
+			pid->parameter.kd * pid->process.lpf_differential_bias / pid->cycle + 	
 			pid->process.feedforward;
 #if USE_HOOK_OUT
 		pid->parameter.user_hook_end(pid);
