@@ -89,7 +89,7 @@ int main(void)
     curve.currentPos = 0.0f;   
     curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
     curve.stepPos = 0.1f;     // 位置变化的步长
-		curve.max_pos = 1000.0f;
+	curve.max_pos = 1000.0f;
     curve.PosMax = curve.max_pos;    // 最大位置限制
     curve.PosMin = -curve.max_pos;      // 最小位置限制
     curve.aTimes = 0;            // 当前时间步
