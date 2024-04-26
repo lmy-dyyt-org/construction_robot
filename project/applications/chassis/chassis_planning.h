@@ -6,7 +6,7 @@ extern "C" {
 
 #include "chassis.h"
 typedef struct{
-
+    chassis_t* chassis;
 }chassis_planning_t;
 #ifdef __cplusplus
 }
