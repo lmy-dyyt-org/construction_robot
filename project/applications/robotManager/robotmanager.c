@@ -96,7 +96,7 @@ void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
         if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01f) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01f) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1f))
         {
             chassis_pos_clean(&chassis_mai);
-					        rt_thread_mdelay(500);
+            rt_thread_mdelay(500);
 
             LOG_D("action over");
             break;
@@ -134,13 +134,13 @@ int take_action(void)
     }
 
     // 先判断左右移动距离
-    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)//左边
+    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8) // 左边
     {
         action_relative_movement_car(0.f, -0.06f, 0.f);
         action_relative_movement_car(0.185f, 0.f, 0.f);
         action_relative_movement_car(0.f, 0.068f, 0.f);
     }
-    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)//右边
+    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9) // 右边
     {
         action_relative_movement_car(0.f, -0.045f, 0.f);
         action_relative_movement_car(-0.208f, 0.f, 0.f);
@@ -152,10 +152,10 @@ int take_action(void)
         // color_type = BLUE;
     }
 
-		rt_thread_mdelay(1000);
-		
-    //只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
-    if(color_flag)
+    rt_thread_mdelay(1000);
+
+    // 只在！！！！抓取前！！！！赋一次值！！！！！！！！！！！！！！！！！！！
+    if (color_flag)
     {
         switch (color[0])
         {
@@ -170,19 +170,18 @@ int take_action(void)
             break;
         case 120:
             color_type = NONE;
-            break;								
+            break;
         default:
             LOG_E("color error!");
             color_type = NONE;
             break;
         }
-        
-        LOG_D("color_type:%d  0:RED 1:BLUE 2:YELLOW",color_type);
+
+        LOG_D("color_type:%d  0:RED 1:BLUE 2:YELLOW", color_type);
     }
 
-   
     // 抓取
-    
+
     extern void mypick(void);
     extern void myup(void);
     power_on(SWITCH_24V_4);
@@ -215,8 +214,8 @@ int take_action(void)
     // action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
     action_relative_movement_car(0.f, -0.3f, 0.f);
-		
-		rt_thread_mdelay(500);
+
+    rt_thread_mdelay(500);
     // 抓取次数记录
     take_cnt++;
 
@@ -231,43 +230,43 @@ int put_action(void)
 {
     LOG_D("\tput action start");
     // 先判断抓取物体颜色，左右移动
-		action_relative_movement_car(0.0f, 0.f, 0.f); 
-								//rt_thread_mdelay(2000);
+    action_relative_movement_car(0.0f, 0.f, 0.f);
+    // rt_thread_mdelay(2000);
 
     switch (color_type)
     {
-			case RED:
-					red_cnt++;
-//					action_relative_movement_car(0.0f, 0.f, 0.f); 
-//								rt_thread_mdelay(500);
-				//	action_relative_movement_car(0.0f, 0.f, -0.15f); 
+    case RED:
+        red_cnt++;
+        //					action_relative_movement_car(0.0f, 0.f, 0.f);
+        //								rt_thread_mdelay(500);
+        //	action_relative_movement_car(0.0f, 0.f, -0.15f);
 
-					action_relative_movement_car(0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-					break;
-			case BLUE:
-					blue_cnt++;
-					action_relative_movement_car(0.0f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-					break;
-			case YELLOW:
-					yellow_cnt++;
-					action_relative_movement_car(-0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-								//action_relative_movement_car(0.0f, 0.f, 0.15f); 
+        action_relative_movement_car(0.6f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.18f, 0.f);
+        break;
+    case BLUE:
+        blue_cnt++;
+        action_relative_movement_car(0.0f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.18f, 0.f);
+        break;
+    case YELLOW:
+        yellow_cnt++;
+        action_relative_movement_car(-0.6f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.18f, 0.f);
+        // action_relative_movement_car(0.0f, 0.f, 0.15f);
 
-					break;
-            case NONE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;
-            case IDLE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                      
-			default:
-					LOG_E("error color");
-					break;
+        break;
+    case NONE:
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        break;
+    case IDLE:
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        break;
+    default:
+        LOG_E("error color");
+        break;
     }
 
     // 判断第几次抓取
@@ -279,38 +278,38 @@ int put_action(void)
     // 回去巡线
     switch (color_type)
     {
-			case RED:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(-0.6f, 0.f, 0.f); 
-					//action_relative_movement_car(0.f, 0.f, -0.17f); 
-			
-					break;
-			case BLUE:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					break;
-			case YELLOW:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(0.6f, 0.f, 0.f); 
-					break;
-            case NONE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;
-            case IDLE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                                                 
-			default:
-					LOG_E("error color");
-					break;
+    case RED:
+        action_relative_movement_car(0.f, -0.18f, 0.f);
+        action_relative_movement_car(-0.6f, 0.f, 0.f);
+        // action_relative_movement_car(0.f, 0.f, -0.17f);
+
+        break;
+    case BLUE:
+        action_relative_movement_car(0.f, -0.18f, 0.f);
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        break;
+    case YELLOW:
+        action_relative_movement_car(0.f, -0.18f, 0.f);
+        action_relative_movement_car(0.6f, 0.f, 0.f);
+        break;
+    case NONE:
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        break;
+    case IDLE:
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        action_relative_movement_car(0.f, 0.f, 0.f);
+        break;
+    default:
+        LOG_E("error color");
+        break;
     }
 
     // 转弯
     action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
     color_type = IDLE;
-    color_flag=0;
+    color_flag = 0;
 
     rbmg_mode = LINE_MODE;
     LOG_D(" put action end");
@@ -372,12 +371,12 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         }
         else if (this_table == &back_table)
         {
-                    action_relative_movement_car(0.f, 0.4f, 0.f);
+            action_relative_movement_car(0.f, 0.4f, 0.f);
             Path_table_init(&back_table, back, "back table", 0, 0);
 
             this_table = &put_table;
             LOG_D("table now: %s", this_table->name);
-            while(1)
+            while (1)
             {
                 LOG_D("over");
                 rt_thread_mdelay(1000);
@@ -507,47 +506,46 @@ void rbmg_handle(void *parameter)
 
             /*
                 校准模式，也可以用来简单测试
-                
+
             */
 
-
+            action_relative_movement_car(1.f, 0.f, 0.f );
             rt_thread_mdelay(8000);
-					
-						extern  void myup(void);
 
-						myup();//在8秒之后再操作，防止评委误判死机
-					
-					
+            extern void myup(void);
+
+            myup(); // 在8秒之后再操作，防止评委误判死机
+
             // action_relative_movement_car(0, 0.f, 3.1415926f*16.f);
-						 //action_relative_movement_car(0.f, 0.2f, 0.f);
-             //action_relative_movement_car(1.8f, 0.f, 0.f);
-//             action_relative_movement_car(0, 0.f, 3.1415926f*2);
-					//while(1){};
+            // action_relative_movement_car(0.f, 0.2f, 0.f);
+            // action_relative_movement_car(1.8f, 0.f, 0.f);
+            //             action_relative_movement_car(0, 0.f, 3.1415926f*2);
+            // while(1){};
             // action_relative_movement_car(0, 1.8f, 0);
-            //action_relative_movement_car( 0.6f,0, 0);
-					
-					//等待树莓派启动
-						while(1)
-						{
-							if(color_flag)
-							{
-									switch (color[0])
-									{
-									case 114:
-													LOG_D("shumeipai open!");
-													rbmg_mode = LINE_MODE;
-													color_flag = 0;
-													break;
-									}
-									color_flag = 0;
-							}
-							if(rbmg_mode == LINE_MODE)
-							{
-								break;
-							}
-						}
+            // action_relative_movement_car( 0.6f,0, 0);
 
-            //handle
+            // 等待树莓派启动
+            while (1)
+            {
+                if (color_flag)
+                {
+                    switch (color[0])
+                    {
+                    case 114:
+                        LOG_D("shumeipai open!");
+                        rbmg_mode = LINE_MODE;
+                        color_flag = 0;
+                        break;
+                    }
+                    color_flag = 0;
+                }
+                if (rbmg_mode == LINE_MODE)
+                {
+                    break;
+                }
+            }
+
+            // handle
             while (1)
             {
                 LOG_D("cab mode");
@@ -557,8 +555,8 @@ void rbmg_handle(void *parameter)
                     break;
                 }
 
-								if(color[0]!=120)            rbmg_mode = LINE_MODE;
-
+                if (color[0] != 120)
+                    rbmg_mode = LINE_MODE;
 
                 rt_thread_mdelay(500);
             }
@@ -622,4 +620,4 @@ int rbmg_init(void)
     }
     return 0;
 }
-//INIT_APP_EXPORT(rbmg_init);
+// INIT_APP_EXPORT(rbmg_init);

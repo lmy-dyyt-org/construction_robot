@@ -79,32 +79,33 @@ int main(void)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //使用示例
-	 motor_set_pos(0, 0);
-		CurveObjectType curve;
-		
-		
-		curve.targetPosm = 0.4f;//m
-		
-    curve.startPos = 0.0f;     // 初始位置
-    curve.currentPos = 0.0f;   
-    curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
-    curve.stepPos = 0.1f;     // 位置变化的步长
-	curve.max_pos = 1000.0f;
-    curve.PosMax = curve.max_pos;    // 最大位置限制
-    curve.PosMin = -curve.max_pos;      // 最小位置限制
-    curve.aTimes = 0;            // 当前时间步
-    curve.maxTimes = 500;          // 总时间步，实际使用时需要根据实际情况计算
-    curve.curveMode = CURVE_SPTA; // 使用S型曲线
-    curve.flexible = 10.f;       // S曲线的柔性因子
+//	 motor_set_pos(0, 0);
+//		CurveObjectType curve;
+//		
+//		
+//	//	curve.targetPosm = 0.4f;//m
+//	curve.targetPos = target;
+
+//    curve.startPos = 0.0f;     // 初始位置
+//    curve.currentPos = 0.0f;   
+//    // curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
+//    curve.stepPos = 0.1f;     // 位置变化的步长
+//	curve.max_pos = 1000.0f;
+//    curve.PosMax = curve.max_pos;    // 最大位置限制
+//    curve.PosMin = -curve.max_pos;      // 最小位置限制
+//    curve.aTimes = 0;            // 当前时间步
+//    curve.maxTimes = 500;          // 总时间步，实际使用时需要根据实际情况计算
+//    curve.curveMode = CURVE_SPTA; // 使用S型曲线
+//    curve.flexible = 10.f;       // S曲线的柔性因子
 
 
-    for (int i = 0; i < curve.maxTimes; ++i)
-    {
-				rt_thread_mdelay(10);
-        mine_plan(&curve);
-			//LOG_D("Current Pos:%f\n", curve.currentPos);
-				 motor_set_pos(0, curve.currentPos);
-    }
+//    for (int i = 0; i < curve.maxTimes; ++i)
+//    {
+//				rt_thread_mdelay(10);
+//        mine_plan(&curve);
+//			//LOG_D("Current Pos:%f\n", curve.currentPos);
+//				 motor_set_pos(0, curve.currentPos);
+//    }
 ////////////////////////////////////////////////////////////////////////////////////////
 
 

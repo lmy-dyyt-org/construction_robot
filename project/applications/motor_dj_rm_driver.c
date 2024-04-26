@@ -376,57 +376,57 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         {
             if (
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
-                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff ||
+                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID2_CAN1
                 dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID3_CAN1
-                    dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID4_CAN1
-                    dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
 #endif
 
 #ifdef MOTOR_DJ_M2006_ID1_CAN2
-                    dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID2_CAN2
-                    dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID3_CAN2
-                    dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M2006_ID4_CAN2
-                    dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
 #endif
 
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
-                    dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN1
-                    dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID3_CAN1
-                    dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_3].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN1
-                    dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_4].msg_cnt == 0xff &&
 #endif
 
 #ifdef MOTOR_DJ_M3508_ID1_CAN2
-                    dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_1].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID2_CAN2
-                    dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_2].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID3_CAN2
-                    dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_3].msg_cnt == 0xff &&
 #endif
 #ifdef MOTOR_DJ_M3508_ID4_CAN2
-                    dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN2_4].msg_cnt == 0xff &&
 #endif
-                    1)
+                1)
             {
                 iq1_low[tt] = tmpout;
                 /* 待发送的 8 字节数据 */
@@ -614,12 +614,12 @@ static void can_rx_thread1(void *parameter)
     var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
     var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
 
-    //motor_set_pos(0,0);
+    // motor_set_pos(0,0);
     motor_set_speed(0, 0);
     while (1)
     {
-        motor_shakdown(0);
-        // motor_shakdown(1);
+        // motor_shakdown(0);
+        //  motor_shakdown(1);
         rt_thread_delay(10);
     }
 }
@@ -813,15 +813,15 @@ static void set_motor_passive_feedback(void)
     motor_set_passive_feedback(M2006_1_CAN1, 1);
     APID_Set_Out_Limit(motor_get_pid_speed(M2006_1_CAN1), 30000);
     APID_Set_Integral_Limit(motor_get_pid_speed(M2006_1_CAN1), 800);
-    //APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_1_CAN1), 2);
-    // APID_Set_Bias_Limit(motor_get_pid_speed(M2006_1_CAN1),2000);
+    // APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_1_CAN1), 2);
+    //  APID_Set_Bias_Limit(motor_get_pid_speed(M2006_1_CAN1),2000);
     APID_Set_Target_Limit(motor_get_pid_speed(M2006_1_CAN1), 700);
 
     APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 500);
     // APID_Set_Out_Limit(motor_get_pid_pos(M2006_1_CAN1), 50);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_1_CAN1), 200);
-    //APID_Set_Bias_Limit(motor_get_pid_pos(M2006_1_CAN1), 100);
-    // APID_D_PART(motor_get_pid_pos(M2006_1_CAN1), 0.7);
+    // APID_Set_Bias_Limit(motor_get_pid_pos(M2006_1_CAN1), 100);
+    //  APID_D_PART(motor_get_pid_pos(M2006_1_CAN1), 0.7);
 
 #endif
 #if defined(MOTOR_DJ_M2006_ID2_CAN1)

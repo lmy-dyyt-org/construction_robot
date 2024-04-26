@@ -2,7 +2,7 @@
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
  * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-04-21 01:35:17
+ * @LastEditTime: 2024-04-26 17:02:11
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,19 +32,19 @@ void chassis_port_handle(void *parameter)
 
     // chassis_pos.x_m = 10;
     // chassis_pos.y_m = 0.55;
-    chassis_pos.z_rad = 0;
+    chassis_pos.z_rad = 1;
     // chassis_set_speed(&chassis_mai, &chassis_speed);
 
 
-    chassis_set_pos(&chassis_mai, &chassis_pos);
+    chassis_set_pos_plan(&chassis_mai, &chassis_pos);
     while (1)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
 
-        //chassis_handle(&chassis_mai, 0);
+        chassis_handle(&chassis_mai, 0);
 #endif
 
-        rt_thread_mdelay(50);
+        rt_thread_mdelay(5);
     }
 }
 int chassis_sub_callback(abus_topic_t *sub)
@@ -65,7 +65,7 @@ int chassis_sub_callback(abus_topic_t *sub)
     else
     {
         //LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
-        chassis_set_pos(&chassis_mai, &ctrl.pos);
+        chassis_set_pos_plan(&chassis_mai, &ctrl.pos);
     }
     return 0;
 }

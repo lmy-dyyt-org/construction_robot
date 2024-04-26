@@ -3,11 +3,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include "chassis.h"
-typedef struct{
-    chassis_t* chassis;
-}chassis_planning_t;
+#include "Trajectory_planning.h"
+
+
 #ifdef __cplusplus
 }
 #endif
