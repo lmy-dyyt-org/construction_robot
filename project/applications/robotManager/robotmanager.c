@@ -58,16 +58,64 @@ uint8_t next_dir = 1; // 下一个方向
 Path_table_t *this_table;
 
 Path_table_t init_table;
-Path_table_element_t init[] = {FORWARD, FORWARD, END, END}; // 初始
+Path_table_element_t init[] = {FORWARD, FORWARD, END, END}; // 初始，先拿黄色区域
+////////////////////////////////////
+Path_table_t yellow_yellow_take_table;
+Path_table_element_t yellow_yellow_take[] = {LEFT, RIGHT, END, END}; // 黄色配送区 回到 黄色存储区
 
-Path_table_t put_table;
-Path_table_element_t put[] = {RIGHT, END, END}; // 放
+Path_table_t yellow_blue_take_table;
+Path_table_element_t yellow_blue_take[] = {FORWARD, END, END}; // 
 
-Path_table_t take_table;
-Path_table_element_t take[] = {RIGHT, END, END}; // 拿
+Path_table_t yellow_red_take_table;
+Path_table_element_t yellow_red_take[] = {RIGHT, LEFT, END, END}; // 
 
+Path_table_t yellow_yellow_put_table;
+Path_table_element_t yellow_yellow_put[] = { LEFT,RIGHT, END, END}; // 黄色存储区 送到 黄色配送区
+
+Path_table_t yellow_blue_put_table;
+Path_table_element_t yellow_blue_put[] = {FORWARD,LEFT,FORWARD,RIGHT,RIGHT, LEFT, END, END}; // 
+
+Path_table_t yellow_red_put_table;
+Path_table_element_t yellow_red_put[] = {LEFT,FORWARD,RIGHT,RIGHT,LEFT, RIGHT,LEFT,FORWARD,FORWARD,END, END}; // 
+/////////////////////////////////////////
+Path_table_t blue_yellow_take_table;
+Path_table_element_t blue_yellow_take[] = {RIGHT, LEFT,LEFT,FORWARD,RIGHT,FORWARD,END, END}; // 
+
+Path_table_t blue_blue_take_table;
+Path_table_element_t blue_blue_take[] = {RIGHT, LEFT,LEFT,FORWARD,RIGHT,RIGHT,LEFT,END, END}; // 
+
+Path_table_t blue_red_take_table;
+Path_table_element_t blue_red_take[] = {FORWARD,LEFT,RIGHT,LEFT,FORWARD,END, END}; // 
+
+Path_table_t blue_yellow_put_table;
+Path_table_element_t blue_yellow_put[] = {FORWARD, END, END}; // 
+
+Path_table_t blue_blue_put_table;
+Path_table_element_t blue_blue_put[] = {RIGHT,LEFT,LEFT,FORWARD, RIGHT,RIGHT,LEFT,END, END}; // 
+
+Path_table_t blue_red_put_table;
+Path_table_element_t blue_red_put[] = {LEFT,RIGHT, RIGHT,LEFT, RIGHT,LEFT,FORWARD,FORWARD,END, END}; // 
+/////////////////////////////////////////
+Path_table_t red_yellow_take_table;
+Path_table_element_t red_yellow_take[] = {FORWARD,FORWARD,RIGHT,LEFT, RIGHT,LEFT,LEFT,FORWARD, RIGHT,END, END}; // 
+
+Path_table_t red_blue_take_table;
+Path_table_element_t red_blue_take[] = {FORWARD,FORWARD,RIGHT,LEFT, RIGHT,LEFT,LEFT,RIGHT,END, END}; // 
+
+Path_table_t red_red_take_table;
+Path_table_element_t red_red_take[] = {FORWARD,FORWARD,RIGHT,LEFT, RIGHT,LEFT,FORWARD,END, END}; // 
+
+Path_table_t red_yellow_put_table;
+Path_table_element_t red_yellow_put[] = {RIGHT,LEFT, END, END}; // 
+
+Path_table_t red_blue_put_table;
+Path_table_element_t red_blue_put[] = {FORWARD,RIGHT, LEFT,RIGHT,FORWARD,END, END}; // 
+
+Path_table_t red_red_put_table;
+Path_table_element_t red_red_put[] = {FORWARD,RIGHT, LEFT,RIGHT,LEFT,FORWARD,FORWARD,END, END}; // 
+/////////////////////////////////////////
 Path_table_t back_table;
-Path_table_element_t back[] = {LEFT, END, END}; // 回
+Path_table_element_t back[] = {FORWARD,LEFT,LEFT,RIGHT,RIGHT,LEFT,RIGHT,FORWARD, END, END}; // 从红色配送区下方块 回到 起始区
 
 uint8_t take_cnt = 1;
 uint8_t red_cnt;
@@ -119,38 +167,27 @@ int take_action(void)
     LOG_D("\ttake action start");
     power_on(SWITCH_24V_4);
 
-    // 再判断前进距离
-    if (take_cnt > 3 && take_cnt < 7)
-    {
-        action_relative_movement_car(0.f, 0.185f, 0.f);
-    }
-    else if (take_cnt > 6)
-    {
-        action_relative_movement_car(0.f, 0.385f, 0.f);
-    }
-    else
-    {
-        action_relative_movement_car(0.f, 0.f, 0.f);
-    }
-
-    // 先判断左右移动距离
-    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)//左边
-    {
-        action_relative_movement_car(0.f, -0.06f, 0.f);
-        action_relative_movement_car(0.182f, 0.f, 0.f);
-        action_relative_movement_car(0.f, 0.068f, 0.f);
-    }
-    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)//右边
-    {
-        action_relative_movement_car(0.f, -0.045f, 0.f);
-        action_relative_movement_car(-0.215f, 0.f, 0.f);
-        action_relative_movement_car(0.f, 0.043f, 0.f);
-    }
-    else
-    {
-        action_relative_movement_car(0.f, 0.f, 0.f);
-        // color_type = BLUE;
-    }
+		switch(take_cnt)
+		{
+			case 1 : action_relative_movement_car(-0.3f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.175f, 0.f); 
+			case 2 : action_relative_movement_car(-0.19175f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 
+			case 3 : action_relative_movement_car(-0.40825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 
+			case 4 : action_relative_movement_car(0.f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.175f, 0.f); 
+			case 5 : action_relative_movement_car(0.10825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 
+			case 6 : action_relative_movement_car(-0.10825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 
+			case 7 : action_relative_movement_car(0.3f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.175f, 0.f); 
+			case 8 : action_relative_movement_car(0.19175f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 
+			case 9 : action_relative_movement_car(0.40825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.f, 0.3625f, 0.f); 			
+		}
 
 		rt_thread_mdelay(1000);
 		
@@ -192,35 +229,112 @@ int take_action(void)
     // rt_thread_mdelay(2000);
 
     // 回去巡线
-    if (take_cnt == 2 || take_cnt == 5 || take_cnt == 8)
-    {
-        action_relative_movement_car(-0.182f, 0.f, 0.f);
-    }
-    else if (take_cnt == 3 || take_cnt == 6 || take_cnt == 9)
-    {
-        action_relative_movement_car(0.215f, 0.f, 0.f);
-    }
-
-    //
-    if (take_cnt > 3 && take_cnt < 7)
-    {
-        action_relative_movement_car(0.f, -0.2f, 0.f);
-    }
-    else if (take_cnt > 6)
-    {
-        action_relative_movement_car(0.f, -0.4f, 0.f);
-    }
+		switch(take_cnt)
+		{
+			case 1 : action_relative_movement_car(0.f, -0.175f, 0.f); 
+							 action_relative_movement_car(0.3f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 2 : action_relative_movement_car(0.f, -0.3625f, 0.f);   //第一是左右 第二个参数是前后  
+							 action_relative_movement_car(0.19175f, 0.f, 0.f);
+			case 3 : action_relative_movement_car(0.f, -0.3625f, 0.f);
+							 action_relative_movement_car(0.40825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 4 : action_relative_movement_car(0.f, -0.175f, 0.f);
+							 action_relative_movement_car(0.f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 5 : action_relative_movement_car(0.f, -0.3625f, 0.f);
+						   action_relative_movement_car(-0.10825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  	  
+			case 6 : action_relative_movement_car(0.f, -0.3625f, 0.f);
+							 action_relative_movement_car(0.10825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 7 : action_relative_movement_car(0.f, -0.175f, 0.f);
+							 action_relative_movement_car(-0.3f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 8 : action_relative_movement_car(0.f, -0.3625f, 0.f);
+							 action_relative_movement_car(-0.19175f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+			case 9 : action_relative_movement_car(0.f, -0.3625f, 0.f);
+							 action_relative_movement_car(-0.40825f, 0.f, 0.f);   //第一是左右 第二个参数是前后  
+		}
 
     // 转弯
-    // action_relative_movement_car(0.f, 0.f, 3.1415926f);
+    action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
-    action_relative_movement_car(0.f, -0.3f, 0.f);
-		
 		rt_thread_mdelay(500);
     // 抓取次数记录
     take_cnt++;
 
     // 切换循迹表
+		switch (color_type)
+    {
+			case RED:
+					red_cnt++;
+					if(take_cnt<4)
+					{
+						this_table = &yellow_red_put_table;
+					}
+					else if(take_cnt>3 && take_cnt<7)
+					{
+						this_table = &blue_red_put_table;
+					}
+					else{
+						this_table = &red_red_put_table;
+					}
+					break;
+			case BLUE:
+					blue_cnt++;
+					if(take_cnt<4)
+					{
+						this_table = &yellow_blue_put_table;
+					}
+					else if(take_cnt>3 && take_cnt<7)
+					{
+						this_table = &blue_blue_put_table;
+					}
+					else{
+						this_table = &red_blue_put_table;
+					}
+					break;
+			case YELLOW:
+					yellow_cnt++;
+					if(take_cnt<4)
+					{
+						this_table = &yellow_yellow_put_table;
+					}
+					else if(take_cnt>3 && take_cnt<7)
+					{
+						this_table = &blue_yellow_put_table;
+					}
+					else{
+						this_table = &red_yellow_put_table;
+					}
+					break;
+      case NONE: //扫没扫到都丢红色
+					LOG_E("NONE color");
+					if(take_cnt<4)
+					{
+						this_table = &yellow_red_put_table;
+					}
+					else if(take_cnt>3 && take_cnt<7)
+					{
+						this_table = &blue_red_put_table;
+					}
+					else{
+						this_table = &red_red_put_table;
+					}			
+					break;
+      case IDLE:
+					LOG_E("IDLE color");
+					if(take_cnt<4)
+					{
+						this_table = &yellow_red_put_table;
+					}
+					else if(take_cnt>3 && take_cnt<7)
+					{
+						this_table = &blue_red_put_table;
+					}
+					else{
+						this_table = &red_red_put_table;
+					}			
+					break;                      
+			default:
+					LOG_E("error color");
+					break;
+    }
     rbmg_mode = LINE_MODE;
     LOG_D("take action end");
 
@@ -230,88 +344,137 @@ int take_action(void)
 int put_action(void)
 {
     LOG_D("\tput action start");
-    // 先判断抓取物体颜色，左右移动
-		action_relative_movement_car(0.0f, 0.f, 0.f); 
-								//rt_thread_mdelay(2000);
 
-    switch (color_type)
-    {
-			case RED:
-					red_cnt++;
-//					action_relative_movement_car(0.0f, 0.f, 0.f); 
-//								rt_thread_mdelay(500);
-				//	action_relative_movement_car(0.0f, 0.f, -0.15f); 
-
-					action_relative_movement_car(0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-					break;
-			case BLUE:
-					blue_cnt++;
-					action_relative_movement_car(0.0f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-					break;
-			case YELLOW:
-					yellow_cnt++;
-					action_relative_movement_car(-0.6f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.18f, 0.f);
-								//action_relative_movement_car(0.0f, 0.f, 0.15f); 
-
-					break;
-            case NONE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;
-            case IDLE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                      
-			default:
-					LOG_E("error color");
-					break;
-    }
-
-    // 判断第几次抓取
-
+		if(take_cnt<4)
+		{
+			action_relative_movement_car(0.2f, 0.f, 0.f);
+			action_relative_movement_car(0.f, 0.15f, 0.f);
+		}
+		else if(!strcmp(this_table->name,yellow_blue_put_table.name) || !strcmp(this_table->name,blue_blue_put_table.name))
+		{
+			action_relative_movement_car(0.2f, 0.f, 0.f);
+			action_relative_movement_car(0.f, 0.15f, 0.f);
+		}
+		else if(!strcmp(this_table->name,red_blue_put_table.name))
+		{
+			action_relative_movement_car(-0.15f, 0.f, 0.f);
+		}
+		else
+		{
+			action_relative_movement_car(0.f, 0.15f, 0.f);
+		}
+		
     // 放
     power_off(SWITCH_24V_4);
     rt_thread_mdelay(4000);
 
-    // 回去巡线
-    switch (color_type)
-    {
-			case RED:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(-0.6f, 0.f, 0.f); 
-					//action_relative_movement_car(0.f, 0.f, -0.17f); 
-			
-					break;
-			case BLUE:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					break;
-			case YELLOW:
-					action_relative_movement_car(0.f, -0.18f, 0.f);
-					action_relative_movement_car(0.6f, 0.f, 0.f); 
-					break;
-            case NONE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;
-            case IDLE:
-					action_relative_movement_car(0.f, 0.f, 0.f); 
-					action_relative_movement_car(0.f, 0.f, 0.f);
-					break;                                                 
-			default:
-					LOG_E("error color");
-					break;
-    }
-
+		if(take_cnt<4)
+		{
+			action_relative_movement_car(0.f, -0.15f, 0.f);
+			action_relative_movement_car(-0.2f, 0.f, 0.f);
+		}
+		else if(!strcmp(this_table->name,yellow_blue_put_table.name) || !strcmp(this_table->name,blue_blue_put_table.name))
+		{
+			action_relative_movement_car(0.f, -0.15f, 0.f);
+			action_relative_movement_car(-0.2f, 0.f, 0.f);
+		}
+		else if(!strcmp(this_table->name,red_blue_put_table.name))
+		{
+			action_relative_movement_car(0.15f, 0.f, 0.f);
+		}
+		else
+		{
+			action_relative_movement_car(0.f, -0.15f, 0.f);
+		}
+		
     // 转弯
     action_relative_movement_car(0.f, 0.f, 3.1415926f);
 
     color_type = IDLE;
     color_flag=0;
-
+		
+		
+    // 切换循迹表
+		switch (color_type)
+    {
+			case RED:
+					if(take_cnt<3)
+					{
+						this_table = &red_yellow_take_table;
+					}
+					else if(take_cnt>2 && take_cnt<6)
+					{
+						this_table = &red_blue_take_table;
+					}
+					else
+					{
+						this_table = &red_red_take_table;
+					}
+					break;
+			case BLUE:
+					blue_cnt++;
+					if(take_cnt<3)
+					{
+						this_table = &blue_yellow_take_table;
+					}
+					else if(take_cnt>2 && take_cnt<6)
+					{
+						this_table = &blue_blue_take_table;
+					}
+					else
+					{
+						this_table = &blue_red_take_table;
+					}
+					break;
+			case YELLOW:
+					yellow_cnt++;
+					if(take_cnt<3)
+					{
+						this_table = &yellow_yellow_take_table;
+					}
+					else if(take_cnt>2 && take_cnt<6)
+					{
+						this_table = &yellow_blue_take_table;
+					}
+					else
+					{
+						this_table = &yellow_red_take_table;
+					}
+					break;
+      case NONE: //扫没扫到都丢红色
+					LOG_E("NONE color");
+					if(take_cnt<3)
+					{
+						this_table = &red_yellow_take_table;
+					}
+					else if(take_cnt>2 && take_cnt<6)
+					{
+						this_table = &red_blue_take_table;
+					}
+					else
+					{
+						this_table = &red_red_take_table;
+					}		
+					break;
+      case IDLE:
+					LOG_E("IDLE color");
+					if(take_cnt<3)
+					{
+						this_table = &red_yellow_take_table;
+					}
+					else if(take_cnt>2 && take_cnt<6)
+					{
+						this_table = &red_blue_take_table;
+					}
+					else
+					{
+						this_table = &red_red_take_table;
+					}			
+					break;                      
+			default:
+					LOG_E("error color");
+					break;
+    }
     rbmg_mode = LINE_MODE;
     LOG_D(" put action end");
     return 0;
@@ -333,34 +496,29 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         if (this_table == &init_table)
         {
             take_action();
-            Path_table_init(&put_table, put, "put table", 0, 0);
-            this_table = &put_table;
             LOG_D("table now: %s", this_table->name);
             return 0;
         }
-        else if (this_table == &take_table)
+        else if (this_table == &yellow_yellow_take_table || this_table == &yellow_blue_take_table || this_table == &yellow_red_take_table ||
+								 this_table == &blue_yellow_take_table || this_table == &blue_blue_take_table || this_table == &blue_red_take_table ||
+								 this_table == &red_yellow_take_table || this_table == &red_blue_take_table || this_table == &red_red_take_table )
         {
             take_action();
-            Path_table_init(&put_table, put, "put table", 0, 0);
-
-            this_table = &put_table;
+						
             LOG_D("table now: %s", this_table->name);
             return 0;
         }
-        else if (this_table == &put_table)
+        else if (this_table == &yellow_yellow_put_table || this_table == &yellow_blue_put_table || this_table == &yellow_red_put_table ||
+								 this_table == &blue_yellow_put_table || this_table == &blue_blue_put_table || this_table == &blue_red_put_table ||
+								 this_table == &red_yellow_put_table || this_table == &red_blue_put_table || this_table == &red_red_put_table )
         {
             put_action();
-            Path_table_init(&take_table, take, "take table", 0, 0);
+					
             // 切换循迹表
-            if (take_cnt < 10)
-            {
-                this_table = &take_table;
-            }
-            else
+            if (take_cnt == 10)
             {
                 this_table = &back_table;
             }
-
             LOG_D("table now: %s", this_table->name);
 
             //            while (1)
@@ -372,10 +530,7 @@ int turn_actions(uint8_t now_dir, uint8_t will_dir)
         }
         else if (this_table == &back_table)
         {
-                    action_relative_movement_car(0.f, 0.4f, 0.f);
-            Path_table_init(&back_table, back, "back table", 0, 0);
-
-            this_table = &put_table;
+            action_relative_movement_car(0.f, 0.4f, 0.f);
             LOG_D("table now: %s", this_table->name);
             while(1)
             {
@@ -600,11 +755,28 @@ void rbmg_handle(void *parameter)
 int rbmg_init(void)
 {
 
-    Path_table_init(&take_table, take, "take table", 0, 0);
-    Path_table_init(&put_table, put, "put table", 0, 0);
-    Path_table_init(&init_table, init, "init table", 0, 0);
-    Path_table_init(&back_table, back, "back table", 0, 0);
-
+    Path_table_init(&init_table, init, "take table", 0, 0);
+    Path_table_init(&back_table, back, "put table", 0, 0);
+    Path_table_init(&yellow_yellow_take_table, yellow_yellow_take, "init table", 0, 0);
+    Path_table_init(&yellow_blue_take_table, yellow_blue_take, "back table", 0, 0);
+		Path_table_init(&yellow_red_take_table, yellow_red_take, "put table", 0, 0);
+		Path_table_init(&blue_yellow_take_table, blue_yellow_take, "put table", 0, 0);	
+		Path_table_init(&blue_blue_take_table, blue_blue_take, "put table", 0, 0);	
+		Path_table_init(&blue_red_take_table, blue_red_take, "put table", 0, 0);
+		Path_table_init(&red_yellow_take_table, red_yellow_take, "put table", 0, 0);	
+		Path_table_init(&red_blue_take_table, red_blue_take, "put table", 0, 0);	
+		Path_table_init(&red_red_take_table, red_red_take, "put table", 0, 0);
+	
+    Path_table_init(&yellow_yellow_put_table, yellow_yellow_put, "init table", 0, 0);
+    Path_table_init(&yellow_blue_put_table, yellow_blue_put, "back table", 0, 0);
+		Path_table_init(&yellow_red_put_table, yellow_red_put, "put table", 0, 0);
+		Path_table_init(&blue_yellow_put_table, blue_yellow_put, "put table", 0, 0);	
+		Path_table_init(&blue_blue_put_table, blue_blue_put, "put table", 0, 0);	
+		Path_table_init(&blue_red_put_table, blue_red_put, "put table", 0, 0);
+		Path_table_init(&red_yellow_put_table, red_yellow_put, "put table", 0, 0);	
+		Path_table_init(&red_blue_put_table, red_blue_put, "put table", 0, 0);	
+		Path_table_init(&red_red_put_table, red_red_put, "put table", 0, 0);
+	
     this_table = &init_table;
 
     rt_thread_t tid_rbmg = RT_NULL;
