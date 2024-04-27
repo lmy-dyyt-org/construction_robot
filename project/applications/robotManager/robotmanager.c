@@ -543,6 +543,7 @@ void rbmg_handle(void *parameter)
                 {
                     break;
                 }
+                rt_thread_mdelay(100);
             }
 
             // handle
