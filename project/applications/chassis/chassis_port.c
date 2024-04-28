@@ -12,14 +12,18 @@
 
 #include <rtthread.h>
 #include <rtdbg.h>
-#define DBG_TAG    "Chassis.port"
-#define DBG_LVL               DBG_LOG
+#define DBG_TAG "Chassis.port"
+#define DBG_LVL DBG_LOG
 
 chassis_t chassis_mai;
 
 chassis_speed_t chassis_speed;
 chassis_pos_t chassis_pos;
 
+int chassis_port_plan(struct chassis *chassis, chassis_data_t *outdata)
+{
+    
+}
 
 // 0.55 正中间 400 90度
 void chassis_port_handle(void *parameter)
@@ -28,13 +32,12 @@ void chassis_port_handle(void *parameter)
     // int chassis_set_pos(chassis_t *chassis, chassis_pos_t *data);
     // chassis_speed.x_m_s = 10;
     chassis_speed.y_m_s = 0;
-    //chassis_speed.z_rad_s = 10;
+    // chassis_speed.z_rad_s = 10;
 
-     chassis_pos.x_m = 0.2;
-    //chassis_pos.y_m = 0.4;
-    //chassis_pos.z_rad = 1;
-    // chassis_set_speed(&chassis_mai, &chassis_speed);
-
+    chassis_pos.x_m = 0.2;
+    // chassis_pos.y_m = 0.4;
+    // chassis_pos.z_rad = 1;
+    //  chassis_set_speed(&chassis_mai, &chassis_speed);
 
     chassis_set_pos_plan(&chassis_mai, &chassis_pos);
     while (1)
@@ -51,32 +54,31 @@ int chassis_sub_callback(abus_topic_t *sub)
 {
     chassis_ctrl_t ctrl;
     uint16_t size;
-    size = afifo_out_data(sub->datafifo, (uint8_t*)&ctrl, sizeof(chassis_ctrl_t));
-    if (size!=sizeof(chassis_ctrl_t))
+    size = afifo_out_data(sub->datafifo, (uint8_t *)&ctrl, sizeof(chassis_ctrl_t));
+    if (size != sizeof(chassis_ctrl_t))
     {
         LOG_E("abus_topic_subscribe  afifo_out_data error\n");
         return -1;
     }
     if (ctrl.type == 0)
     {
-        //LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
+        // LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
         chassis_set_speed(&chassis_mai, &ctrl.speed);
     }
     else
     {
-        //LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
+        // LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
         chassis_set_pos_plan(&chassis_mai, &ctrl.pos);
     }
     return 0;
 }
-
-int chassis_port_init(void)
+int int chassis_port_init(void)
 {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
     chassis_init(&chassis_mai, &ops_mai);
 #endif
 
-   rt_thread_t tid_chassis = RT_NULL;
+    rt_thread_t tid_chassis = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
     tid_chassis = rt_thread_create("chassis_mai",

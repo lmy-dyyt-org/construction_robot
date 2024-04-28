@@ -4,7 +4,8 @@
     "ulog.h": "c",
     "chassis_module_mai_ops.h": "c",
     "chassis_module_mai.h": "c",
-    "follow_line.h": "c"
+    "follow_line.h": "c",
+    "chassis.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
