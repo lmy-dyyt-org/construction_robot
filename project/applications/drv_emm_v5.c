@@ -22,7 +22,7 @@ int motor_vel = 150;
 // #define motor_acc 0xff
 // #define motor_vel 150
 //v=0.1 m/s
-
+int gap_time = 10;
 
 void emm_transmit(uint8_t *data, uint8_t len)
 {
@@ -655,7 +655,7 @@ void drv_emm_v5_entry(void *t)
         real_corexy.x = (float)(left_stepper_pulse - right_stepper_pulse) * 0.04f / (float)(256*200);
         real_corexy.y = (float)(left_stepper_pulse + right_stepper_pulse) * 0.04f / (float)(256*200);
 
-        rt_thread_mdelay(325);//150有点震
+        rt_thread_mdelay(gap_time);//150有点震
     }
 }
 

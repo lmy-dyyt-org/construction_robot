@@ -22,6 +22,7 @@
 #include "drv_corexy.h"
 #include "drv_emm_v5.h"
 
+
 Point imagecenter={0,0};//corexy到绘图坐标系的偏移
 Point rightbottom;//corexy坐标系下图像的右下角顶点 (给插值器用的零点)
 
@@ -59,7 +60,7 @@ enum{
 int draw_square(void)
 {
 #define delta 0.005  
-    int gap_time = 0 ;
+
     static float draw_x = 0; 
     // static float tmp = 0;
     // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
@@ -107,7 +108,7 @@ int draw_square(void)
             if(draw_points.y == c)
             {
                 step = B;
-                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间
+                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
                 break;
             }
 
@@ -115,9 +116,9 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_a,draw_points.x);
             draw_points.y = square_interpolation_a.Interpolation_Out;
 
-            graphics2corexy(&now_points, &draw_points);
-            corexy_absolute_move(&corexy,now_points.x,now_points.y);
-            gap_time = fabs((draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ; 
+            // graphics2corexy(&now_points, &draw_points);
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);//这里还是需要丢点的（全局变量的core xy 坐标），不然你这里的延时毫无意义了
+            gap_time = fabs((draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
             rt_thread_mdelay(gap_time);
             break;
         case B:
@@ -132,8 +133,8 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_b,draw_points.x);
             draw_points.y = square_interpolation_b.Interpolation_Out;
 
-            graphics2corexy(&now_points, &draw_points);
-            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            // graphics2corexy(&now_points, &draw_points);
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);
             gap_time =  fabs((delta / ((motor_vel*0.04f)/60.f))*1000) ;         
             rt_thread_mdelay(gap_time);     
             break;
@@ -148,8 +149,8 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
             
-            graphics2corexy(&now_points, &draw_points);
-            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            // graphics2corexy(&now_points, &draw_points);
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);
             gap_time = fabs( ( draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ;         
             rt_thread_mdelay(gap_time);             
             break;
@@ -165,8 +166,8 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_d,draw_points.x);
             draw_points.y = square_interpolation_d.Interpolation_Out;
             
-            graphics2corexy(&now_points, &draw_points);
-            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            // graphics2corexy(&now_points, &draw_points);
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);
             gap_time = fabs( (delta / ((motor_vel*0.04f)/60.f))*1000) ;         
             rt_thread_mdelay(gap_time);
             break;    
