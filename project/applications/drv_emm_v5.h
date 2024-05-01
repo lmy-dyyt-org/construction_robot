@@ -50,20 +50,23 @@ extern stepper_motor_t stepper11;
 /**********************************************************
 *** 注意：每个函数的参数的具体说明，请查阅下方的函数的注释说明
 **********************************************************/
-void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr); // 将当前位置清零
-void Emm_V5_Reset_Clog_Pro(uint8_t addr); // 解除堵转保护
-void Emm_V5_Read_Sys_Params(uint8_t addr, SysParams_t s); // 读取参数
-void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, bool svF, uint8_t ctrl_mode); // 发送命令修改开环/闭环控制模式
-void Emm_V5_En_Control(uint8_t addr, bool state, bool snF); // 电机使能控制
-void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool snF); // 速度模式控制
-void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF); // 位置模式控制
-void Emm_V5_Stop_Now(uint8_t addr, bool snF); // 让电机立即停止运动
-void Emm_V5_Synchronous_motion(uint8_t addr); // 触发多机同步开始运动
-void Emm_V5_Origin_Set_O(uint8_t addr, bool svF); // 设置单圈回零的零点位置
-void Emm_V5_Origin_Modify_Params(uint8_t addr, bool svF, uint8_t o_mode, uint8_t o_dir, uint16_t o_vel, uint32_t o_tm, uint16_t sl_vel, uint16_t sl_ma, uint16_t sl_ms, bool potF); // 修改回零参数
-void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, bool snF); // 发送命令触发回零
-void Emm_V5_Origin_Interrupt(uint8_t addr); // 强制中断并退出回零
-void Emm_V5_Receive_Data(uint8_t *rxCmd, uint8_t *rxCount); // 返回数据接收函数
+void Emm_V5_Reset_CurPos_To_Zero(stepper_motor_t *motor); // 将当前位置清零
+void Emm_V5_Reset_Clog_Pro(stepper_motor_t *motor); // 解除堵转保护
+
+void Emm_V5_Read_Sys_Params(stepper_motor_t *motor, SysParams_t s); // 读取参数
+
+void Emm_V5_Modify_Ctrl_Mode(stepper_motor_t *motor, bool svF, uint8_t ctrl_mode); // 发送命令修改开环/闭环控制模式
+void Emm_V5_En_Control(stepper_motor_t *motor, bool state, bool snF); // 电机使能控制
+void Emm_V5_Vel_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8_t acc, bool snF); // 速度模式控制
+
+void Emm_V5_Pos_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF); // 位置模式控制
+
+void Emm_V5_Stop_Now(stepper_motor_t *motor, bool snF); // 让电机立即停止运动
+void Emm_V5_Synchronous_motion(stepper_motor_t *motor); // 触发多机同步开始运动
+void Emm_V5_Origin_Set_O(stepper_motor_t *motor, bool svF); // 设置单圈回零的零点位置
+void Emm_V5_Origin_Modify_Params(stepper_motor_t *motor, bool svF, uint8_t o_mode, uint8_t o_dir, uint16_t o_vel, uint32_t o_tm, uint16_t sl_vel, uint16_t sl_ma, uint16_t sl_ms, bool potF); // 修改回零参数
+void Emm_V5_Origin_Trigger_Return(stepper_motor_t *motor, uint8_t o_mode, bool snF); // 发送命令触发回零
+void Emm_V5_Origin_Interrupt(stepper_motor_t *motor); // 强制中断并退出回零
 
 
 
