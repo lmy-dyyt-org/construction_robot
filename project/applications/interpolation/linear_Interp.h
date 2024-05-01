@@ -46,6 +46,7 @@ typedef struct {
     float y2[8]; // 二阶导数数组
 } SplineInterpolation;
 
+struct Interpolation_handle_t;
 typedef struct Interpolation_handle_t
 {
     Point original_points[8];
@@ -54,15 +55,15 @@ typedef struct Interpolation_handle_t
     void* Interpolation_driver_handle;
 
     // 调用拟合
-    int (*Cre)(void* Interpolation_driver_handle);
+    int (*Cre)(struct Interpolation_handle_t* Interpolation_driver_handle);
     // 调用计算
-    float (*Cal)(void* Interpolation_driver_handle, float x);
+    float (*Cal)(struct Interpolation_handle_t* Interpolation_driver_handle, float x);
 
     float Interpolation_Out;
 
 }Interpolation_handle_t;
 
-int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle, int (*Cre)(void* Interpolation_driver_handle), float (*Cal)(void* Interpolation_driver_handle, float x), Point* original_points, int size);
+int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle, int (*Cre)(Interpolation_handle_t* Interpolation_driver_handle), float (*Cal)(Interpolation_handle_t* Interpolation_driver_handle, float x), Point* original_points, int size);
 float Interpolate(Interpolation_handle_t* interp, float x);
 
 int Linear_Interpolation_Init(LinearInterpolation* interp);//先有驱动（底层），再有调用
@@ -73,7 +74,7 @@ int Quadratic_Interpolation_Init(QuadraticFitInterpolation* interp);
 int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp);// 初始化拟合曲线
 float Quadratic_Interpolate(Interpolation_handle_t* interp, float x);
 
-int Lagrange_Interpolation_Init(LagrangeInterpolation* interp);int Lagrange_Interpolation_Init(LagrangeInterpolation* interp);
+int Lagrange_Interpolation_Init(LagrangeInterpolation* interp);
 float lagrangeBasePoly(Interpolation_handle_t* interp, int index, float x);
 float Lagrange_Interpolate(Interpolation_handle_t* interp, float x);
 

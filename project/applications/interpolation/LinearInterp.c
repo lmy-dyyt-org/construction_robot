@@ -3,7 +3,7 @@
 #include <stdlib.h>
 //#include <malloc.h>
 
-int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle,  int (*Cre)(void* Interpolation_driver_handle), float (*Cal)(void* Interpolation_driver_handle, float x), Point* original_points, int size)
+int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle,  int (*Cre)(Interpolation_handle_t* Interpolation_driver_handle), float (*Cal)(Interpolation_handle_t* Interpolation_driver_handle, float x), Point* original_points, int size)
 {
     interp->Interpolation_driver_handle = Interpolation_driver_handle;
     interp->Cal = Cal;

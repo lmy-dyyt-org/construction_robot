@@ -7,7 +7,6 @@
 
 corexy_t corexy;
 
-
 int corexy_init(corexy_t *corexy)//归位 左下角 0，0
 {
     corexy->x = 0;
@@ -38,7 +37,6 @@ void corexy_entry(void *t)
     while (1)
     {
         //视觉传入图像，计算插补
-
 
 
         rt_thread_mdelay(100);

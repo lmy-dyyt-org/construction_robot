@@ -19,74 +19,141 @@
 //#include "PathFinder.h"
 #include "aboard_power_switch.h"
 #include "linear_Interp.h"
+#include "drv_corexy.h"
 
-Point offset;//corexy到绘图坐标系的偏移
+Point imagecenter;//corexy到绘图坐标系的偏移
+Point rightbottom;//corexy坐标系下图像的右下角顶点 (给插值器用的零点)
 
+Interpolation_handle_t square_interpolation_a;
+LinearInterpolation square_interpolation_handle_a;
+Interpolation_handle_t square_interpolation_b;
+LinearInterpolation square_interpolation_handle_b;
+Interpolation_handle_t square_interpolation_c;
+LinearInterpolation square_interpolation_handle_c;
+Interpolation_handle_t square_interpolation_d;
+LinearInterpolation square_interpolation_handle_d;
 
-Point rightbottom;//corexy坐标系下图像的右下角顶点
+Point now_points = {0,0};
 
-
-void corexy2graphics(const Point* corexy,Point* graphics)
-{
-    graphics->x = corexy->x + offset.x;
-    graphics->y = corexy->y + offset.y;
-}
+// void corexy2graphics(const Point* corexy,Point* graphics)
+// {
+//     graphics->x = corexy->x + imagecenter.x;
+//     graphics->y = corexy->y + imagecenter.y;
+// }
 
 void graphics2corexy(Point* corexy,const Point* graphics)
 {
-    corexy->x = graphics->x - offset.x;
-    corexy->y = graphics->y - offset.y;
+    corexy->x = graphics->x + imagecenter.x;
+    corexy->y = graphics->y + imagecenter.y;
 }
 enum{
     A=0U,
     B, 
     C,
     D,
-}
+};
 
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
-int draw_square(uint32_t time_ms,Point* out)
+int draw_square(uint32_t time_ms)
 {
-    static Point points[4];
+
+    static float delta = 0;
+    delta = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float c = 0; //边长
+    c = delta/sqrt(2);
+
+    // static Point points_01[2]={{0,0},{0,c}};
+    // static Point points_12[2]={{0,c},{-c,c}};
+    // static Point points_23[2]={{-c,c},{-c,0}};
+    // static Point points_30[2]={{-c,0},{0,0}};
+
+    static Point points_01[2]={0};
+    static Point points_12[2]={0};
+    static Point points_23[2]={0};
+    static Point points_30[2]={0};
+
+    points_01[1].y=c;
+    points_12[0].y=c; points_12[1].x=-c; points_12[1].y=c;
+    points_23[0].x=-c; points_23[0].y=c; points_23[1].x=-c;
+    points_30[0].x=-c;
+
+    static Point draw_points={0,0};
+
+    if(time_ms == 0)
+    {
+        Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
+        Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
+        Interpolation_Init(&square_interpolation_c, &square_interpolation_handle_c, Linear_Interpolation_Creat,Linear_Interpolate,points_23, 2);
+        Interpolation_Init(&square_interpolation_d, &square_interpolation_handle_d, Linear_Interpolation_Creat,Linear_Interpolate,points_30, 2);
+    }
+    
     static int step=A;//用于指示哪一段曲线a,b,c,d
-    /*绘图坐标系下图像中心为原点00
+    /*绘图坐标系下 以右下角为原点 （0，0）
    2____b____1
     |       |
    c|       |a
    3|___d___|0
     */
-    if(time_ms == 0)
+   if(draw_points.x==0 && draw_points.y>0 && draw_points.y<c)
     {
-        corexy2graphics(&rightbottom,points[0]);
-        point[1].x = points[0].x;
-        point[1].y = -points[0].y;
-
-        point[2].x = -points[0].x;
-        point[2].y = -points[0].y;
-
-        point[3].x = -points[0].x;
-        point[3].y = points[0].y;
+        step = A;
     }
+    else if (draw_points.y==c)
+    {
+        step = B;
+    }
+    else if (draw_points.x==-c && draw_points.y>0 && draw_points.y<c)
+    {
+        step = C;
+    }
+    else if(draw_points.y==0)
+    {
+        step = D;
+    }    
+    else
+    {
+        LOG_E("draw error!");
+    }
+
     switch(step)
     {
         case A:
-            if(time_ms < 1000)
-            {
-                out->x += points[0].x;
-                out->y += points[0].y;
-                if(out->x>points[1].x)out->x=points[1].x;
-                if(out->y>points[1].y)out->y=points[1].y;
-                if(out->x == points[1].x && out->y == points[1].y)step=B;
-            }else{
-                step = B;
-            }
-        break;
+            Linear_Interpolate(&square_interpolation_a,time_ms);
+            draw_points.x = time_ms; 
+            draw_points.y = square_interpolation_a.Interpolation_Out;
+            graphics2corexy(&now_points, &draw_points);
+            break;
+        case B:
+            Linear_Interpolate(&square_interpolation_b,time_ms);
+            draw_points.x = time_ms; 
+            draw_points.y = square_interpolation_b.Interpolation_Out;
+            graphics2corexy(&now_points, &draw_points);
+            break;
+        case C:
+            Linear_Interpolate(&square_interpolation_c,time_ms);
+            draw_points.x = time_ms; 
+            draw_points.y = square_interpolation_c.Interpolation_Out;
+            graphics2corexy(&now_points, &draw_points);
+            break;
+        case D:
+            Linear_Interpolate(&square_interpolation_d,time_ms);
+            draw_points.x = time_ms; 
+            draw_points.y = square_interpolation_d.Interpolation_Out;
+            graphics2corexy(&now_points, &draw_points);
+            break;                                    
     }
-            
+    
+    return 0;
 }
 void rbmg_handle(void*param)
 {
-    while(1){
+
+    while(1)
+    {
+        now_points.x = corexy.x; 
+        now_points.y = corexy.y; 
+
+
         rt_thread_mdelay(100);
     }
 }
