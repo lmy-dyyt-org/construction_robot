@@ -4,9 +4,10 @@
 #include <rtdbg.h>
 #define DBG_TAG "corxy"
 #define DBG_LVL DBG_LOG
+#include "math.h"
 
 corexy_t corexy;
-
+corexy_t real_corexy;
 int corexy_init(corexy_t *corexy)//归位 左下角 0，0
 {
     corexy->x = 0;
@@ -14,14 +15,14 @@ int corexy_init(corexy_t *corexy)//归位 左下角 0，0
     return 0;
 }
 
-int corexy_relative_move(corexy_t *corexy,int x,int y)//x,y为增量
+int corexy_relative_move(corexy_t *corexy,float x,float y)//x,y为增量
 {
     corexy->x += x;
     corexy->y += y;
     return 0;
 }
 
-int corexy_absolute_move(corexy_t *corexy,int x,int y)//x,y为坐标
+int corexy_absolute_move(corexy_t *corexy,float x,float y)//x,y为坐标
 {
     corexy->x = x;
     corexy->y = y;
@@ -32,11 +33,12 @@ void corexy_entry(void *t)
 {
     corexy_init(&corexy);
 
-    corexy.x = 0.05; //m
-    corexy.y = 0.05;
+    corexy.x = 0; //m
+    corexy.y = 0;
     while (1)
     {
         //视觉传入图像，计算插补
+
 
 
         rt_thread_mdelay(100);

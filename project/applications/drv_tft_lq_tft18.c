@@ -80,7 +80,7 @@ TFTSPI_Init(1);
 TFTSPI_Test();
   /* USER CODE END SPI4_Init 2 */
 	return 0;
-}INIT_COMPONENT_EXPORT(MX_SPI4_Init);
+}//INIT_COMPONENT_EXPORT(MX_SPI4_Init);
 
 
 /*!

@@ -20,8 +20,9 @@
 #include "aboard_power_switch.h"
 #include "linear_Interp.h"
 #include "drv_corexy.h"
+#include "drv_emm_v5.h"
 
-Point imagecenter;//corexy到绘图坐标系的偏移
+Point imagecenter={0,0};//corexy到绘图坐标系的偏移
 Point rightbottom;//corexy坐标系下图像的右下角顶点 (给插值器用的零点)
 
 Interpolation_handle_t square_interpolation_a;
@@ -51,16 +52,20 @@ enum{
     B, 
     C,
     D,
+    OVER,
 };
 
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
-int draw_square(uint32_t time_ms)
+int draw_square(void)
 {
-
-    static float delta = 0;
-    delta = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+#define delta 0.005  
+    int gap_time = 0 ;
+    static float draw_x = 0; 
+    // static float tmp = 0;
+    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
     static float c = 0; //边长
-    c = delta/sqrt(2);
+    // c = tmp/sqrt(2);
+    c=0.1;
 
     // static Point points_01[2]={{0,0},{0,c}};
     // static Point points_12[2]={{0,c},{-c,c}};
@@ -79,7 +84,7 @@ int draw_square(uint32_t time_ms)
 
     static Point draw_points={0,0};
 
-    if(time_ms == 0)
+    if(draw_x == 0)
     {
         Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
         Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
@@ -88,61 +93,95 @@ int draw_square(uint32_t time_ms)
     }
     
     static int step=A;//用于指示哪一段曲线a,b,c,d
-    /*绘图坐标系下 以右下角为原点 （0，0）
+    /*绘图坐标系下 以图形中心为原点 （0，0）
    2____b____1
     |       |
    c|       |a
    3|___d___|0
     */
-   if(draw_points.x==0 && draw_points.y>0 && draw_points.y<c)
-    {
-        step = A;
-    }
-    else if (draw_points.y==c)
-    {
-        step = B;
-    }
-    else if (draw_points.x==-c && draw_points.y>0 && draw_points.y<c)
-    {
-        step = C;
-    }
-    else if(draw_points.y==0)
-    {
-        step = D;
-    }    
-    else
-    {
-        LOG_E("draw error!");
-    }
+
 
     switch(step)
     {
         case A:
-            Linear_Interpolate(&square_interpolation_a,time_ms);
-            draw_points.x = time_ms; 
+            if(draw_points.y == c)
+            {
+                step = B;
+                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间
+                break;
+            }
+
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_a,draw_points.x);
             draw_points.y = square_interpolation_a.Interpolation_Out;
+
             graphics2corexy(&now_points, &draw_points);
+            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time = fabs((draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ; 
+            rt_thread_mdelay(gap_time);
             break;
         case B:
-            Linear_Interpolate(&square_interpolation_b,time_ms);
-            draw_points.x = time_ms; 
+            if(draw_points.x == -c)
+            {
+                step = C;
+                 rt_thread_mdelay(2000); 
+                break;
+            }
+            draw_x = draw_x - delta;
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_b,draw_points.x);
             draw_points.y = square_interpolation_b.Interpolation_Out;
+
             graphics2corexy(&now_points, &draw_points);
+            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time =  fabs((delta / ((motor_vel*0.04f)/60.f))*1000) ;         
+            rt_thread_mdelay(gap_time);     
             break;
         case C:
-            Linear_Interpolate(&square_interpolation_c,time_ms);
-            draw_points.x = time_ms; 
+            if(draw_points.y == 0)
+            {
+                step = D;
+                 rt_thread_mdelay(2000); 
+                break;
+            }
+            draw_points.x = draw_x;        
+            Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
+            
             graphics2corexy(&now_points, &draw_points);
+            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time = fabs( ( draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ;         
+            rt_thread_mdelay(gap_time);             
             break;
         case D:
-            Linear_Interpolate(&square_interpolation_d,time_ms);
-            draw_points.x = time_ms; 
+            if(draw_points.x == 0)
+            {
+                step = OVER;
+                 rt_thread_mdelay(2000); 
+                break;
+            }
+            draw_x = draw_x + delta;
+            draw_points.x = draw_x;        
+            Linear_Interpolate(&square_interpolation_d,draw_points.x);
             draw_points.y = square_interpolation_d.Interpolation_Out;
+            
             graphics2corexy(&now_points, &draw_points);
-            break;                                    
+            corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time = fabs( (delta / ((motor_vel*0.04f)/60.f))*1000) ;         
+            rt_thread_mdelay(gap_time);
+            break;    
+        default:
+            // LOG_E("step error case");         
+            break;                       
     }
-    
+    if(draw_points.y>c) draw_points.y=c;
+    if(draw_points.y<0) draw_points.y=0;
+    if(draw_points.x<-c) draw_points.x=-c;
+    if(draw_points.x>0) draw_points.x=0;
+
+    graphics2corexy(&now_points, &draw_points);
+    corexy_absolute_move(&corexy,now_points.x,now_points.y);
+    //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
     return 0;
 }
 void rbmg_handle(void*param)
@@ -150,11 +189,11 @@ void rbmg_handle(void*param)
 
     while(1)
     {
-        now_points.x = corexy.x; 
-        now_points.y = corexy.y; 
+        now_points.x = corexy.x ; 
+        now_points.y = corexy.y ; 
 
-
-        rt_thread_mdelay(100);
+        draw_square();
+        rt_thread_mdelay(5);
     }
 }
 

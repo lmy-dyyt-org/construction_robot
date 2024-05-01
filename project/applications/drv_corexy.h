@@ -14,8 +14,13 @@ typedef struct
 }corexy_t;
 
 extern corexy_t corexy;
+extern corexy_t real_corexy;
 	
-	
+
+int corexy_init(corexy_t *corexy);
+int corexy_relative_move(corexy_t *corexy,float x,float y);
+int corexy_absolute_move(corexy_t *corexy,float x,float y);
+
 #ifdef __cplusplus
 }
 #endif

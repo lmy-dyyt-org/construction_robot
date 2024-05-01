@@ -5,6 +5,7 @@
 #define DBG_LVL DBG_LOG
 #include "drv_emm_v5.h"
 #include "drv_corexy.h"
+#include "math.h"
 
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 rt_mutex_t mutex_step = RT_NULL; // 互斥锁
@@ -15,6 +16,13 @@ uint8_t Emm_rx_buf[64] = {0};
 
 stepper_motor_t left_stepper;
 stepper_motor_t right_stepper;
+
+int motor_acc = 0xff;
+int motor_vel = 150;
+// #define motor_acc 0xff
+// #define motor_vel 150
+//v=0.1 m/s
+
 
 void emm_transmit(uint8_t *data, uint8_t len)
 {
@@ -370,6 +378,19 @@ void Emm_V5_Pos_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8
     // 发送命令
     emm_transmit(cmd, 13);
     emm_wait_for_ack(motor,cmd[1]);
+
+    // LOG_D("move start");
+    // while( 1 )
+    // {
+    //     if(fabs(corexy.x - real_corexy.x) < 0.001f  &&  fabs(corexy.y-real_corexy.y) < 0.001f)
+    //     {
+    //         real_corexy.x = corexy.x;
+    //         real_corexy.y = corexy.y;
+    //         LOG_D("move ok");
+    //         break;
+    //     }
+        
+    // }
 }
 
 /**
@@ -539,7 +560,7 @@ rt_err_t emm_uart_rx_ind(rt_device_t dev, rt_size_t size)
 
 void drv_emm_v5_entry(void *t)
 {
-    rt_thread_mdelay(1000); //等待步进上电
+    rt_thread_mdelay(2000); //等待步进上电
     /* 查找系统中的串口设备 */
     Emm_serial1 = rt_device_find("uart8");
 	if(Emm_serial1==RT_NULL)return ;
@@ -602,8 +623,7 @@ void drv_emm_v5_entry(void *t)
     int left_stepper_pulse = 0;
     int right_stepper_pulse = 0;
 
-#define motor_acc 0xff
-#define motor_vel 150
+
 
     while (1)
     {
@@ -629,10 +649,13 @@ void drv_emm_v5_entry(void *t)
         {
             Emm_V5_Pos_Control(&right_stepper, 0, motor_vel, motor_acc, -right_stepper_pulse, 1, 0);
         }
-        rt_thread_mdelay(500);
+
         Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
         Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
-        rt_thread_mdelay(500);
+        real_corexy.x = (float)(left_stepper_pulse - right_stepper_pulse) * 0.04f / (float)(256*200);
+        real_corexy.y = (float)(left_stepper_pulse + right_stepper_pulse) * 0.04f / (float)(256*200);
+
+        rt_thread_mdelay(325);//150有点震
     }
 }
 
