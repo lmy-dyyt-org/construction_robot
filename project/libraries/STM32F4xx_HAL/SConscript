@@ -45,6 +45,8 @@ if GetDepend(['RT_USING_USB']):
 
 if GetDepend(['RT_USING_CAN']):
     src += ['STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c']
+    src += ['STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c']
+    src += ['STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_qspi.c']
 
 if GetDepend(['RT_USING_HWTIMER']) or GetDepend(['RT_USING_PWM']) or GetDepend(['RT_USING_PULSE_ENCODER']):
     src += ['STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c']
