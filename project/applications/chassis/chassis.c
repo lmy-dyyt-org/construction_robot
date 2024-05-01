@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 09:10:28
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-28 00:35:01
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-04-28 19:58:40
  * @FilePath: \project\applications\chassis\chassis.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,6 +11,7 @@
 #include "stddef.h"
 #include "ulog.h"
 #include "apid.h"
+#include "float.h"
 
 apid_t pid_offset;
 int chassis_init(chassis_t *chassis, chassis_ops_t *ops)
@@ -42,9 +43,9 @@ void chassis_init_curve(CurveObjectType *curve)
     curve->startPos = 0.0f; // 初始位置
     curve->currentPos = 0.0f;
     curve->stepPos = 0.1f; // 位置变化的步长
-    curve->max_pos = 1500.0f;
-    curve->PosMax = curve->max_pos;  // 最大位置限制
-    curve->PosMin = -curve->max_pos; // 最小位置限制
+    //curve->max_pos = 1500.0f;
+    curve->PosMax = FLT_MAX;  // 最大位置限制
+    curve->PosMin = -FLT_MAX; // 最小位置限制
     curve->aTimes = 0;               // 当前时间步
     curve->maxTimes = 500;           // 总时间步，实际使用时需要根据实际情况计算
     curve->curveMode = CURVE_SPTA;   // 使用S型曲线
@@ -59,48 +60,23 @@ void chassis_planning_(CurveObjectType *curve, float *out)
         *out = curve->currentPos;
     }
 }
-void chassis_check_planning(chassis_t *chassis)
-{
-    if (chassis->plan.curve_x.maxTimes == 0 && chassis->plan.curve_y.maxTimes == 0 && chassis->plan.curve_w.maxTimes == 0)
-    {
-        chassis->plan.is_planning = 0;
-    }
-    else
-    {
-        chassis->plan.is_planning = 1;
-    }
-}
+
 int chassis_set_pos_plan(chassis_t *chassis, chassis_pos_t *data)
 {
     chassis->target.pos = *data;
 
-    chassis_init_curve(&chassis->plan.curve_x);
-    chassis_init_curve(&chassis->plan.curve_y);
-    chassis_init_curve(&chassis->plan.curve_w);
-
-    chassis->plan.curve_x.targetPos = data->x_m;
-    chassis->plan.curve_y.targetPos = data->y_m;
-    chassis->plan.curve_w.targetPos = data->z_rad;
-
-    chassis->plan.curve_x.startPos = chassis->present.pos.x_m;
-    chassis->plan.curve_y.startPos = chassis->present.pos.y_m;
-    chassis->plan.curve_w.startPos = chassis->present.pos.z_rad;
-
-    chassis_check_planning(chassis);
-    chassis_planning_(&chassis->plan.curve_x, &chassis->target.pos.x_m);
-    chassis_planning_(&chassis->plan.curve_y, &chassis->target.pos.y_m);
-    chassis_planning_(&chassis->plan.curve_w, &chassis->target.pos.z_rad);
+    chassis->ops->plan_init(chassis,&chassis->present,&chassis->target);
+    chassis->ops->plan(chassis,&chassis->target);
+    chassis->run_status = CHASSIS_POS;
 
     LOG_D("target_x %f target_y %f target_w %f",chassis->target.pos.x_m,chassis->target.pos.y_m,chassis->target.pos.z_rad);
-    // mine_plan(&chassis->plan.curve_x);
-    // mine_plan(&chassis->plan.curve_y);
-    // mine_plan(&chassis->plan.curve_w);
-    // chassis->target.pos.x_m = chassis->plan.curve_x.currentPos;
-    // chassis->target.pos.y_m = chassis->plan.curve_y.currentPos;
-    // chassis->target.pos.z_rad = chassis->plan.curve_w.currentPos;
+		return 0;
+
+
 }
 int chassis_set_speed_plan(chassis_t *chassis, chassis_speed_t *data)
 {
+	return 0;
 }
 const chassis_pos_t *chassis_get_pos(chassis_t *chassis)
 {
@@ -177,7 +153,7 @@ rt_weak void chassis_updata_offset(chassis_t *chassis, int time_ms)
 
 void chassis_planning_if(chassis_t *chassis, int time_ms)
 {
-    //chassis_check_planning(chassis);
+   // chassis_check_planning(chassis);
     if (chassis->plan.is_planning)
     {
         chassis->ops->plan(chassis,&chassis->target);
@@ -197,6 +173,8 @@ void chassis_planning_if(chassis_t *chassis, int time_ms)
  */
 int chassis_handle(chassis_t *chassis, int time_ms)
 {
+	    static int cnt=0;
+
     if (chassis == NULL)
     {
         CHASSIS_LOG("chassis is NULL\n");
@@ -211,6 +189,9 @@ int chassis_handle(chassis_t *chassis, int time_ms)
     switch (chassis->run_status)
     {
     case CHASSIS_IDLE:
+    if(cnt++%10==0){
+        CHASSIS_LOG("chassis status IDEL\n",1);
+    }
         break;
     case CHASSIS_SPEED:
         chassis_drv_set_speed(chassis);

@@ -56,7 +56,7 @@ rt_err_t uart_rx_ind(rt_device_t dev, rt_size_t size)
 				rt_pin_write(GET_PIN(G,7),1);
 		 	break;								
 		 default:
-		 	LOG_E("color error!");
+		 	//LOG_E("color error!");
 //		 	color_type = NONE;
 			 	rt_pin_write(GET_PIN(G,1),1);
 				rt_pin_write(GET_PIN(G,3),1);

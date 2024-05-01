@@ -18,6 +18,7 @@
 #include <ruckig/velocity.hpp>
 
 
+
 namespace ruckig {
 
 //! Calculation class for a state-to-state trajectory.

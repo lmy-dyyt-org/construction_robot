@@ -330,7 +330,7 @@
             <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>6</v6Lang>
-            <v6LangP>8</v6LangP>
+            <v6LangP>9</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
@@ -5386,66 +5386,6 @@
               <FileName>console_be.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\utilities\ulog\backend\console_be.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ruckig</GroupName>
-          <Files>
-            <File>
-              <FileName>brake.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\brake.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_first_step1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_first_step1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_first_step2.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_first_step2.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_second_step1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_second_step1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_second_step2.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_second_step2.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_third_step1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_third_step1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>position_third_step2.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\position_third_step2.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>velocity_second_step1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\velocity_second_step1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>velocity_second_step2.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\velocity_second_step2.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>velocity_third_step1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\velocity_third_step1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>velocity_third_step2.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\applications\ruckig\velocity_third_step2.cpp</FilePath>
             </File>
           </Files>
         </Group>

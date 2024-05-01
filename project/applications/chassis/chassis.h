@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-30 21:11:21
- * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-28 00:26:58
+ * @LastEditors: Dyyt587 805207319@qq.com
+ * @LastEditTime: 2024-04-28 19:39:03
  * @FilePath: \project\applications\chassis\chassis.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -56,11 +56,15 @@ struct chassis_planning{
     chassis_data_t plan_start;
     chassis_data_t plan_end;
 
-    CurveObjectType curve_x;
-    CurveObjectType curve_y;
+    // CurveObjectType curve_x;
+    // CurveObjectType curve_y;
 
     CurveObjectType curve_xy;/*xy 方向的向量*/
     CurveObjectType curve_w;
+
+	float stepPos;  //位置变化步长， 
+	int maxTimes;   //调速跨度,最大执行时间
+	float flexible;     //S曲线拉伸度,柔性因子
 };
 
 typedef struct chassis_ops
@@ -72,6 +76,7 @@ typedef struct chassis_ops
     int (*driver)(struct chassis *chassis, const void *input, const void *output,chassis_status require_cmd);
     void* date;/* 用于保存相互传递的数据 */
 
+    int (*plan_init)(struct chassis *chassis, chassis_data_t *present, chassis_data_t *target);
     int (*plan)(struct chassis *chassis, chassis_data_t *outdata);
 } chassis_ops_t;
 typedef struct chassis
