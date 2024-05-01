@@ -6,36 +6,36 @@
 extern "C" {
 #endif
 
-// ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚ´æ´¢ÏßĞÔ²åÖµËùĞèµÄÒÑÖªµã
+// å®šä¹‰ä¸€ä¸ªç»“æ„ä½“ç”¨äºå­˜å‚¨çº¿æ€§æ’å€¼æ‰€éœ€çš„å·²çŸ¥ç‚¹
 typedef struct {
     float x;
     float y;
 } Point;
 
-// ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚ´æ´¢ÏßĞÔ²åÖµµÄÏà¹ØĞÅÏ¢
+// å®šä¹‰ä¸€ä¸ªç»“æ„ä½“ç”¨äºå­˜å‚¨çº¿æ€§æ’å€¼çš„ç›¸å…³ä¿¡æ¯
 typedef struct {
 
-    float slope; // Ğ±ÂÊ
+    float slope; // æ–œç‡
 
 } LinearInterpolation;
 
 
-// ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚ´æ´¢ÏßĞÔ²åÖµµÄÏà¹ØĞÅÏ¢
+// å®šä¹‰ä¸€ä¸ªç»“æ„ä½“ç”¨äºå­˜å‚¨çº¿æ€§æ’å€¼çš„ç›¸å…³ä¿¡æ¯
 /*
     
 */
 typedef struct {
 
-    Point ori; // Ô­µã
-    Point cfg; // x°ë³¤Öá y°ë¶ÌÖá
+    Point ori; // åŸç‚¹
+    Point cfg; // xåŠé•¿è½´ yåŠçŸ­è½´
 } CircleInterpolation_t;
 
 
 
 typedef struct {
-    float a; // ¶ş´ÎÏîÏµÊı
-    float b; // Ò»´ÎÏîÏµÊı
-    float c; // ³£ÊıÏî
+    float a; // äºŒæ¬¡é¡¹ç³»æ•°
+    float b; // ä¸€æ¬¡é¡¹ç³»æ•°
+    float c; // å¸¸æ•°é¡¹
 } QuadraticFitInterpolation;
 
 typedef struct {
@@ -43,7 +43,7 @@ typedef struct {
 } LagrangeInterpolation;
 
 typedef struct {
-    float y2[8]; // ¶ş½×µ¼ÊıÊı×é
+    float y2[8]; // äºŒé˜¶å¯¼æ•°æ•°ç»„
 } SplineInterpolation;
 
 typedef struct Interpolation_handle_t
@@ -53,9 +53,9 @@ typedef struct Interpolation_handle_t
 
     void* Interpolation_driver_handle;
 
-    // µ÷ÓÃÄâºÏ
+    // è°ƒç”¨æ‹Ÿåˆ
     int (*Cre)(void* Interpolation_driver_handle);
-    // µ÷ÓÃ¼ÆËã
+    // è°ƒç”¨è®¡ç®—
     float (*Cal)(void* Interpolation_driver_handle, float x);
 
     float Interpolation_Out;
@@ -65,12 +65,12 @@ typedef struct Interpolation_handle_t
 int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle, int (*Cre)(void* Interpolation_driver_handle), float (*Cal)(void* Interpolation_driver_handle, float x), Point* original_points, int size);
 float Interpolate(Interpolation_handle_t* interp, float x);
 
-int Linear_Interpolation_Init(LinearInterpolation* interp);//ÏÈÓĞÇı¶¯£¨µ×²ã£©£¬ÔÙÓĞµ÷ÓÃ
-int Linear_Interpolation_Creat(Interpolation_handle_t* interp);// ³õÊ¼»¯ÄâºÏÇúÏß 
+int Linear_Interpolation_Init(LinearInterpolation* interp);//å…ˆæœ‰é©±åŠ¨ï¼ˆåº•å±‚ï¼‰ï¼Œå†æœ‰è°ƒç”¨
+int Linear_Interpolation_Creat(Interpolation_handle_t* interp);// åˆå§‹åŒ–æ‹Ÿåˆæ›²çº¿ 
 float Linear_Interpolate(Interpolation_handle_t* interp, float x);
 
 int Quadratic_Interpolation_Init(QuadraticFitInterpolation* interp);
-int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp);// ³õÊ¼»¯ÄâºÏÇúÏß
+int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp);// åˆå§‹åŒ–æ‹Ÿåˆæ›²çº¿
 float Quadratic_Interpolate(Interpolation_handle_t* interp, float x);
 
 int Lagrange_Interpolation_Init(LagrangeInterpolation* interp);int Lagrange_Interpolation_Init(LagrangeInterpolation* interp);

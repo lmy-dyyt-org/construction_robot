@@ -1,14 +1,14 @@
 #include "linear_Interp.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <rtthread.h>
-#include <rtdevice.h>
+#include <malloc.h>
+
 int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle,  int (*Cre)(void* Interpolation_driver_handle), float (*Cal)(void* Interpolation_driver_handle, float x), Point* original_points, int size)
 {
     interp->Interpolation_driver_handle = Interpolation_driver_handle;
     interp->Cal = Cal;
     for (int i = 0; i < size; ++i) {
-        interp->original_points[i] = original_points[i]; // ¸³ÖµÔ­Ê¼µã
+        interp->original_points[i] = original_points[i]; // èµ‹å€¼åŸå§‹ç‚¹
     }
     interp->Cre = Cre;
     interp->size = size;
@@ -25,24 +25,24 @@ float Interpolate(Interpolation_handle_t* interp, float x)
     return interp->Cal(interp, x);
 }
 
-// ³õÊ¼»¯²åÖµ½á¹¹Ìå
+// åˆå§‹åŒ–æ’å€¼ç»“æ„ä½“
 int Linear_Interpolation_Init(LinearInterpolation* interp)
 {  
 
     return 0;
 }
 
-int Linear_Interpolation_Creat(Interpolation_handle_t* interp)// ³õÊ¼»¯ÄâºÏÇúÏß 
+int Linear_Interpolation_Creat(Interpolation_handle_t* interp)// åˆå§‹åŒ–æ‹Ÿåˆæ›²çº¿ 
 {
     LinearInterpolation* Linear_Interpolation = (LinearInterpolation*)interp->Interpolation_driver_handle;
-    Linear_Interpolation->slope = (interp->original_points[0].y - interp->original_points[1].y) / (interp->original_points[0].x - interp->original_points[1].x); // ¼ÆËãĞ±ÂÊ
+    Linear_Interpolation->slope = (interp->original_points[0].y - interp->original_points[1].y) / (interp->original_points[0].x - interp->original_points[1].x); // è®¡ç®—æ–œç‡
     return 0;
 }
 
-// ¸ù¾İx×ø±ê¼ÆËãyÖµ
+// æ ¹æ®xåæ ‡è®¡ç®—yå€¼
 float Linear_Interpolate(Interpolation_handle_t* interp, float x)
 {
-    // Ê¹ÓÃĞ±ÂÊºÍÒÑÖªµãµÄÖµ¼ÆËãÎ´ÖªµãµÄÖµ
+    // ä½¿ç”¨æ–œç‡å’Œå·²çŸ¥ç‚¹çš„å€¼è®¡ç®—æœªçŸ¥ç‚¹çš„å€¼
     LinearInterpolation* Linear_Interpolation = (LinearInterpolation *)interp->Interpolation_driver_handle;
     float y = interp->original_points[0].y + Linear_Interpolation->slope * (x - interp->original_points[0].x);
     interp->Interpolation_Out = y;
@@ -55,9 +55,9 @@ int Quadratic_Interpolation_Init(QuadraticFitInterpolation* interp)
     return 0;
 }
 
-int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp)// ³õÊ¼»¯ÄâºÏÇúÏß
+int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp)// åˆå§‹åŒ–æ‹Ÿåˆæ›²çº¿
 {
-    if (interp == NULL || interp->size < 3  || interp->Interpolation_driver_handle == NULL) {
+    if (interp == NULL || interp->size < 3 || interp->original_points == NULL || interp->Interpolation_driver_handle == NULL) {
         return -1;
     }
 
@@ -82,13 +82,13 @@ int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp)// ³õÊ¼»¯ÄâºÏÇú
     float meanX2 = sumX2 / interp->size;
     float meanX3 = sumX3 / interp->size;
 
-    // ¼ÆËã¶ş´Î¶àÏîÊ½µÄÏµÊı
+    // è®¡ç®—äºŒæ¬¡å¤šé¡¹å¼çš„ç³»æ•°
     float denom = interp->size * sumX2 - sumX * sumX;
     fitInterpolation->a = (interp->size * sumX2Y - sumX * sumXY) / denom;
     fitInterpolation->b = (interp->size * sumXYSquared - meanX * sumXY) / denom - (2 * meanX * fitInterpolation->a);
     fitInterpolation->c = meanY - fitInterpolation->a * meanX2 - fitInterpolation->b * meanX;
 
-    return 0; // ³É¹¦ÄâºÏ
+    return 0; // æˆåŠŸæ‹Ÿåˆ
 }
 
 
@@ -106,7 +106,7 @@ int Lagrange_Interpolation_Init(LagrangeInterpolation* interp)
     return 0;
 }
 
-// ¼ÆËãÀ­¸ñÀÊÈÕ»ù¶àÏîÊ½ L_i(x)
+// è®¡ç®—æ‹‰æ ¼æœ—æ—¥åŸºå¤šé¡¹å¼ L_i(x)
 float lagrangeBasePoly(Interpolation_handle_t* interp, int index, float x) {
     float result = 1.0;
     for (int j = 0; j < 7; j++) {
@@ -118,7 +118,7 @@ float lagrangeBasePoly(Interpolation_handle_t* interp, int index, float x) {
 }
 
 
-// À­¸ñÀÊÈÕ²åÖµ·¨
+// æ‹‰æ ¼æœ—æ—¥æ’å€¼æ³•
 float Lagrange_Interpolate(Interpolation_handle_t* interp, float x) {
     float result = 0.0;
     for (int i = 0; i < interp->size; i++) {
@@ -148,23 +148,22 @@ int Spline_Interpolation_Creat(Interpolation_handle_t* interp)
         float b;
         float c;
     }tmp_t;
-//    tmp_t* tmp;
-//    if (n < 128) {
-//        tmp = (tmp_t*)alloca(n * sizeof(tmp_t));
-//    }
-//    else {
-//        while (1);
-//    }
-		
-		tmp_t tmp[(n * sizeof(tmp_t))];
-    //if (tmp == 0)return 0;
-    // ¼ÆËã h ºÍ u Êı×é
+    tmp_t* tmp;
+    if (n < 128) {
+        tmp = (tmp_t*)alloca(n * sizeof(tmp_t));
+    }
+    else {
+        while (1);
+    }
+
+    if (tmp == 0)return 0;
+    // è®¡ç®— h å’Œ u æ•°ç»„
     for (int i = 1; i < n - 1; i++) {
         tmp[i].h = interp->original_points[i].x - interp->original_points[i - 1].x;
         tmp[i].u = (interp->original_points[i + 1].x - interp->original_points[i].x) / tmp[i].h;
     }
 
-    // Ó¦ÓÃ±ß½çÌõ¼ş£º×ÔÈ»±ß½çÌõ¼ş
+    // åº”ç”¨è¾¹ç•Œæ¡ä»¶ï¼šè‡ªç„¶è¾¹ç•Œæ¡ä»¶
     Spline_Interpolation->y2[0] = 0.0f;
     Spline_Interpolation->y2[n - 1] = 0.0f;
 
@@ -176,7 +175,7 @@ int Spline_Interpolation_Creat(Interpolation_handle_t* interp)
         tmp[k].c = (tmp[k].u - tmp[k - 1].u) / tmp[k - 1].h;
     }
 
-    // ½âÏßĞÔ·½³Ì×é
+    // è§£çº¿æ€§æ–¹ç¨‹ç»„
     for (int k = 1; k < n - 1; k++) {
         float s = 0.0;
         for (int j = 0; j < k - 1; j++) {
@@ -185,12 +184,12 @@ int Spline_Interpolation_Creat(Interpolation_handle_t* interp)
         Spline_Interpolation->y2[k] = (tmp[k].u - s) / tmp[k].b;
     }
 
-    // »Ø´ú¼ÆËã y2
+    // å›ä»£è®¡ç®— y2
     for (int k = n - 2; k >= 0; k--) {
         Spline_Interpolation->y2[k] = (Spline_Interpolation->y2[k + 1] - tmp[k].c) / tmp[k].a;
     }
 
-    // ÇåÀí·ÖÅäµÄÄÚ´æ
+    // æ¸…ç†åˆ†é…çš„å†…å­˜
 
     return 0;
 }
