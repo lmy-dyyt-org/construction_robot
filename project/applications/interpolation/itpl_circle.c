@@ -19,6 +19,7 @@ int Circle_Interpolation_Creat(Interpolation_handle_t* interp)
 	CircleInterpolation_t* Circle_Interpolation = (CircleInterpolation_t*)interp->Interpolation_driver_handle;
 	Circle_Interpolation->ori = interp->original_points[0];
 	Circle_Interpolation->cfg = interp->original_points[1];
+	return 0;
 }
 
 

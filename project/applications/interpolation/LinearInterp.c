@@ -1,7 +1,7 @@
 #include "linear_Interp.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
+//#include <malloc.h>
 
 int Interpolation_Init(Interpolation_handle_t* interp, void* Interpolation_driver_handle,  int (*Cre)(void* Interpolation_driver_handle), float (*Cal)(void* Interpolation_driver_handle, float x), Point* original_points, int size)
 {
@@ -57,7 +57,7 @@ int Quadratic_Interpolation_Init(QuadraticFitInterpolation* interp)
 
 int Quadratic_Interpolation_Creat(Interpolation_handle_t* interp)// 初始化拟合曲线
 {
-    if (interp == NULL || interp->size < 3 || interp->original_points == NULL || interp->Interpolation_driver_handle == NULL) {
+    if (interp == NULL || interp->size < 3 || interp->Interpolation_driver_handle == NULL) {
         return -1;
     }
 
@@ -148,15 +148,17 @@ int Spline_Interpolation_Creat(Interpolation_handle_t* interp)
         float b;
         float c;
     }tmp_t;
-    tmp_t* tmp;
-    if (n < 128) {
-        tmp = (tmp_t*)alloca(n * sizeof(tmp_t));
-    }
-    else {
-        while (1);
-    }
+//    tmp_t* tmp;
+//    if (n < 128) {
+//        tmp = (tmp_t*)alloca(n * sizeof(tmp_t));
+//    }
+//    else {
+//        while (1);
+//    }
 
-    if (tmp == 0)return 0;
+//    if (tmp == 0)return 0;
+		
+		tmp_t tmp[n * sizeof(tmp_t)];
     // 计算 h 和 u 数组
     for (int i = 1; i < n - 1; i++) {
         tmp[i].h = interp->original_points[i].x - interp->original_points[i - 1].x;

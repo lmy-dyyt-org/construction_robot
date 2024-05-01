@@ -28,7 +28,7 @@ void corexy2graphics(const Point* corexy,Point* graphics)
     graphics->y = corexy->y + offset.y;
 }
 
-void corexy2graphics(Point* corexy,const Point* graphics)
+void graphics2corexy(Point* corexy,const Point* graphics)
 {
     corexy->x = graphics->x - offset.x;
     corexy->y = graphics->y - offset.y;
