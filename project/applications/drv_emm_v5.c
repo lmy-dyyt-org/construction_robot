@@ -12,7 +12,8 @@ rt_device_t Emm_serial1 = RT_NULL;
 int Emm_rx_size = 0;
 uint8_t Emm_rx_buf[64] = {0};
 
-stepper_motor_t stepper11;
+stepper_motor_t stepper1;
+stepper_motor_t stepper2;
 
 void emm_transmit(uint8_t *data, uint8_t len)
 {
@@ -23,50 +24,76 @@ int emm_get_cmd_receive_size(uint8_t cmd)
 {
     switch (cmd)
     {
-    case 0x35: // v
-        return 6;
-    case 0x1F: // p
-        return 8;
-    default:
-        return 4;
+        case 0x35: // v
+            return 6;
+        case 0x36: // p
+            return 8;
+        default:
+            return 4;
     }
 }
 
-void emm_cmd_ana(uint8_t cmd, uint8_t *buf)
-{
+void emm_cmd_ana(stepper_motor_t *motor, uint8_t cmd, uint8_t *buf)
+{   
+    //LOG_D("cmd:%d",cmd);
     switch (cmd)
     {
     case 0x35: // v
-        if (Emm_rx_buf[0] == 1 && Emm_rx_buf[1] == 0x35)
+        if (Emm_rx_buf[1] == 0x35)
         {
 
             // 拼接成uint16_t类型数据
             uint16_t vel = (uint16_t)(((uint16_t)Emm_rx_buf[3] << 8) |
                                       ((uint16_t)Emm_rx_buf[4] << 0));
-
-            stepper11.stepper_motor_speed = vel;
+            motor->stepper_motor_speed = vel;
 
             // 符号
             if (Emm_rx_buf[2])
             {
-                stepper11.stepper_motor_speed = -stepper11.stepper_motor_speed;
+                motor->stepper_motor_speed = -motor->stepper_motor_speed;
             }
-            LOG_D("emm_cmd_ana v:%d", stepper11.stepper_motor_speed);
+            LOG_D("emm_cmd_ana v:%d", motor->stepper_motor_speed);
+            return;
         }
         else
             return;
-    case 0x1F: // p
+    case 0x36: // p
+        if(Emm_rx_buf[1] == 0x36)
+        {
+                //获取绝对值信息
+                float pos = (uint32_t)(
+                                ((uint32_t)Emm_rx_buf[3] << 24)    |
+                                ((uint32_t)Emm_rx_buf[4] << 16)    |
+                                ((uint32_t)Emm_rx_buf[5] << 8)     |
+                                ((uint32_t)Emm_rx_buf[6] << 0)
+                                );
+                // 转换为角度
+                motor->stepper_motor_angle = (float)pos * 360.0f / 65536.0f;
 
-        return;
+                // 修正电机正反位置
+                if(Emm_rx_buf[2])
+                {
+                    motor->stepper_motor_angle = -motor->stepper_motor_angle;
+                }
+                LOG_I("stepperMotor_%d_Cur_Pos: %f\n",motor->stepper_motor_id , motor->stepper_motor_angle);     
+                return;             
+        }
+        else
+            return;
     default:
-        if (buf[2] != 0x6B)
+        if (Emm_rx_buf[3] != 0x6B)
+            for(int i=0;i<4;i++)
+            {
+                LOG_D("Emm_rx_buf[%d]:%x",i,Emm_rx_buf[i]);
+            }
             LOG_W("emm_cmd answer nuknown");
         return;
     }
 }
-void emm_wait_for_ack(uint8_t cmd)
+void emm_wait_for_ack(stepper_motor_t *motor, uint8_t cmd)
 {
     uint8_t will_rx_size = emm_get_cmd_receive_size(cmd);
+    // LOG_D("will_rx_size:%d",will_rx_size);
     uint8_t Emm_rx_index = 0;
     uint8_t ch = 0;
     while (1)
@@ -82,13 +109,14 @@ void emm_wait_for_ack(uint8_t cmd)
             }
             else
             {
+
             }
         }
         // 获取到字符
         Emm_rx_buf[Emm_rx_index++] = ch;
         if (Emm_rx_index >= will_rx_size)
         {
-            emm_cmd_ana(cmd, Emm_rx_buf);
+            emm_cmd_ana(motor, cmd, Emm_rx_buf);
             rt_mutex_release(mutex_step);
             return;
         }
@@ -101,20 +129,20 @@ void emm_wait_for_ack(uint8_t cmd)
  * @param    addr  ：电机地址
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr)
+void Emm_V5_Reset_CurPos_To_Zero(stepper_motor_t *motor)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0x0A; // 功能码
     cmd[2] = 0x6D; // 辅助码
     cmd[3] = 0x6B; // 校验字节
 
     // 发送命令
     emm_transmit(cmd, 4);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -122,20 +150,20 @@ void Emm_V5_Reset_CurPos_To_Zero(uint8_t addr)
  * @param    addr  ：电机地址
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Reset_Clog_Pro(uint8_t addr)
+void Emm_V5_Reset_Clog_Pro(stepper_motor_t *motor)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0x0E; // 功能码
     cmd[2] = 0x52; // 辅助码
     cmd[3] = 0x6B; // 校验字节
 
     // 发送命令
     emm_transmit(cmd, 4);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -144,14 +172,14 @@ void Emm_V5_Reset_Clog_Pro(uint8_t addr)
  * @param    s     ：系统参数类型
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Read_Sys_Params(uint8_t addr, SysParams_t s)
+void Emm_V5_Read_Sys_Params(stepper_motor_t *motor, SysParams_t s)
 {
     uint8_t i = 0;
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[i] = addr;
+    cmd[i] = motor->stepper_motor_id;
     ++i; // 地址
 
     switch (s) // 功能码
@@ -225,7 +253,7 @@ void Emm_V5_Read_Sys_Params(uint8_t addr, SysParams_t s)
 
     // 发送命令
     emm_transmit(cmd, i);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -235,13 +263,13 @@ void Emm_V5_Read_Sys_Params(uint8_t addr, SysParams_t s)
  * @param    ctrl_mode：控制模式（对应屏幕上的P_Pul菜单），0是关闭脉冲输入引脚，1是开环模式，2是闭环模式，3是让En端口复用为多圈限位开关输入引脚，Dir端口复用为到位输出高电平功能
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, bool svF, uint8_t ctrl_mode)
+void Emm_V5_Modify_Ctrl_Mode(stepper_motor_t *motor, bool svF, uint8_t ctrl_mode)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;      // 地址
+    cmd[0] = motor->stepper_motor_id;      // 地址
     cmd[1] = 0x46;      // 功能码
     cmd[2] = 0x69;      // 辅助码
     cmd[3] = svF;       // 是否存储标志，false为不存储，true为存储
@@ -250,7 +278,7 @@ void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, bool svF, uint8_t ctrl_mode)
 
     // 发送命令
     emm_transmit(cmd, 6);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -260,13 +288,13 @@ void Emm_V5_Modify_Ctrl_Mode(uint8_t addr, bool svF, uint8_t ctrl_mode)
  * @param    snF   ：多机同步标志 ，false为不启用，true为启用
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_En_Control(uint8_t addr, bool state, bool snF)
+void Emm_V5_En_Control(stepper_motor_t *motor, bool state, bool snF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;           // 地址
+    cmd[0] = motor->stepper_motor_id;           // 地址
     cmd[1] = 0xF3;           // 功能码
     cmd[2] = 0xAB;           // 辅助码
     cmd[3] = (uint8_t)state; // 使能状态
@@ -275,7 +303,7 @@ void Emm_V5_En_Control(uint8_t addr, bool state, bool snF)
 
     // 发送命令
     emm_transmit(cmd, 6);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -287,13 +315,13 @@ void Emm_V5_En_Control(uint8_t addr, bool state, bool snF)
  * @param    snF ：多机同步标志，false为不启用，true为启用
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool snF)
+void Emm_V5_Vel_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8_t acc, bool snF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;                // 地址
+    cmd[0] = motor->stepper_motor_id;                // 地址
     cmd[1] = 0xF6;                // 功能码
     cmd[2] = dir;                 // 方向
     cmd[3] = (uint8_t)(vel >> 8); // 速度(RPM)高8位字节
@@ -304,7 +332,7 @@ void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bo
 
     // 发送命令
     emm_transmit(cmd, 8);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -318,13 +346,13 @@ void Emm_V5_Vel_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bo
  * @param    snF ：多机同步标志 ，false为不启用，true为启用
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF)
+void Emm_V5_Pos_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;                 // 地址
+    cmd[0] = motor->stepper_motor_id;                 // 地址
     cmd[1] = 0xFD;                 // 功能码
     cmd[2] = dir;                  // 方向
     cmd[3] = (uint8_t)(vel >> 8);  // 速度(RPM)高8位字节
@@ -340,7 +368,7 @@ void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, ui
 
     // 发送命令
     emm_transmit(cmd, 13);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -349,13 +377,13 @@ void Emm_V5_Pos_Control(uint8_t addr, uint8_t dir, uint16_t vel, uint8_t acc, ui
  * @param    snF   ：多机同步标志，false为不启用，true为启用
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Stop_Now(uint8_t addr, bool snF)
+void Emm_V5_Stop_Now(stepper_motor_t *motor, bool snF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0xFE; // 功能码
     cmd[2] = 0x98; // 辅助码
     cmd[3] = snF;  // 多机同步运动标志
@@ -363,7 +391,7 @@ void Emm_V5_Stop_Now(uint8_t addr, bool snF)
 
     // 发送命令
     emm_transmit(cmd, 5);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -371,20 +399,20 @@ void Emm_V5_Stop_Now(uint8_t addr, bool snF)
  * @param    addr  ：电机地址
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Synchronous_motion(uint8_t addr)
+void Emm_V5_Synchronous_motion(stepper_motor_t *motor)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0xFF; // 功能码
     cmd[2] = 0x66; // 辅助码
     cmd[3] = 0x6B; // 校验字节
 
     // 发送命令
     emm_transmit(cmd, 4);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -393,13 +421,13 @@ void Emm_V5_Synchronous_motion(uint8_t addr)
  * @param    svF   ：是否存储标志，false为不存储，true为存储
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Origin_Set_O(uint8_t addr, bool svF)
+void Emm_V5_Origin_Set_O(stepper_motor_t *motor, bool svF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0x93; // 功能码
     cmd[2] = 0x88; // 辅助码
     cmd[3] = svF;  // 是否存储标志，false为不存储，true为存储
@@ -407,7 +435,7 @@ void Emm_V5_Origin_Set_O(uint8_t addr, bool svF)
 
     // 发送命令
     emm_transmit(cmd, 5);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -424,13 +452,13 @@ void Emm_V5_Origin_Set_O(uint8_t addr, bool svF)
  * @param    potF   ：上电自动触发回零，false为不使能，true为使能
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Origin_Modify_Params(uint8_t addr, bool svF, uint8_t o_mode, uint8_t o_dir, uint16_t o_vel, uint32_t o_tm, uint16_t sl_vel, uint16_t sl_ma, uint16_t sl_ms, bool potF)
+void Emm_V5_Origin_Modify_Params(stepper_motor_t *motor, bool svF, uint8_t o_mode, uint8_t o_dir, uint16_t o_vel, uint32_t o_tm, uint16_t sl_vel, uint16_t sl_ma, uint16_t sl_ms, bool potF)
 {
     uint8_t cmd[32] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;                    // 地址
+    cmd[0] = motor->stepper_motor_id;                    // 地址
     cmd[1] = 0x4C;                    // 功能码
     cmd[2] = 0xAE;                    // 辅助码
     cmd[3] = svF;                     // 是否存储标志，false为不存储，true为存储
@@ -453,7 +481,7 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, bool svF, uint8_t o_mode, uint8_t
 
     // 发送命令
     emm_transmit(cmd, 20);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -463,13 +491,13 @@ void Emm_V5_Origin_Modify_Params(uint8_t addr, bool svF, uint8_t o_mode, uint8_t
  * @param    snF   ：多机同步标志，false为不启用，true为启用
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, bool snF)
+void Emm_V5_Origin_Trigger_Return(stepper_motor_t *motor, uint8_t o_mode, bool snF)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr;   // 地址
+    cmd[0] = motor->stepper_motor_id;   // 地址
     cmd[1] = 0x9A;   // 功能码
     cmd[2] = o_mode; // 回零模式，0为单圈就近回零，1为单圈方向回零，2为多圈无限位碰撞回零，3为多圈有限位开关回零
     cmd[3] = snF;    // 多机同步运动标志，false为不启用，true为启用
@@ -477,7 +505,7 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, bool snF)
 
     // 发送命令
     emm_transmit(cmd, 5);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 
 /**
@@ -485,20 +513,20 @@ void Emm_V5_Origin_Trigger_Return(uint8_t addr, uint8_t o_mode, bool snF)
  * @param    addr  ：电机地址
  * @retval   地址 + 功能码 + 命令状态 + 校验字节
  */
-void Emm_V5_Origin_Interrupt(uint8_t addr)
+void Emm_V5_Origin_Interrupt(stepper_motor_t *motor)
 {
     uint8_t cmd[16] = {0};
     rt_mutex_take(mutex_step, RT_WAITING_FOREVER);
 
     // 装载命令
-    cmd[0] = addr; // 地址
+    cmd[0] = motor->stepper_motor_id; // 地址
     cmd[1] = 0x9C; // 功能码
     cmd[2] = 0x48; // 辅助码
     cmd[3] = 0x6B; // 校验字节
 
     // 发送命令
     emm_transmit(cmd, 4);
-    emm_wait_for_ack(cmd[1]);
+    emm_wait_for_ack(motor,cmd[1]);
 }
 rt_err_t emm_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
@@ -506,6 +534,8 @@ rt_err_t emm_uart_rx_ind(rt_device_t dev, rt_size_t size)
     rt_sem_release(emm_rx_sem);
     return RT_EOK;
 }
+
+
 void drv_emm_v5_entry(void *t)
 {
     /* 查找系统中的串口设备 */
@@ -522,12 +552,23 @@ void drv_emm_v5_entry(void *t)
         return ;
     }
 
+    stepper1.stepper_motor_id = 1;
+    stepper2.stepper_motor_id = 2;
+    
+  //回零调参 电机有存储的 没必要每次都重新设置
+  Emm_V5_Origin_Modify_Params(&stepper1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+  Emm_V5_Origin_Modify_Params(&stepper2, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+
+  rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！延时等待闭环步进参数设置完成（写入flash）
+  Emm_V5_Origin_Trigger_Return(&stepper1, 2, 0);
+  Emm_V5_Origin_Trigger_Return(&stepper2, 2, 0);
 
     while (1)
     {
-        Emm_V5_Vel_Control(0, 0, 1000, 0, 0);
-        rt_thread_mdelay(500);
-          Emm_V5_Read_Sys_Params(0, S_VEL);
+        // Emm_V5_Vel_Control(0, 0, 1000, 0, 0);
+        // Emm_V5_Pos_Control(&stepper1, 1, 100, 100, 3600, 0, 0); // 位置模式控制
+        // rt_thread_mdelay(500);
+        Emm_V5_Read_Sys_Params(&stepper1, S_CPOS);
         rt_thread_mdelay(500);
 
         //Emm_V5_Stop_Now(0,0);
@@ -544,7 +585,7 @@ int emm_v5_init(void)
 
     drv_emm_v5_tb = rt_thread_create("drv_emm_v5",
                                      drv_emm_v5_entry, RT_NULL,
-                                     4096,
+                                     8192,
                                      15, 1);
 
     if (drv_emm_v5_tb != RT_NULL)
