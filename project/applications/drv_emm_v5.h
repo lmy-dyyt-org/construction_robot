@@ -69,8 +69,6 @@ void Emm_V5_Origin_Trigger_Return(stepper_motor_t *motor, uint8_t o_mode, bool s
 void Emm_V5_Origin_Interrupt(stepper_motor_t *motor); // 强制中断并退出回零
 
 
-
-
 #ifdef __cplusplus
 }
 #endif

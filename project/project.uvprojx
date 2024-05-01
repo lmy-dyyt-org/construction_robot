@@ -1707,6 +1707,11 @@
               <FileType>5</FileType>
               <FilePath>.\applications\interpolation\linear_Interp.h</FilePath>
             </File>
+            <File>
+              <FileName>drv_corexy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_corexy.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
