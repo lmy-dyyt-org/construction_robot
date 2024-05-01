@@ -4,6 +4,7 @@
 #define DBG_TAG "drv.step_motor"
 #define DBG_LVL DBG_LOG
 #include "drv_emm_v5.h"
+#include "drv_corexy.h"
 
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 rt_mutex_t mutex_step = RT_NULL; // 互斥锁
@@ -12,8 +13,8 @@ rt_device_t Emm_serial1 = RT_NULL;
 int Emm_rx_size = 0;
 uint8_t Emm_rx_buf[64] = {0};
 
-stepper_motor_t stepper1;
-stepper_motor_t stepper2;
+stepper_motor_t left_stepper;
+stepper_motor_t right_stepper;
 
 void emm_transmit(uint8_t *data, uint8_t len)
 {
@@ -538,6 +539,7 @@ rt_err_t emm_uart_rx_ind(rt_device_t dev, rt_size_t size)
 
 void drv_emm_v5_entry(void *t)
 {
+    rt_thread_mdelay(1000); //等待步进上电
     /* 查找系统中的串口设备 */
     Emm_serial1 = rt_device_find("uart8");
 	if(Emm_serial1==RT_NULL)return ;
@@ -552,28 +554,88 @@ void drv_emm_v5_entry(void *t)
         return ;
     }
 
-    stepper1.stepper_motor_id = 1;
-    stepper2.stepper_motor_id = 2;
+    left_stepper.stepper_motor_id = 1;
+    right_stepper.stepper_motor_id = 2;
     
-  //回零调参 电机有存储的 没必要每次都重新设置
-  Emm_V5_Origin_Modify_Params(&stepper1, 1, 2, 1, 30, 5000, 300, 700, 60, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
-  Emm_V5_Origin_Modify_Params(&stepper2, 1, 2, 0, 30, 5000, 300, 700, 60, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+#define Origin_vel 180
+#define timeout 30000
+//这里的堵转速度直接给最大值 就不用管这个参数了
+#define sl_vel 500 
+//用大电流 小时间来
+#define sl_ma 600
+#define sl_ms 10
+    //回零调参 电机有存储的 没必要每次都重新设置
+    /*
+     * @param    addr  ：电机地址
+ * @param    svF   ：是否存储标志，false为不存储，true为存储
+ * @param    o_mode ：回零模式，0为单圈就近回零，1为单圈方向回零，2为多圈无限位碰撞回零，3为多圈有限位开关回零
+ * @param    o_dir  ：回零方向，0为CW，其余值为CCW
+ * @param    o_vel  ：回零速度，单位：RPM（转/分钟）
+ * @param    o_tm   ：回零超时时间，单位：毫秒
+ * @param    sl_vel ：无限位碰撞回零检测转速，单位：RPM（转/分钟）
+ * @param    sl_ma  ：无限位碰撞回零检测电流，单位：Ma（毫安）
+ * @param    sl_ms  ：无限位碰撞回零检测时间，单位：Ms（毫秒）
+ * @param    potF   ：上电自动触发回零，false为不使能，true为使能
+ * */
+    
+    // Emm_V5_Origin_Modify_Params(&left_stepper, 1, 2, 0, Origin_vel, timeout, sl_vel, sl_ma, sl_ms, 0);//参数4是方向   倒数第三个参数是电流值   这是控制大臂的电机（螺丝很长的一边）  方向1 是控制往上抬
+    // Emm_V5_Origin_Modify_Params(&right_stepper, 1, 2, 0, Origin_vel, timeout, sl_vel, sl_ma, sl_ms, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
+  
+    // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！延时等待闭环步进参数设置完成（写入flash）
+   
+    // Emm_V5_En_Control(&right_stepper, 0, 0);//一个一个回零
+    // Emm_V5_Origin_Trigger_Return(&left_stepper, 2, 0);
+    // rt_thread_mdelay(5000);
 
-  rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！延时等待闭环步进参数设置完成（写入flash）
-  Emm_V5_Origin_Trigger_Return(&stepper1, 2, 0);
-  Emm_V5_Origin_Trigger_Return(&stepper2, 2, 0);
+    // Emm_V5_En_Control(&left_stepper, 0, 0);//一个一个回零
+    // Emm_V5_Origin_Trigger_Return(&right_stepper, 2, 0);
+    // rt_thread_mdelay(5000);
+
+    // Emm_V5_Reset_CurPos_To_Zero(&left_stepper);
+    // Emm_V5_Reset_CurPos_To_Zero(&right_stepper);
+    
+    // Emm_V5_En_Control(&left_stepper, 1, 0);
+    // Emm_V5_En_Control(&right_stepper, 1, 0);
+    int x_pulse = 0;
+    int y_pulse = 0;
+
+    int left_stepper_pulse = 0;
+    int right_stepper_pulse = 0;
+
+#define motor_acc 0xff
+#define motor_vel 150
 
     while (1)
     {
-        // Emm_V5_Vel_Control(0, 0, 1000, 0, 0);
-        // Emm_V5_Pos_Control(&stepper1, 1, 100, 100, 3600, 0, 0); // 位置模式控制
-        // rt_thread_mdelay(500);
-        Emm_V5_Read_Sys_Params(&stepper1, S_CPOS);
-        rt_thread_mdelay(500);
+        //1.8*256*200 对应 0.04m
+        x_pulse = corexy.x * (float)(256*200) / 0.04f ;
+        y_pulse = -corexy.y * (float)(256*200) / 0.04f ;
 
-        //Emm_V5_Stop_Now(0,0);
+        left_stepper_pulse = x_pulse - y_pulse;
+        right_stepper_pulse = x_pulse + y_pulse;
+        if(left_stepper_pulse>=0) //对电机来说 默认逆时针为正 
+        {
+            Emm_V5_Pos_Control(&left_stepper, 1, motor_vel, motor_acc, left_stepper_pulse, 1, 0);
+        }
+        else
+        {
+            Emm_V5_Pos_Control(&left_stepper, 0, motor_vel, motor_acc, -left_stepper_pulse, 1, 0);
+        }
+        if(right_stepper_pulse>=0)
+        {
+            Emm_V5_Pos_Control(&right_stepper, 1, motor_vel, motor_acc, right_stepper_pulse, 1, 0);
+        }
+        else
+        {
+            Emm_V5_Pos_Control(&right_stepper, 0, motor_vel, motor_acc, -right_stepper_pulse, 1, 0);
+        }
+        rt_thread_mdelay(500);
+        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
+        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
+        rt_thread_mdelay(500);
     }
 }
+
 int emm_v5_init(void)
 {
 

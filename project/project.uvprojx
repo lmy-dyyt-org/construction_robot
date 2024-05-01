@@ -2201,6 +2201,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\drv_emm_v5.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_corexy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_corexy.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
