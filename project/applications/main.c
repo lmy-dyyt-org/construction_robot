@@ -17,9 +17,9 @@
 #endif /* RT_USING_NANO */
 
 #include "ulog.h"
-#include "Emm_V5.h"
-#include "follow_line.h"
-#include "drv_stepper_motor.h"
+//#include "Emm_V5.h"
+//#include "follow_line.h"
+//#include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
 #include "motor.h"
 /* defined the LED_G pin: PF14 */

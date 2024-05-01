@@ -79,7 +79,7 @@ TFTSPI_Init(1);
     rt_thread_mdelay(1000);
 TFTSPI_Test();
   /* USER CODE END SPI4_Init 2 */
-
+	return 0;
 }INIT_COMPONENT_EXPORT(MX_SPI4_Init);
 
 
