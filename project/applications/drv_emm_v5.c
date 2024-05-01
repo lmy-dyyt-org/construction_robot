@@ -61,7 +61,7 @@ void emm_cmd_ana(stepper_motor_t *motor, uint8_t cmd, uint8_t *buf)
             {
                 motor->stepper_motor_speed = -motor->stepper_motor_speed;
             }
-            LOG_D("emm_cmd_ana v:%d", motor->stepper_motor_speed);
+       //     LOG_D("emm_cmd_ana v:%d", motor->stepper_motor_speed);
             return;
         }
         else
@@ -84,7 +84,7 @@ void emm_cmd_ana(stepper_motor_t *motor, uint8_t cmd, uint8_t *buf)
                 {
                     motor->stepper_motor_angle = -motor->stepper_motor_angle;
                 }
-                LOG_I("stepperMotor_%d_Cur_Pos: %f\n",motor->stepper_motor_id , motor->stepper_motor_angle);     
+             //   LOG_I("stepperMotor_%d_Cur_Pos: %f\n",motor->stepper_motor_id , motor->stepper_motor_angle);     
                 return;             
         }
         else
@@ -95,7 +95,7 @@ void emm_cmd_ana(stepper_motor_t *motor, uint8_t cmd, uint8_t *buf)
             {
                 LOG_D("Emm_rx_buf[%d]:%x",i,Emm_rx_buf[i]);
             }
-            LOG_W("emm_cmd answer nuknown");
+          //  LOG_W("emm_cmd answer nuknown");
         return;
     }
 }
@@ -652,9 +652,9 @@ void drv_emm_v5_entry(void *t)
 
         Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
         Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
-        real_corexy.x = (float)(left_stepper_pulse - right_stepper_pulse) * 0.04f / (float)(256*200);
-        real_corexy.y = (float)(left_stepper_pulse + right_stepper_pulse) * 0.04f / (float)(256*200);
-
+        real_corexy.x = (float)(left_stepper_pulse + right_stepper_pulse) * 0.04f / (float)(256*200) / 2;
+        real_corexy.y = (float)(left_stepper_pulse - right_stepper_pulse) * 0.04f / (float)(256*200) / 2;
+        LOG_D("real_corexy.x:%f,real_corexy.y:%f",real_corexy.x,real_corexy.y);
         rt_thread_mdelay(gap_time);//150有点震
     }
 }

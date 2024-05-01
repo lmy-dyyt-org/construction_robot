@@ -2,4 +2,4 @@
 Build target 'rt-thread'
 After Build - User command #1: fromelf --bin .\build\keil\Obj\rt-thread.axf --output rtthread.bin
 ".\build\keil\Obj\rt-thread.axf" - 0 Error(s), 0 Warning(s).
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:02

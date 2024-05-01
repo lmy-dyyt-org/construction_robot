@@ -56,10 +56,11 @@ enum{
     OVER,
 };
 
+ 
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
 int draw_square(void)
 {
-#define delta 0.005  
+#define delta 0.005 
 
     static float draw_x = 0; 
     // static float tmp = 0;
@@ -67,6 +68,7 @@ int draw_square(void)
     static float c = 0; //边长
     // c = tmp/sqrt(2);
     c=0.1;
+    float offset = 0; //每次插值移动的距离
 
     // static Point points_01[2]={{0,0},{0,c}};
     // static Point points_12[2]={{0,c},{-c,c}};
@@ -94,7 +96,7 @@ int draw_square(void)
     }
     
     static int step=A;//用于指示哪一段曲线a,b,c,d
-    /*绘图坐标系下 以图形中心为原点 （0，0）
+    /*绘图坐标系下 以图形右下角为原点 （0，0）
    2____b____1
     |       |
    c|       |a
@@ -116,9 +118,10 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_a,draw_points.x);
             draw_points.y = square_interpolation_a.Interpolation_Out;
 
-            // graphics2corexy(&now_points, &draw_points);
+            graphics2corexy(&now_points, &draw_points);
+            offset = now_points.y - corexy.y;
             // corexy_absolute_move(&corexy,now_points.x,now_points.y);//这里还是需要丢点的（全局变量的core xy 坐标），不然你这里的延时毫无意义了
-            gap_time = fabs((draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+            gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
             rt_thread_mdelay(gap_time);
             break;
         case B:
@@ -149,9 +152,10 @@ int draw_square(void)
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
             
-            // graphics2corexy(&now_points, &draw_points);
+            graphics2corexy(&now_points, &draw_points);
+            offset = now_points.y - corexy.y;
             // corexy_absolute_move(&corexy,now_points.x,now_points.y);
-            gap_time = fabs( ( draw_points.y / ((motor_vel*0.04f)/60.f))*1000) ;         
+            gap_time = fabs( ( offset / ((motor_vel*0.04f)/60.f))*1000) ;         
             rt_thread_mdelay(gap_time);             
             break;
         case D:
@@ -185,6 +189,123 @@ int draw_square(void)
     //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
     return 0;
 }
+
+//以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
+int draw_triangle(void)
+{
+#define delta2 0.001 
+    static float draw_x = 0; 
+    // static float tmp = 0;
+    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float c = 0; //边长
+    // c = sqrt(3)*tmp;
+    c=0.1;
+    float offset = 0; //每次插值移动的距离
+
+    // static Point points_01[2]={{0,0},{-1.732c/2,3c/2}};
+    // static Point points_12[2]={{-1.732c/2,3c/2},{-c,0}};
+    // static Point points_23[2]={{-c,0},{0,0}};
+
+    static Point points_01[2]={0};
+    static Point points_12[2]={0};
+    static Point points_20[2]={0};
+
+    points_01[1].x=-0.866*c; points_01[1].y=1.5*c;
+    points_12[0].x=-0.866*c; points_12[0].y=1.5*c; points_12[1].x=-c;
+    points_20[0].x=-c; 
+
+    static Point draw_points={0,0};
+
+    if(draw_x == 0)
+    {
+        Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
+        Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
+        Interpolation_Init(&square_interpolation_c, &square_interpolation_handle_c, Linear_Interpolation_Creat,Linear_Interpolate,points_20, 2);
+    }
+    
+    static int step=A;//用于指示哪一段曲线a,b,c
+    /*绘图坐标系下 以图形右下角为原点 （0，0）
+      1
+     /\
+    /  \
+ b /    \a
+2 /______\ 0
+      c
+    */
+    switch(step)
+    {
+        case A:
+            if(draw_points.x == -0.866*c)
+            {
+                step = B;
+                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
+                break;
+            }
+            draw_x = draw_x - delta2;
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_a,draw_points.x);
+            draw_points.y = square_interpolation_a.Interpolation_Out;
+
+            graphics2corexy(&now_points, &draw_points);
+            offset = now_points.y - corexy.y;
+            
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);//这里还是需要丢点的（全局变量的core xy 坐标），不然你这里的延时毫无意义了
+            gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+            rt_thread_mdelay(gap_time);
+            break;
+        case B:
+            if(draw_points.x == -c)
+            {
+                step = C;
+                 rt_thread_mdelay(2000); 
+                break;
+            }
+            draw_x = draw_x - delta2;
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_b,draw_points.x);
+            draw_points.y = square_interpolation_b.Interpolation_Out;
+
+
+            graphics2corexy(&now_points, &draw_points);
+            offset = now_points.y - corexy.y;
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time =  fabs((offset / ((motor_vel*0.04f)/60.f))*1000) ;         
+            rt_thread_mdelay(gap_time);     
+            break;
+        case C:
+            if(draw_points.x == 0)
+            {
+                step = OVER;
+                 rt_thread_mdelay(2000); 
+                break;
+            }
+            draw_x = draw_x + delta2;
+            draw_points.x = draw_x;        
+            Linear_Interpolate(&square_interpolation_c,draw_points.x);
+            draw_points.y = square_interpolation_c.Interpolation_Out;
+            
+            graphics2corexy(&now_points, &draw_points);
+            offset = now_points.y - corexy.y;
+            // corexy_absolute_move(&corexy,now_points.x,now_points.y);
+            gap_time = fabs( ( offset / ((motor_vel*0.04f)/60.f))*1000) ;         
+            rt_thread_mdelay(gap_time);             
+            break;  
+        default:
+            // LOG_E("step error case");         
+            break;                       
+    }
+    if(draw_points.y>1.5*c) draw_points.y=1.5*c;
+    if(draw_points.y<0) draw_points.y=0;
+    if(draw_points.x<-c) draw_points.x=-c;
+    if(draw_points.x>0) draw_points.x=0;
+
+    graphics2corexy(&now_points, &draw_points);
+    corexy_absolute_move(&corexy,now_points.x,now_points.y);
+    //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
+    return 0;
+}
+
+
 void rbmg_handle(void*param)
 {
 
@@ -193,7 +314,8 @@ void rbmg_handle(void*param)
         now_points.x = corexy.x ; 
         now_points.y = corexy.y ; 
 
-        draw_square();
+        //draw_square();
+        draw_triangle();
         rt_thread_mdelay(5);
     }
 }
