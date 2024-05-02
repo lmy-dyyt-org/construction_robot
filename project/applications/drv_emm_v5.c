@@ -677,7 +677,7 @@ void drv_emm_v5_entry(void *t)
 
        static int time=0;
 
-        if(time++%10==0)
+        if(time++%50==0)
         {
             LOG_D("tar_corexy.x:%f,tar_corexy.y:%f",corexy.x,corexy.y);
             LOG_D("real_corexy.x:%f,real_corexy.y:%f",real_corexy.x,real_corexy.y);
