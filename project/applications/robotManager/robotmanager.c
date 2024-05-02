@@ -110,23 +110,23 @@ int draw_square(void)
     switch(step)
     {
         case A:
-            if(fabs(draw_points.y -c)<0.005)//1mm
+            if(fabs( draw_points.y - c )<0.005f)//1mm
             {
                 step = B;
-                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
+                rt_thread_mdelay(100); //每个曲线之间稍微留长点时间。
                 break;
             }
 
             draw_points.x = draw_x;
             Linear_Interpolate(&square_interpolation_a,draw_points.x);
-            draw_points.y = square_interpolation_a.Interpolation_Out;
-
+            // draw_points.y = square_interpolation_a.Interpolation_Out;
+            draw_points.y = c;
             break;
         case B:
-            if(fabs(draw_points.x+c) < 0.005)//5mm
+            if(fabs( draw_points.x + c ) < 0.005f)//5mm
             {
                 step = C;
-                 rt_thread_mdelay(2000); 
+                 rt_thread_mdelay(100); 
                 break;
             }
             draw_x = draw_x - delta;
@@ -136,22 +136,22 @@ int draw_square(void)
 
             break;
         case C:
-            if(fabs(draw_points.y) <0.005)//1mm
+            if(fabs( draw_points.y ) <0.005f)//1mm
             {
                 step = D;
-                rt_thread_mdelay(2000); 
+                rt_thread_mdelay(100); 
                 break;
             }
             draw_points.x = draw_x;        
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
-            draw_points.y = square_interpolation_c.Interpolation_Out;
-
+            // draw_points.y = square_interpolation_c.Interpolation_Out;
+            draw_points.y = 0;
             break;
         case D:
             if(fabs(draw_points.x) <0.005f)
             {
                 step = OVER;
-                 rt_thread_mdelay(2000); 
+                 rt_thread_mdelay(100); 
                 break;
             }
             draw_x = draw_x + delta;
@@ -288,24 +288,33 @@ int draw_triangle(void)
     return 0;
 }
 
-    float r;
-    int draw_cricle(void)
-    {
-        static float draw_x = 0;
-        static float draw_y = 0;
-        r = sqrt(pow(imagecenter.x - rightbottom.x, 2) + pow(imagecenter.y - rightbottom.y, 2));
-        static float delta_angle = 0.01;//变化角度
-        static float angle = 0;
+float r;
+int draw_cricle(void)
+{
+    float offset = 0;
+    static Point draw_points = {0};
+    // r = sqrt(pow(imagecenter.x - rightbottom.x, 2) + pow(imagecenter.y - rightbottom.y, 2));
+    r = 0.1;
+    static float delta_angle = 0.01;//变化角度
+    static float angle = 0;
 
-        angle += delta_angle;
-        if (angle >= 2 * 3.1415926)angle = 2 * 3.1415926;
-        draw_x = r * cos(angle);
-        draw_y = r * sin(angle);
+    angle += delta_angle;
+    if (angle >= 2 * 3.1415926)angle = 2 * 3.1415926;
+    draw_points.x = r * cos(angle);
+    draw_points.y = r * sin(angle);
 
-        draw_x += imagecenter.x;
-        draw_y += imagecenter.y;
-        return 0;
-    }
+    // draw_points.x += imagecenter.x;
+    // draw_points.y += imagecenter.y;
+
+    graphics2corexy(&now_points, &draw_points);
+    corexy_absolute_move(&corexy,now_points.x,now_points.y);
+
+    offset =max( fabs(now_points.y - corexy.y) , fabs(now_points.x - corexy.x));
+    gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*100) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+    rt_thread_mdelay(gap_time);
+
+    return 0;
+}
 
 void rbmg_handle(void*param)
 {
@@ -316,8 +325,10 @@ void rbmg_handle(void*param)
         now_points.x = corexy.x ; 
         now_points.y = corexy.y ; 
 
-         //draw_square();
-        draw_triangle();
+        //draw_square();
+        //draw_triangle();
+        //draw_cricle();
+
         Emm_V5_Pos_moveok();
         rt_thread_mdelay(5);
 
