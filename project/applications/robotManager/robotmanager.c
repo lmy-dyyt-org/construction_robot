@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-01 21:10:12
+ * @LastEditTime: 2024-05-02 11:29:02
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -288,6 +288,24 @@ int draw_triangle(void)
     return 0;
 }
 
+    float r;
+    int draw_cricle(void)
+    {
+        static float draw_x = 0;
+        static float draw_y = 0;
+        r = sqrt(pow(imagecenter.x - rightbottom.x, 2) + pow(imagecenter.y - rightbottom.y, 2));
+        static float delta_angle = 0.01;//变化角度
+        static float angle = 0;
+
+        angle += delta_angle;
+        if (angle >= 2 * 3.1415926)angle = 2 * 3.1415926;
+        draw_x = r * cos(angle);
+        draw_y = r * sin(angle);
+
+        draw_x += imagecenter.x;
+        draw_y += imagecenter.y;
+
+    }
 
 void rbmg_handle(void*param)
 {

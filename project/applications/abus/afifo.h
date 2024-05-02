@@ -8,18 +8,18 @@ extern "C"
 
 #include "stdint.h"
 #include "stdbool.h"
-// #ifndef min
-// #define __NSX_PASTE__(A, B) A##B
-// #define min(A, B) __NSMIN_IMPL__(A, B, __COUNTER__)
-// #endif
-// #define __NSMIN_IMPL__(A, B, L) ({                                                                   \
-// 	__typeof__(A) __NSX_PASTE__(__a, L) = (A);                                                       \
-// 	__typeof__(B) __NSX_PASTE__(__b, L) = (B);                                                       \
-// 	(__NSX_PASTE__(__a, L) < __NSX_PASTE__(__b, L)) ? __NSX_PASTE__(__a, L) : __NSX_PASTE__(__b, L); \
-// })
 #ifndef min
-#define min(a,b) (a)<(b)?(a):(b)
+#define __NSX_PASTE__(A, B) A##B
+#define min(A, B) __NSMIN_IMPL__(A, B, __COUNTER__)
 #endif
+#define __NSMIN_IMPL__(A, B, L) ({                                                                   \
+	__typeof__(A) __NSX_PASTE__(__a, L) = (A);                                                       \
+	__typeof__(B) __NSX_PASTE__(__b, L) = (B);                                                       \
+	(__NSX_PASTE__(__a, L) < __NSX_PASTE__(__b, L)) ? __NSX_PASTE__(__a, L) : __NSX_PASTE__(__b, L); \
+})
+// #ifndef min
+// #define min(a,b) (a)<(b)?(a):(b)
+// #endif
 	typedef struct
 	{
 		int TODO;
