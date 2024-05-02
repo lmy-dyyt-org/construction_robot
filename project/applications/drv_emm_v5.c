@@ -18,7 +18,7 @@ stepper_motor_t left_stepper;
 stepper_motor_t right_stepper;
 
 int motor_acc = 0xff;
-int motor_vel = 150;
+int motor_vel = 5000;
 // #define motor_acc 0xff
 // #define motor_vel 150
 //v=0.1 m/s
@@ -559,8 +559,10 @@ void Emm_V5_Pos_moveok(void)
         real_corexy.y = -(float)(left_stepper.stepper_motor_angle*142.22f - right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
         float error_x = fabs(corexy.x - real_corexy.x);
         float error_y = fabs(corexy.y - real_corexy.y);
-        if(fabs(corexy.x - real_corexy.x) < 0.01f  &&  fabs(corexy.y-real_corexy.y) < 0.01f )
+        if(fabs(corexy.x - real_corexy.x) < 0.005f  &&  fabs(corexy.y-real_corexy.y) < 0.005f )
         {
+            // real_corexy.x = corexy.x;
+            // real_corexy.y = corexy.y;
             return;
         }
         
@@ -682,7 +684,7 @@ void drv_emm_v5_entry(void *t)
         }
         Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
         Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
-        rt_thread_mdelay(20);//150有点震
+        rt_thread_mdelay(10);//150有点震
     }
 }
 

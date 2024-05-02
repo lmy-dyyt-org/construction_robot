@@ -63,7 +63,7 @@ enum{
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
 int draw_square(void)
 {
-#define delta 0.005 
+#define delta 0.001 
 
     static float draw_x = 0; 
     // static float tmp = 0;
@@ -145,7 +145,7 @@ int draw_square(void)
             draw_points.x = draw_x;        
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
-                    
+
             break;
         case D:
             if(fabs(draw_points.x) <0.005f)
@@ -183,26 +183,26 @@ int draw_square(void)
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
 int draw_triangle(void)
 {
-#define delta2 0.01 
+#define delta2 0.001 
     static int time = 0; 
     static float draw_x = 0; 
     // static float tmp = 0;
     // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
     static float c = 0; //边长
     // c = sqrt(3)*tmp;
-    c=0.1;
+    c=0.3;
     float offset = 0; //每次插值移动的距离
 
     // static Point points_01[2]={{0,0},{-1.732c/2,3c/2}};
     // static Point points_12[2]={{-1.732c/2,3c/2},{-c,0}};
-    // static Point points_23[2]={{-c,0},{0,0}};
+    // static Point points_20[2]={{-c,0},{0,0}};
 
     static Point points_01[2]={0};
     static Point points_12[2]={0};
     static Point points_20[2]={0};
 
-    points_01[1].x=-0.866*c; points_01[1].y=1.5*c;
-    points_12[0].x=-0.866*c; points_12[0].y=1.5*c; points_12[1].x=-c;
+    points_01[1].x=-0.5*c; points_01[1].y=0.866*c;
+    points_12[0].x=-0.5*c; points_12[0].y=0.866*c; points_12[1].x=-c;
     points_20[0].x=-c; 
 
     static Point draw_points={0,0};
@@ -229,10 +229,11 @@ int draw_triangle(void)
     switch(step)
     {
         case A:
-            if( fabs(draw_points.x +0.866*c) < 0.005f )
+            if( fabs(draw_points.x + 0.5*c) < 0.0001f )
             {
                 step = B;
-                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
+                LOG_W("trigle to B");
+                rt_thread_mdelay(100); //每个曲线之间稍微留长点时间。
                 break;
             }
             draw_x = draw_x - delta2;
@@ -241,11 +242,11 @@ int draw_triangle(void)
             draw_points.y = square_interpolation_a.Interpolation_Out;
             break;
         case B:
-            if( fabs(draw_points.x +c) < 0.005f )
+            if( fabs(draw_points.x + c) < 0.0001f )
             {
                 step = C;
                 LOG_W("trigle to C");
-                //rt_thread_mdelay(2000); 
+                rt_thread_mdelay(100); 
                 break;
             }
             draw_x = draw_x - delta2;
@@ -254,10 +255,10 @@ int draw_triangle(void)
             draw_points.y = square_interpolation_b.Interpolation_Out;
             break;
         case C:
-            if( fabs(draw_points.x - 0) < 0.005f )
+            if( fabs(draw_points.x - 0) < 0.0001f )
             {
                 step = OVER;
-                 rt_thread_mdelay(2000); 
+                rt_thread_mdelay(100); 
                 break;
             }
             draw_x = draw_x + delta2;
@@ -269,7 +270,7 @@ int draw_triangle(void)
             // LOG_E("step error case");         
             break;                       
     }
-    if(draw_points.y>1.5*c) draw_points.y=1.5*c;
+    if(draw_points.y>0.866*c) draw_points.y=0.866*c;
     if(draw_points.y<0) draw_points.y=0;
     if(draw_points.x<-c) draw_points.x=-c;
     if(draw_points.x>0) draw_points.x=0;
@@ -282,7 +283,7 @@ int draw_triangle(void)
 
     offset =max( fabs(now_points.y - corexy.y) , fabs(now_points.x - corexy.x));
     gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*100) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
-    //rt_thread_mdelay(gap_time);
+    rt_thread_mdelay(gap_time);
     //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
     return 0;
 }
@@ -303,7 +304,7 @@ int draw_triangle(void)
 
         draw_x += imagecenter.x;
         draw_y += imagecenter.y;
-
+        return 0;
     }
 
 void rbmg_handle(void*param)
@@ -317,8 +318,9 @@ void rbmg_handle(void*param)
 
          //draw_square();
         draw_triangle();
-        rt_thread_mdelay(5);
         Emm_V5_Pos_moveok();
+        rt_thread_mdelay(5);
+
     }
 }
 
