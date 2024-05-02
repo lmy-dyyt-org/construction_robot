@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-02 18:21:11
+ * @LastEditTime: 2024-05-02 20:33:10
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -288,6 +288,46 @@ int draw_triangle(void)
     return 0;
 }
 
+int draw_line(Point *start, Point *end)
+{
+    float draw_x = 0;
+    int temp = 0;
+    // init
+    Interpolation_handle_t interp;
+    Point data[2] = {*start, *end};
+    Interpolation_Init(&interp, &square_interpolation_handle_a, Linear_Interpolation_Creat, Linear_Interpolate, data, 2);
+    draw_x = start->x;
+    if (start->x > end->x)
+    {
+        delta = -delta;
+        tmp = 1;
+    }
+    while (1)
+    {
+        draw_x += delta;
+        if (tmp)
+        {
+            if (draw_x < end.x)
+            {
+                draw_x = end.x;
+            }
+        }
+        else
+        {
+            if (draw_x > end.x)
+            {
+                draw_x = end.x;
+            }
+        }
+        Linear_Interpolate(&interp, draw_x);
+        Point draw_points = {draw_x, interp.Interpolation_Out};
+        graphics2corexy(&now_points, &draw_points);
+        corexy_absolute_move(&corexy, now_points.x, now_points.y);
+        offset = max(fabs(now_points.y - corexy.y), fabs(now_points.x - corexy.x));
+        gap_time = fabs((offset / ((motor_vel * 0.04f) / 60.f)) * 1000); // 有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+        rt_thread_mdelay(gap_time);
+    }
+}
 float r;
 int draw_cricle(void)
 {
