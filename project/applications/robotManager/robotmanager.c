@@ -316,6 +316,132 @@ int draw_cricle(void)
     return 0;
 }
 
+
+
+//以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
+int draw_square_rotate(void)
+{
+#define delta 0.001 
+
+    
+    static float draw_x = 0; 
+    // static float tmp = 0;
+    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float c = 0; //边长
+    // c = tmp/sqrt(2);
+    c=0.25;
+    float offset = 0; //每次插值移动的距离
+
+    // static Point points_01[2]={{0,0},{0,c}};
+    // static Point points_12[2]={{0,c},{-c,c}};
+    // static Point points_23[2]={{-c,c},{-c,0}};
+    // static Point points_30[2]={{-c,0},{0,0}};
+
+    static Point points_01[2]={0};
+    static Point points_12[2]={0};
+    static Point points_23[2]={0};
+    static Point points_30[2]={0};
+
+    points_01[1].y=c;
+    points_12[0].y=c; points_12[1].x=-c; points_12[1].y=c;
+    points_23[0].x=-c; points_23[0].y=c; points_23[1].x=-c;
+    points_30[0].x=-c;
+
+    static Point draw_points={0,0};
+
+    if(draw_x == 0)
+    {
+        Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
+        Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
+        Interpolation_Init(&square_interpolation_c, &square_interpolation_handle_c, Linear_Interpolation_Creat,Linear_Interpolate,points_23, 2);
+        Interpolation_Init(&square_interpolation_d, &square_interpolation_handle_d, Linear_Interpolation_Creat,Linear_Interpolate,points_30, 2);
+    }
+    
+    static int step=A;//用于指示哪一段曲线a,b,c,d
+    /*绘图坐标系下 以图形右下角为原点 （0，0）
+   2____b____1
+    |       |
+   c|       |a
+   3|___d___|0
+    */
+
+
+    switch(step)
+    {
+        case A:
+            if(fabs( draw_points.y - c )<0.005f)//1mm
+            {
+                step = B;
+                rt_thread_mdelay(100); //每个曲线之间稍微留长点时间。
+                break;
+            }
+
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_a,draw_points.x);
+            // draw_points.y = square_interpolation_a.Interpolation_Out;
+            draw_points.y = c;
+            break;
+        case B:
+            if(fabs( draw_points.x + c ) < 0.005f)//5mm
+            {
+                step = C;
+                 rt_thread_mdelay(100); 
+                break;
+            }
+            draw_x = draw_x - delta;
+            draw_points.x = draw_x;
+            Linear_Interpolate(&square_interpolation_b,draw_points.x);
+            draw_points.y = square_interpolation_b.Interpolation_Out;
+
+            break;
+        case C:
+            if(fabs( draw_points.y ) <0.005f)//1mm
+            {
+                step = D;
+                rt_thread_mdelay(100); 
+                break;
+            }
+            draw_points.x = draw_x;        
+            Linear_Interpolate(&square_interpolation_c,draw_points.x);
+            // draw_points.y = square_interpolation_c.Interpolation_Out;
+            draw_points.y = 0;
+            break;
+        case D:
+            if(fabs(draw_points.x) <0.005f)
+            {
+                step = OVER;
+                 rt_thread_mdelay(100); 
+                break;
+            }
+            draw_x = draw_x + delta;
+            draw_points.x = draw_x;        
+            Linear_Interpolate(&square_interpolation_d,draw_points.x);
+            draw_points.y = square_interpolation_d.Interpolation_Out;
+            
+            break;    
+        default:
+            // LOG_E("step error case");         
+            break;                       
+    }
+    if(draw_points.y>c) draw_points.y=c;
+    if(draw_points.y<0) draw_points.y=0;
+    if(draw_points.x<-c) draw_points.x=-c;
+    if(draw_points.x>0) draw_points.x=0;
+    static int time = 0;
+    if(time++%100==0)LOG_I("now step:%s drae_y %f",step==A?"A":step==B?"B":step==C?"C":step==D?"D":"OVER",draw_points.y);
+    graphics2corexy(&now_points, &draw_points);
+    corexy_absolute_move(&corexy,now_points.x,now_points.y);
+
+    offset =max( fabs(now_points.y - corexy.y) , fabs(now_points.x - corexy.x));
+    gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+    rt_thread_mdelay(gap_time);
+    //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
+    return 0;
+}
+
+
+
+
 void rbmg_handle(void*param)
 {
     rt_thread_mdelay(1000);
