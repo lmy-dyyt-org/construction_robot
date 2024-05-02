@@ -35,7 +35,7 @@ int Linear_Interpolation_Init(LinearInterpolation* interp)
 int Linear_Interpolation_Creat(Interpolation_handle_t* interp)// 初始化拟合曲线 
 {
     LinearInterpolation* Linear_Interpolation = (LinearInterpolation*)interp->Interpolation_driver_handle;
-    if((interp->original_points[0].x - interp->original_points[1].x)==0) interp->original_points[0].x+=0.000001f;
+    if((interp->original_points[0].x - interp->original_points[1].x)==0) interp->original_points[0].x+=0.00001f;
     Linear_Interpolation->slope = (interp->original_points[0].y - interp->original_points[1].y) / (interp->original_points[0].x - interp->original_points[1].x); // 计算斜率
     return 0;
 }

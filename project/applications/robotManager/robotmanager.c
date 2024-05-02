@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-02 11:29:02
+ * @LastEditTime: 2024-05-02 14:59:16
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -110,7 +110,7 @@ int draw_square(void)
     switch(step)
     {
         case A:
-            if(draw_points.y == c)
+            if(fabs(draw_points.y -c)<0.005)//1mm
             {
                 step = B;
                 rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
@@ -123,7 +123,7 @@ int draw_square(void)
 
             break;
         case B:
-            if(draw_points.x == -c)
+            if(fabs(draw_points.x+c) < 0.005)//5mm
             {
                 step = C;
                  rt_thread_mdelay(2000); 
@@ -136,10 +136,10 @@ int draw_square(void)
 
             break;
         case C:
-            if(draw_points.y == 0)
+            if(fabs(draw_points.y) <0.005)//1mm
             {
                 step = D;
-                 rt_thread_mdelay(2000); 
+                rt_thread_mdelay(2000); 
                 break;
             }
             draw_points.x = draw_x;        
@@ -148,7 +148,7 @@ int draw_square(void)
                     
             break;
         case D:
-            if(draw_points.x == 0)
+            if(fabs(draw_points.x) <0.005f)
             {
                 step = OVER;
                  rt_thread_mdelay(2000); 
@@ -168,7 +168,8 @@ int draw_square(void)
     if(draw_points.y<0) draw_points.y=0;
     if(draw_points.x<-c) draw_points.x=-c;
     if(draw_points.x>0) draw_points.x=0;
-
+    static int time = 0;
+    if(time++%100==0)LOG_I("now step:%s drae_y %f",step==A?"A":step==B?"B":step==C?"C":step==D?"D":"OVER",draw_points.y);
     graphics2corexy(&now_points, &draw_points);
     corexy_absolute_move(&corexy,now_points.x,now_points.y);
 
@@ -228,11 +229,10 @@ int draw_triangle(void)
     switch(step)
     {
         case A:
-            LOG_D("now_step:%d",step);
-            if( fabs(draw_points.x - -0.866*c) < 0.001f )
+            if( fabs(draw_points.x +0.866*c) < 0.005f )
             {
                 step = B;
-                //rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
+                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
                 break;
             }
             draw_x = draw_x - delta2;
@@ -241,10 +241,10 @@ int draw_triangle(void)
             draw_points.y = square_interpolation_a.Interpolation_Out;
             break;
         case B:
-            LOG_D("now_step:%d",step);
-            if( fabs(draw_points.x - (-c)) < 0.001f )
+            if( fabs(draw_points.x +c) < 0.005f )
             {
                 step = C;
+                LOG_W("trigle to C");
                 //rt_thread_mdelay(2000); 
                 break;
             }
@@ -254,11 +254,10 @@ int draw_triangle(void)
             draw_points.y = square_interpolation_b.Interpolation_Out;
             break;
         case C:
-            LOG_D("now_step:%d",step);
-            if( fabs(draw_points.x - 0) < 0.001f )
+            if( fabs(draw_points.x - 0) < 0.005f )
             {
                 step = OVER;
-                // rt_thread_mdelay(2000); 
+                 rt_thread_mdelay(2000); 
                 break;
             }
             draw_x = draw_x + delta2;
@@ -275,8 +274,8 @@ int draw_triangle(void)
     if(draw_points.x<-c) draw_points.x=-c;
     if(draw_points.x>0) draw_points.x=0;
 
-    if(time%100==0)
-    LOG_D("draw_points.x:%f,draw_points.y:%f",draw_points.x,draw_points.y); 
+
+    if(time++%100==0)LOG_I("now step:%s draw_y %f",step==A?"A":step==B?"B":step==C?"C":step==D?"D":"OVER",draw_points.y);
 
     graphics2corexy(&now_points, &draw_points);
     corexy_absolute_move(&corexy,now_points.x,now_points.y);
@@ -316,8 +315,8 @@ void rbmg_handle(void*param)
         now_points.x = corexy.x ; 
         now_points.y = corexy.y ; 
 
-         draw_square();
-        //draw_triangle();
+         //draw_square();
+        draw_triangle();
         rt_thread_mdelay(5);
         Emm_V5_Pos_moveok();
     }

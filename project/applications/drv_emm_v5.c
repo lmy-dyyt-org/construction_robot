@@ -554,16 +554,22 @@ void Emm_V5_Pos_moveok(void)
     while( 1 )
     {
         time++;
-        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
-        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
-        real_corexy.x = (float)(left_stepper.stepper_motor_angle*142.22f + right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
-        real_corexy.y = (float)(left_stepper.stepper_motor_angle*142.22f - right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
 
+        real_corexy.x = -(float)(left_stepper.stepper_motor_angle*142.22f + right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
+        real_corexy.y = -(float)(left_stepper.stepper_motor_angle*142.22f - right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
+        float error_x = fabs(corexy.x - real_corexy.x);
+        float error_y = fabs(corexy.y - real_corexy.y);
         if(fabs(corexy.x - real_corexy.x) < 0.01f  &&  fabs(corexy.y-real_corexy.y) < 0.01f )
         {
-            break;
+            return;
         }
         
+       static int time=0;
+
+        if(time++%50==0)
+        {
+        LOG_D("eror_x %f,error_y %f",error_x,error_y);
+        }
         if(time == 500) 
         {
             time = 0;
@@ -674,7 +680,9 @@ void drv_emm_v5_entry(void *t)
             LOG_D("tar_corexy.x:%f,tar_corexy.y:%f",corexy.x,corexy.y);
             LOG_D("real_corexy.x:%f,real_corexy.y:%f",real_corexy.x,real_corexy.y);
         }
-        rt_thread_mdelay(gap_time);//150有点震
+        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
+        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
+        rt_thread_mdelay(20);//150有点震
     }
 }
 
