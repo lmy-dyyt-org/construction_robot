@@ -379,19 +379,9 @@ void Emm_V5_Pos_Control(stepper_motor_t *motor, uint8_t dir, uint16_t vel, uint8
     emm_transmit(cmd, 13);
     emm_wait_for_ack(motor,cmd[1]);
 
-    // LOG_D("move start");
-    // while( 1 )
-    // {
-    //     if(fabs(corexy.x - real_corexy.x) < 0.001f  &&  fabs(corexy.y-real_corexy.y) < 0.001f)
-    //     {
-    //         real_corexy.x = corexy.x;
-    //         real_corexy.y = corexy.y;
-    //         LOG_D("move ok");
-    //         break;
-    //     }
-        
-    // }
+
 }
+
 
 /**
  * @brief    立即停止（所有控制模式都通用）
@@ -558,9 +548,38 @@ rt_err_t emm_uart_rx_ind(rt_device_t dev, rt_size_t size)
 }
 
 
+void Emm_V5_Pos_moveok(void)
+{
+    static int time=0;
+    while( 1 )
+    {
+        time++;
+        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
+        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
+        real_corexy.x = (float)(left_stepper.stepper_motor_angle*142.22f + right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
+        real_corexy.y = (float)(left_stepper.stepper_motor_angle*142.22f - right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
+
+        if(fabs(corexy.x - real_corexy.x) < 0.01f  &&  fabs(corexy.y-real_corexy.y) < 0.01f )
+        {
+            break;
+        }
+        
+        if(time == 500) 
+        {
+            time = 0;
+            LOG_E("stepper_motor_move_timeout");
+            break;
+        }
+
+        rt_thread_mdelay(10);
+    }
+}
+
+
+
 void drv_emm_v5_entry(void *t)
 {
-    rt_thread_mdelay(2000); //等待步进上电
+    //rt_thread_mdelay(2000); //等待步进上电
     /* 查找系统中的串口设备 */
     Emm_serial1 = rt_device_find("uart8");
 	if(Emm_serial1==RT_NULL)return ;
@@ -623,8 +642,6 @@ void drv_emm_v5_entry(void *t)
     int left_stepper_pulse = 0;
     int right_stepper_pulse = 0;
 
-
-
     while (1)
     {
         //1.8*256*200 对应 0.04m
@@ -650,11 +667,13 @@ void drv_emm_v5_entry(void *t)
             Emm_V5_Pos_Control(&right_stepper, 0, motor_vel, motor_acc, -right_stepper_pulse, 1, 0);
         }
 
-        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
-        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
-        real_corexy.x = (float)(left_stepper_pulse + right_stepper_pulse) * 0.04f / (float)(256*200) / 2;
-        real_corexy.y = (float)(left_stepper_pulse - right_stepper_pulse) * 0.04f / (float)(256*200) / 2;
-        LOG_D("real_corexy.x:%f,real_corexy.y:%f",real_corexy.x,real_corexy.y);
+       static int time=0;
+
+        if(time++%10==0)
+        {
+            LOG_D("tar_corexy.x:%f,tar_corexy.y:%f",corexy.x,corexy.y);
+            LOG_D("real_corexy.x:%f,real_corexy.y:%f",real_corexy.x,real_corexy.y);
+        }
         rt_thread_mdelay(gap_time);//150有点震
     }
 }

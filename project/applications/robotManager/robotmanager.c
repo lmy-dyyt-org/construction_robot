@@ -182,7 +182,8 @@ int draw_square(void)
 //以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
 int draw_triangle(void)
 {
-#define delta2 0.001 
+#define delta2 0.01 
+    static int time = 0; 
     static float draw_x = 0; 
     // static float tmp = 0;
     // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
@@ -207,6 +208,9 @@ int draw_triangle(void)
 
     if(draw_x == 0)
     {
+        LOG_D("points_0.x:%f,points_0.y:%f",points_01[0].x,points_01[0].y);
+        LOG_D("points_1.x:%f,points_1.y:%f",points_01[1].x,points_01[1].y);
+        LOG_D("points_2.x:%f,points_2.y:%f",points_12[1].x,points_12[1].y);
         Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
         Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
         Interpolation_Init(&square_interpolation_c, &square_interpolation_handle_c, Linear_Interpolation_Creat,Linear_Interpolate,points_20, 2);
@@ -214,53 +218,53 @@ int draw_triangle(void)
     
     static int step=A;//用于指示哪一段曲线a,b,c
     /*绘图坐标系下 以图形右下角为原点 （0，0）
-      1
-     /\
-    /  \
- b /    \a
-2 /______\ 0
-      c
+        1
+        /\
+       /  \
+    b /    \a
+   2 /______\ 0
+        c
     */
     switch(step)
     {
         case A:
-            if(draw_points.x == -0.866*c)
+            LOG_D("now_step:%d",step);
+            if( fabs(draw_points.x - -0.866*c) < 0.001f )
             {
                 step = B;
-                rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
+                //rt_thread_mdelay(2000); //每个曲线之间稍微留长点时间。
                 break;
             }
             draw_x = draw_x - delta2;
             draw_points.x = draw_x;
             Linear_Interpolate(&square_interpolation_a,draw_points.x);
             draw_points.y = square_interpolation_a.Interpolation_Out;
-            LOG_D("draw_points.x"); 
             break;
         case B:
-            if(draw_points.x == -c)
+            LOG_D("now_step:%d",step);
+            if( fabs(draw_points.x - (-c)) < 0.001f )
             {
                 step = C;
-                 rt_thread_mdelay(2000); 
+                //rt_thread_mdelay(2000); 
                 break;
             }
             draw_x = draw_x - delta2;
             draw_points.x = draw_x;
             Linear_Interpolate(&square_interpolation_b,draw_points.x);
             draw_points.y = square_interpolation_b.Interpolation_Out;
-    
             break;
         case C:
-            if(draw_points.x == 0)
+            LOG_D("now_step:%d",step);
+            if( fabs(draw_points.x - 0) < 0.001f )
             {
                 step = OVER;
-                 rt_thread_mdelay(2000); 
+                // rt_thread_mdelay(2000); 
                 break;
             }
             draw_x = draw_x + delta2;
             draw_points.x = draw_x;        
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
-                    
             break;  
         default:
             // LOG_E("step error case");         
@@ -271,12 +275,15 @@ int draw_triangle(void)
     if(draw_points.x<-c) draw_points.x=-c;
     if(draw_points.x>0) draw_points.x=0;
 
+    if(time%100==0)
+    LOG_D("draw_points.x:%f,draw_points.y:%f",draw_points.x,draw_points.y); 
+
     graphics2corexy(&now_points, &draw_points);
     corexy_absolute_move(&corexy,now_points.x,now_points.y);
 
     offset =max( fabs(now_points.y - corexy.y) , fabs(now_points.x - corexy.x));
-    gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*1000) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
-    rt_thread_mdelay(gap_time);
+    gap_time = fabs((offset / ((motor_vel*0.04f)/60.f))*100) ; //有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+    //rt_thread_mdelay(gap_time);
     //  LOG_D("corexy.x:%f,corexy.y:%f",corexy.x,corexy.y);
     return 0;
 }
@@ -284,15 +291,17 @@ int draw_triangle(void)
 
 void rbmg_handle(void*param)
 {
+    rt_thread_mdelay(1000);
 
     while(1)
     {
         now_points.x = corexy.x ; 
         now_points.y = corexy.y ; 
 
-        // draw_square();
-        draw_triangle();
+         draw_square();
+        //draw_triangle();
         rt_thread_mdelay(5);
+        Emm_V5_Pos_moveok();
     }
 }
 
@@ -304,7 +313,7 @@ int rbmg_init(void)
     tid_rbmg = rt_thread_create("robotmanger",
                                 rbmg_handle, RT_NULL,
                                 4096,
-                                7, 1);
+                                16, 1);
 
     /* 线程创建成功，则启动线程 */
     if (tid_rbmg != RT_NULL)

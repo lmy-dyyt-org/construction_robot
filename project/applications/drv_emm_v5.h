@@ -69,7 +69,7 @@ void Emm_V5_Origin_Modify_Params(stepper_motor_t *motor, bool svF, uint8_t o_mod
 void Emm_V5_Origin_Trigger_Return(stepper_motor_t *motor, uint8_t o_mode, bool snF); // 发送命令触发回零
 void Emm_V5_Origin_Interrupt(stepper_motor_t *motor); // 强制中断并退出回零
 
-
+void Emm_V5_Pos_moveok(void);
 #ifdef __cplusplus
 }
 #endif

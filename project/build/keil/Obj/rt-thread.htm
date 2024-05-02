@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\build\keil\Obj\rt-thread.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\build\keil\Obj\rt-thread.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Thu May  2 11:23:14 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Thu May  2 13:29:40 2024
 <BR><P>
 <H3>Maximum Stack Usage =       1108 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -111,8 +111,8 @@ Function Pointers
  <LI><a href="#[33]">I2C2_EV_IRQHandler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
  <LI><a href="#[5b]">I2C3_ER_IRQHandler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
  <LI><a href="#[5a]">I2C3_EV_IRQHandler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
- <LI><a href="#[90]">Linear_Interpolate</a> from linearinterp.o(.text.Linear_Interpolate) referenced 2 times from robotmanager.o(.text.draw_triangle)
- <LI><a href="#[8f]">Linear_Interpolation_Creat</a> from linearinterp.o(.text.Linear_Interpolation_Creat) referenced 2 times from robotmanager.o(.text.draw_triangle)
+ <LI><a href="#[90]">Linear_Interpolate</a> from linearinterp.o(.text.Linear_Interpolate) referenced 2 times from robotmanager.o(.text.draw_square)
+ <LI><a href="#[8f]">Linear_Interpolation_Creat</a> from linearinterp.o(.text.Linear_Interpolation_Creat) referenced 2 times from robotmanager.o(.text.draw_square)
  <LI><a href="#[b]">MemManage_Handler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
  <LI><a href="#[9]">NMI_Handler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
  <LI><a href="#[55]">OTG_FS_IRQHandler</a> from startup_stm32f427xx.o(.text) referenced from startup_stm32f427xx.o(RESET)
@@ -1126,29 +1126,29 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[28c]"></a>strchr</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, strchr.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<BR><BR>[Called By]<UL><LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
 </UL>
 
-<P><STRONG><a name="[24f]"></a>memcmp</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, memcmp.o(.text))
+<P><STRONG><a name="[24e]"></a>memcmp</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, memcmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = memcmp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
 
-<P><STRONG><a name="[24e]"></a>strlen</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, strlen.o(.text))
+<P><STRONG><a name="[24d]"></a>strlen</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, strlen.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
-<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
+<BR>[Called By]<UL><LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
 
 <P><STRONG><a name="[28b]"></a>strncmp</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, strncmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = strncmp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
-<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
-<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
+<BR>[Called By]<UL><LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
+<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
 </UL>
 
 <P><STRONG><a name="[18b]"></a>__aeabi_memcpy</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, rt_memcpy_v6.o(.text))
@@ -1221,8 +1221,8 @@ Global Symbols
 <P><STRONG><a name="[157]"></a>_memset_w</STRONG> (Thumb, 74 bytes, Stack size 4 bytes, rt_memclr_w.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = _memset_w
 </UL>
-<BR>[Called By]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset4
-<LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset
+<BR>[Called By]<UL><LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset
+<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset4
 </UL>
 
 <P><STRONG><a name="[158]"></a>strncpy</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, strncpy.o(.text))
@@ -1232,7 +1232,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_init
-<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
 
@@ -1982,7 +1982,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[2f2]"></a>HAL_RCC_GetClockConfig</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetClockConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
+<BR><BR>[Called By]<UL><LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
 </UL>
 
 <P><STRONG><a name="[1cd]"></a>HAL_RCC_GetPCLK1Freq</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK1Freq))
@@ -2021,11 +2021,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_pwm_init
 </UL>
 
-<P><STRONG><a name="[242]"></a>HAL_TIMEx_PWMN_Start</STRONG> (Thumb, 242 bytes, Stack size 0 bytes, stm32f4xx_hal_tim_ex.o(.text.HAL_TIMEx_PWMN_Start))
+<P><STRONG><a name="[241]"></a>HAL_TIMEx_PWMN_Start</STRONG> (Thumb, 242 bytes, Stack size 0 bytes, stm32f4xx_hal_tim_ex.o(.text.HAL_TIMEx_PWMN_Start))
 <BR><BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
 </UL>
 
-<P><STRONG><a name="[243]"></a>HAL_TIMEx_PWMN_Stop</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, stm32f4xx_hal_tim_ex.o(.text.HAL_TIMEx_PWMN_Stop))
+<P><STRONG><a name="[242]"></a>HAL_TIMEx_PWMN_Stop</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, stm32f4xx_hal_tim_ex.o(.text.HAL_TIMEx_PWMN_Stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = HAL_TIMEx_PWMN_Stop
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
@@ -2079,11 +2079,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Init
 </UL>
 
-<P><STRONG><a name="[245]"></a>HAL_TIM_PWM_Start</STRONG> (Thumb, 290 bytes, Stack size 0 bytes, stm32f4xx_hal_tim.o(.text.HAL_TIM_PWM_Start))
+<P><STRONG><a name="[244]"></a>HAL_TIM_PWM_Start</STRONG> (Thumb, 290 bytes, Stack size 0 bytes, stm32f4xx_hal_tim.o(.text.HAL_TIM_PWM_Start))
 <BR><BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
 </UL>
 
-<P><STRONG><a name="[246]"></a>HAL_TIM_PWM_Stop</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, stm32f4xx_hal_tim.o(.text.HAL_TIM_PWM_Stop))
+<P><STRONG><a name="[245]"></a>HAL_TIM_PWM_Stop</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, stm32f4xx_hal_tim.o(.text.HAL_TIM_PWM_Stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = HAL_TIM_PWM_Stop
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_pwm_control
@@ -2214,16 +2214,16 @@ Global Symbols
 <P><STRONG><a name="[238]"></a>Interpolation_Init</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, linearinterp.o(.text.Interpolation_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Interpolation_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 </UL>
 
 <P><STRONG><a name="[90]"></a>Linear_Interpolate</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, linearinterp.o(.text.Linear_Interpolate))
-<BR><BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR><BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 </UL>
-<BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.draw_triangle)
+<BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.draw_square)
 </UL>
 <P><STRONG><a name="[8f]"></a>Linear_Interpolation_Creat</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, linearinterp.o(.text.Linear_Interpolation_Creat))
-<BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.draw_triangle)
+<BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.draw_square)
 </UL>
 <P><STRONG><a name="[191]"></a>My_FSUS_up</STRONG> (Thumb, 222 bytes, Stack size 176 bytes, fashion_star_uart_servo.o(.text.My_FSUS_up))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1028 + Unknown Stack Size
@@ -2629,7 +2629,7 @@ Global Symbols
 <LI><a href="#[21a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_call_stack
 <LI><a href="#[219]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dump_stack
 </UL>
-<BR>[Called By]<UL><LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<BR>[Called By]<UL><LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 </UL>
 
 <P><STRONG><a name="[21d]"></a>cm_backtrace_init</STRONG> (Thumb, 160 bytes, Stack size 16 bytes, cm_backtrace.o(.text.cm_backtrace_init))
@@ -2664,8 +2664,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> can.o(FSymTab)
 </UL>
-<P><STRONG><a name="[23b]"></a>corexy_absolute_move</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, drv_corexy.o(.text.corexy_absolute_move))
-<BR><BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<P><STRONG><a name="[23a]"></a>corexy_absolute_move</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, drv_corexy.o(.text.corexy_absolute_move))
+<BR><BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 </UL>
 
 <P><STRONG><a name="[91]"></a>corexy_entry</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, drv_corexy.o(.text.corexy_entry))
@@ -2726,17 +2726,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loop
 </UL>
 
-<P><STRONG><a name="[237]"></a>draw_triangle</STRONG> (Thumb, 720 bytes, Stack size 48 bytes, robotmanager.o(.text.draw_triangle))
+<P><STRONG><a name="[237]"></a>draw_square</STRONG> (Thumb, 752 bytes, Stack size 48 bytes, robotmanager.o(.text.draw_square))
 <BR><BR>[Stack]<UL><LI>Max Depth = 892 + Unknown Stack Size
-<LI>Call Chain = draw_triangle &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
+<LI>Call Chain = draw_square &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;corexy_absolute_move
+<BR>[Calls]<UL><LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;corexy_absolute_move
 <LI><a href="#[238]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Interpolation_Init
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Linear_Interpolate
-<LI><a href="#[17a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 <LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
 <LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
-<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
 <LI><a href="#[239]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
@@ -2752,12 +2750,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> drv_corexy.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[93]"></a>drv_emm_v5_entry</STRONG> (Thumb, 1040 bytes, Stack size 128 bytes, drv_emm_v5.o(.text.drv_emm_v5_entry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 988 + Unknown Stack Size
+<P><STRONG><a name="[93]"></a>drv_emm_v5_entry</STRONG> (Thumb, 784 bytes, Stack size 104 bytes, drv_emm_v5.o(.text.drv_emm_v5_entry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 964 + Unknown Stack Size
 <LI>Call Chain = drv_emm_v5_entry &rArr; rt_sem_create &rArr; rt_object_allocate &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
-<LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<BR>[Calls]<UL><LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
+<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
 <LI><a href="#[179]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_set_rx_indicate
 <LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_open
 <LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_find
@@ -2769,13 +2767,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> drv_emm_v5.o(.text.emm_v5_init)
 </UL>
-<P><STRONG><a name="[247]"></a>emm_cmd_ana</STRONG> (Thumb, 180 bytes, Stack size 32 bytes, drv_emm_v5.o(.text.emm_cmd_ana))
+<P><STRONG><a name="[246]"></a>emm_cmd_ana</STRONG> (Thumb, 180 bytes, Stack size 32 bytes, drv_emm_v5.o(.text.emm_cmd_ana))
 <BR><BR>[Stack]<UL><LI>Max Depth = 720 + Unknown Stack Size
 <LI>Call Chain = emm_cmd_ana &rArr; ulog_output &rArr; ulog_voutput &rArr;  rt_assert_handler (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[17a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
 </UL>
-<BR>[Called By]<UL><LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<BR>[Called By]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
 </UL>
 
 <P><STRONG><a name="[92]"></a>emm_uart_rx_ind</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, drv_emm_v5.o(.text.emm_uart_rx_ind))
@@ -2789,17 +2787,17 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 884 + Unknown Stack Size
 <LI>Call Chain = emm_v5_init &rArr; rt_thread_create &rArr; rt_object_allocate &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
+<BR>[Calls]<UL><LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
 <LI><a href="#[186]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_startup
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_create
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> drv_emm_v5.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[241]"></a>emm_wait_for_ack</STRONG> (Thumb, 160 bytes, Stack size 40 bytes, drv_emm_v5.o(.text.emm_wait_for_ack))
+<P><STRONG><a name="[240]"></a>emm_wait_for_ack</STRONG> (Thumb, 160 bytes, Stack size 40 bytes, drv_emm_v5.o(.text.emm_wait_for_ack))
 <BR><BR>[Stack]<UL><LI>Max Depth = 852 + Unknown Stack Size
 <LI>Call Chain = emm_wait_for_ack &rArr; rt_sem_take &rArr; _rt_sem_take &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_cmd_ana
+<BR>[Calls]<UL><LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_cmd_ana
 <LI><a href="#[189]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_take
 <LI><a href="#[188]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_read
 <LI><a href="#[17a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_output
@@ -2812,11 +2810,11 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 1092 + Unknown Stack Size
 <LI>Call Chain = exception_hook &rArr; rt_cm_backtrace_exception_hook &rArr; list_thread &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<BR>[Calls]<UL><LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cmb_port.o(.text.rt_cm_backtrace_init)
 </UL>
-<P><STRONG><a name="[24a]"></a>finsh_getchar</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, shell.o(.text.finsh_getchar))
+<P><STRONG><a name="[249]"></a>finsh_getchar</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, shell.o(.text.finsh_getchar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 836 + Unknown Stack Size
 <LI>Call Chain = finsh_getchar &rArr; rt_sem_take &rArr; _rt_sem_take &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -2827,7 +2825,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
 
-<P><STRONG><a name="[24b]"></a>finsh_set_device</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, shell.o(.text.finsh_set_device))
+<P><STRONG><a name="[24a]"></a>finsh_set_device</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, shell.o(.text.finsh_set_device))
 <BR><BR>[Stack]<UL><LI>Max Depth = 828 + Unknown Stack Size
 <LI>Call Chain = finsh_set_device &rArr; rt_device_find &rArr; rt_object_find &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -2836,7 +2834,7 @@ Global Symbols
 <LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_open
 <LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_find
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
-<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
 <LI><a href="#[1cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memset
 </UL>
 <BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
@@ -2851,7 +2849,7 @@ Global Symbols
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_create
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[182]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_init
-<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> shell.o(.rti_fn.6)
 </UL>
@@ -2921,7 +2919,7 @@ Global Symbols
 <LI><a href="#[266]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_feedback_torque
 <LI><a href="#[188]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_read
 <LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
-<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> motor_dj_rm_driver.o(.text.can_rx_thread)
@@ -3031,7 +3029,7 @@ Global Symbols
 <LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_list
 <LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_ps
 <LI><a href="#[13c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_hard_fault_exception
@@ -3084,9 +3082,9 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = module_mai &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
-<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
-<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[239]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
@@ -3204,11 +3202,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_init
 </UL>
 
-<P><STRONG><a name="[23d]"></a>motor_get_pos</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(.text.motor_get_pos))
+<P><STRONG><a name="[23c]"></a>motor_get_pos</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(.text.motor_get_pos))
 <BR><BR>[Called By]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;driver_mai
 </UL>
 
-<P><STRONG><a name="[23c]"></a>motor_get_speed</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(.text.motor_get_speed))
+<P><STRONG><a name="[23b]"></a>motor_get_speed</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(.text.motor_get_speed))
 <BR><BR>[Called By]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;driver_mai
 </UL>
 
@@ -3235,11 +3233,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_init
 </UL>
 
-<P><STRONG><a name="[23f]"></a>motor_set_pos</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, motor.o(.text.motor_set_pos))
+<P><STRONG><a name="[23e]"></a>motor_set_pos</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, motor.o(.text.motor_set_pos))
 <BR><BR>[Called By]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;driver_mai
 </UL>
 
-<P><STRONG><a name="[23e]"></a>motor_set_speed</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, motor.o(.text.motor_set_speed))
+<P><STRONG><a name="[23d]"></a>motor_set_speed</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, motor.o(.text.motor_set_speed))
 <BR><BR>[Called By]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;driver_mai
 </UL>
 
@@ -3262,14 +3260,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[27b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_init
 </UL>
 
-<P><STRONG><a name="[251]"></a>msh_auto_complete</STRONG> (Thumb, 272 bytes, Stack size 32 bytes, msh.o(.text.msh_auto_complete))
+<P><STRONG><a name="[250]"></a>msh_auto_complete</STRONG> (Thumb, 272 bytes, Stack size 32 bytes, msh.o(.text.msh_auto_complete))
 <BR><BR>[Stack]<UL><LI>Max Depth = 820 + Unknown Stack Size
 <LI>Call Chain = msh_auto_complete &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_strncpy
 <LI><a href="#[28b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncmp
-<LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 </UL>
 <BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
@@ -3284,7 +3282,7 @@ Global Symbols
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pwm_list
 </UL>
 
-<P><STRONG><a name="[253]"></a>msh_exec</STRONG> (Thumb, 448 bytes, Stack size 72 bytes, msh.o(.text.msh_exec))
+<P><STRONG><a name="[252]"></a>msh_exec</STRONG> (Thumb, 448 bytes, Stack size 72 bytes, msh.o(.text.msh_exec))
 <BR><BR>[Stack]<UL><LI>Max Depth = 860 + Unknown Stack Size
 <LI>Call Chain = msh_exec &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -3303,13 +3301,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_pin_cmd
 </UL>
 
-<P><STRONG><a name="[252]"></a>msh_opt_auto_complete</STRONG> (Thumb, 498 bytes, Stack size 40 bytes, msh.o(.text.msh_opt_auto_complete))
+<P><STRONG><a name="[251]"></a>msh_opt_auto_complete</STRONG> (Thumb, 498 bytes, Stack size 40 bytes, msh.o(.text.msh_opt_auto_complete))
 <BR><BR>[Stack]<UL><LI>Max Depth = 828 + Unknown Stack Size
 <LI>Call Chain = msh_opt_auto_complete &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[28b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncmp
-<LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[28c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
@@ -3362,18 +3360,18 @@ Global Symbols
 <LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_find
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
-<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[296]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[292]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> rt_drv_pwm.o(FSymTab)
 </UL>
-<P><STRONG><a name="[9d]"></a>rbmg_handle</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
+<P><STRONG><a name="[9d]"></a>rbmg_handle</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, robotmanager.o(.text.rbmg_handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 892 + Unknown Stack Size
-<LI>Call Chain = rbmg_handle &rArr; draw_triangle &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
+<LI>Call Chain = rbmg_handle &rArr; draw_square &rArr; rt_thread_mdelay &rArr; _thread_sleep &rArr; rt_exit_critical_safe &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR>[Calls]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 <LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robotmanager.o(.text.rbmg_init)
@@ -3449,8 +3447,8 @@ Global Symbols
 <LI><a href="#[268]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_ringbuffer_putchar_force
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_thread
 <LI><a href="#[289]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_updata_cfg
-<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
-<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
+<LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
+<LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
 <LI><a href="#[20f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_control
 <LI><a href="#[20e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_pin_mode
 <LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_pin_write
@@ -3488,7 +3486,7 @@ Global Symbols
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bus_device_read
 <LI><a href="#[261]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_i2c_master_recv
 <LI><a href="#[2bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_i2c_bus_device_device_init
-<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
 <LI><a href="#[263]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_detach
 <LI><a href="#[262]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_is_systemobject
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_get_type
@@ -3512,7 +3510,6 @@ Global Symbols
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_init
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_control
 <LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmb_test
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_update_priority
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[264]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_delete
@@ -3520,8 +3517,8 @@ Global Symbols
 <LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtthread_startup
 <LI><a href="#[2e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_check
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_system_init
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
-<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_rx_ind
 <LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_tick_increase
 <LI><a href="#[2b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_usart_init
@@ -3536,7 +3533,7 @@ Global Symbols
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_configure
 <LI><a href="#[1ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_isr
 <LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_i2c_init
-<LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
+<LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
 <LI><a href="#[2ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_enable_clock
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_can_recvmsg
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_can_sendmsg
@@ -3580,6 +3577,7 @@ Global Symbols
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_allocate
 <LI><a href="#[2d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_enqueue
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_resume_all
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[2f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_backend_register
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 <LI><a href="#[2f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_hex_formater
@@ -3622,7 +3620,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_backtrace
 </UL>
 
-<P><STRONG><a name="[24d]"></a>rt_calloc</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, kservice.o(.text.rt_calloc))
+<P><STRONG><a name="[24c]"></a>rt_calloc</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, kservice.o(.text.rt_calloc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 828 + Unknown Stack Size
 <LI>Call Chain = rt_calloc &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -3646,7 +3644,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;assert_hook
 </UL>
 
-<P><STRONG><a name="[249]"></a>rt_cm_backtrace_exception_hook</STRONG> (Thumb, 128 bytes, Stack size 16 bytes, cmb_port.o(.text.rt_cm_backtrace_exception_hook))
+<P><STRONG><a name="[248]"></a>rt_cm_backtrace_exception_hook</STRONG> (Thumb, 128 bytes, Stack size 16 bytes, cmb_port.o(.text.rt_cm_backtrace_exception_hook))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1076 + Unknown Stack Size
 <LI>Call Chain = rt_cm_backtrace_exception_hook &rArr; list_thread &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -3735,27 +3733,27 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_open
 <LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_find
-<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_board_init
 </UL>
 
 <P><STRONG><a name="[1f0]"></a>rt_critical_level</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, scheduler_up.o(.text.rt_critical_level))
 <BR><BR>[Called By]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
 
-<P><STRONG><a name="[24c]"></a>rt_device_close</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, device.o(.text.rt_device_close))
+<P><STRONG><a name="[24b]"></a>rt_device_close</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, device.o(.text.rt_device_close))
 <BR><BR>[Stack]<UL><LI>Max Depth = 748 + Unknown Stack Size
 <LI>Call Chain = rt_device_close &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_assert_handler
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_get_type
 </UL>
-<BR>[Called By]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<BR>[Called By]<UL><LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 <LI><a href="#[2a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_console_set_device
 </UL>
 
@@ -3787,7 +3785,7 @@ Global Symbols
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_Init
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc
 <LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_canstat
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 <LI><a href="#[2a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_console_set_device
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pwm_list
 </UL>
@@ -3805,7 +3803,7 @@ Global Symbols
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Action_Init
 <LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_init
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_Init
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 <LI><a href="#[2a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_console_set_device
 </UL>
 
@@ -3837,11 +3835,11 @@ Global Symbols
 <LI><a href="#[2ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_set_errno
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_dj_can_motor_callback
-<LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_rx_ind
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_rx_ind
 <LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_RecvPackage
-<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
 </UL>
 
 <P><STRONG><a name="[2aa]"></a>rt_device_register</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, device.o(.text.rt_device_register))
@@ -3871,7 +3869,7 @@ Global Symbols
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Action_Init
 <LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_init
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_Init
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 </UL>
 
 <P><STRONG><a name="[18d]"></a>rt_device_write</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, device.o(.text.rt_device_write))
@@ -3899,13 +3897,13 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_release
 <LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
+<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
 <LI><a href="#[1fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_detach
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_exit
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1ea]"></a>rt_exit_critical</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, scheduler_up.o(.text.rt_exit_critical))
@@ -3916,9 +3914,9 @@ Global Symbols
 <LI><a href="#[1c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_interrupt_enable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_release
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[204]"></a>rt_exit_critical_safe</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, scheduler_up.o(.text.rt_exit_critical_safe))
@@ -4094,9 +4092,9 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[1ef]"></a>rt_hw_interrupt_is_disabled</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, irq.o(.text.rt_hw_interrupt_is_disabled))
 <BR><BR>[Called By]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
 
@@ -4271,19 +4269,19 @@ Global Symbols
 <LI><a href="#[2bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_atomic_load
 </UL>
 <BR>[Called By]<UL><LI><a href="#[283]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mb_create
-<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
-<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
+<LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
+<LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
 <LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_release
 <LI><a href="#[2a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_find
 <LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
 <LI><a href="#[2ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_set_errno
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[2e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_check
 <LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_tick_increase
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_allocate
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 <LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;do_output
 </UL>
@@ -4329,8 +4327,8 @@ Global Symbols
 <LI><a href="#[224]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_list_dump
 <LI><a href="#[1b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_assert_handler
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_motor
-<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
-<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
+<LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
+<LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
 <LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_init
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_free
 <LI><a href="#[1d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_malloc
@@ -4341,10 +4339,9 @@ Global Symbols
 <LI><a href="#[2a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_find
 <LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_canstat
 <LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
-<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
+<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
 <LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmb_test
 <LI><a href="#[223]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_thread
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[22a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_device
 <LI><a href="#[22b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_timer
@@ -4360,10 +4357,10 @@ Global Symbols
 <LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memory_info
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_free
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_help
-<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
-<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
+<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_system_init
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 <LI><a href="#[2b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_heap_init
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_pin_get
@@ -4379,6 +4376,7 @@ Global Symbols
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_backtrace
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_allocate
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_async_init
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_init
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
@@ -4411,7 +4409,7 @@ Global Symbols
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_create
 <LI><a href="#[2c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_rbb_create
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_open
-<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_serial_open
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_allocate
 <LI><a href="#[20d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_async_output
@@ -4445,7 +4443,7 @@ Global Symbols
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_serial_control
 </UL>
 
-<P><STRONG><a name="[250]"></a>rt_memmove</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, kservice.o(.text.rt_memmove))
+<P><STRONG><a name="[24f]"></a>rt_memmove</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, kservice.o(.text.rt_memmove))
 <BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 </UL>
 
@@ -4471,10 +4469,10 @@ Global Symbols
 <LI><a href="#[2b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_can_register
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_control
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_open
-<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
-<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
+<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
 <LI><a href="#[2da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_init
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_thread_entry
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_adc_enabled
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_serial_close
@@ -4485,7 +4483,7 @@ Global Symbols
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_GLOBAL__sub_I_Wire.cpp
 </UL>
 
-<P><STRONG><a name="[248]"></a>rt_mutex_create</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, ipc.o(.text.rt_mutex_create))
+<P><STRONG><a name="[247]"></a>rt_mutex_create</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, ipc.o(.text.rt_mutex_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 852 + Unknown Stack Size
 <LI>Call Chain = rt_mutex_create &rArr; rt_object_allocate &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -4563,7 +4561,7 @@ Global Symbols
 <LI><a href="#[2c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_thread_ready
 <LI><a href="#[1e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_lock
 </UL>
-<BR>[Called By]<UL><LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<BR>[Called By]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_free
 <LI><a href="#[1d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_malloc
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_process
@@ -4612,8 +4610,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[285]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_create
 <LI><a href="#[283]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mb_create
-<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
-<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
+<LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_create
+<LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_create
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_create
 </UL>
 
@@ -4691,12 +4689,11 @@ Global Symbols
 <LI><a href="#[1f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_suspend_to_list
 <LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_resume
 <LI><a href="#[1f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_control
-<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_device_close
 <LI><a href="#[29f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_detach
 <LI><a href="#[29e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_stop
 <LI><a href="#[1f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_start
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_control
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_update_priority
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[2db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_detach
@@ -4707,6 +4704,7 @@ Global Symbols
 <LI><a href="#[2c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_smem_alloc
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_backtrace
 <LI><a href="#[208]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_control
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[2ad]"></a>rt_object_init</STRONG> (Thumb, 196 bytes, Stack size 40 bytes, object.o(.text.rt_object_init))
@@ -4937,7 +4935,6 @@ Global Symbols
 <LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_resume
 <LI><a href="#[1f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_start
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_control
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[2cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_tick_increase
 <LI><a href="#[26a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_print
@@ -4946,6 +4943,7 @@ Global Symbols
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_exit
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_resume_all
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1ff]"></a>rt_sched_remove_thread</STRONG> (Thumb, 108 bytes, Stack size 8 bytes, scheduler_up.o(.text.rt_sched_remove_thread))
@@ -4987,19 +4985,19 @@ Global Symbols
 
 <P><STRONG><a name="[1e5]"></a>rt_sched_thread_get_curr_prio</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, scheduler_comm.o(.text.rt_sched_thread_get_curr_prio))
 <BR><BR>[Called By]<UL><LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_release
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_update_priority
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[2d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_enqueue
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1e6]"></a>rt_sched_thread_get_init_prio</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, scheduler_comm.o(.text.rt_sched_thread_get_init_prio))
 <BR><BR>[Called By]<UL><LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_release
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_update_priority
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1fe]"></a>rt_sched_thread_get_stat</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, scheduler_comm.o(.text.rt_sched_thread_get_stat))
@@ -5082,7 +5080,6 @@ Global Symbols
 <LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_resume
 <LI><a href="#[1f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_start
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_control
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_mutex_before_delete_detach
 <LI><a href="#[2cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_tick_increase
 <LI><a href="#[26a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_print
@@ -5090,6 +5087,7 @@ Global Symbols
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_exit
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_susp_list_resume_all
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1e8]"></a>rt_sched_unlock_n_resched</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, scheduler_up.o(.text.rt_sched_unlock_n_resched))
@@ -5124,13 +5122,13 @@ Global Symbols
 <LI><a href="#[1ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_exit_critical
 <LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_control
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_exit
 <LI><a href="#[204]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_exit_critical_safe
 <LI><a href="#[1e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_unlock_n_resched
 <LI><a href="#[208]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_control
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1da]"></a>rt_scheduler_sethook</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, scheduler_up.o(.text.rt_scheduler_sethook))
@@ -5152,7 +5150,7 @@ Global Symbols
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;async_output_thread_entry
 </UL>
 
-<P><STRONG><a name="[240]"></a>rt_sem_create</STRONG> (Thumb, 146 bytes, Stack size 24 bytes, ipc.o(.text.rt_sem_create))
+<P><STRONG><a name="[23f]"></a>rt_sem_create</STRONG> (Thumb, 146 bytes, Stack size 24 bytes, ipc.o(.text.rt_sem_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 860 + Unknown Stack Size
 <LI>Call Chain = rt_sem_create &rArr; rt_object_allocate &rArr; rt_malloc &rArr; rt_kprintf &rArr; rt_device_write &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -5222,10 +5220,10 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 </UL>
-<BR>[Called By]<UL><LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<BR>[Called By]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
 <LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FSUS_RecvPackage
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_write
-<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_timer_thread_entry
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;async_output_thread_entry
 </UL>
@@ -5329,7 +5327,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_init
-<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
+<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
 <LI><a href="#[2c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_object_allocate
 <LI><a href="#[2f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_backend_register
 <LI><a href="#[2f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_hex_formater
@@ -5542,7 +5540,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rbmg_handle
-<LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_thread
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_emm_v5_entry
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_port_handle
@@ -5577,7 +5575,6 @@ Global Symbols
 <LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_fault
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_assert
 <LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_call_stack
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[2cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_tick_increase
 <LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memory_info
@@ -5589,6 +5586,7 @@ Global Symbols
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_backtrace
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
 <LI><a href="#[1e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_unlock_n_resched
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
 
@@ -5631,9 +5629,9 @@ Global Symbols
 <LI><a href="#[1e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_lock
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_suspend_with_flag
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[2a6]"></a>rt_thread_suspend_with_flag</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, thread.o(.text.rt_thread_suspend_with_flag))
@@ -5666,7 +5664,7 @@ Global Symbols
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bit_xfer
 <LI><a href="#[1f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_start
 <LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 <LI><a href="#[2e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_timer_check
 <LI><a href="#[22b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_timer
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_timer_thread_entry
@@ -5713,9 +5711,9 @@ Global Symbols
 <LI><a href="#[1c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_interrupt_enable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[285]"></a>rt_timer_create</STRONG> (Thumb, 118 bytes, Stack size 24 bytes, timer.o(.text.rt_timer_create))
@@ -5771,10 +5769,10 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_completion_wait
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_can_open
-<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_sem_take
 <LI><a href="#[2d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_timer_thread_init
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_thread_sleep
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[29e]"></a>rt_timer_stop</STRONG> (Thumb, 138 bytes, Stack size 16 bytes, timer.o(.text.rt_timer_stop))
@@ -5873,7 +5871,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_pwm_init
 </UL>
 
-<P><STRONG><a name="[244]"></a>stm32_tim_pclkx_doubler_get</STRONG> (Thumb, 98 bytes, Stack size 48 bytes, drv_tim.o(.text.stm32_tim_pclkx_doubler_get))
+<P><STRONG><a name="[243]"></a>stm32_tim_pclkx_doubler_get</STRONG> (Thumb, 98 bytes, Stack size 48 bytes, drv_tim.o(.text.stm32_tim_pclkx_doubler_get))
 <BR><BR>[Stack]<UL><LI>Max Depth = 788 + Unknown Stack Size
 <LI>Call Chain = stm32_tim_pclkx_doubler_get &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
@@ -5951,7 +5949,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[20d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_async_output
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 <LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_fault
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_assert
 <LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_init
@@ -6017,8 +6015,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ulog_voutput
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_call
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_rx_call
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_ctr
 <LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_dj_driver
 <LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_pos
@@ -6026,8 +6023,8 @@ Global Symbols
 <LI><a href="#[22c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_torque
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmd_motor
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;drv_emm_v5_entry
-<LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
-<LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_cmd_ana
+<LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_wait_for_ack
+<LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;emm_cmd_ana
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Action_Init
 <LI><a href="#[213]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_handle
 <LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dbus_uart_init
@@ -6044,7 +6041,7 @@ Global Symbols
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_bit_xfer
 <LI><a href="#[1db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_libc_exit
 <LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_assert_hook
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
+<LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_cm_backtrace_exception_hook
 <LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_fault
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_assert
 <LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cm_backtrace_init
@@ -6220,7 +6217,7 @@ Global Symbols
 <P><STRONG><a name="[304]"></a>__mathlib_dbl_overflow</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dunder.o(i.__mathlib_dbl_overflow))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __mathlib_dbl_overflow &rArr; __aeabi_dmul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<BR>[Calls]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 </UL>
 <BR>[Called By]<UL><LI><a href="#[301]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_ldexp
 </UL>
@@ -6228,7 +6225,7 @@ Global Symbols
 <P><STRONG><a name="[303]"></a>__mathlib_dbl_underflow</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dunder.o(i.__mathlib_dbl_underflow))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __mathlib_dbl_underflow &rArr; __aeabi_dmul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<BR>[Calls]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 </UL>
 <BR>[Called By]<UL><LI><a href="#[301]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_ldexp
 </UL>
@@ -6258,7 +6255,7 @@ Global Symbols
 <P><STRONG><a name="[2fe]"></a>frexp</STRONG> (Thumb, 118 bytes, Stack size 16 bytes, frexp.o(i.frexp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = frexp &rArr; __aeabi_dmul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<BR>[Calls]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp___mathlib_tofloat
 </UL>
@@ -6283,7 +6280,7 @@ Global Symbols
 <P><STRONG><a name="[174]"></a>__aeabi_d2f</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, d2f.o(x$fpl$d2f))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_d2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_dj_can_motor_callback
 <LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_pos
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_speed
@@ -6302,7 +6299,7 @@ Global Symbols
 <P><STRONG><a name="[239]"></a>__aeabi_dadd</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, daddsub_clz.o(x$fpl$dadd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_dadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 <LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;module_mai
 <LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
 </UL>
@@ -6370,11 +6367,11 @@ Global Symbols
 
 <P><STRONG><a name="[35f]"></a>_dflt</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt), UNUSED)
 
-<P><STRONG><a name="[256]"></a>__aeabi_l2d</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, dfltll_clz.o(x$fpl$dfltll))
+<P><STRONG><a name="[255]"></a>__aeabi_l2d</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, dfltll_clz.o(x$fpl$dfltll))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_l2d
 </UL>
 <BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 </UL>
 
 <P><STRONG><a name="[360]"></a>_ll_sto_d</STRONG> (Thumb, 162 bytes, Stack size 8 bytes, dfltll_clz.o(x$fpl$dfltll), UNUSED)
@@ -6409,14 +6406,14 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[314]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drcmple
 </UL>
 
-<P><STRONG><a name="[258]"></a>__aeabi_dmul</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dmul.o(x$fpl$dmul))
+<P><STRONG><a name="[257]"></a>__aeabi_dmul</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dmul.o(x$fpl$dmul))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_dmul
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_dj_can_motor_callback
 <LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;module_mai
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pwm_list
 <LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[303]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_underflow
 <LI><a href="#[304]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_overflow
 <LI><a href="#[2fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;frexp
@@ -6457,12 +6454,12 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[315]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dcmple_InfNaN
 </UL>
 
-<P><STRONG><a name="[257]"></a>__aeabi_dsub</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub))
+<P><STRONG><a name="[256]"></a>__aeabi_dsub</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_dsub
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;module_mai
 <LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 </UL>
 
 <P><STRONG><a name="[316]"></a>_dsub</STRONG> (Thumb, 472 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub), UNUSED)
@@ -6473,7 +6470,7 @@ Global Symbols
 <P><STRONG><a name="[176]"></a>__aeabi_f2d</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, f2d.o(x$fpl$f2d))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_f2d
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
+<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_square
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_dj_can_motor_callback
 <LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_pos
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_get_speed
@@ -6494,7 +6491,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_dcmpeq
 </UL>
 <BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 </UL>
 
 <P><STRONG><a name="[31a]"></a>_deq</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, dcmp.o(x$fpl$fcmp), UNUSED)
@@ -6508,7 +6505,7 @@ Global Symbols
 <P><STRONG><a name="[259]"></a>__aeabi_dcmpgt</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, dcmp.o(x$fpl$fcmp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_dcmpgt
 </UL>
-<BR>[Called By]<UL><LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<BR>[Called By]<UL><LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[295]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
 </UL>
 
@@ -6527,12 +6524,11 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[311]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dcmpge
 </UL>
 
-<P><STRONG><a name="[23a]"></a>__aeabi_dcmple</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, dcmp.o(x$fpl$fcmp))
+<P><STRONG><a name="[258]"></a>__aeabi_dcmple</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, dcmp.o(x$fpl$fcmp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_dcmple
 </UL>
-<BR>[Called By]<UL><LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw_triangle
-<LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[295]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
 </UL>
 
@@ -6544,7 +6540,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_dcmplt
 </UL>
 <BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 </UL>
 
 <P><STRONG><a name="[31f]"></a>_dls</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, dcmp.o(x$fpl$fcmp), UNUSED)
@@ -6584,11 +6580,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_value
 </UL>
 
-<P><STRONG><a name="[255]"></a>__aeabi_d2lz</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dfixll.o(x$fpl$llsfromd))
+<P><STRONG><a name="[254]"></a>__aeabi_d2lz</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dfixll.o(x$fpl$llsfromd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_d2lz
 </UL>
 <BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 </UL>
 
 <P><STRONG><a name="[320]"></a>_ll_sfrom_d</STRONG> (Thumb, 194 bytes, Stack size 32 bytes, dfixll.o(x$fpl$llsfromd), UNUSED)
@@ -6661,10 +6657,10 @@ Local Symbols
 <P><STRONG><a name="[7]"></a>driver_mai</STRONG> (Thumb, 194 bytes, Stack size 16 bytes, chassis_module_mai.o(.text.driver_mai))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = driver_mai
 </UL>
-<BR>[Calls]<UL><LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_pos
-<LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_speed
-<LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_get_pos
-<LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_get_speed
+<BR>[Calls]<UL><LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_pos
+<LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_speed
+<LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_get_pos
+<LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_get_speed
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chassis_module_mai.o(.data.ops_mai)
 </UL>
@@ -7273,13 +7269,13 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 836 + Unknown Stack Size
 <LI>Call Chain = drv_pwm_control &rArr; stm32_tim_pclkx_doubler_get &rArr; rt_assert_handler &rArr;  rt_kprintf (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Stop
-<LI><a href="#[245]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Start
+<BR>[Calls]<UL><LI><a href="#[245]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Stop
+<LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Start
 <LI><a href="#[1cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetPCLK1Freq
 <LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetPCLK2Freq
-<LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
-<LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_PWMN_Stop
-<LI><a href="#[242]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_PWMN_Start
+<LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stm32_tim_pclkx_doubler_get
+<LI><a href="#[242]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_PWMN_Stop
+<LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_PWMN_Start
 <LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> drv_pwm.o(.data.drv_ops)
@@ -7408,15 +7404,15 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memcpy
 <LI><a href="#[1cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memset
-<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
+<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_exec
 <LI><a href="#[1ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_console_get_device
-<LI><a href="#[252]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
-<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
-<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memmove
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
-<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
-<LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcmp
+<LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_opt_auto_complete
+<LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msh_auto_complete
+<LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_memmove
+<LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_set_device
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_getchar
+<LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcmp
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> shell.o(.text.finsh_system_init)
@@ -7562,8 +7558,8 @@ Local Symbols
 <LI><a href="#[1e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_thread_get_init_prio
 <LI><a href="#[1e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sched_thread_get_curr_prio
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
-<LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
+<BR>[Called By]<UL><LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mutex_drop_thread
+<LI><a href="#[1ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_rt_mutex_take
 </UL>
 
 <P><STRONG><a name="[1ee]"></a>_rt_mutex_take</STRONG> (Thumb, 744 bytes, Stack size 32 bytes, ipc.o(.text._rt_mutex_take))
@@ -7786,12 +7782,12 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
 <LI><a href="#[28e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_broken_up_decimal
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[28f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;out_rev_
-<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset4
-<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
+<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
 <LI><a href="#[293]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpge
 <LI><a href="#[259]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpgt
+<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_vsnprintf
 </UL>
@@ -7815,17 +7811,17 @@ Local Symbols
 <LI><a href="#[295]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
 </UL>
 
-<P><STRONG><a name="[254]"></a>get_components</STRONG> (Thumb, 328 bytes, Stack size 80 bytes, rt_vsnprintf.o(.text.get_components))
+<P><STRONG><a name="[253]"></a>get_components</STRONG> (Thumb, 328 bytes, Stack size 80 bytes, rt_vsnprintf.o(.text.get_components))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = get_components &rArr; __aeabi_dmul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
-<LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
+<BR>[Calls]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
+<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
 <LI><a href="#[25b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmplt
-<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
+<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
 <LI><a href="#[259]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpgt
 <LI><a href="#[25a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpeq
-<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 </UL>
 <BR>[Called By]<UL><LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_exponential_number
 <LI><a href="#[295]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
@@ -7846,19 +7842,19 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = print_exponential_number &rArr; print_integer &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[28e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_broken_up_decimal
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
+<LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_components
 <LI><a href="#[294]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_integer
-<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
+<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_l2d
 <LI><a href="#[291]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
-<LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
+<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2lz
 <LI><a href="#[292]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[273]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[25b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmplt
-<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
+<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmple
 <LI><a href="#[293]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpge
 <LI><a href="#[25a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dcmpeq
-<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[239]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[295]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print_floating_point
