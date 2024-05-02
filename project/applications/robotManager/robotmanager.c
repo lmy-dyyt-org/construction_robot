@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-02 14:59:16
+ * @LastEditTime: 2024-05-02 18:21:11
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -26,7 +26,7 @@
 #define max(a,b) (a)>(b)?(a):(b)
 #endif
 
-Point imagecenter={0,0};//corexy到绘图坐标系的偏移
+Point imagecenter={0.0,0.0};//corexy到绘图坐标系的偏移
 Point rightbottom;//corexy坐标系下图像的右下角顶点 (给插值器用的零点)
 
 Interpolation_handle_t square_interpolation_a;
@@ -329,9 +329,13 @@ int draw_square_rotate(void)
     // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
     static float c = 0; //边长
     // c = tmp/sqrt(2);
-    c=0.25;
+    c=0.25/2;
     float offset = 0; //每次插值移动的距离
-
+    float angle = 3.14/4;/*0--2*pi*/
+    float cos_angle = cosf(angle);
+    float sin_angle = sinf(angle);
+    float tmp0 = cos_angle-sin_angle;
+    float tmp1 = sin_angle+cos_angle;
     // static Point points_01[2]={{0,0},{0,c}};
     // static Point points_12[2]={{0,c},{-c,c}};
     // static Point points_23[2]={{-c,c},{-c,0}};
@@ -342,10 +346,35 @@ int draw_square_rotate(void)
     static Point points_23[2]={0};
     static Point points_30[2]={0};
 
-    points_01[1].y=c;
-    points_12[0].y=c; points_12[1].x=-c; points_12[1].y=c;
-    points_23[0].x=-c; points_23[0].y=c; points_23[1].x=-c;
-    points_30[0].x=-c;
+    // points_01[1].y=c;
+    // points_12[0].y=c; points_12[1].x=-c; points_12[1].y=c;
+    // points_23[0].x=-c; points_23[0].y=c; points_23[1].x=-c;
+    // points_30[0].x=-c;
+
+
+////////////////////////////////////////////////////////////
+    points_01[0].x = 0*cos_angle-0*sin_angle;
+    points_01[0].y = 0*sin_angle+0*cos_angle;
+
+    points_12[0].x = 0*cos_angle-c*sin_angle;
+    points_12[0].y = 0*sin_angle+c*cos_angle;
+
+    points_23[0].x = -c*cos_angle-c*sin_angle;
+    points_23[0].y = -c*sin_angle+c*cos_angle;
+
+    points_30[0].x =-c*cos_angle-0*sin_angle;
+    points_30[0].y =-c*sin_angle+0*cos_angle;
+
+    points_30[1] = points_01[0];
+    points_01[1] = points_12[0];
+    points_12[1] = points_23[0];
+    points_23[1] = points_30[0];
+
+    LOG_D("point1 x1=%f; y1=%f;",points_01[0].x,points_01[0].y);
+    LOG_D("point2 x2=%f; y2=%f;",points_12[0].x,points_12[0].y);
+    LOG_D("point3 x3=%f; y3=%f;",points_23[0].x,points_23[0].y);
+    LOG_D("point4 x4=%f; y4=%f;",points_30[0].x,points_30[0].y);
+////////////////////////////////////////////////////////////        
 
     static Point draw_points={0,0};
 
@@ -423,10 +452,10 @@ int draw_square_rotate(void)
             // LOG_E("step error case");         
             break;                       
     }
-    if(draw_points.y>c) draw_points.y=c;
-    if(draw_points.y<0) draw_points.y=0;
-    if(draw_points.x<-c) draw_points.x=-c;
-    if(draw_points.x>0) draw_points.x=0;
+    if(draw_points.y>c*tmp1) draw_points.y=c*tmp1;
+    if(draw_points.y<-c*tmp1) draw_points.y=-c*tmp1;
+    if(draw_points.x<-c*tmp0) draw_points.x=-c*tmp0;
+    if(draw_points.x>c*tmp0) draw_points.x=c*tmp0;
     static int time = 0;
     if(time++%100==0)LOG_I("now step:%s drae_y %f",step==A?"A":step==B?"B":step==C?"C":step==D?"D":"OVER",draw_points.y);
     graphics2corexy(&now_points, &draw_points);
@@ -454,7 +483,7 @@ void rbmg_handle(void*param)
         //draw_square();
         //draw_triangle();
         //draw_cricle();
-
+        draw_square_rotate();
         Emm_V5_Pos_moveok();
         rt_thread_mdelay(5);
 
