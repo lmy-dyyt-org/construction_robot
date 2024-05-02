@@ -478,7 +478,7 @@ int draw_triangle_rotate(void)
     // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
     static float c = 0; //边长
     // c = sqrt(3)*tmp;
-    c=0.3;
+    c=0.1;
     float offset = 0; //每次插值移动的距离
     float angle = 3.14/4;/*0--2*pi*/
     float cos_angle = cosf(angle);
@@ -505,16 +505,13 @@ int draw_triangle_rotate(void)
     points_01[1] = points_12[0];
     points_12[1] = points_20[0];
 
-    LOG_D("point1 x1=%f; y1=%f;",points_01[0].x,points_01[0].y);
-    LOG_D("point2 x2=%f; y2=%f;",points_12[0].x,points_12[0].y);
-    LOG_D("point3 x3=%f; y3=%f;",points_20[0].x,points_20[0].y);
     static Point draw_points={0,0};
 
     if(draw_x == 0)
     {
         LOG_D("points_0.x:%f,points_0.y:%f",points_01[0].x,points_01[0].y);
-        LOG_D("points_1.x:%f,points_1.y:%f",points_12[1].x,points_12[1].y);
-        LOG_D("points_2.x:%f,points_2.y:%f",points_20[1].x,points_20[1].y);
+        LOG_D("points_1.x:%f,points_1.y:%f",points_12[0].x,points_12[0].y);
+        LOG_D("points_2.x:%f,points_2.y:%f",points_20[0].x,points_20[0].y);
         Interpolation_Init(&square_interpolation_a, &square_interpolation_handle_a, Linear_Interpolation_Creat,Linear_Interpolate,points_01, 2);
         Interpolation_Init(&square_interpolation_b, &square_interpolation_handle_b, Linear_Interpolation_Creat,Linear_Interpolate,points_12, 2);
         Interpolation_Init(&square_interpolation_c, &square_interpolation_handle_c, Linear_Interpolation_Creat,Linear_Interpolate,points_20, 2);
@@ -539,7 +536,15 @@ int draw_triangle_rotate(void)
                 rt_thread_mdelay(100); //每个曲线之间稍微留长点时间。
                 break;
             }
-            draw_x = draw_x - delta2;
+
+            if(draw_points.x<points_01[1].x)
+            {
+                draw_x = draw_x + delta2;
+            }
+            else
+            {
+                draw_x = draw_x - delta2;
+            }
             draw_points.x = draw_x;
             Linear_Interpolate(&square_interpolation_a,draw_points.x);
             draw_points.y = square_interpolation_a.Interpolation_Out;
@@ -552,19 +557,37 @@ int draw_triangle_rotate(void)
                 rt_thread_mdelay(100); 
                 break;
             }
-            draw_x = draw_x - delta2;
+
+            if(draw_points.x<points_12[1].x)
+            {
+                draw_x = draw_x + delta2;
+            }
+            else
+            {
+                draw_x = draw_x - delta2;
+            }
+
             draw_points.x = draw_x;
             Linear_Interpolate(&square_interpolation_b,draw_points.x);
             draw_points.y = square_interpolation_b.Interpolation_Out;
             break;
         case C:
-            if( fabs(draw_points.x - points_20[0].x) < 0.0001f )
+            if( fabs(draw_points.x - points_20[1].x) < 0.0001f )
             {
                 step = OVER;
                 rt_thread_mdelay(100); 
                 break;
             }
-            draw_x = draw_x + delta2;
+
+            if(draw_points.x<points_20[1].x)
+            {
+                draw_x = draw_x + delta2;
+            }
+            else
+            {
+                draw_x = draw_x - delta2;
+            }
+
             draw_points.x = draw_x;        
             Linear_Interpolate(&square_interpolation_c,draw_points.x);
             draw_points.y = square_interpolation_c.Interpolation_Out;
@@ -577,7 +600,6 @@ int draw_triangle_rotate(void)
     // if(draw_points.y<points_12[1].y) draw_points.y=0;
     // if(draw_points.x<points_01[0].x) draw_points.x=-c;
     // if(draw_points.x>points_01[0].x) draw_points.x=0;
-
 
     if(time++%100==0)LOG_I("now step:%s draw_y %f",step==A?"A":step==B?"B":step==C?"C":step==D?"D":"OVER",draw_points.y);
 
@@ -605,7 +627,7 @@ void rbmg_handle(void*param)
         //draw_square();
         //draw_triangle();
         //draw_cricle();
-        draw_square_rotate();
+        // draw_square_rotate();
         draw_triangle_rotate();
         Emm_V5_Pos_moveok();
         rt_thread_mdelay(5);
