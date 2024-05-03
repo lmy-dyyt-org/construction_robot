@@ -315,37 +315,37 @@ void Visual_process(void *parameter)
 				{
 					get_data_from_text((char *)data_frame_struct.frame_text);
 					receive_flag = 0;
-					LOG_D("data receive ok!");
+					// LOG_D("data receive ok!");
 				}
 			}
 			
 			////////////////////Êý¾Ý´òÓ¡
-			if (data_frame_struct.data_buff.float_data_lenght != 0)
-			{
-				LOG_D("float_data_lenght: %d", data_frame_struct.data_buff.float_data_lenght);
-				for (uint8_t i = 0; i < data_frame_struct.data_buff.float_data_lenght; i++)
-				{
-					LOG_D("%f", data_frame_struct.data_buff.float_data[i]);
-				}
-			}
+			// if (data_frame_struct.data_buff.float_data_lenght != 0)
+			// {
+			// 	LOG_D("float_data_lenght: %d", data_frame_struct.data_buff.float_data_lenght);
+			// 	for (uint8_t i = 0; i < data_frame_struct.data_buff.float_data_lenght; i++)
+			// 	{
+			// 		LOG_D("%f", data_frame_struct.data_buff.float_data[i]);
+			// 	}
+			// }
 
-			if (data_frame_struct.data_buff.uint32_data_lenght != 0)
-			{
-				LOG_D("uint32_data_lenght: %d", data_frame_struct.data_buff.uint32_data_lenght);
-				for (uint8_t i = 0; i < data_frame_struct.data_buff.uint32_data_lenght; i++)
-				{
-					LOG_D("%d", data_frame_struct.data_buff.uint32_data[i]);
-				}
-			}
+			// if (data_frame_struct.data_buff.uint32_data_lenght != 0)
+			// {
+			// 	LOG_D("uint32_data_lenght: %d", data_frame_struct.data_buff.uint32_data_lenght);
+			// 	for (uint8_t i = 0; i < data_frame_struct.data_buff.uint32_data_lenght; i++)
+			// 	{
+			// 		LOG_D("%d", data_frame_struct.data_buff.uint32_data[i]);
+			// 	}
+			// }
 
-			if (data_frame_struct.data_buff.int32_data_lenght != 0)
-			{
-				LOG_D("int32_data_lenght: %d", data_frame_struct.data_buff.int32_data_lenght);
-				for (uint8_t i = 0; i < data_frame_struct.data_buff.int32_data_lenght; i++)
-				{
-					LOG_D("%d", data_frame_struct.data_buff.int32_data[i]);
-				}
-			}
+			// if (data_frame_struct.data_buff.int32_data_lenght != 0)
+			// {
+			// 	LOG_D("int32_data_lenght: %d", data_frame_struct.data_buff.int32_data_lenght);
+			// 	for (uint8_t i = 0; i < data_frame_struct.data_buff.int32_data_lenght; i++)
+			// 	{
+			// 		LOG_D("%d", data_frame_struct.data_buff.int32_data[i]);
+			// 	}
+			// }
 		}
 	}
 }

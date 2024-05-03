@@ -8,6 +8,7 @@
 
 corexy_t corexy;
 corexy_t real_corexy;
+corexy_t tar_corexy;
 int corexy_init(corexy_t *corexy)//归位 左下角 0，0
 {
     corexy->x = 0;

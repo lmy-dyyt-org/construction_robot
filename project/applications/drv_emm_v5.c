@@ -570,7 +570,7 @@ void Emm_V5_Pos_moveok(void)
 
         if(time++%50==0)
         {
-        LOG_D("eror_x %f,error_y %f",error_x,error_y);
+        // LOG_D("eror_x %f,error_y %f",error_x,error_y);
         }
         if(time == 500) 
         {
@@ -680,7 +680,8 @@ void drv_emm_v5_entry(void *t)
         }
 
        static int time=0;
-
+        real_corexy.x = -(float)(left_stepper.stepper_motor_angle*142.22f + right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
+        real_corexy.y = -(float)(left_stepper.stepper_motor_angle*142.22f - right_stepper.stepper_motor_angle*142.22f) * 0.04f / (float)(256*200) / 2;
         if(time++%50==0)
         {
             LOG_D("tar_corexy.x:%f,tar_corexy.y:%f",corexy.x,corexy.y);

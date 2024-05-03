@@ -15,7 +15,7 @@ typedef struct
 
 extern corexy_t corexy;
 extern corexy_t real_corexy;
-	
+extern corexy_t tar_corexy;
 
 int corexy_init(corexy_t *corexy);
 int corexy_relative_move(corexy_t *corexy,float x,float y);

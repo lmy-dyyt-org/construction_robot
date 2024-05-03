@@ -22,13 +22,14 @@
 #include "drv_corexy.h"
 #include "drv_emm_v5.h"
 #include "apid.h"
+#include "data_analysis.h"
 
 #ifndef max
 #define max(a, b) (a) > (b) ? (a) : (b)
 #endif
 
-Point imagecenter = {0.0, 0.0}; // corexy到绘图坐标系的偏移
-Point rightbottom;              // corexy坐标系下图像的右下角顶点 (给插值器用的零点)
+Point imagecenter; // corexy到绘图坐标系的偏移
+Point rightbottom; // corexy坐标系下图像的右下角顶点 (给插值器用的零点)
 
 Interpolation_handle_t square_interpolation_a;
 LinearInterpolation square_interpolation_handle_a;
@@ -48,6 +49,7 @@ float now_datax;
 apid_t pid_centery;
 float pid_outy;
 float now_datay;
+
 // void corexy2graphics(const Point* corexy,Point* graphics)
 // {
 //     graphics->x = corexy->x + imagecenter.x;
@@ -127,11 +129,11 @@ int draw_square(void)
 #define delta 0.001
 
     static float draw_x = 0;
-    // static float tmp = 0;
-    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float tmp = 0;
+    tmp = sqrt(pow((imagecenter.x - rightbottom.x), 2) + pow((imagecenter.y - rightbottom.y), 2));
     static float c = 0; // 边长
-    // c = tmp/sqrt(2);
-    c = 0.25;
+    c = tmp / sqrt(2);
+    // c = 0.25;
     float offset = 0; // 每次插值移动的距离
 
     // static Point points_01[2]={{0,0},{0,c}};
@@ -202,11 +204,11 @@ int draw_triangle(void)
 #define delta2 0.001
     static int time = 0;
     static float draw_x = 0;
-    // static float tmp = 0;
-    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float tmp = 0;
+    tmp = sqrt(pow((imagecenter.x - rightbottom.x), 2) + pow((imagecenter.y - rightbottom.y), 2));
     static float c = 0; // 边长
-    // c = sqrt(3)*tmp;
-    c = 0.3;
+    c = sqrt(3) * tmp;
+    // c = 0.3;
     float offset = 0; // 每次插值移动的距离
 
     // static Point points_01[2]={{0,0},{-1.732c/2,3c/2}};
@@ -271,11 +273,11 @@ int draw_triangle_rotate(void)
 #define delta2 0.001
     static int time = 0;
     static float draw_x = 0;
-    // static float tmp = 0;
-    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float tmp = 0;
+    tmp = sqrt(pow((imagecenter.x - rightbottom.x), 2) + pow((imagecenter.y - rightbottom.y), 2));
     static float c = 0; // 边长
-    // c = sqrt(3)*tmp;
-    c = 0.1;
+    c = sqrt(3) * tmp;
+    // c = 0.1;
     float offset = 0;       // 每次插值移动的距离
     float angle = 3.14 / 4; /*0--2*pi*/
     float cos_angle = cosf(angle);
@@ -340,8 +342,8 @@ int draw_cricle(void)
 {
     float offset = 0;
     static Point draw_points = {0};
-    // r = sqrt(pow(imagecenter.x - rightbottom.x, 2) + pow(imagecenter.y - rightbottom.y, 2));
-    r = 0.1;
+    r = sqrt(pow(imagecenter.x - rightbottom.x, 2) + pow(imagecenter.y - rightbottom.y, 2));
+    // r = 0.1;
     static float delta_angle = 0.01; // 变化角度
     static float angle = 0;
 
@@ -377,11 +379,11 @@ int draw_square_rotate(void)
 #define delta 0.001
 
     static float draw_x = 0;
-    // static float tmp = 0;
-    // tmp = sqrt( pow((imagecenter.x-rightbottom.x),2) + pow((imagecenter.y-rightbottom.y),2) );
+    static float tmp = 0;
+    tmp = sqrt(pow((imagecenter.x - rightbottom.x), 2) + pow((imagecenter.y - rightbottom.y), 2));
     static float c = 0; // 边长
-    // c = tmp/sqrt(2);
-    c = 0.25 / 2;
+    c = tmp / sqrt(2);
+    // c = 0.25 / 2;
     float offset = 0;       // 每次插值移动的距离
     float angle = 3.14 / 4; /*0--2*pi*/
     float cos_angle = cosf(angle);
@@ -463,20 +465,21 @@ int draw_square_rotate(void)
     return 0;
 }
 
-static int state = 0; /* 0：归中点 1：运动到达第一个图形边点2：进行图形运动3：等待其他操作*/
+int state = 0; /* 0：归中点 1：运动到达第一个图形边点2：进行图形运动3：等待其他操作*/
+
 void rbmg_handle(void *param)
 {
     rt_thread_mdelay(1000);
-    APID_Init(&pid_centerx, PID_POSITION, 0.0005f, 0, 0);
-    APID_Init(&pid_centery, PID_POSITION, 0.0005f, 0, 0);
-
+    APID_Init(&pid_centerx, PID_POSITION, 0.00001f, 0, 0);
+    APID_Init(&pid_centery, PID_POSITION, 0.00001f, 0, 0);
+    int time;
     rt_thread_mdelay(2000);
-
-    corexy.x = 0.3;
-    corexy.y = 0.3;
-
+    // 0 圆 1 方 2三角
+    // 图像中心点 x y
+    // 右下角 x y
     while (1)
     {
+        time++;
         now_points.x = corexy.x;
         now_points.y = corexy.y;
 
@@ -488,50 +491,83 @@ void rbmg_handle(void *param)
 
         // 摄像头 640*480    320 240
         // corexy 0.25 0.25
-
-        if (state == 0)//归中间点
+        if (state == 0) // 归中间点
         {
-            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[1]);
+            APID_Set_Target(&pid_centerx, 320);
             APID_Hander(&pid_centerx, 5);
             pid_outx = APID_Get_Out(&pid_centerx);
 
-            APID_Set_Present(&pid_centery, now_datay);
+            APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[2]);
+            APID_Set_Target(&pid_centery, 240);
             APID_Hander(&pid_centery, 5);
             pid_outy = APID_Get_Out(&pid_centery);
+
+            if (pid_outx > 0.5)
+                pid_outx = 0.5;
+            if (pid_outx < -0.5)
+                pid_outx = -0.5;
+            if (abs(data_frame_struct.data_buff.uint32_data[1] - 320) < 5)
+                pid_outx = 0;
+
+            if (pid_outy > 0.5)
+                pid_outy = 0.5;
+            if (pid_outy < -0.5)
+                pid_outy = -0.5;
+            if (abs(data_frame_struct.data_buff.uint32_data[2] - 240) < 5)
+                pid_outy = 0;
+
+            if (time % 100 == 0)
+                LOG_D("pid_outx=%f", pid_outx);
+
+            corexy.x -= pid_outx;
+            corexy.y += pid_outy;
+            Emm_V5_Pos_moveok();
+            imagecenter.x = real_corexy.x;
+            imagecenter.y = real_corexy.y;
         }
 
-        if (state == 1)//
+        else if (state == 1) //
         {
-            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[3]);
+            APID_Set_Target(&pid_centerx, 320);
             APID_Hander(&pid_centerx, 5);
             pid_outx = APID_Get_Out(&pid_centerx);
 
-            APID_Set_Present(&pid_centery, now_datay);
+            APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[4]);
+            APID_Set_Target(&pid_centery, 240);
             APID_Hander(&pid_centery, 5);
             pid_outy = APID_Get_Out(&pid_centery);
+
+            if (pid_outx > 0.5)
+                pid_outx = 0.5;
+            if (pid_outx < -0.5)
+                pid_outx = -0.5;
+            if (abs(data_frame_struct.data_buff.uint32_data[3] - 320) < 5)
+                pid_outx = 0;
+
+            if (pid_outy > 0.5)
+                pid_outy = 0.5;
+            if (pid_outy < -0.5)
+                pid_outy = -0.5;
+            if (abs(data_frame_struct.data_buff.uint32_data[4] - 240) < 5)
+                pid_outy = 0;
+
+            if (time % 100 == 0)
+                LOG_D("pid_outx=%f", pid_outx);
+
+            corexy.x -= pid_outx;
+            corexy.y += pid_outy;
+            Emm_V5_Pos_moveok();
+            rightbottom.x = real_corexy.x;
+            rightbottom.y = real_corexy.y;
         }
 
-        if (state == 2)
+        else if (state == 2) //
         {
-            APID_Set_Present(&pid_centerx, now_datax);
-            APID_Hander(&pid_centerx, 5);
-            pid_outx = APID_Get_Out(&pid_centerx);
-
-            APID_Set_Present(&pid_centery, now_datay);
-            APID_Hander(&pid_centery, 5);
-            pid_outy = APID_Get_Out(&pid_centery);
+            draw_triangle();
         }
 
-        if (state == 3)
-        {
-            APID_Set_Present(&pid_centerx, now_datax);
-            APID_Hander(&pid_centerx, 5);
-            pid_outx = APID_Get_Out(&pid_centerx);
-
-            APID_Set_Present(&pid_centery, now_datay);
-            APID_Hander(&pid_centery, 5);
-            pid_outy = APID_Get_Out(&pid_centery);
-        }
         rt_thread_mdelay(5);
     }
 }
