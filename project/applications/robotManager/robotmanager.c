@@ -474,6 +474,12 @@ void rbmg_handle(void *param)
     APID_Init(&pid_centery, PID_POSITION, 0.00001f, 0, 0);
     int time;
     rt_thread_mdelay(2000);
+
+
+    int centern_x = data_frame_struct.data_buff.uint32_data[1];
+    int centern_y = data_frame_struct.data_buff.uint32_data[2];
+    int rightbottom_x = data_frame_struct.data_buff.uint32_data[3];
+    int rightbottom_y = data_frame_struct.data_buff.uint32_data[4];
     // 0 圆 1 方 2三角
     // 图像中心点 x y
     // 右下角 x y
@@ -483,84 +489,77 @@ void rbmg_handle(void *param)
         now_points.x = corexy.x;
         now_points.y = corexy.y;
 
-        // draw_square();
-        // draw_triangle();
-        // draw_cricle();
-        //  draw_square_rotate();
-        // draw_triangle_rotate();
+// draw_square();
+// draw_triangle();
+// draw_cricle();
+//  draw_square_rotate();
+// draw_triangle_rotate();
 
-        // 摄像头 640*480    320 240
-        // corexy 0.25 0.25
-        if (state == 0) // 归中间点
+// 摄像头 640*480    320 240
+// corexy 0.25 0.25
+#define visio_center_x 312
+#define visio_center_y 225
+
+#define visiox_k 0.000877
+#define visioy_k 0.0024
+        if (state == 1) // 归中间点
         {
-            APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[1]);
-            APID_Set_Target(&pid_centerx, 320);
-            APID_Hander(&pid_centerx, 5);
-            pid_outx = APID_Get_Out(&pid_centerx);
-
-            APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[2]);
-            APID_Set_Target(&pid_centery, 240);
-            APID_Hander(&pid_centery, 5);
-            pid_outy = APID_Get_Out(&pid_centery);
+            pid_outx = visiox_k * centern_x;
+            pid_outy = visioy_k * centern_y;
 
             if (pid_outx > 0.5)
                 pid_outx = 0.5;
             if (pid_outx < -0.5)
                 pid_outx = -0.5;
-            if (abs(data_frame_struct.data_buff.uint32_data[1] - 320) < 5)
-                pid_outx = 0;
 
             if (pid_outy > 0.5)
                 pid_outy = 0.5;
             if (pid_outy < -0.5)
                 pid_outy = -0.5;
-            if (abs(data_frame_struct.data_buff.uint32_data[2] - 240) < 5)
-                pid_outy = 0;
 
             if (time % 100 == 0)
-                LOG_D("pid_outx=%f", pid_outx);
+                {
+                    LOG_D("visio_x=%f", centern_x);
+                    LOG_D("visio_y=%f", centern_y);
+                    LOG_D("pid_outx=%f", pid_outx);
+                    LOG_D("pid_outy=%f", pid_outy);
+                }
 
-            corexy.x -= pid_outx;
-            corexy.y += pid_outy;
+            corexy.x = pid_outx;
+            corexy.y = pid_outy;
             Emm_V5_Pos_moveok();
             imagecenter.x = real_corexy.x;
             imagecenter.y = real_corexy.y;
         }
 
-        else if (state == 1) //
+        else if (state == 0) //
         {
-            APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[3]);
-            APID_Set_Target(&pid_centerx, 320);
-            APID_Hander(&pid_centerx, 5);
-            pid_outx = APID_Get_Out(&pid_centerx);
-
-            APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[4]);
-            APID_Set_Target(&pid_centery, 240);
-            APID_Hander(&pid_centery, 5);
-            pid_outy = APID_Get_Out(&pid_centery);
+            pid_outx = visiox_k * rightbottom_x;
+            pid_outy = visioy_k * rightbottom_y;
 
             if (pid_outx > 0.5)
                 pid_outx = 0.5;
             if (pid_outx < -0.5)
                 pid_outx = -0.5;
-            if (abs(data_frame_struct.data_buff.uint32_data[3] - 320) < 5)
-                pid_outx = 0;
 
             if (pid_outy > 0.5)
                 pid_outy = 0.5;
             if (pid_outy < -0.5)
                 pid_outy = -0.5;
-            if (abs(data_frame_struct.data_buff.uint32_data[4] - 240) < 5)
-                pid_outy = 0;
 
             if (time % 100 == 0)
-                LOG_D("pid_outx=%f", pid_outx);
+                {
+                    LOG_D("visio_x=%f", rightbottom_x);
+                    LOG_D("visio_y=%f", rightbottom_y);
+                    LOG_D("pid_outx=%f", pid_outx);
+                    LOG_D("pid_outy=%f", pid_outy);
+                }
 
-            corexy.x -= pid_outx;
-            corexy.y += pid_outy;
+            corexy.x = pid_outx;
+            corexy.y = pid_outy;
             Emm_V5_Pos_moveok();
-            rightbottom.x = real_corexy.x;
-            rightbottom.y = real_corexy.y;
+            imagecenter.x = real_corexy.x;
+            imagecenter.y = real_corexy.y;
         }
 
         else if (state == 2) //
@@ -590,3 +589,80 @@ int rbmg_init(void)
     return 0;
 }
 INIT_APP_EXPORT(rbmg_init);
+
+// if (state == 0) // 归中间点
+// {
+//     APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[1]);
+//     APID_Set_Target(&pid_centerx, visio_center_x); //越小 越靠右
+//     APID_Hander(&pid_centerx, 5);
+//     pid_outx = APID_Get_Out(&pid_centerx);
+
+//     APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[2]);
+//     APID_Set_Target(&pid_centery, visio_center_y);//越小 越靠下
+//     APID_Hander(&pid_centery, 5);
+//     pid_outy = APID_Get_Out(&pid_centery);
+
+//     if (pid_outx > 0.5)
+//         pid_outx = 0.5;
+//     if (pid_outx < -0.5)
+//         pid_outx = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[1] - 320) < 5)
+//         pid_outx = 0;
+
+//     if (pid_outy > 0.5)
+//         pid_outy = 0.5;
+//     if (pid_outy < -0.5)
+//         pid_outy = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[2] - 240) < 5)
+//         pid_outy = 0;
+
+//     if (time % 100 == 0)
+//         LOG_D("pid_outx=%f", pid_outx);
+
+//     corexy.x -= pid_outx;
+//     corexy.y += pid_outy;
+//     Emm_V5_Pos_moveok();
+//     imagecenter.x = real_corexy.x;
+//     imagecenter.y = real_corexy.y;
+// }
+
+// else if (state == 1) //
+// {
+//     APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[3]);
+//     APID_Set_Target(&pid_centerx, visio_center_x);
+//     APID_Hander(&pid_centerx, 5);
+//     pid_outx = APID_Get_Out(&pid_centerx);
+
+//     APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[4]);
+//     APID_Set_Target(&pid_centery, visio_center_y);
+//     APID_Hander(&pid_centery, 5);
+//     pid_outy = APID_Get_Out(&pid_centery);
+
+//     if (pid_outx > 0.5)
+//         pid_outx = 0.5;
+//     if (pid_outx < -0.5)
+//         pid_outx = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[3] - 320) < 5)
+//         pid_outx = 0;
+
+//     if (pid_outy > 0.5)
+//         pid_outy = 0.5;
+//     if (pid_outy < -0.5)
+//         pid_outy = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[4] - 240) < 5)
+//         pid_outy = 0;
+
+//     if (time % 100 == 0)
+//         LOG_D("pid_outx=%f", pid_outx);
+
+//     corexy.x -= pid_outx;
+//     corexy.y += pid_outy;
+//     Emm_V5_Pos_moveok();
+//     rightbottom.x = real_corexy.x;
+//     rightbottom.y = real_corexy.y;
+// }
+
+// else if (state == 2) //
+// {
+//     draw_triangle();
+// }

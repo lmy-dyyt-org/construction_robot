@@ -609,8 +609,8 @@ void drv_emm_v5_entry(void *t)
 #define timeout 30000
 //这里的堵转速度直接给最大值 就不用管这个参数了
 #define sl_vel 500 
-//用大电流 小时间来
-#define sl_ma 600
+//用大电流 小时间来60
+#define sl_ma 200
 #define sl_ms 10
     //回零调参 电机有存储的 没必要每次都重新设置
     /*
@@ -657,6 +657,14 @@ void drv_emm_v5_entry(void *t)
     while (1)
     {
         //1.8*256*200 对应 0.04m
+        // #define laser_visio_offsety  0.027
+        // #define laser_visio_offsetx  0.002
+
+        // float laser_visio_offsety = 0.027;
+        // float laser_visio_offsetx = 0.002;
+        // x_pulse = (corexy.x+laser_visio_offsetx) * (float)(256*200) / 0.04f ;
+        // y_pulse = -(corexy.y-laser_visio_offsety) * (float)(256*200) / 0.04f ;
+
         x_pulse = corexy.x * (float)(256*200) / 0.04f ;
         y_pulse = -corexy.y * (float)(256*200) / 0.04f ;
 
