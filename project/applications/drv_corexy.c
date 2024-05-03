@@ -33,8 +33,8 @@ void corexy_entry(void *t)
 {
     corexy_init(&corexy);
 
-    corexy.x = 0; //m
-    corexy.y = 0;
+    // corexy.x = 0; //m
+    // corexy.y = 0;
     while (1)
     {
         //视觉传入图像，计算插补
