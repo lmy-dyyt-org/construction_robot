@@ -322,7 +322,7 @@ void Visual_process(void *parameter)
 			////////////////////Êý¾Ý´òÓ¡
 			if (data_frame_struct.data_buff.float_data_lenght != 0)
 			{
-				LOG_E("float_data_lenght: %d", data_frame_struct.data_buff.float_data_lenght);
+				LOG_D("float_data_lenght: %d", data_frame_struct.data_buff.float_data_lenght);
 				for (uint8_t i = 0; i < data_frame_struct.data_buff.float_data_lenght; i++)
 				{
 					LOG_D("%f", data_frame_struct.data_buff.float_data[i]);
