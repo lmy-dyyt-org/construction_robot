@@ -644,6 +644,10 @@ void drv_emm_v5_entry(void *t)
     
     // Emm_V5_En_Control(&left_stepper, 1, 0);
     // Emm_V5_En_Control(&right_stepper, 1, 0);
+    // corexy.x=0;
+    // corexy.y=0;
+
+
     int x_pulse = 0;
     int y_pulse = 0;
 

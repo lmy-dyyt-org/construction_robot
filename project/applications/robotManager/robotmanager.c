@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-03 10:18:43
+ * @LastEditTime: 2024-05-03 13:50:40
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -21,6 +21,7 @@
 #include "linear_Interp.h"
 #include "drv_corexy.h"
 #include "drv_emm_v5.h"
+#include "apid.h"
 
 #ifndef max
 #define max(a, b) (a) > (b) ? (a) : (b)
@@ -40,6 +41,13 @@ LinearInterpolation square_interpolation_handle_d;
 
 Point now_points = {0, 0};
 
+apid_t pid_centerx;
+float pid_outx;
+float now_datax;
+
+apid_t pid_centery;
+float pid_outy;
+float now_datay;
 // void corexy2graphics(const Point* corexy,Point* graphics)
 // {
 //     graphics->x = corexy->x + imagecenter.x;
@@ -101,15 +109,15 @@ int draw_line(Point *start, Point *end)
         graphics2corexy(&now_points, &draw_points);
         corexy_absolute_move(&corexy, now_points.x, now_points.y);
         float offset = max(fabs(now_points.y - corexy.y), fabs(now_points.x - corexy.x));
-        gap_time = fabs((offset *1000/ ((motor_vel * 0.04f) / 60.f))); // 有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
-        //rt_thread_mdelay(gap_time);
-        // rt_thread_mdelay(500);
+        gap_time = fabs((offset * 1000 / ((motor_vel * 0.04f) / 60.f))); // 有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
+        // rt_thread_mdelay(gap_time);
+        //  rt_thread_mdelay(500);
         Emm_V5_Pos_moveok();
-                    // 添加到达终点的判断条件，这里假设delta始终指向终点方向
-    if (fabs(draw_x-end->x)<0.005f)
-    {
-        return 0; // 到达终点，退出循环
-    }
+        // 添加到达终点的判断条件，这里假设delta始终指向终点方向
+        if (fabs(draw_x - end->x) < 0.005f)
+        {
+            return 0; // 到达终点，退出循环
+        }
     }
 }
 
@@ -237,27 +245,26 @@ int draw_triangle(void)
    2 /______\ 0
         c
     */
-    switch(step)
+    switch (step)
     {
-        case A:
-            draw_line(&points_01[0], &points_01[1]);
-            step = B;
-            break;
-        case B:
-            draw_line(&points_12[0], &points_12[1]);
-            step = C;
-            break;
-        case C:
-            draw_line(&points_20[0], &points_20[1]);
-            step = OVER;
-            break;
-        default:
-            // LOG_E("step error case");
-            break;
+    case A:
+        draw_line(&points_01[0], &points_01[1]);
+        step = B;
+        break;
+    case B:
+        draw_line(&points_12[0], &points_12[1]);
+        step = C;
+        break;
+    case C:
+        draw_line(&points_20[0], &points_20[1]);
+        step = OVER;
+        break;
+    default:
+        // LOG_E("step error case");
+        break;
     }
     return 0;
 }
-
 
 int draw_triangle_rotate(void)
 {
@@ -306,26 +313,24 @@ int draw_triangle_rotate(void)
    2 /______\ 0
         c
     */
-    switch(step)
+    switch (step)
     {
-        case A:
-            draw_line(&points_01[0], &points_01[1]);
-            step = B;
-            break;
-        case B:
-            draw_line(&points_12[0], &points_12[1]);
-            step = C;
-            break;
-        case C:
-            draw_line(&points_20[0], &points_20[1]);
-            step = OVER;
-            break;
-        default:
-            // LOG_E("step error case");
-            break;
+    case A:
+        draw_line(&points_01[0], &points_01[1]);
+        step = B;
+        break;
+    case B:
+        draw_line(&points_12[0], &points_12[1]);
+        step = C;
+        break;
+    case C:
+        draw_line(&points_20[0], &points_20[1]);
+        step = OVER;
+        break;
+    default:
+        // LOG_E("step error case");
+        break;
     }
-
-
 
     return 0;
 }
@@ -340,7 +345,7 @@ int draw_cricle(void)
     static float delta_angle = 0.01; // 变化角度
     static float angle = 0;
 
-    while(1)
+    while (1)
     {
         angle += delta_angle;
         if (angle >= 2 * 3.1415926)
@@ -358,11 +363,10 @@ int draw_cricle(void)
         gap_time = fabs((offset / ((motor_vel * 0.04f) / 60.f)) * 100); // 有两个gap_time延时,这里的是为了不要快速的去算插值，导致跳跃很大。 还有一个延时（drv emm v5），是让电机运动到目标位置，再开始下一段插值。
         // rt_thread_mdelay(gap_time);
         Emm_V5_Pos_moveok();
-        if( fabs(angle-360) > 0.001f )
+        if (fabs(angle - 360) > 0.001f)
         {
             return 0;
         }
-
     }
     return 0;
 }
@@ -425,7 +429,6 @@ int draw_square_rotate(void)
 
     static Point draw_points = {0, 0};
 
-
     static int step = A; // 用于指示哪一段曲线a,b,c,d
     /*绘图坐标系下 以图形右下角为原点 （0，0）
    2____b____1
@@ -456,13 +459,21 @@ int draw_square_rotate(void)
         // LOG_E("step error case");
         break;
     }
-    
+
     return 0;
 }
 
+static int state = 0; /* 0：归中点 1：运动到达第一个图形边点2：进行图形运动3：等待其他操作*/
 void rbmg_handle(void *param)
 {
     rt_thread_mdelay(1000);
+    APID_Init(&pid_centerx, PID_POSITION, 0.0005f, 0, 0);
+    APID_Init(&pid_centery, PID_POSITION, 0.0005f, 0, 0);
+
+    rt_thread_mdelay(2000);
+
+    corexy.x = 0.3;
+    corexy.y = 0.3;
 
     while (1)
     {
@@ -474,6 +485,53 @@ void rbmg_handle(void *param)
         // draw_cricle();
         //  draw_square_rotate();
         // draw_triangle_rotate();
+
+        // 摄像头 640*480    320 240
+        // corexy 0.25 0.25
+
+        if (state == 0)//归中间点
+        {
+            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Hander(&pid_centerx, 5);
+            pid_outx = APID_Get_Out(&pid_centerx);
+
+            APID_Set_Present(&pid_centery, now_datay);
+            APID_Hander(&pid_centery, 5);
+            pid_outy = APID_Get_Out(&pid_centery);
+        }
+
+        if (state == 1)//
+        {
+            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Hander(&pid_centerx, 5);
+            pid_outx = APID_Get_Out(&pid_centerx);
+
+            APID_Set_Present(&pid_centery, now_datay);
+            APID_Hander(&pid_centery, 5);
+            pid_outy = APID_Get_Out(&pid_centery);
+        }
+
+        if (state == 2)
+        {
+            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Hander(&pid_centerx, 5);
+            pid_outx = APID_Get_Out(&pid_centerx);
+
+            APID_Set_Present(&pid_centery, now_datay);
+            APID_Hander(&pid_centery, 5);
+            pid_outy = APID_Get_Out(&pid_centery);
+        }
+
+        if (state == 3)
+        {
+            APID_Set_Present(&pid_centerx, now_datax);
+            APID_Hander(&pid_centerx, 5);
+            pid_outx = APID_Get_Out(&pid_centerx);
+
+            APID_Set_Present(&pid_centery, now_datay);
+            APID_Hander(&pid_centery, 5);
+            pid_outy = APID_Get_Out(&pid_centery);
+        }
         rt_thread_mdelay(5);
     }
 }
