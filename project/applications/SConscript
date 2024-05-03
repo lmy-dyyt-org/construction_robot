@@ -5,9 +5,9 @@ cwd     = GetCurrentDir()
 CPPPATH = [cwd]
 src     = Glob('*.c')
 
-src     += Glob('**/*.c')
-src     += Glob('**/*.cpp')
-src     += Glob('*.cpp')
+# src     += Glob('**/*.c')
+# src     += Glob('**/*.cpp')
+# src     += Glob('*.cpp')
 
 if GetDepend(['PKG_USING_RTDUINO']) and not GetDepend(['RTDUINO_NO_SETUP_LOOP']):
     src += ['arduino_main.cpp']

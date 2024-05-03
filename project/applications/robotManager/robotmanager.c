@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-19 09:10:31
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-02 20:33:10
+ * @LastEditTime: 2024-05-03 10:18:43
  * @FilePath: \project\applications\robotManager\robotmanager.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -112,8 +112,6 @@ int draw_line(Point *start, Point *end)
     }
     }
 }
-
-
 
 // 以知道矩形中心点，矩形右下角顶点坐标 //均在绘图坐标系
 int draw_square(void)

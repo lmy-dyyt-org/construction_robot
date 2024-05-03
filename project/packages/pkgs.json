@@ -15,6 +15,11 @@
   "name": "PERF_COUNTER"
  }, 
  {
+  "path": "/packages/misc/FlexibleButton", 
+  "ver": "v1.0.0", 
+  "name": "FLEXIBLE_BUTTON"
+ }, 
+ {
   "path": "/packages/arduino/RTduino", 
   "ver": "latest", 
   "name": "RTDUINO"
