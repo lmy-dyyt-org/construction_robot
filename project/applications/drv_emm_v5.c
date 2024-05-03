@@ -112,7 +112,7 @@ void emm_wait_for_ack(stepper_motor_t *motor, uint8_t cmd)
             rt_err_t ret = rt_sem_take(emm_rx_sem, 100);
             if (ret != RT_EOK)
             {
-                LOG_E("emm_wait_for_ack timeout");
+                //LOG_E("emm_wait_for_ack timeout");
                 rt_mutex_release(mutex_step);
                 return;
             }
