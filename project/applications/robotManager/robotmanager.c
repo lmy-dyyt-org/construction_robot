@@ -58,8 +58,8 @@ float now_datay;
 
 void graphics2corexy(Point *corexy, const Point *graphics)
 {
-    corexy->x = graphics->x + imagecenter.x;
-    corexy->y = graphics->y + imagecenter.y;
+    corexy->x = graphics->x + rightbottom.x;
+    corexy->y = graphics->y + rightbottom.y;
 }
 
 enum
@@ -475,11 +475,10 @@ void rbmg_handle(void *param)
     int time;
     rt_thread_mdelay(2000);
 
-
-    int centern_x = data_frame_struct.data_buff.uint32_data[1];
-    int centern_y = data_frame_struct.data_buff.uint32_data[2];
-    int rightbottom_x = data_frame_struct.data_buff.uint32_data[3];
-    int rightbottom_y = data_frame_struct.data_buff.uint32_data[4];
+    // int centern_x = data_frame_struct.data_buff.uint32_data[1];
+    // int centern_y = data_frame_struct.data_buff.uint32_data[2];
+    // int rightbottom_x = data_frame_struct.data_buff.uint32_data[3];
+    // int rightbottom_y = data_frame_struct.data_buff.uint32_data[4];
     // 0 圆 1 方 2三角
     // 图像中心点 x y
     // 右下角 x y
@@ -502,70 +501,33 @@ void rbmg_handle(void *param)
 
 #define visiox_k 0.000877
 #define visioy_k 0.0024
-        if (state == 1) // 归中间点
+
+#define kp 0.0003
+//p 0.002 c 5   
+        pid_outx = kp * data_frame_struct.data_buff.float_data[1] / 10.0f;
+        pid_outy = kp * data_frame_struct.data_buff.float_data[2] / 10.0f;
+
+        if (pid_outx > 0.5)
+            pid_outx = 0.5;
+        if (pid_outx < -0.5)
+            pid_outx = -0.5;
+
+        if (pid_outy > 0.5)
+            pid_outy = 0.5;
+        if (pid_outy < -0.5)
+            pid_outy = -0.5;
+
+        if (time % 100 == 0)
         {
-            pid_outx = visiox_k * centern_x;
-            pid_outy = visioy_k * centern_y;
-
-            if (pid_outx > 0.5)
-                pid_outx = 0.5;
-            if (pid_outx < -0.5)
-                pid_outx = -0.5;
-
-            if (pid_outy > 0.5)
-                pid_outy = 0.5;
-            if (pid_outy < -0.5)
-                pid_outy = -0.5;
-
-            if (time % 100 == 0)
-                {
-                    LOG_D("visio_x=%f", centern_x);
-                    LOG_D("visio_y=%f", centern_y);
-                    LOG_D("pid_outx=%f", pid_outx);
-                    LOG_D("pid_outy=%f", pid_outy);
-                }
-
-            corexy.x = pid_outx;
-            corexy.y = pid_outy;
-            Emm_V5_Pos_moveok();
-            imagecenter.x = real_corexy.x;
-            imagecenter.y = real_corexy.y;
+            LOG_D("pid_outx=%f", pid_outx);
+            LOG_D("pid_outy=%f", pid_outy);
         }
-
-        else if (state == 0) //
-        {
-            pid_outx = visiox_k * rightbottom_x;
-            pid_outy = visioy_k * rightbottom_y;
-
-            if (pid_outx > 0.5)
-                pid_outx = 0.5;
-            if (pid_outx < -0.5)
-                pid_outx = -0.5;
-
-            if (pid_outy > 0.5)
-                pid_outy = 0.5;
-            if (pid_outy < -0.5)
-                pid_outy = -0.5;
-
-            if (time % 100 == 0)
-                {
-                    LOG_D("visio_x=%f", rightbottom_x);
-                    LOG_D("visio_y=%f", rightbottom_y);
-                    LOG_D("pid_outx=%f", pid_outx);
-                    LOG_D("pid_outy=%f", pid_outy);
-                }
-
-            corexy.x = pid_outx;
-            corexy.y = pid_outy;
-            Emm_V5_Pos_moveok();
-            imagecenter.x = real_corexy.x;
-            imagecenter.y = real_corexy.y;
-        }
-
-        else if (state == 2) //
-        {
-            draw_triangle();
-        }
+        LOG_D("error_x=%f,error_y=%f", data_frame_struct.data_buff.float_data[1],data_frame_struct.data_buff.float_data[2]);
+        corexy.x += pid_outx;
+        corexy.y -= pid_outy;
+        Emm_V5_Pos_moveok();
+        // imagecenter.x = real_corexy.x;
+        // imagecenter.y = real_corexy.y;
 
         rt_thread_mdelay(5);
     }
@@ -590,15 +552,80 @@ int rbmg_init(void)
 }
 INIT_APP_EXPORT(rbmg_init);
 
+//     if (state == 1) // 归中间点
+//     {
+//         pid_outx = visiox_k * centern_x;
+//         pid_outy = visioy_k * centern_y;
+
+//         if (pid_outx > 0.5)
+//             pid_outx = 0.5;
+//         if (pid_outx < -0.5)
+//             pid_outx = -0.5;
+
+//         if (pid_outy > 0.5)
+//             pid_outy = 0.5;
+//         if (pid_outy < -0.5)
+//             pid_outy = -0.5;
+
+//         if (time % 100 == 0)
+//             {
+//                 LOG_D("visio_x=%f", centern_x);
+//                 LOG_D("visio_y=%f", centern_y);
+//                 LOG_D("pid_outx=%f", pid_outx);
+//                 LOG_D("pid_outy=%f", pid_outy);
+//             }
+
+//         corexy.x = pid_outx;
+//         corexy.y = pid_outy;
+//         Emm_V5_Pos_moveok();
+//         imagecenter.x = real_corexy.x;
+//         imagecenter.y = real_corexy.y;
+//     }
+
+//     else if (state == 0) //
+//     {
+//         pid_outx = visiox_k * rightbottom_x;
+//         pid_outy = visioy_k * rightbottom_y;
+
+//         if (pid_outx > 0.5)
+//             pid_outx = 0.5;
+//         if (pid_outx < -0.5)
+//             pid_outx = -0.5;
+
+//         if (pid_outy > 0.5)
+//             pid_outy = 0.5;
+//         if (pid_outy < -0.5)
+//             pid_outy = -0.5;
+
+//         if (time % 100 == 0)
+//             {
+//                 LOG_D("visio_x=%f", rightbottom_x);
+//                 LOG_D("visio_y=%f", rightbottom_y);
+//                 LOG_D("pid_outx=%f", pid_outx);
+//                 LOG_D("pid_outy=%f", pid_outy);
+//             }
+
+//         corexy.x = pid_outx;
+//         corexy.y = pid_outy;
+//         Emm_V5_Pos_moveok();
+//         imagecenter.x = real_corexy.x;
+//         imagecenter.y = real_corexy.y;
+//     }
+
+//     else if (state == 2) //
+//     {
+//         draw_triangle();
+//     }
+
 // if (state == 0) // 归中间点
 // {
 //     APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[1]);
-//     APID_Set_Target(&pid_centerx, visio_center_x); //越小 越靠右
+//     APID_Set_Target(&pid_centerx, visio_center_x); // 越小 越靠右
 //     APID_Hander(&pid_centerx, 5);
 //     pid_outx = APID_Get_Out(&pid_centerx);
 
 //     APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[2]);
-//     APID_Set_Target(&pid_centery, visio_center_y);//越小 越靠下
+//     APID_Set_Target(&pid_centery, visio_center_y); // 越小 越靠下
 //     APID_Hander(&pid_centery, 5);
 //     pid_outy = APID_Get_Out(&pid_centery);
 
@@ -665,4 +692,83 @@ INIT_APP_EXPORT(rbmg_init);
 // else if (state == 2) //
 // {
 //     draw_triangle();
+// }
+
+// if (state == 0) // 归中间点
+// {
+//     APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[5]); //377
+//     APID_Set_Target(&pid_centerx, centern_x); // 越小 越靠右 324  err = tar - pre
+//     APID_Hander(&pid_centerx, 5);
+//     pid_outx = APID_Get_Out(&pid_centerx);
+
+//     APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[6]);//108
+//     APID_Set_Target(&pid_centery, centern_y); // 越小 越靠下112
+//     APID_Hander(&pid_centery, 5);
+//     pid_outy = APID_Get_Out(&pid_centery);
+
+//     if (pid_outx > 0.5)
+//         pid_outx = 0.5;
+//     if (pid_outx < -0.5)
+//         pid_outx = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[5] - centern_x) < 2)
+//         pid_outx = 0;
+
+//     if (pid_outy > 0.5)
+//         pid_outy = 0.5;
+//     if (pid_outy < -0.5)
+//         pid_outy = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[6] - centern_y) < 2)
+//         pid_outy = 0;
+
+//     if (time % 100 == 0)
+//         LOG_D("pid_outx=%f", pid_outx);
+
+//     // LOG_D("lasor_x:%d,lasor_y:%d",data_frame_struct.data_buff.uint32_data[5],data_frame_struct.data_buff.uint32_data[6]);
+//     // LOG_D("centern_x:%d,centern_y:%d",centern_x,centern_y);
+//     corexy.x += pid_outx;
+//     corexy.y -= pid_outy;
+//     Emm_V5_Pos_moveok();
+//     imagecenter.x = real_corexy.x;
+//     imagecenter.y = real_corexy.y;
+// }
+
+// else if (state == 1) //
+// {
+//     APID_Set_Present(&pid_centerx, data_frame_struct.data_buff.uint32_data[5]);
+//     APID_Set_Target(&pid_centerx, rightbottom_x);
+//     APID_Hander(&pid_centerx, 5);
+//     pid_outx = APID_Get_Out(&pid_centerx);
+
+//     APID_Set_Present(&pid_centery, data_frame_struct.data_buff.uint32_data[6]);
+//     APID_Set_Target(&pid_centery, rightbottom_y);
+//     APID_Hander(&pid_centery, 5);
+//     pid_outy = APID_Get_Out(&pid_centery);
+
+//     if (pid_outx > 0.5)
+//         pid_outx = 0.5;
+//     if (pid_outx < -0.5)
+//         pid_outx = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[5] - rightbottom_x) < 2)
+//         pid_outx = 0;
+
+//     if (pid_outy > 0.5)
+//         pid_outy = 0.5;
+//     if (pid_outy < -0.5)
+//         pid_outy = -0.5;
+//     if (abs(data_frame_struct.data_buff.uint32_data[6] - rightbottom_y) < 2)
+//         pid_outy = 0;
+
+//     if (time % 100 == 0)
+//         LOG_D("pid_outx=%f", pid_outx);
+
+//     corexy.x += pid_outx;
+//     corexy.y -= pid_outy;
+//     Emm_V5_Pos_moveok();
+//     rightbottom.x = real_corexy.x;
+//     rightbottom.y = real_corexy.y;
+// }
+
+// else if (state == 2) //
+// {
+//     draw_triangle_rotate();
 // }

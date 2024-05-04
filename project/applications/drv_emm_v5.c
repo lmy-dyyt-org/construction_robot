@@ -18,7 +18,7 @@ stepper_motor_t left_stepper;
 stepper_motor_t right_stepper;
 
 int motor_acc = 0xff;
-int motor_vel = 2000;
+int motor_vel = 5000;
 // #define motor_acc 0xff
 // #define motor_vel 150
 //v=0.1 m/s
@@ -579,7 +579,7 @@ void Emm_V5_Pos_moveok(void)
             break;
         }
 
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(1);
     }
 }
 
