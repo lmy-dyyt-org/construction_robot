@@ -32,6 +32,7 @@ typedef struct CurveObject {
 	PosCurveType curveMode;  //曲线类型
 	float flexible;     //S曲线拉伸度
 	float max_pos; //最大位置限制
+	int intervel;//调用间隔 单位ms
 }CurveObjectType;
 
 

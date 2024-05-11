@@ -36,21 +36,20 @@ void MotorVelocityCurve(CurveObjectType* curve)
 
     if ((fabs(curve->currentPos - curve->startPos) <= curve->stepPos) && (curve->maxTimes == 0))
     {
+        /*自动计算最大时间长度*/
         if (curve->startPos < curve->PosMin)
         {
             curve->startPos = curve->PosMin;
         }
-
-        temp = (float)fabs(curve->targetPos - curve->startPos);
-        temp = temp / curve->stepPos;
-        curve->maxTimes = (int)(temp)+1;
+        curve->maxTimes = (int)(((float)fabs(curve->targetPos - curve->startPos)/ curve->stepPos))*curve->intervel+1;
         curve->aTimes = 0;
     }
 
     if (curve->aTimes < curve->maxTimes)
     {
+        /*单步计算*/
         pCalCurve[curve->curveMode](curve);
-        curve->aTimes++;
+        curve->aTimes+=curve->intervel;
     }
     else
     {
@@ -60,7 +59,7 @@ void MotorVelocityCurve(CurveObjectType* curve)
     }
 }
 
-/*S型曲线速度计算*/
+/*S型位置计算*/
 static void CalCurveSPTA(CurveObjectType* spta)
 {
     float power = 0.0;

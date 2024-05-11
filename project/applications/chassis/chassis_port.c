@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-16 21:52:49
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-04-28 20:29:16
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-05-11 11:47:21
  * @FilePath: \project\applications\chassis\chassis_port.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -33,32 +33,34 @@ int chassis_port_plan_init(struct chassis *chassis, chassis_data_t *present, cha
     float pos_delta = sqrtf(delta_x * delta_x + delta_y * delta_y);
     cosx = delta_x / pos_delta;
     sinx = delta_y / pos_delta;
+
+
     plan_mai.targetPos = pos_delta;
-    plan_mai.startPos = 0.f; // 初始位置
-    plan_mai.currentPos = 0.0f;
-    // plan_mai.stepPos = chassis->plan.stepPos; // 位置变化的步长
-    plan_mai.stepPos = 3.8f;   // 位置变化的步长
-    plan_mai.PosMax = FLT_MAX;  // 最大位置限制
-    plan_mai.PosMin = -FLT_MAX; // 最小位置限制
-    plan_mai.aTimes = 0;        // 当前时间步
-    // plan_mai.maxTimes = chassis->plan.maxTimes;           // 总时间步，实际使用时需要根据实际情况计算
-    plan_mai.maxTimes = 1600;         // 总时间步，实际使用时需要根据实际情况计算
+    plan_mai.startPos = sqrtf(present->pos.x_m*present->pos.x_m + present->pos.y_m*present->pos.y_m); // 初始位置
+    plan_mai.currentPos = plan_mai.startPos;
+    plan_mai.stepPos = 0.002f;       // 位置变化的步长，单位m
+    plan_mai.PosMax = FLT_MAX;       // 最大位置限制
+    plan_mai.PosMin = -FLT_MAX;      // 最小位置限制
+    plan_mai.aTimes = 0;             // 当前时间
+    plan_mai.maxTimes = 0;           // 总时间，设置为0，自动计算,时间单位为ms
     plan_mai.curveMode = CURVE_SPTA; // 使用S型曲线
-    // plan_mai.flexible = chassis->plan.flexible;          // S曲线的柔性因子
-    plan_mai.flexible = 10.f; // S曲线的柔性因子
-		return 0;
+    plan_mai.flexible = 10.f;        // S曲线的柔性因子
+    plan_mai.intervel = 20;          // 调用间隔，单位为ms
+    mine_plan(&plan_mai);     
+
+    return 0;
 }
 
 int chassis_port_plan(struct chassis *chassis, chassis_data_t *outdata)
 {
-    //LOG_D("chassis planning");
+    // LOG_D("chassis planning");
     if (plan_mai.maxTimes) /*确保规划还在继续*/
     {
         chassis->plan.is_planning = 1;
         mine_plan(&plan_mai);
         outdata->pos.x_m = plan_mai.currentPos * cosx;
         outdata->pos.y_m = plan_mai.currentPos * sinx;
-        LOG_D(":%f,%f",outdata->pos.x_m,outdata->pos.y_m);
+        LOG_D(":%f,%f", outdata->pos.x_m, outdata->pos.y_m);
     }
     else
     {
@@ -76,7 +78,7 @@ void chassis_port_handle(void *parameter)
     // chassis_speed.z_rad_s = 10;
 
     chassis_pos.x_m = 0.2;
-     chassis_pos.y_m = 0.4;
+    chassis_pos.y_m = 0.4;
     // chassis_pos.z_rad = 1;
     //  chassis_set_speed(&chassis_mai, &chassis_speed);
 
@@ -104,12 +106,12 @@ int chassis_sub_callback(abus_topic_t *sub)
     if (ctrl.type == 0)
     {
         // LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
-        //chassis_set_speed(&chassis_mai, &ctrl.speed);
+        // chassis_set_speed(&chassis_mai, &ctrl.speed);
     }
     else
     {
         // LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
-        //chassis_set_pos_plan(&chassis_mai, &ctrl.pos);
+        // chassis_set_pos_plan(&chassis_mai, &ctrl.pos);
     }
     return 0;
 }
