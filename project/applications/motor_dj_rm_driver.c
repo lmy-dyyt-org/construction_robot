@@ -762,6 +762,14 @@ static void set_motor_passive_feedback(void)
 {
 #if defined(MOTOR_DJ_M3508_ID1_CAN1)
     motor_set_passive_feedback(M3508_1_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_1_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_1_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_1_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_1_CAN1), 2000);
+    //APID_Set_Target_Limit(motor_get_pid_speed(M3508_1_CAN1), 70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_1_CAN1), 200);
 #endif
 #if defined(MOTOR_DJ_M3508_ID2_CAN1)
     motor_set_passive_feedback(M3508_2_CAN1, 1);
